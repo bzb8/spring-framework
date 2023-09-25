@@ -290,7 +290,12 @@ configure(allprojects) { project ->
 			cacheChangingModulesFor 0, "seconds"
 		}
 		repositories {
-			mavenCentral()
+
+			maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+			maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+			mavenCentral() {
+				allowInsecureProtocol = true
+			}
 			maven { url "https://repo.spring.io/libs-spring-framework-build" }
 		}
 	}
