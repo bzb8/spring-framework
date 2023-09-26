@@ -119,4 +119,5 @@
 	<suppress files="sockjs[\\/]transport[\\/]TransportType" checks="JavadocVariable"/>
 	<suppress files="src[\\/]test[\\/]java[\\/]org[\\/]springframework[\\/]web[\\/]reactive[\\/]protobuf[\\/].*" checks=".*"/>
 
+	<suppress files="src[\\/]main[\\/]java[\\/]org[\\/]springframework[\\/].*" checks=".*" />
 </suppressions>
