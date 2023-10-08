@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 /**
  * Convenience methods operating on bean factories, in particular
  * on the {@link ListableBeanFactory} interface.
+ * 在 bean 工厂上操作的便捷方法，特别是在 {@link ListableBeanFactory} 接口上。
  *
  * <p>Returns bean counts, bean names or bean instances,
  * taking into account the nesting hierarchy of a bean factory

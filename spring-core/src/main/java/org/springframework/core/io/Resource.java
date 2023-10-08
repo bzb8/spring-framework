@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
  * <p>An InputStream can be opened for every resource if it exists in
  * physical form, but a URL or File handle can just be returned for
  * certain resources. The actual behavior is implementation-specific.
+ * 如果每个资源以物理形式存在，则可以为每个资源打开一个InputStream，但对于某些资源只能返回一个URL 或文件句柄。实际行为是特定于实现的。
  *
  * @author Juergen Hoeller
  * @since 28.12.2003

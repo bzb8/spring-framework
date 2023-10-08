@@ -24,6 +24,8 @@ import java.util.Properties;
 import org.springframework.lang.Nullable;
 
 /**
+ * "I.e." 是拉丁语 "id est" 的缩写，通常用于英语写作中，表示 "即，也就是，也就是说" 等意思。它常用来在句子中进一步解释或澄清前面提到的内容。 "I.e." 用于在同一句中提供更具体或详细的信息，以便读者更好地理解作者的意思。
+ * spring 库级别的属性
  * Static holder for local Spring properties, i.e. defined at the Spring library level.
  *
  * <p>Reads a {@code spring.properties} file from the root of the Spring library classpath,

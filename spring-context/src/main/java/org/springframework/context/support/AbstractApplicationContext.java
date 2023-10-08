@@ -168,6 +168,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 
 	static {
+		// 在WebLogic 8.1 中的应用程序关闭的时候立即加载 ContextClosedEvent 类以避免奇怪的类加载器问题。
 		// Eagerly load the ContextClosedEvent class to avoid weird classloader issues
 		// on application shutdown in WebLogic 8.1. (Reported by Dustin Woods.)
 		ContextClosedEvent.class.getName();
@@ -244,6 +245,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Create a new AbstractApplicationContext with no parent.
 	 */
 	public AbstractApplicationContext() {
+		// 调用构造器
+		// 初始化一系列变量
+		// new PathMatchingResourcePatternResolver(this)
 		this.resourcePatternResolver = getResourcePatternResolver();
 	}
 
@@ -344,6 +348,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * a custom {@link ConfigurableEnvironment} implementation.
 	 */
 	protected ConfigurableEnvironment createEnvironment() {
+		// 包含环境变量和系统属性，和spring属性源
 		return new StandardEnvironment();
 	}
 
@@ -544,11 +549,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
+			// 标定刷新步骤开始了
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
 			prepareRefresh();
 
+			// 告诉子类刷新内部bean工厂
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
@@ -606,12 +613,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Reset common introspection caches in Spring's core, since we
 				// might not ever need metadata for singleton beans anymore...
 				resetCommonCaches();
+				// 标定刷新结束了
 				contextRefresh.end();
 			}
 		}
 	}
 
 	/**
+	 * 准备此上下文以进行刷新、设置其启动日期和活动标志以及执行属性源的任何初始化。
 	 * Prepare this context for refreshing, setting its startup date and
 	 * active flag as well as performing any initialization of property sources.
 	 */
@@ -630,13 +639,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 
+		// 初始化上下文环境中的任何占位符属性源
 		// Initialize any placeholder property sources in the context environment.
 		initPropertySources();
 
+		// 验证所有标记为必需的属性都是可解析的
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
 		getEnvironment().validateRequiredProperties();
 
+		// 存储预刷新 ApplicationListeners...
 		// Store pre-refresh ApplicationListeners...
 		if (this.earlyApplicationListeners == null) {
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
@@ -647,6 +659,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			this.applicationListeners.addAll(this.earlyApplicationListeners);
 		}
 
+		// 允许收集早期应用程序事件，一旦多播器可用即可发布
 		// Allow for the collection of early ApplicationEvents,
 		// to be published once the multicaster is available...
 		this.earlyApplicationEvents = new LinkedHashSet<>();

@@ -30,10 +30,17 @@ import org.springframework.lang.Nullable;
  * preload all their bean definitions (such as XML-based factories) may implement
  * this interface.
  *
+ * 由 bean 工厂实现的 {@link BeanFactory} 接口的扩展，可以枚举所有 bean 实例，而不是按照客户端的要求尝试通过名称一一查找 bean。
+ * 预加载所有 bean 定义的 BeanFactory 实现（例如基于 XML 的工厂）可以实现此接口
+ *
  * <p>If this is a {@link HierarchicalBeanFactory}, the return values will <i>not</i>
  * take any BeanFactory hierarchy into account, but will relate only to the beans
  * defined in the current factory. Use the {@link BeanFactoryUtils} helper class
  * to consider beans in ancestor factories too.
+ *
+ * 如果这是一个 {@link HierarchicalBeanFactory}，则返回值将<i>不会<i>考虑任何 BeanFactory 层次结构，
+ * 而只会与当前工厂中定义的 bean 相关。
+ * 使用 {@link BeanFactoryUtils} 帮助器类也可以考虑祖先工厂中的 bean。
  *
  * <p>The methods in this interface will just respect bean definitions of this factory.
  * They will ignore any singleton beans that have been registered by other means like

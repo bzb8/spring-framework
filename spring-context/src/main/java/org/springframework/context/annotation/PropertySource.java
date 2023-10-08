@@ -31,6 +31,9 @@ import org.springframework.core.io.support.PropertySourceFactory;
  * {@link org.springframework.core.env.Environment Environment}. To be used in
  * conjunction with @{@link Configuration} classes.
  *
+ * 注解提供了一种方便的声明性机制，
+ * 用于将PropertySource 添加到 Spring 的 Environment 环境。与Configuration类结合使用。
+ *
  * <h3>Example usage</h3>
  *
  * <p>Given a file {@code app.properties} containing the key/value pair
@@ -146,6 +149,8 @@ import org.springframework.core.io.support.PropertySourceFactory;
  * {@code PropertySource} API. See {@link org.springframework.core.env.ConfigurableEnvironment
  * ConfigurableEnvironment} and {@link org.springframework.core.env.MutablePropertySources
  * MutablePropertySources} javadocs for details.
+ *
+ * 组件扫描时，需要使用编程式来控制顺序
  *
  * <p><b>NOTE: This annotation is repeatable according to Java 8 conventions.</b>
  * However, all such {@code @PropertySource} annotations need to be declared at the same

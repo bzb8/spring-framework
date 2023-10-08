@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
  * <p>Where <em>precedence</em> is mentioned in methods such as {@link #addFirst}
  * and {@link #addLast}, this is with regard to the order in which property sources
  * will be searched when resolving a given property with a {@link PropertyResolver}.
+ * addFirst和addLast的添加顺序就是解析的顺序
  *
  * @author Chris Beams
  * @author Juergen Hoeller

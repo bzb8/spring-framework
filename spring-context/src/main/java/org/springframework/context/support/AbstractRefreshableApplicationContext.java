@@ -32,6 +32,9 @@ import org.springframework.lang.Nullable;
  * Typically (but not necessarily), such a context will be driven by
  * a set of config locations to load bean definitions from.
  *
+ * {@link org.springframework.context.ApplicationContext} 实现的基类，
+ * 应该支持对 {@link refresh()} 的多次调用，每次都会创建一个新的内部 bean 工厂实例。通常（但不一定），这样的上下文将由一组配置位置驱动以从中加载 bean 定义。
+ *
  * <p>The only method to be implemented by subclasses is {@link #loadBeanDefinitions},
  * which gets invoked on each refresh. A concrete implementation is supposed to load
  * bean definitions into the given
