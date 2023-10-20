@@ -124,6 +124,10 @@ public interface BeanFactory {
 	 * beans <i>created</i> by the FactoryBean. For example, if the bean named
 	 * {@code myJndiObject} is a FactoryBean, getting {@code &myJndiObject}
 	 * will return the factory, not the instance returned by the factory.
+	 *
+	 * 用于解引用 {@link FactoryBean} 实例并将其与 FactoryBean 创建的 bean 区分开来。
+	 * 例如，如果名为 {@code myJndiObject} 的 bean 是一个 FactoryBean，则获取 {@code &myJndiObject} 将返回工厂，而不是工厂返回的实例。
+	 *
 	 */
 	String FACTORY_BEAN_PREFIX = "&";
 
@@ -147,19 +151,34 @@ public interface BeanFactory {
 
 	/**
 	 * Return an instance, which may be shared or independent, of the specified bean.
+	 *
+	 * 返回指定 bean 的实例，该实例可以是共享的，也可以是独立的。
+	 *
 	 * <p>Behaves the same as {@link #getBean(String)}, but provides a measure of type
 	 * safety by throwing a BeanNotOfRequiredTypeException if the bean is not of the
 	 * required type. This means that ClassCastException can't be thrown on casting
 	 * the result correctly, as can happen with {@link #getBean(String)}.
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 *
+	 * <p>行为与 {@link getBean(String)} 相同，但如果 bean 不属于所需类型，则通过抛出 BeanNotOfRequiredTypeException 来提供类型安全措施。
+	 * 这意味着在正确转换结果时不能抛出 ClassCastException，就像 {@link getBean(String)} 可能发生的情况一样。
+	 * <p>将别名翻译回相应的规范 bean 名称。 <p>如果在该工厂实例中找不到该bean，将询问父工厂。
+	 *
 	 * @param name the name of the bean to retrieve
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @return an instance of the bean.
+	 *
+	 * bean 的类型必须匹配；可以是接口或超类 @return bean 的实例。
+	 *
 	 * Note that the return value will never be {@code null}. In case of a stub for
 	 * {@code null} from a factory method having been resolved for the requested bean, a
 	 * {@code BeanNotOfRequiredTypeException} against the NullBean stub will be raised.
 	 * Consider using {@link #getBeanProvider(Class)} for resolving optional dependencies.
+	 *
+	 * 请注意，返回值永远不会是 {@code null}。如果工厂方法中的 {@code null} 存根已针对所请求的 bean 进行解析，则会引发针对 NullBean 存根的 {@code BeanNotOfRequiredTypeException}。
+	 * 考虑使用 {@link getBeanProvider(Class)} 来解决可选依赖项。
+	 *
 	 * @throws NoSuchBeanDefinitionException if there is no such bean definition
 	 * @throws BeanNotOfRequiredTypeException if the bean is not of the required type
 	 * @throws BeansException if the bean could not be created
@@ -255,15 +274,20 @@ public interface BeanFactory {
 	/**
 	 * Does this bean factory contain a bean definition or externally registered singleton
 	 * instance with the given name?
+	 * 该 bean 工厂是否包含 bean 定义或具有给定名称的外部注册单例实例?
 	 * <p>If the given name is an alias, it will be translated back to the corresponding
 	 * canonical bean name.
+	 * 如果给定的名称是别名，它将被翻译回相应的规范 bean 名称.
 	 * <p>If this factory is hierarchical, will ask any parent factory if the bean cannot
 	 * be found in this factory instance.
+	 * 如果这个工厂是分层的，如果在这个工厂实例中找不到该bean，将询问任何父工厂。
 	 * <p>If a bean definition or singleton instance matching the given name is found,
 	 * this method will return {@code true} whether the named bean definition is concrete
 	 * or abstract, lazy or eager, in scope or not. Therefore, note that a {@code true}
 	 * return value from this method does not necessarily indicate that {@link #getBean}
 	 * will be able to obtain an instance for the same name.
+	 * 如果找到与给定名称匹配的 bean 定义或单例实例，则无论命名 bean 定义是具体的还是抽象的、惰性的还是急切的、是否在范围内，此方法都将返回 {@code true}。
+	 * 因此，请注意，此方法的 {@code true} 返回值并不一定表明 {@link getBean} 将能够获取同名的实例。
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is present
 	 */
@@ -323,10 +347,12 @@ public interface BeanFactory {
 
 	/**
 	 * Check whether the bean with the given name matches the specified type.
+	 * 检查给定名称的 bean 是否与指定类型匹配。
 	 * More specifically, check whether a {@link #getBean} call for the given name
 	 * would return an object that is assignable to the specified target type.
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 * 更具体地说，检查给定名称的 {@link getBean} 调用是否会返回可分配给指定目标类型的对象。 <p>将别名翻译回相应的规范 bean 名称。 <p>如果在该工厂实例中找不到该bean，将询问父工厂。
 	 * @param name the name of the bean to query
 	 * @param typeToMatch the type to match against (as a {@code Class})
 	 * @return {@code true} if the bean type matches,

@@ -149,6 +149,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Dependency interfaces to ignore on dependency check and autowire, as Set of
 	 * Class objects. By default, only the BeanFactory interface is ignored.
+	 * 依赖项检查和自动装配时要忽略的依赖项接口，作为类对象集。默认情况下，仅忽略 BeanFactory 接口
 	 */
 	private final Set<Class<?>> ignoredDependencyInterfaces = new HashSet<>();
 
@@ -1940,6 +1941,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * Applies the {@code postProcessAfterInitialization} callback of all
 	 * registered BeanPostProcessors, giving them a chance to post-process the
 	 * object obtained from FactoryBeans (for example, to auto-proxy them).
+	 *
+	 * 应用所有已注册 BeanPostProcessor 的 {@code postProcessAfterInitialization} 回调，使它们有机会对从 FactoryBeans 获取的对象进行后处理（例如，自动代理它们）。
+	 *
 	 * @see #applyBeanPostProcessorsAfterInitialization
 	 */
 	@Override

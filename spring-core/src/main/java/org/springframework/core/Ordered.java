@@ -20,17 +20,27 @@ package org.springframework.core;
  * {@code Ordered} is an interface that can be implemented by objects that
  * should be <em>orderable</em>, for example in a {@code Collection}.
  *
+ * {@code Ordered} 是一个可以由应该可排序的对象实现的接口，例如在 {@code Collection} 中。
+ *
  * <p>The actual {@link #getOrder() order} can be interpreted as prioritization,
  * with the first object (with the lowest order value) having the highest
  * priority.
+ *
+ * <p>实际的{@link getOrder()顺序}可以解释为优先级，第一个对象（具有最低顺序值）具有最高优先级。
  *
  * <p>Note that there is also a <em>priority</em> marker for this interface:
  * {@link PriorityOrdered}. Consult the Javadoc for {@code PriorityOrdered} for
  * details on how {@code PriorityOrdered} objects are ordered relative to
  * <em>plain</em> {@link Ordered} objects.
  *
+ * <p>请注意，此接口还有一个<em>优先级<em>标记：{@link PriorityOrdered}。
+ * 有关 {@code PriorityOrdered} 对象如何相对于 <em>plain<em> {@link Ordered} 对象进行排序的详细信息，
+ * 请参阅 {@code PriorityOrdered} 的 Javadoc
+ *
  * <p>Consult the Javadoc for {@link OrderComparator} for details on the
  * sort semantics for non-ordered objects.
+ *
+ * <p>有关非有序对象的排序语义的详细信息，请参阅 {@link OrderComparator} 的 Javadoc。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen

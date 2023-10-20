@@ -41,11 +41,17 @@ import org.springframework.util.Assert;
  * typically registered as {@link GenericBeanDefinition GenericBeanDefinitions}.
  * A root bean definition is essentially the 'unified' bean definition view at runtime.
  *
+ * 根 bean 定义表示合并的 bean 定义，该定义在运行时支持 Spring BeanFactory 中的特定 bean。
+ * 它可能是从多个相互继承的原始 bean 定义创建的，通常注册为 {@link GenericBeanDefinition GenericBeanDefinitions}。根 bean 定义本质上是运行时的“统一”bean 定义视图。
+ *
  * <p>Root bean definitions may also be used for registering individual bean definitions
  * in the configuration phase. However, since Spring 2.5, the preferred way to register
  * bean definitions programmatically is the {@link GenericBeanDefinition} class.
  * GenericBeanDefinition has the advantage that it allows to dynamically define
  * parent dependencies, not 'hard-coding' the role as a root bean definition.
+ *
+ * <p>根 bean 定义还可用于在配置阶段注册各个 bean 定义。然而，从 Spring 2.5 开始，以编程方式注册 bean 定义的首选方法是 {@link GenericBeanDefinition} 类。
+ * GenericBeanDefinition 的优点是它允许动态定义父依赖项，而不是将角色“硬编码”为根 bean 定义。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -77,6 +83,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	volatile Class<?> resolvedTargetType;
 
 	/** Package-visible field for caching if the bean is a factory bean. */
+	// 如果 bean 是工厂 bean，则用于缓存的包可见字段。
 	@Nullable
 	volatile Boolean isFactoryBean;
 
@@ -330,6 +337,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/**
 	 * Return the target type of this bean definition, if known
 	 * (either specified in advance or resolved on first instantiation).
+	 *
+	 * 返回此 bean 定义的目标类型（如果已知）（提前指定或在第一次实例化时解析）。
+	 *
 	 * @since 3.2.2
 	 */
 	@Nullable

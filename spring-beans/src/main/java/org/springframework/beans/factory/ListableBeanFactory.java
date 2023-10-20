@@ -225,23 +225,44 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * Return the names of beans matching the given type (including subclasses),
 	 * judging from either bean definitions or the value of {@code getObjectType}
 	 * in the case of FactoryBeans.
+	 *
+	 * 返回与给定类型（包括子类）匹配的 bean 名称，根据 bean 定义或 FactoryBeans 情况下的 {@code getObjectType} 值进行判断。
+	 *
 	 * <p><b>NOTE: This method introspects top-level beans only.</b> It does <i>not</i>
 	 * check nested beans which might match the specified type as well.
+	 *
+	 * <p><b>注意：此方法仅自省顶级 bean。<b>它<i>不<i>检查也可能与指定类型匹配的嵌套 bean。
+	 *
 	 * <p>Does consider objects created by FactoryBeans if the "allowEagerInit" flag is set,
 	 * which means that FactoryBeans will get initialized. If the object created by the
 	 * FactoryBean doesn't match, the raw FactoryBean itself will be matched against the
 	 * type. If "allowEagerInit" is not set, only raw FactoryBeans will be checked
 	 * (which doesn't require initialization of each FactoryBean).
+	 *
+	 * <p>如果设置了“allowEagerInit”标志，则考虑 FactoryBeans 创建的对象，这意味着 FactoryBeans 将被初始化。
+	 * 如果 FactoryBean 创建的对象不匹配，则原始 FactoryBean 本身将与类型进行匹配。如果未设置“allowEagerInit”，则仅检查原始FactoryBean（不需要初始化每个FactoryBean）。
+	 *
 	 * <p>Does not consider any hierarchy this factory may participate in.
 	 * Use BeanFactoryUtils' {@code beanNamesForTypeIncludingAncestors}
 	 * to include beans in ancestor factories too.
+	 *
+	 * <p>不考虑该工厂可能参与的任何层次结构。也使用 BeanFactoryUtils 的 {@code beanNamesForTypeInducingAncestors} 将 Bean 包含在祖先工厂中。
+	 *
 	 * <p>Note: Does <i>not</i> ignore singleton beans that have been registered
 	 * by other means than bean definitions.
+	 *
+	 * 注意： <i>not<i> 是否忽略通过 bean 定义以外的其他方式注册的单例 bean。
+	 *
 	 * <p>Bean names returned by this method should always return bean names <i>in the
 	 * order of definition</i> in the backend configuration, as far as possible.
+	 *
+	 * <p>此方法返回的 Bean 名称应尽可能始终按照后端配置中定义<i>的顺序返回 Bean 名称<i>。
+	 *
 	 * @param type the class or interface to match, or {@code null} for all bean names
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)
+	 * 是否也包含原型或作用域 bean 还是仅包含单例（也适用于 FactoryBeans）
+	 *
 	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
 	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
 	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
@@ -249,6 +270,11 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * for this flag will initialize FactoryBeans and "factory-bean" references.
 	 * @return the names of beans (or objects created by FactoryBeans) matching
 	 * the given object type (including subclasses), or an empty array if none
+	 *
+	 * 是否初始化由 FactoryBeans<i>（或具有“factory-bean”引用的工厂方法）创建的惰性初始化单例和对象以进行类型检查。
+	 * 请注意，FactoryBeans 需要立即初始化以确定其类型：因此请注意，为此标志传入“true”将初始化 FactoryBeans 和“factory-bean”引用。
+	 * @return 与给定对象类型（包括子类）匹配的 bean（或由 FactoryBeans 创建的对象）的名称，如果没有则返回空数组
+	 *
 	 * @see FactoryBean#getObjectType
 	 * @see BeanFactoryUtils#beanNamesForTypeIncludingAncestors(ListableBeanFactory, Class, boolean, boolean)
 	 */
