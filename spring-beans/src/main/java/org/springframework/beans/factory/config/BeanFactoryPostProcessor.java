@@ -67,6 +67,7 @@ public interface BeanFactoryPostProcessor {
 	 * initialization. All bean definitions will have been loaded, but no beans
 	 * will have been instantiated yet. This allows for overriding or adding
 	 * properties even to eager-initializing beans.
+	 * 在标准初始化后修改应用程序上下文的内部 bean 工厂。所有 bean 定义都将被加载，但还没有任何 bean 被实例化。这甚至允许覆盖或添加属性，甚至是急于初始化的 bean。
 	 * @param beanFactory the bean factory used by the application context
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 */

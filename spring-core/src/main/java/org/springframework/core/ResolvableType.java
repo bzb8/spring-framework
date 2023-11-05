@@ -48,11 +48,19 @@ import org.springframework.util.StringUtils;
  * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately
  * {@link #resolve() resolve} to a {@link java.lang.Class}.
  *
+ * 封装 Java {@link java.lang.reflect.Type}，提供对 {@link getSuperType() 超类型}、{@link getInterfaces() 接口}和 {@link getGeneric(int...) 泛型参数}
+ * 的访问以及最终将 {@link resolve() 解析} 为 {@link java.lang.Class} 的能力。
+ *
  * <p>A {@code ResolvableType} may be obtained from a {@linkplain #forField(Field) field},
  * a {@linkplain #forMethodParameter(Method, int) method parameter},
  * a {@linkplain #forMethodReturnType(Method) method return type}, or a
  * {@linkplain #forClass(Class) class}. Most methods on this class will themselves return
  * a {@code ResolvableType}, allowing for easy navigation. For example:
+ *
+ * <p>可以从{@linkplain forField(Field)字段}、{@linkplain forMethodParameter(Method, int)方法参数}、
+ * {@linkplain forMethodReturnType(Method)方法返回类型}获取{@code ResolvableType} ，或一个 {@linkplain forClass(Class) 类}。
+ * 此类上的大多数方法本身都会返回一个 {@code ResolvableType}，以便轻松导航。例如
+ *
  * <pre class="code">
  * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
  *

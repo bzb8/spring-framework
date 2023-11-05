@@ -52,6 +52,9 @@ public interface SmartInitializingSingleton {
 	 * lazily initialized on demand after {@link BeanFactory} bootstrap,
 	 * and not for any other bean scope either. Carefully use it for beans
 	 * with the intended bootstrap semantics only.
+	 *
+	 * 在单例预实例化阶段结束时调用，保证所有常规单例 bean 都已创建。此方法中的 {@link ListableBeanFactorygetBeansOfType} 调用不会在引导期间触发意外的副作用。
+	 * <p><b>注意：<b> 对于在 {@link BeanFactory} 引导之后按需延迟初始化的单例 bean，不会触发此回调，也不会为任何其他 bean 作用域触发此回调。仅将其小心地用于具有预期引导语义的 bean。
 	 */
 	void afterSingletonsInstantiated();
 

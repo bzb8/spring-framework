@@ -21,6 +21,7 @@ package org.springframework.core.env;
  * Models two key aspects of the application environment: <em>profiles</em> and
  * <em>properties</em>. Methods related to property access are exposed via the
  * {@link PropertyResolver} superinterface.
+ * 上下文的应用环境，profiles和propertyResolver
  *
  * <p>A <em>profile</em> is a named, logical group of bean definitions to be registered
  * with the container only if the given profile is <em>active</em>. Beans may be assigned
@@ -55,6 +56,7 @@ package org.springframework.core.env;
  * {@code AbstractApplicationContext} subclass {@code getEnvironment()} methods. See
  * {@link ConfigurableEnvironment} Javadoc for usage examples demonstrating manipulation
  * of property sources prior to application context {@code refresh()}.
+ * 在refresh()之前调用
  *
  * @author Chris Beams
  * @author Phillip Webb

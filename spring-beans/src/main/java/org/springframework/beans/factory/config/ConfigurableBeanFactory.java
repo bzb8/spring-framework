@@ -104,6 +104,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * <i>load-time weaving</i> is involved, to make sure that actual bean
 	 * classes are loaded as lazily as possible. The temporary loader is
 	 * then removed once the BeanFactory completes its bootstrap phase.
+	 * 指定用于类型匹配目的的临时类加载器。默认为无，仅使用标准 bean 类加载器。 <p>如果涉及<i>加载时编织<i>，通常只指定临时类加载器，以确保尽可能延迟加载实际的bean类。
+	 * 一旦 BeanFactory 完成其引导阶段，临时加载器就会被删除
 	 * @since 2.5
 	 */
 	void setTempClassLoader(@Nullable ClassLoader tempClassLoader);
@@ -162,11 +164,13 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	ConversionService getConversionService();
 
 	/**
+	 * 添加要应用于所有 bean 创建过程的 PropertyEditorRegistrar.
 	 * Add a PropertyEditorRegistrar to be applied to all bean creation processes.
 	 * <p>Such a registrar creates new PropertyEditor instances and registers them
 	 * on the given registry, fresh for each bean creation attempt. This avoids
 	 * the need for synchronization on custom editors; hence, it is generally
 	 * preferable to use this method instead of {@link #registerCustomEditor}.
+	 * 添加要应用于所有 bean 创建过程的 PropertyEditorRegistrar.这避免了在自定义编辑器上进行同步的需要；因此，通常最好使用此方法而不是 {@link registerCustomEditor}。
 	 * @param registrar the PropertyEditorRegistrar to register
 	 */
 	void addPropertyEditorRegistrar(PropertyEditorRegistrar registrar);

@@ -30,17 +30,21 @@ import org.springframework.util.ObjectUtils;
  * objects, {@code ServletContext} and {@code ServletConfig} objects (for access to init
  * parameters). Explore the {@code PropertySource} type hierarchy to see provided
  * implementations.
+ * 属性源
  *
  * <p>{@code PropertySource} objects are not typically used in isolation, but rather
  * through a {@link PropertySources} object, which aggregates property sources and in
  * conjunction with a {@link PropertyResolver} implementation that can perform
  * precedence-based searches across the set of {@code PropertySources}.
  *
+ * 不会单独使用，而是通过PropertySources聚合属性源，可以基于优先级的搜索
+ *
  * <p>{@code PropertySource} identity is determined not based on the content of
  * encapsulated properties, but rather based on the {@link #getName() name} of the
  * {@code PropertySource} alone. This is useful for manipulating {@code PropertySource}
  * objects when in collection contexts. See operations in {@link MutablePropertySources}
  * as well as the {@link #named(String)} and {@link #toString()} methods for details.
+ * 它的标识是基于getName()方法的，而不是基于内容
  *
  * <p>Note that when working with @{@link
  * org.springframework.context.annotation.Configuration Configuration} classes that

@@ -25,6 +25,8 @@ import java.util.Map;
  * conversion service and more through the {@link ConfigurablePropertyResolver}
  * superinterface.
  *
+ * 提供用于设置活动和默认配置文件以及操作底层属性源的工具
+ *
  * <h2>Manipulating property sources</h2>
  * <p>Property sources may be removed, reordered, or replaced; and additional
  * property sources may be added using the {@link MutablePropertySources}
@@ -63,6 +65,8 @@ import java.util.Map;
  * container bootstrap process, including use by {@linkplain
  * org.springframework.context.support.PropertySourcesPlaceholderConfigurer property
  * placeholder configurers}.
+ *
+ * 需要在refresh()之前调用
  *
  * @author Chris Beams
  * @since 3.1

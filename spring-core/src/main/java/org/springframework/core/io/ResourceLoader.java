@@ -49,12 +49,16 @@ public interface ResourceLoader {
 	 * Return a {@code Resource} handle for the specified resource location.
 	 * <p>The handle should always be a reusable resource descriptor,
 	 * allowing for multiple {@link Resource#getInputStream()} calls.
+	 *
+	 * 返回指定资源位置的 {@code Resource} 句柄。 <p>句柄应始终是可重用的资源描述符，允许多个 {@link ResourcegetInputStream()} 调用
+	 *
 	 * <p><ul>
 	 * <li>Must support fully qualified URLs, e.g. "file:C:/test.dat".
 	 * <li>Must support classpath pseudo-URLs, e.g. "classpath:test.dat".
 	 * <li>Should support relative file paths, e.g. "WEB-INF/test.dat".
 	 * (This will be implementation-specific, typically provided by an
 	 * ApplicationContext implementation.)
+	 * 这将是特定于实现的，通常由 ApplicationContext 实现提供。
 	 * </ul>
 	 * <p>Note that a {@code Resource} handle does not imply an existing resource;
 	 * you need to invoke {@link Resource#exists} to check for existence.

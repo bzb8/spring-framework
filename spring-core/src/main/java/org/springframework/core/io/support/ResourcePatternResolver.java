@@ -24,6 +24,7 @@ import org.springframework.core.io.ResourceLoader;
 /**
  * Strategy interface for resolving a location pattern (for example,
  * an Ant-style path pattern) into {@link Resource} objects.
+ * 用于将位置模式（例如，Ant 样式路径模式）解析为 {@link Resource} 对象的策略接口。
  *
  * <p>This is an extension to the {@link org.springframework.core.io.ResourceLoader}
  * interface. A passed-in {@code ResourceLoader} (for example, an
@@ -35,6 +36,7 @@ import org.springframework.core.io.ResourceLoader;
  * that is usable outside an {@code ApplicationContext}, also used by
  * {@link ResourceArrayPropertyEditor} for populating {@code Resource} array bean
  * properties.
+ * 可以独立使用
  *
  * <p>Can be used with any sort of location pattern &mdash; for example,
  * {@code "/WEB-INF/*-context.xml"}. However, input patterns have to match the
@@ -70,6 +72,7 @@ public interface ResourcePatternResolver extends ResourceLoader {
 	 * <p>Overlapping resource entries that point to the same physical
 	 * resource should be avoided, as far as possible. The result should
 	 * have set semantics.
+	 * 将给定的位置模式解析为 {@code Resource} 对象。 <p>应尽可能避免指向同一物理资源的重叠资源条目。结果应该具有设定的语义。
 	 * @param locationPattern the location pattern to resolve
 	 * @return the corresponding {@code Resource} objects
 	 * @throws IOException in case of I/O errors

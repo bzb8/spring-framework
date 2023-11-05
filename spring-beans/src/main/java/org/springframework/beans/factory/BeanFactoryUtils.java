@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 /**
  * Convenience methods operating on bean factories, in particular
  * on the {@link ListableBeanFactory} interface.
+ * 在 bean 工厂上操作的便捷方法，特别是在 {@link ListableBeanFactory} 接口上。
  *
  * <p>Returns bean counts, bean names or bean instances,
  * taking into account the nesting hierarchy of a bean factory
@@ -54,6 +55,9 @@ public abstract class BeanFactoryUtils {
 
 	/**
 	 * Cache from name with factory bean prefix to stripped name without dereference.
+	 *
+	 * 从带有工厂 bean 前缀的名称缓存到剥离名称而不解引用。
+	 *
 	 * @since 5.1
 	 * @see BeanFactory#FACTORY_BEAN_PREFIX
 	 */
@@ -74,6 +78,9 @@ public abstract class BeanFactoryUtils {
 	/**
 	 * Return the actual bean name, stripping out the factory dereference
 	 * prefix (if any, also stripping repeated factory prefixes if found).
+	 *
+	 * 返回实际的 bean 名称，去掉工厂取消引用前缀（如果有的话，如果找到的话也去掉重复的工厂前缀）。
+	 *
 	 * @param name the name of the bean
 	 * @return the transformed name
 	 * @see BeanFactory#FACTORY_BEAN_PREFIX

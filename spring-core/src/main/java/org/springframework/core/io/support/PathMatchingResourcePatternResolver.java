@@ -289,6 +289,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 			}
 		}
 		else {
+			// 通常，此处仅在前缀之后查找模式，而在 Tomcat 上，仅在其“war:”协议的“”分隔符之后查找模式
 			// Generally only look for a pattern after a prefix here,
 			// and on Tomcat only after the "*/" separator for its "war:" protocol.
 			int prefixEnd = (locationPattern.startsWith("war:") ? locationPattern.indexOf("*/") + 1 :

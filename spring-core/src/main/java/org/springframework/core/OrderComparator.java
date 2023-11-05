@@ -27,19 +27,34 @@ import org.springframework.util.ObjectUtils;
  * {@link Comparator} implementation for {@link Ordered} objects, sorting
  * by order value ascending, respectively by priority descending.
  *
+ * {@link Ordered} 对象的 {@link Comparator} 实现，按顺序值升序排序，分别按优先级降序排序。
+ *
  * <h3>{@code PriorityOrdered} Objects</h3>
  * <p>{@link PriorityOrdered} objects will be sorted with higher priority than
  * <em>plain</em> {@code Ordered} objects.
  *
+ * <h3>{@code PriorityOrdered} 对象<h3>
+ * <p>{@link PriorityOrdered} 对象将以比 <em>plain<em> {@code Ordered} 对象更高的优先级进行排序。
+ *
  * <h3>Same Order Objects</h3>
+ *
+ * 相同顺序的对象
+ *
  * <p>Objects that have the same order value will be sorted with arbitrary
  * ordering with respect to other objects with the same order value.
  *
+ * 具有相同顺序值的对象将相对于具有相同顺序值的其他对象以任意顺序进行排序。
+ *
  * <h3>Non-ordered Objects</h3>
+ *
+ * 无序对象
+ *
  * <p>Any object that does not provide its own order value is implicitly
  * assigned a value of {@link Ordered#LOWEST_PRECEDENCE}, thus ending up
  * at the end of a sorted collection in arbitrary order with respect to
  * other objects with the same order value.
+ *
+ * 任何不提供自己的顺序值的对象都会隐式分配一个值 {@link OrderedLOWEST_PRECEDENCE}，从而相对于具有相同顺序值的其他对象以任意顺序结束在排序集合的末尾。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen

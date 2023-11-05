@@ -31,6 +31,8 @@ import org.springframework.util.ObjectUtils;
 /**
  * Holder that combines a {@link Resource} descriptor with a specific encoding
  * or {@code Charset} to be used for reading from the resource.
+ * 
+ * 将 {@link Resource} 描述符与特定编码或 {@code Charset} 相结合的持有者，用于从资源中读取。
  *
  * <p>Used as an argument for operations that support reading content with
  * a specific encoding, typically via a {@code java.io.Reader}.
