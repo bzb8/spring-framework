@@ -75,6 +75,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 
 	/** Cache of singleton objects: bean name to bean instance. */
+
+	// 完全初始化后的对象
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
 	/** Cache of singleton factories: bean name to ObjectFactory. */
@@ -111,6 +113,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private final Map<String, Set<String>> containedBeanMap = new ConcurrentHashMap<>(16);
 
 	/** Map between dependent bean names: bean name to Set of dependent bean names. */
+	// 依赖 bean 名称之间的映射：bean 名称到依赖 bean 名称集。
 	private final Map<String, Set<String>> dependentBeanMap = new ConcurrentHashMap<>(64);
 
 	/** Map between depending bean names: bean name to Set of bean names for the bean's dependencies. */
@@ -175,13 +178,17 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * Return the (raw) singleton object registered under the given name.
 	 * <p>Checks already instantiated singletons and also allows for an early
 	 * reference to a currently created singleton (resolving a circular reference).
+	 *
+	 * 返回以给定名称注册的（原始）单例对象。 <p>检查已实例化的单例，并允许早期引用当前创建的单例（解决循环引用）。
+	 *
 	 * @param beanName the name of the bean to look for
-	 * @param allowEarlyReference whether early references should be created or not 是否应该创建早期参考
+	 * @param allowEarlyReference whether early references should be created or not 是否应该创建早期引用
 	 * @return the registered singleton object, or {@code null} if none found
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock
+		// 快速检查现有实例，无需完整的单例锁
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			singletonObject = this.earlySingletonObjects.get(beanName);
@@ -210,6 +217,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Return the (raw) singleton object registered under the given name,
 	 * creating and registering a new one if none registered yet.
+	 *
+	 * 返回在给定名称下注册的（原始）单例对象，如果尚未注册，则创建并注册一个新对象。
+	 *
 	 * @param beanName the name of the bean
 	 * @param singletonFactory the ObjectFactory to lazily create the singleton
 	 * with, if necessary
@@ -342,6 +352,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Return whether the specified singleton bean is currently in creation
 	 * (within the entire factory).
+	 * 返回指定的单例 bean 当前是否正在创建（在整个工厂内）。
 	 * @param beanName the name of the bean
 	 */
 	public boolean isSingletonCurrentlyInCreation(@Nullable String beanName) {
@@ -435,6 +446,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Determine whether the specified dependent bean has been registered as
 	 * dependent on the given bean or on any of its transitive dependencies.
+	 *
+	 * 确定指定的依赖 bean 是否已注册为依赖于给定 bean 或其任何传递依赖项。
+	 *
 	 * @param beanName the name of the bean to check
 	 * @param dependentBeanName the name of the dependent bean
 	 * @since 4.0

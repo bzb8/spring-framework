@@ -47,6 +47,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	/** Map from alias to canonical name. */
+	// <alias, beanName>
 	private final Map<String, String> aliasMap = new ConcurrentHashMap<>(16);
 
 
@@ -189,6 +190,9 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * Check whether the given name points back to the given alias as an alias
 	 * in the other direction already, catching a circular reference upfront
 	 * and throwing a corresponding IllegalStateException.
+	 *
+	 * 检查给定名称是否已经作为另一个方向的别名指向给定别名，预先捕获循环引用并抛出相应的 IllegalStateException。
+	 *
 	 * @param name the candidate name
 	 * @param alias the candidate alias
 	 * @see #registerAlias
@@ -206,6 +210,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * Determine the raw name, resolving aliases to canonical names.
 	 *
 	 * 确定原始名称，将别名解析为规范名称。
+	 * 为了获取id
 	 *
 	 * @param name the user-specified name
 	 * @return the transformed name

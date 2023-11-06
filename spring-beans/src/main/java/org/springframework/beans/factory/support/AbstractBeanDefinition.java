@@ -786,6 +786,8 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return whether to allow access to non-public constructors and methods.
+	 *
+	 * 返回是否允许访问非公共构造函数和方法。
 	 */
 	public boolean isNonPublicAccessAllowed() {
 		return this.nonPublicAccessAllowed;
@@ -1142,6 +1144,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Validate and prepare the given method override.
 	 * Checks for existence of a method with the specified name,
 	 * marking it as not overloaded if none found.
+	 *
+	 * 验证并准备给定的方法覆盖。检查是否存在具有指定名称的方法，如果没有找到，则将其标记为未重载。
+	 *
 	 * @param mo the MethodOverride object to validate
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
