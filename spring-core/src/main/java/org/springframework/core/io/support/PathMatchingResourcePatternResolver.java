@@ -65,7 +65,13 @@ import org.springframework.util.StringUtils;
  * {@link org.springframework.util.AntPathMatcher} utility).
  * Both of the latter are effectively wildcards.
  *
- * <p><b>No Wildcards:</b>
+ * 一个 {@link ResourcePatternResolver} 实现，能够将指定的资源位置路径解析为一个或多个匹配的 Resources。
+ * 源路径可以是一个简单的路径，它与目标{@link org.springframework.core.io.Resource}具有一对一的映射关系，
+ * 或者可以包含特殊的“{@code classpath*：}”前缀和/或内部Ant样式的正则表达式
+ * （使用Spring的{@link org.springframework.util.AntPathMatcher}实用程序进行匹配）。
+ * 后者实际上都是通配符。
+ *
+ * <p><b>No Wildcards:</b> 无通配符
  *
  * <p>In the simple case, if the specified location path does not start with the
  * {@code "classpath*:}" prefix, and does not contain a PathMatcher pattern,
@@ -76,6 +82,12 @@ import org.springframework.util.StringUtils;
  * such as "{@code /WEB-INF/context.xml}". The latter will resolve in a
  * fashion specific to the underlying {@code ResourceLoader} (e.g.
  * {@code ServletContextResource} for a {@code WebApplicationContext}).
+ *
+ * <p>在简单情况下，如果指定的位置路径不以 {@code “classpath*：}” 前缀开头，并且不包含 PathMatcher 模式，
+ * 则此解析器将仅通过对底层 {@code ResourceLoader} 的 {@code getResource（）} 调用返回单个资源。
+ * 例如，真实 URL（如“{@code file:C:/context.xml}”）、伪 URL（如“{@code classpath：context.xml}”）和
+ * 简单的无前缀路径（如“{@code WEB-INF/context.xml}”。
+ * 后者将以特定于底层 {@code ResourceLoader} 的方式解析（例如，{@code ServletContextResource} 用于 {@code WebApplicationContext}）。
  *
  * <p><b>Ant-style Patterns:</b>
  *
@@ -96,11 +108,20 @@ import org.springframework.util.StringUtils;
  * the jar URL, and then traverses the contents of the jar file, to resolve the
  * wildcards.
  *
- * <p><b>Implications on portability:</b>
+ * <p>当路径位置包含 Ant 样式模式时，
+ * 例如：<pre class=“code”> WEB-INF/*-context.xml com/mycompany/** /applicationContext.xml
+ * 解析<pre>器将遵循更复杂但已定义的过程来尝试解析通配符。它为最后一个非通配符段的路径生成 {@code Resource}，并从中获取 {@code URL}。
+ * 如果此 URL 不是 “{@code jar：}” URL 或特定于容器的变体（例如，WebLogic 中的 “{@code zip：}”
+ * ，WebSphere 中的 “{@code wsjar}” 等），那么从中获取 {@code java.io.File}，并用于通过遍历文件系统来解析通配符。
+ * 对于 jar URL，解析器要么从中获取 {@code java.net.JarURLConnection}，要么手动解析 jar URL，然后遍历 jar 文件的内容，以解析通配符。
+ *
+ * <p><b>Implications on portability:</b> 对可移植性的影响
  *
  * <p>If the specified path is already a file URL (either explicitly, or
  * implicitly because the base {@code ResourceLoader} is a filesystem one),
  * then wildcarding is guaranteed to work in a completely portable fashion.
+ *
+ * p>如果指定的路径已经是文件 URL（显式或隐式，因为基 {@code ResourceLoader} 是文件系统的），则通配符可以保证以完全可移植的方式工作。
  *
  * <p>If the specified path is a classpath location, then the resolver must
  * obtain the last non-wildcard path segment URL via a
@@ -112,6 +133,11 @@ import org.springframework.util.StringUtils;
  * location, or a jar URL of some sort, where the classpath resource resolves
  * to a jar location. Still, there is a portability concern on this operation.
  *
+ * <p>如果指定的路径是类路径位置，则解析器必须通过 {@code Classloader.getResource（）} 调用获取最后一个非通配符路径段 URL。
+ * 由于这只是路径的一个节点（而不是末尾的文件），因此在这种情况下，它实际上是未定义的（在 ClassLoader Javadocs 中）确切的 URL 类型。
+ * 在实践中，它通常是表示目录的 {@code java.io.File}，类路径资源解析为文件系统位置，
+ * 或者是某种 jar URL，类路径资源解析为 jar 位置。尽管如此，此操作仍存在可移植性问题。
+ *
  * <p>If a jar URL is obtained for the last non-wildcard segment, the resolver
  * must be able to get a {@code java.net.JarURLConnection} from it, or
  * manually parse the jar URL, to be able to walk the contents of the jar,
@@ -119,6 +145,10 @@ import org.springframework.util.StringUtils;
  * fail in others, and it is strongly recommended that the wildcard
  * resolution of resources coming from jars be thoroughly tested in your
  * specific environment before you rely on it.
+ *
+ * p>如果为最后一个非通配符段获取了 jar URL，则解析器必须能够从中获取 {@code java.net.JarURLConnection}，或者手动解析 jar URL，
+ * 以便能够遍历 jar 的内容并解析通配符。
+ * 这在大多数环境中都有效，但在其他环境中会失败，强烈建议在依赖它之前，在特定环境中对来自 jar 的资源的通配符解析进行全面测试。
  *
  * <p><b>{@code classpath*:} Prefix:</b>
  *
@@ -130,6 +160,11 @@ import org.springframework.util.StringUtils;
  * at the same location within each jar file. Internally, this happens via a
  * {@code ClassLoader.getResources()} call, and is completely portable.
  *
+ * <p>特别支持通过“{@code classpath*：}”前缀检索具有相同名称的多个类路径资源。
+ * 例如，“{@code classpath*：META-INF/beans.xml}”将在类路径中找到所有“beans.xml”文件，
+ * 无论是在“classes”目录中还是在 JAR 文件中。这对于自动检测每个 jar 文件中相同位置的同名配置文件特别有用。
+ * 在内部，这是通过 {@code ClassLoader.getResources（）} 调用实现的，并且是完全可移植的。
+ *
  * <p>The "classpath*:" prefix can also be combined with a PathMatcher pattern in
  * the rest of the location path, for example "classpath*:META-INF/*-beans.xml".
  * In this case, the resolution strategy is fairly simple: a
@@ -137,6 +172,10 @@ import org.springframework.util.StringUtils;
  * path segment to get all the matching resources in the class loader hierarchy,
  * and then off each resource the same PathMatcher resolution strategy described
  * above is used for the wildcard subpath.
+ *
+ * p>“classpath*：”前缀还可以与位置路径其余部分中的 PathMatcher 模式结合使用，例如“classpath*：META-INF/*-beans.xml”。
+ * 在这种情况下，解析策略相当简单：在最后一个非通配符路径段上使用 {@code ClassLoader.getResources（）} 调用来获取类装入器层次结构中的所有匹配资源，
+ * 然后对每个资源使用上述相同的 PathMatcher 解析策略用于通配符子路径。
  *
  * <p><b>Other notes:</b>
  *
@@ -151,6 +190,13 @@ import org.springframework.util.StringUtils;
  * This {@code ResourcePatternResolver} implementation is trying to mitigate the
  * jar root lookup limitation through {@link URLClassLoader} introspection and
  * "java.class.path" manifest evaluation; however, without portability guarantees.
+ *
+ * p><b>警告：<b>请注意，当 “{@code classpath*：}” 与 Ant 样式模式结合使用时，
+ * 除非实际目标文件驻留在文件系统中，否则在模式启动之前，只能可靠地使用至少一个根目录。
+ * 这意味着像 “{@code classpath*：*.xml}” 这样的模式不会从 jar 文件的根目录检索文件，<i><i>而只会从扩展目录的根目录检索文件。
+ * 这源于 JDK 的 {@code ClassLoader.getResources（）} 方法中的限制，该方法仅返回传入的空字符串的文件系统位置（指示要搜索的潜在根）。
+ * 此 {@code ResourcePatternResolver} 实现试图通过 {@link URLClassLoader} 内省和“java.class.path”清单评估来缓解 jar 根查找限制;
+ * 但是，没有可移植性保证。
  *
  * <p><b>WARNING:</b> Ant-style patterns with "classpath:" resources are not
  * guaranteed to find matching resources if the root package to search is available
@@ -168,6 +214,13 @@ import org.springframework.util.StringUtils;
  * underneath. Therefore, preferably, use "{@code classpath*:}" with the same
  * Ant-style pattern in such a case, which will search <i>all</i> class path
  * locations that contain the root package.
+ *
+ * p><b>警告：<b>如果要搜索的根包在多个类路径位置可用，则不能保证具有 “classpath*：” 资源的 Ant 样式模式找到匹配的资源。
+ * 这是因为诸如 <pre class=“code”>commycompanypackage1service-context.xml 之类的资源<pre>可能只位于一个位置，
+ * 但是当使用 <pre class=“code”> classpath：commycompany&47;service-context.xml 等路径尝试解析<pre>它时，
+ * 解析器将处理 {@code getResource（“commycompany”）;} 返回的（第一个）URL。如果此基本包节点存在于多个类装入器位置中，
+ * 那么实际的最终资源可能不在下面。
+ * 因此，在这种情况下，最好使用具有相同 Ant 样式模式的 “{@code classpath*：}”，这将搜索<i><i>包含根包的所有类路径位置。
  *
  * @author Juergen Hoeller
  * @author Colin Sampaleanu

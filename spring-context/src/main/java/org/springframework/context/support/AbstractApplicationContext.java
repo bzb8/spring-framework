@@ -480,11 +480,21 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * into Resource instances. Default is a
 	 * {@link org.springframework.core.io.support.PathMatchingResourcePatternResolver},
 	 * supporting Ant-style location patterns.
+	 *
+	 * 返回用于将位置模式解析为 Resource 实例的 ResourcePatternResolver。
+	 * 默认值为 {@link org.springframework.core.io.support.PathMatchingResourcePatternResolver}，支持 Ant 样式的位置模式。
+	 *
 	 * <p>Can be overridden in subclasses, for extended resolution strategies,
 	 * for example in a web environment.
+	 *
+	 * <p>可以在子类中重写，用于扩展解析策略，例如在 Web 环境中。
+	 *
 	 * <p><b>Do not call this when needing to resolve a location pattern.</b>
 	 * Call the context's {@code getResources} method instead, which
 	 * will delegate to the ResourcePatternResolver.
+	 *
+	 * <p><b>当需要解析位置模式时，不要调用此函数。<b>请改为调用上下文的 {@code getResources} 方法，该方法将委托给 ResourcePatternResolver
+	 *
 	 * @return the ResourcePatternResolver for this context
 	 * @see #getResources
 	 * @see org.springframework.core.io.support.PathMatchingResourcePatternResolver

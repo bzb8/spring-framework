@@ -32,22 +32,33 @@ import org.springframework.core.io.ResourceLoader;
  * {@link org.springframework.context.ResourceLoaderAware} when running in a context)
  * can be checked whether it implements this extended interface too.
  *
+ * <p>这是{@link org.springframework.core.io.ResourceLoader}接口的扩展。
+ * 传入的{@code ResourceLoader}（例如，在上下文中运行时通过{@link org.springframework.context.ResourceLoaderAware}
+ * 传入的{@link org.springframework.context.ApplicationContext}）可以检查它是否也实现了这个扩展接口。
+ *
  * <p>{@link PathMatchingResourcePatternResolver} is a standalone implementation
  * that is usable outside an {@code ApplicationContext}, also used by
  * {@link ResourceArrayPropertyEditor} for populating {@code Resource} array bean
  * properties.
- * 可以独立使用
+ * <p>{@link PathMatchingResourcePatternResolver} 是一个独立的实现，可在 {@code ApplicationContext} 外部使用，
+ * {@link ResourceArrayPropertyEditor} 也使用它来填充 {@code Resource} 数组 Bean 属性。
  *
  * <p>Can be used with any sort of location pattern &mdash; for example,
  * {@code "/WEB-INF/*-context.xml"}. However, input patterns have to match the
  * strategy implementation. This interface just specifies the conversion method
  * rather than a specific pattern format.
  *
+ * <p>可以与任何类型的位置模式一起使用，
+ * 例如 {@code “/WEB-INF/*-context.xml”}。但是，输入模式必须与策略实现相匹配。此接口仅指定转换方法，而不是特定的模式格式。
+ *
  * <p>This interface also defines a {@code "classpath*:"} resource prefix for all
  * matching resources from the class path. Note that the resource location may
  * also contain placeholders &mdash; for example {@code "/beans-*.xml"}. JAR files
  * or different directories in the class path can contain multiple files of the
  * same name.
+ *
+ * <p>此接口还为类路径中的所有匹配资源定义 {@code “classpath*：”} 资源前缀。
+ * 请注意，资源位置也可能包含占位符，例如 {@code “beans-*.xml”}。类路径中的 JAR 文件或不同目录可以包含多个同名文件。
  *
  * @author Juergen Hoeller
  * @since 1.0.2

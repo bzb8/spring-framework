@@ -33,13 +33,20 @@ import org.springframework.util.StringUtils;
 /**
  * Default implementation of the {@link ResourceLoader} interface.
  *
+ * {@link ResourceLoader} 接口的默认实现。
+ *
  * <p>Used by {@link ResourceEditor}, and serves as base class for
  * {@link org.springframework.context.support.AbstractApplicationContext}.
  * Can also be used standalone.
  *
+ * 由 {@link <p>ResourceEditor} 使用，并用作 {@link org.springframework.context.support.AbstractApplicationContext} 的基类。也可以单独使用。
+ *
  * <p>Will return a {@link UrlResource} if the location value is a URL,
  * and a {@link ClassPathResource} if it is a non-URL path or a
  * "classpath:" pseudo-URL.
+ *
+ *
+ * <p>如果位置值是 URL，将返回 {@link UrlResource}，如果是非 URL 路径或“classpath：”伪 URL，则返回 {@link ClassPathResource}。
  *
  * @author Juergen Hoeller
  * @since 10.03.2004
