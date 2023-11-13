@@ -332,7 +332,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the {@code Environment} for this application context in configurable
 	 * form, allowing for further customization.
+	 * 以可配置的形式返回此应用程序上下文的 {@code Environment}，允许进一步自定义。
 	 * <p>If none specified, a default environment will be initialized via
+	 * 如果未指定，则默认环境将通过
 	 * {@link #createEnvironment()}.
 	 */
 	@Override
@@ -564,6 +566,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
+			// 准备此上下文以进行刷新。
 			prepareRefresh();
 
 			// 告诉子类刷新内部bean工厂

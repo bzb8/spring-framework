@@ -25,10 +25,12 @@ import org.springframework.lang.Nullable;
  * Interface to be implemented by types that determine which @{@link Configuration}
  * class(es) should be imported based on a given selection criteria, usually one or
  * more annotation attributes.
+ * 由类型实现的接口，这些类型根据给定的选择条件（通常是一个或多个注解属性）确定应导入哪些 @{@link Configuration} 类
  *
  * <p>An {@link ImportSelector} may implement any of the following
  * {@link org.springframework.beans.factory.Aware Aware} interfaces,
  * and their respective methods will be called prior to {@link #selectImports}:
+ * {@link ImportSelector}可以实现以下任何{@link org.springframework.beans.factory.Aware Aware}接口，并且它们各自的方法将在{@link selectImports}之前调用:
  * <ul>
  * <li>{@link org.springframework.context.EnvironmentAware EnvironmentAware}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactoryAware BeanFactoryAware}</li>
@@ -38,6 +40,7 @@ import org.springframework.lang.Nullable;
  *
  * <p>Alternatively, the class may provide a single constructor with one or more of
  * the following supported parameter types:
+ * 或者，该类可以为单个构造函数提供以下一个或多个受支持的参数类型：
  * <ul>
  * <li>{@link org.springframework.core.env.Environment Environment}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactory BeanFactory}</li>
@@ -49,6 +52,8 @@ import org.springframework.lang.Nullable;
  * as regular {@code @Import} annotations, however, it is also possible to defer
  * selection of imports until all {@code @Configuration} classes have been processed
  * (see {@link DeferredImportSelector} for details).
+ * {@code ImportSelector} 实现的处理方式通常与常规 {@code @Import} 注解相同，但是，也可以推迟导入的选择，
+ * 直到所有 {@code @Configuration} 类都处理完毕（有关详细信息，请参阅 {@link DeferredImportSelector}）。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -63,7 +68,8 @@ public interface ImportSelector {
 	/**
 	 * Select and return the names of which class(es) should be imported based on
 	 * the {@link AnnotationMetadata} of the importing @{@link Configuration} class.
-	 * @return the class names, or an empty array if none
+	 * 根据导入 @{@link Configuration} 类的 {@link AnnotationMetadata} 选择并返回应导入的类的名称。
+	 * @return the class names, or an empty array if none 类名，如果没有，则为空数组
 	 */
 	String[] selectImports(AnnotationMetadata importingClassMetadata);
 
@@ -73,6 +79,9 @@ public interface ImportSelector {
 	 * <p>If this predicate returns {@code true} for a given fully-qualified
 	 * class name, said class will not be considered as an imported configuration
 	 * class, bypassing class file loading as well as metadata introspection.
+	 * 返回一个谓词，用于从导入候选项中排除类，以传递方式应用于通过此选择器的导入找到的所有类。<p>如果此谓词为给定的完全限定类名返回 {@code true}，则该类将不被视为导入的配置类，从而绕过类文件加载和元数据自省。
+	 * 为传递导入的配置类的完全限定候选类名称
+	 *
 	 * @return the filter predicate for fully-qualified candidate class names
 	 * of transitively imported configuration classes, or {@code null} if none
 	 * @since 5.2.4

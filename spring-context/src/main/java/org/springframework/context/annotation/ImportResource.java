@@ -27,12 +27,15 @@ import org.springframework.core.annotation.AliasFor;
 
 /**
  * Indicates one or more resources containing bean definitions to import.
+ * 指示包含要导入的 Bean 定义的一个或多个资源。
  *
  * <p>Like {@link Import @Import}, this annotation provides functionality similar to
  * the {@code <import/>} element in Spring XML. It is typically used when designing
  * {@link Configuration @Configuration} classes to be bootstrapped by an
  * {@link AnnotationConfigApplicationContext}, but where some XML functionality such
  * as namespaces is still necessary.
+ * <p>与 {@link Import @Import} 一样，此注解提供的功能类似于 <import>Spring XML 中的 {@code } 元素。
+ * 它通常用于设计 {@link Configuration @Configuration} 类以由 {@link AnnotationConfigApplicationContext} 引导，但某些 XML 功能（如命名空间）仍然需要。
  *
  * <p>By default, arguments to the {@link #value} attribute will be processed using a
  * {@link org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader GroovyBeanDefinitionReader}
@@ -41,6 +44,9 @@ import org.springframework.core.annotation.AliasFor;
  * will be used to parse Spring {@code <beans/>} XML files. Optionally, the {@link #reader}
  * attribute may be declared, allowing the user to choose a custom {@link BeanDefinitionReader}
  * implementation.
+ * <p>默认情况下，{@link #value} 属性的参数将使用 {@link org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader} 处理，如果以 {@code “.groovy”} 结尾;
+ * 否则，{@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader XmlBeanDefinitionReader} 将用于解析 Spring {@code <beans>} XML 文件。
+ * 或者，可以声明 {@link #reader} 属性，允许用户选择自定义的 {@link BeanDefinitionReader} 实现。
  *
  * @author Chris Beams
  * @author Juergen Hoeller

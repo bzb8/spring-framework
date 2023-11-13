@@ -25,17 +25,22 @@ import java.util.Map;
  * conversion service and more through the {@link ConfigurablePropertyResolver}
  * superinterface.
  *
- * 提供用于设置活动和默认配置文件以及操作底层属性源的工具
+ * 配置接口由大多数（如果不是全部）{@link Environment} 类型实现。提供用于设置活动和默认配置文件以及操作基础属性源的工具。
+ * 允许客户端通过 {@link ConfigurablePropertyResolver} 超级接口设置和验证所需的属性、自定义转换服务等。
  *
  * <h2>Manipulating property sources</h2>
+ * 操作属性源
  * <p>Property sources may be removed, reordered, or replaced; and additional
  * property sources may be added using the {@link MutablePropertySources}
  * instance returned from {@link #getPropertySources()}. The following examples
  * are against the {@link StandardEnvironment} implementation of
  * {@code ConfigurableEnvironment}, but are generally applicable to any implementation,
  * though particular default property sources may differ.
+ * <p>可以删除、重新排序或替换属性源;可以使用从 {@link getPropertySources（）} 返回的 {@link MutablePropertySources} 实例添加其他属性源。
+ * 以下示例针对 {@code ConfigurableEnvironment} 的 {@link StandardEnvironment} 实现，但通常适用于任何实现，但特定的默认属性源可能有所不同。
  *
  * <h4>Example: adding a new property source with highest search priority</h4>
+ * 示例：添加具有最高搜索优先级的新属性源
  * <pre class="code">
  * ConfigurableEnvironment environment = new StandardEnvironment();
  * MutablePropertySources propertySources = environment.getPropertySources();
@@ -45,12 +50,14 @@ import java.util.Map;
  * </pre>
  *
  * <h4>Example: removing the default system properties property source</h4>
+ * 删除默认的系统属性属性源
  * <pre class="code">
  * MutablePropertySources propertySources = environment.getPropertySources();
  * propertySources.remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME)
  * </pre>
  *
  * <h4>Example: mocking the system environment for testing purposes</h4>
+ * 模拟系统环境以进行测试
  * <pre class="code">
  * MutablePropertySources propertySources = environment.getPropertySources();
  * MockPropertySource mockEnvVars = new MockPropertySource().withProperty("xyz", "myValue");
@@ -66,7 +73,9 @@ import java.util.Map;
  * org.springframework.context.support.PropertySourcesPlaceholderConfigurer property
  * placeholder configurers}.
  *
- * 需要在refresh()之前调用
+ * 当{@link ApplicationContext}正在使用{@code ApplicationContext}时，
+ * <em>在<em>调用上下文的{@link org.springframework.context.support.AbstractApplicationContextrefresh（） refresh（）}方法之前，执行任何此类{@code PropertySource}操作非常重要。
+ * 这可确保所有属性源在容器引导过程中都可用，包括 {@linkplain org.springframework.context.support.PropertySourcesPlaceholderConfigurer 属性占位符配置器}的使用。
  *
  * @author Chris Beams
  * @since 3.1
@@ -79,9 +88,14 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * Specify the set of profiles active for this {@code Environment}. Profiles are
 	 * evaluated during container bootstrap to determine whether bean definitions
 	 * should be registered with the container.
+	 * 指定为此 {@code 环境} 激活的配置文件集。在容器引导期间评估配置文件，以确定是否应向容器注册 Bean 定义。
 	 * <p>Any existing active profiles will be replaced with the given arguments; call
 	 * with zero arguments to clear the current set of active profiles. Use
 	 * {@link #addActiveProfile} to add a profile while preserving the existing set.
+	 *
+	 * <p>任何现有的活动配置文件都将替换为给定的参数;使用零参数调用以清除当前的活动配置文件集。
+	 * 使用 {@link addActiveProfile} 添加配置文件，同时保留现有集。
+	 *
 	 * @throws IllegalArgumentException if any profile is null, empty or whitespace-only
 	 * @see #addActiveProfile
 	 * @see #setDefaultProfiles

@@ -31,9 +31,11 @@ import org.springframework.lang.Nullable;
  * Utility class for working with Strings that have placeholder values in them.
  * A placeholder takes the form {@code ${name}}. Using {@code PropertyPlaceholderHelper}
  * these placeholders can be substituted for user-supplied values.
+ * 用于处理包含占位符值的字符串的实用程序类。占位符的格式为 {@code ${name}}。使用 {@code PropertyPlaceholderHelper} 可以替换这些占位符来替换用户提供的值。
  *
  * <p>Values for substitution can be supplied using a {@link Properties} instance or
  * using a {@link PlaceholderResolver}.
+ * <p>可以使用 {@link Properties} 实例或使用 {@link PlaceholderResolver} 提供替换值。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -43,6 +45,7 @@ public class PropertyPlaceholderHelper {
 
 	private static final Log logger = LogFactory.getLog(PropertyPlaceholderHelper.class);
 
+	// 众所周知的简单前缀 <后缀, 前缀>
 	private static final Map<String, String> wellKnownSimplePrefixes = new HashMap<>(4);
 
 	static {
@@ -79,9 +82,10 @@ public class PropertyPlaceholderHelper {
 	 * @param placeholderPrefix the prefix that denotes the start of a placeholder
 	 * @param placeholderSuffix the suffix that denotes the end of a placeholder
 	 * @param valueSeparator the separating character between the placeholder variable
-	 * and the associated default value, if any
+	 * and the associated default value, if any 占位符变量与关联的默认值（如果有）之间的分隔符
 	 * @param ignoreUnresolvablePlaceholders indicates whether unresolvable placeholders should
 	 * be ignored ({@code true}) or cause an exception ({@code false})
+	 * 指示是否应忽略无法解析的占位符 （{@code true}） 或导致异常 （{@code false}）
 	 */
 	public PropertyPlaceholderHelper(String placeholderPrefix, String placeholderSuffix,
 			@Nullable String valueSeparator, boolean ignoreUnresolvablePlaceholders) {
@@ -90,6 +94,7 @@ public class PropertyPlaceholderHelper {
 		Assert.notNull(placeholderSuffix, "'placeholderSuffix' must not be null");
 		this.placeholderPrefix = placeholderPrefix;
 		this.placeholderSuffix = placeholderSuffix;
+		// 根据后缀获取前缀
 		String simplePrefixForSuffix = wellKnownSimplePrefixes.get(this.placeholderSuffix);
 		if (simplePrefixForSuffix != null && this.placeholderPrefix.endsWith(simplePrefixForSuffix)) {
 			this.simplePrefix = simplePrefixForSuffix;
@@ -216,6 +221,7 @@ public class PropertyPlaceholderHelper {
 
 	/**
 	 * Strategy interface used to resolve replacement values for placeholders contained in Strings.
+	 * 策略接口，用于解析 Strings 中包含的占位符的替换值。
 	 */
 	@FunctionalInterface
 	public interface PlaceholderResolver {

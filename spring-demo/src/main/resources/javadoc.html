@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+/**
+* Interface representing the environment in which the current application is running.
+* Models two key aspects of the application environment: <em>profiles</em> and
+* <em>properties</em>. Methods related to property access are exposed via the
+* {@link PropertyResolver} superinterface.
+* 表示当前应用程序运行环境的接口。对应用程序环境的两个关键方面进行建模：配置文件和属性。
+* 与属性访问相关的方法通过 {@link PropertyResolver} 超接口公开。
+*
+* <p>A <em>profile</em> is a named, logical group of bean definitions to be registered
+    * with the container only if the given profile is <em>active</em>. Beans may be assigned
+    * to a profile whether defined in XML or via annotations; see the spring-beans 3.1 schema
+    * or the {@link org.springframework.context.annotation.Profile @Profile} annotation for
+    * syntax details. The role of the {@code Environment} object with relation to profiles is
+    * in determining which profiles (if any) are currently {@linkplain #getActiveProfiles
+    * active}, and which profiles (if any) should be {@linkplain #getDefaultProfiles active
+    * by default}.
+    * profile是Bean定义的命名逻辑组，仅当给定profile处于活动状态时，才会向容器注册。
+    * Bean 可以分配给配置文件，无论是在 XML 中定义还是通过注释定义;有关语法详细信息，
+    * 请参阅 spring-beans 3.1 架构或 {@link org.springframework.context.annotation.Profile @Profile} 注释。
+    * 与配置文件相关的 {@code Environment} 对象的作用是确定哪些配置文件（如果有）当前处于 {@linkplain getActiveProfiles 活动状态}，
+    * 以及哪些配置文件（如果有）应默认处于 {@linkplain getDefaultProfiles 活动状态}。
+    *
+    * <p><em>Properties</em> play an important role in almost all applications, and may
+    * originate from a variety of sources: properties files, JVM system properties, system
+    * environment variables, JNDI, servlet context parameters, ad-hoc Properties objects,
+    * Maps, and so on. The role of the {@code Environment} object with relation to properties
+    * is to provide the user with a convenient service interface for configuring property
+    * sources and resolving properties from them.
+    *
+    * <p>Beans managed within an {@code ApplicationContext} may register to be {@link
+    * org.springframework.context.EnvironmentAware EnvironmentAware} or {@code @Inject} the
+    * {@code Environment} in order to query profile state or resolve properties directly.
+    *
+    * <p>In most cases, however, application-level beans should not need to interact with the
+    * {@code Environment} directly but instead may have to have {@code ${...}} property
+    * values replaced by a property placeholder configurer such as
+    * {@link org.springframework.context.support.PropertySourcesPlaceholderConfigurer
+    * PropertySourcesPlaceholderConfigurer}, which itself is {@code EnvironmentAware} and
+    * as of Spring 3.1 is registered by default when using
+    * {@code <context:property-placeholder/>}.
+    *
+    * <p>Configuration of the {@code Environment} object must be done through the
+    * {@code ConfigurableEnvironment} interface, returned from all
+    * {@code AbstractApplicationContext} subclass {@code getEnvironment()} methods. See
+    * {@link ConfigurableEnvironment} Javadoc for usage examples demonstrating manipulation
+    * of property sources prior to application context {@code refresh()}.
+    * 在refresh()之前调用
+    *
+    * @author Chris Beams
+    * @author Phillip Webb
+    * @author Sam Brannen
+    * @since 3.1
+    * @see PropertyResolver
+    * @see EnvironmentCapable
+    * @see ConfigurableEnvironment
+    * @see AbstractEnvironment
+    * @see StandardEnvironment
+    * @see org.springframework.context.EnvironmentAware
+    * @see org.springframework.context.ConfigurableApplicationContext#getEnvironment
+    * @see org.springframework.context.ConfigurableApplicationContext#setEnvironment
+    * @see org.springframework.context.support.AbstractApplicationContext#createEnvironment
+    */
+</body>
+</html>

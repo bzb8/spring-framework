@@ -12,5 +12,7 @@ public class Test {
 	public static void main(String[] args) {
 		String name = "&&&abc";
 		System.out.println("BeanFactoryUtils.transformedBeanName(name) = " + BeanFactoryUtils.transformedBeanName(name));
+
+		System.out.println(name.getClass().getName());
 	}
 }
