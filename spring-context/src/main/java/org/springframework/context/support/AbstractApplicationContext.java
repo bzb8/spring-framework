@@ -538,6 +538,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the list of BeanFactoryPostProcessors that will get applied
 	 * to the internal BeanFactory.
+	 * 返回将应用于内部 BeanFactory 的 BeanFactoryPostProcessors 列表。
 	 */
 	public List<BeanFactoryPostProcessor> getBeanFactoryPostProcessors() {
 		return this.beanFactoryPostProcessors;
@@ -569,7 +570,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 准备此上下文以进行刷新。
 			prepareRefresh();
 
-			// 告诉子类刷新内部bean工厂
+			// 告诉子类刷新内部bean工厂, 注册BeanDefinition
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
@@ -1159,9 +1160,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * The default implementation destroy all cached singletons in this context,
 	 * invoking {@code DisposableBean.destroy()} and/or the specified
 	 * "destroy-method".
+	 * 用于销毁此上下文管理的所有 Bean 的模板方法。默认实现会销毁此上下文中所有缓存的单例，调用 {@code DisposableBean.destroy（）} 和/或指定的“destroy-method”。
 	 * <p>Can be overridden to add context-specific bean destruction steps
 	 * right before or right after standard singleton destruction,
 	 * while the context's BeanFactory is still active.
+	 * 可以重写以在标准单例销毁之前或之后添加特定于上下文的 Bean 销毁步骤，而上下文的 BeanFactory 仍处于活动状态。
 	 * @see #getBeanFactory()
 	 * @see org.springframework.beans.factory.config.ConfigurableBeanFactory#destroySingletons()
 	 */
@@ -1423,6 +1426,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the internal bean factory of the parent context if it implements
 	 * ConfigurableApplicationContext; else, return the parent context itself.
+	 * 如果父上下文实现了 ConfigurableApplicationContext，则返回父上下文的内部 Bean 工厂;否则，返回父上下文本身。
 	 * @see org.springframework.context.ConfigurableApplicationContext#getBeanFactory
 	 */
 	@Nullable
@@ -1478,7 +1482,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	//---------------------------------------------------------------------
 	// Implementation of ResourcePatternResolver interface
 	//---------------------------------------------------------------------
-
 	@Override
 	public Resource[] getResources(String locationPattern) throws IOException {
 		return this.resourcePatternResolver.getResources(locationPattern);

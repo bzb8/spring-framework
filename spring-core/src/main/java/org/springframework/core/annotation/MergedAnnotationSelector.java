@@ -22,6 +22,8 @@ import java.lang.annotation.Annotation;
  * Strategy interface used to select between two {@link MergedAnnotation}
  * instances.
  *
+ * 策略接口，用于在两个 {@link MergedAnnotation} 实例之间进行选择。
+ *
  * @author Phillip Webb
  * @since 5.2
  * @param <A> the annotation type

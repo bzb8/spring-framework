@@ -314,6 +314,8 @@ public class BeanDefinitionParserDelegate {
 	 * autowire, dependency check settings, init-method, destroy-method and merge settings.
 	 * Support nested 'beans' element use cases by falling back to {@code parentDefaults}
 	 * in case the defaults are not explicitly set locally.
+	 * 使用默认的 lazy-init、autowire、依赖项检查设置、init-method、destroy-method 和 merge 设置填充给定的 DocumentDefaultsDefinition 实例。
+	 * 支持嵌套的“beans”元素用例，回退到 {@code parentDefaults}，以防默认值未在本地显式设置。
 	 * @param defaults the defaults to populate
 	 * @param parentDefaults the parent BeanDefinitionParserDelegate (if any) defaults to fall back to
 	 * @param root the root element of the current bean definition document (or nested beans element)
@@ -434,7 +436,7 @@ public class BeanDefinitionParserDelegate {
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
-		// 解析出了beanDefinition
+		// 解析出了beanDefinition, 并设置各种属性
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -501,6 +503,7 @@ public class BeanDefinitionParserDelegate {
 	public AbstractBeanDefinition parseBeanDefinitionElement(
 			Element ele, String beanName, @Nullable BeanDefinition containingBean) {
 
+		// 跟踪解析状态
 		this.parseState.push(new BeanEntry(beanName));
 
 		String className = null;

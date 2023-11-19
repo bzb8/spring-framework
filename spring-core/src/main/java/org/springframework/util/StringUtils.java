@@ -684,6 +684,8 @@ public abstract class StringUtils {
 	 * <p><strong>NOTE</strong> that {@code cleanPath} should not be depended
 	 * upon in a security context. Other mechanisms should be used to prevent
 	 * path-traversal issues.
+	 * 通过抑制“path..”和内部简单点等序列来规范化路径。<p>结果便于路径比较。对于其他用途，请注意 Windows 分隔符 （“\”） 将替换为简单的斜杠。
+	 * <p><strong>请注意<strong>，在安全上下文中不应依赖 {@code cleanPath}。应使用其他机制来防止路径遍历问题。
 	 * @param path the original path
 	 * @return the normalized path
 	 */
@@ -1164,14 +1166,16 @@ public abstract class StringUtils {
 	/**
 	 * Tokenize the given {@code String} into a {@code String} array via a
 	 * {@link StringTokenizer}.
-	 * <p>Trims tokens and omits empty tokens.
+	 * 通过 {@link StringTokenizer} 将给定的 {@code String} 标记化为 {@code String} 数组。
+	 * <p>Trims tokens and omits empty tokens. 修剪标记并省略空标记。
 	 * <p>The given {@code delimiters} string can consist of any number of
 	 * delimiter characters. Each of those characters can be used to separate
 	 * tokens. A delimiter is always a single character; for multi-character
 	 * delimiters, consider using {@link #delimitedListToStringArray}.
+	 * 给定的 {@code delimiters} 字符串可以由任意数量的分隔符字符组成。这些字符中的每一个都可用于分隔令牌。分隔符始终是单个字符;对于多字符分隔符，请考虑使用 {@link delimitedListToStringArray}。
 	 * @param str the {@code String} to tokenize (potentially {@code null} or empty)
 	 * @param delimiters the delimiter characters, assembled as a {@code String}
-	 * (each of the characters is individually considered as a delimiter)
+	 * (each of the characters is individually considered as a delimiter)分隔符字符，组合为 {@code String}（每个字符单独被视为分隔符）
 	 * @return an array of the tokens
 	 * @see java.util.StringTokenizer
 	 * @see String#trim()

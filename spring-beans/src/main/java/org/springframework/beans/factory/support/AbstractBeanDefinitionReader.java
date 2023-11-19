@@ -37,9 +37,11 @@ import org.springframework.util.Assert;
 /**
  * Abstract base class for bean definition readers which implement
  * the {@link BeanDefinitionReader} interface.
+ * 实现 {@link BeanDefinitionReader} 接口的 Bean 定义读取器的抽象基类。
  *
  * <p>Provides common properties like the bean factory to work on
  * and the class loader to use for loading bean classes.
+ * 提供通用属性，例如要处理的 Bean 工厂和用于装入 Bean 类的类装入器。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -162,6 +164,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * Set the Environment to use when reading bean definitions. Most often used
 	 * for evaluating profile information to determine which bean definitions
 	 * should be read and which should be omitted.
+	 * 设置读取 Bean 定义时要使用的 Environment。最常用于评估profile文件信息，以确定应读取哪些 Bean 定义，应省略哪些 Bean 定义。
 	 */
 	public void setEnvironment(Environment environment) {
 		Assert.notNull(environment, "Environment must not be null");
@@ -208,13 +211,17 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * <p>The location can also be a location pattern, provided that the
 	 * ResourceLoader of this bean definition reader is a ResourcePatternResolver.
 	 *
-	 * 从指定的资源位置加载 bean 定义。 <p>位置也可以是位置模式，前提是该 bean 定义读取器的 ResourceLoader 是 ResourcePatternResolver。
+	 * 从指定的资源位置加载 bean 定义。 位置也可以是位置模式，前提是该 bean 定义读取器的 ResourceLoader 是 ResourcePatternResolver。
 	 *
 	 * @param location the resource location, to be loaded with the ResourceLoader
 	 * (or ResourcePatternResolver) of this bean definition reader
+	 * 资源位置，要与此 Bean 定义读取器的 ResourceLoader（或 ResourcePatternResolver）一起加载
+	 *
 	 * @param actualResources a Set to be filled with the actual Resource objects
 	 * that have been resolved during the loading process. May be {@code null}
 	 * to indicate that the caller is not interested in those Resource objects.
+	 * 使用在加载过程中已解析的实际 Resource 对象填充的 Set。可以是 {@code null}，以指示调用方对这些 Resource 对象不感兴趣。
+	 *
 	 * @return the number of bean definitions found
 	 * @throws BeanDefinitionStoreException in case of loading or parsing errors
 	 * @see #getResourceLoader()

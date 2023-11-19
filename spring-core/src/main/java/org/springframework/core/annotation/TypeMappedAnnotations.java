@@ -35,6 +35,8 @@ import org.springframework.lang.Nullable;
  * {@link MergedAnnotations} implementation that searches for and adapts
  * annotations and meta-annotations using {@link AnnotationTypeMappings}.
  *
+ * {@link MergedAnnotations} 实现，使用 {@link AnnotationTypeMappings} 搜索和调整注解和元注解。
+ *
  * @author Phillip Webb
  * @since 5.2
  */

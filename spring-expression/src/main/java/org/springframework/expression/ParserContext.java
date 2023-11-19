@@ -19,6 +19,7 @@ package org.springframework.expression;
 /**
  * Input provided to an expression parser that can influence an expression
  * parsing/compilation routine.
+ * 提供给表达式分析器的输入，该分析器可以影响表达式分析编译例程。
  *
  * @author Keith Donald
  * @author Andy Clement

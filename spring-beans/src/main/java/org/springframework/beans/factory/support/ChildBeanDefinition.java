@@ -36,7 +36,7 @@ import org.springframework.util.ObjectUtils;
  *
  * 子 bean 定义将从父 bean 继承构造函数参数值、属性值和方法覆盖，并可以选择添加新值。
  * 如果指定了 init 方法、destroy 方法和/或静态工厂方法，它们将覆盖相应的父设置。
- * 其余设置将<i>始终<i>取自子定义：取决于、自动装配模式、依赖项检查、单例、惰性初始化。
+ * 其余设置将始终取自子定义：取决于、自动装配模式、依赖项检查、单例、惰性初始化。
  *
  * <p><b>NOTE:</b> Since Spring 2.5, the preferred way to register bean
  * definitions programmatically is the {@link GenericBeanDefinition} class,
@@ -44,8 +44,8 @@ import org.springframework.util.ObjectUtils;
  * {@link GenericBeanDefinition#setParentName} method. This effectively
  * supersedes the ChildBeanDefinition class for most use cases.
  *
- * <p><b>注意：<b>自 Spring 2.5 起，以编程方式注册 Bean 定义的首选方法是 {@link GenericBeanDefinition} 类，
- * 它允许通过 {@link GenericBeanDefinitionsetParentName} 方法动态定义父依赖项。
+ * 注意：自 Spring 2.5 起，以编程方式注册 Bean 定义的首选方法是 {@link GenericBeanDefinition} 类，
+ * 它允许通过 {@link GenericBeanDefinition#setParentName} 方法动态定义父依赖项。
  * 对于大多数用例来说，这有效地取代了 ChildBeanDefinition 类。
  *
  * @author Rod Johnson

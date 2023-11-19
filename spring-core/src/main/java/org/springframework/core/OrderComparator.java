@@ -27,14 +27,12 @@ import org.springframework.util.ObjectUtils;
  * {@link Comparator} implementation for {@link Ordered} objects, sorting
  * by order value ascending, respectively by priority descending.
  *
- * {@link Ordered} 对象的 {@link Comparator} 实现，按顺序值升序排序，分别按优先级降序排序。
+ * {@link Ordered}对象的{@link Comparator}实现，按顺序值升序排序，分别按优先级降序排序。
  *
  * <h3>{@code PriorityOrdered} Objects</h3>
  * <p>{@link PriorityOrdered} objects will be sorted with higher priority than
  * <em>plain</em> {@code Ordered} objects.
- *
- * <h3>{@code PriorityOrdered} 对象<h3>
- * <p>{@link PriorityOrdered} 对象将以比 <em>plain<em> {@code Ordered} 对象更高的优先级进行排序。
+ * {@link PriorityOrdered} 对象的排序优先级将高于普通的{@code Ordered}对象。
  *
  * <h3>Same Order Objects</h3>
  *
@@ -43,7 +41,7 @@ import org.springframework.util.ObjectUtils;
  * <p>Objects that have the same order value will be sorted with arbitrary
  * ordering with respect to other objects with the same order value.
  *
- * 具有相同顺序值的对象将相对于具有相同顺序值的其他对象以任意顺序进行排序。
+ * 对于具有相同order值的其他对象，将按照任意顺序对具有相同order值的对象进行排序。
  *
  * <h3>Non-ordered Objects</h3>
  *
@@ -54,7 +52,7 @@ import org.springframework.util.ObjectUtils;
  * at the end of a sorted collection in arbitrary order with respect to
  * other objects with the same order value.
  *
- * 任何不提供自己的顺序值的对象都会隐式分配一个值 {@link OrderedLOWEST_PRECEDENCE}，从而相对于具有相同顺序值的其他对象以任意顺序结束在排序集合的末尾。
+ * 任何不提供自己的顺序值的对象都会隐式分配一个值 {@link Ordered#LOWEST_PRECEDENCE}，因此，相对于具有相同顺序值的其他对象，以任意顺序结束排序集合的末尾。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -223,6 +221,9 @@ public class OrderComparator implements Comparator<Object> {
 
 	/**
 	 * Strategy interface to provide an order source for a given object.
+	 *
+	 * 策略接口，用于为给定对象提供order源。
+	 *
 	 * @since 4.1
 	 */
 	@FunctionalInterface
@@ -234,7 +235,10 @@ public class OrderComparator implements Comparator<Object> {
 		 * <p>Can also be an array of order source objects.
 		 * <p>If the returned object does not indicate any order, the comparator
 		 * will fall back to checking the original object.
-		 * @param obj the object to find an order source for
+		 *
+		 * 返回指定对象的order源，即应检查order值作为给定对象的替代品的对象。也可以是order源对象的数组。如果返回的对象未指示任何顺序，则比较器将回退到检查原始对象。
+		 *
+		 * @param obj the object to find an order source for 要查找其order源的对象
 		 * @return the order source for that object, or {@code null} if none found
 		 */
 		@Nullable

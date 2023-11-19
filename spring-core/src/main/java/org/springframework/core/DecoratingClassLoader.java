@@ -28,6 +28,8 @@ import org.springframework.util.Assert;
  * and {@link org.springframework.instrument.classloading.ShadowingClassLoader},
  * providing common handling of excluded packages and classes.
  *
+ * 用于装饰类加载器的基类，例如{@link OverridingClassLoader}和{@link org.springframework.instrument.classloading.ShadowingClassLoader}，提供对排除的包和类的通用处理。
+ *
  * @author Juergen Hoeller
  * @author Rod Johnson
  * @since 2.5.2

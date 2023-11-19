@@ -245,6 +245,9 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * {@link org.springframework.core.Ordered} interface will be ignored. Note
 	 * that autodetected post-processors (e.g. as beans in an ApplicationContext)
 	 * will always be applied after programmatically registered ones.
+	 * 加一个新的 BeanPostProcessor，它将应用于此工厂创建的 bean。在出厂配置期间调用。<p>注意：此处提交的后处理器将按注册顺序应用;
+	 * 通过实现{@link org.springframework.core.Ordered}接口表达的任何排序语义都将被忽略。
+	 * 请注意，自动检测到的后处理器（例如，作为 ApplicationContext 中的 bean）将始终在以编程方式注册的后处理器之后应用。
 	 * @param beanPostProcessor the post-processor to register
 	 */
 	void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
@@ -297,6 +300,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 
 	/**
 	 * Provides a security access control context relevant to this factory.
+	 * 提供与此工厂相关的安全访问控制上下文。
 	 * @return the applicable AccessControlContext (never {@code null})
 	 * @since 3.0
 	 */
@@ -421,6 +425,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * been registered as disposable. To be called on shutdown of a factory.
 	 * <p>Any exception that arises during destruction should be caught
 	 * and logged instead of propagated to the caller of this method.
+	 * 销毁此工厂中的所有单例 Bean，包括已注册为一次性的内部 Bean。在工厂关闭时被要求。销毁期间出现的任何异常都应捕获并记录，而不是传播到此方法的调用方。
 	 */
 	void destroySingletons();
 

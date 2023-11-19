@@ -283,6 +283,8 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Override settings in this bean definition (presumably a copied parent
 	 * from a parent-child inheritance relationship) from the given bean
 	 * definition (presumably the child).
+	 * 覆盖此 Bean 定义中的设置（可能是从父子继承关系中复制的父定义）与给定的 Bean 定义（可能是子定义）中的设置。
+	 *
 	 * <ul>
 	 * <li>Will override beanClass if specified in the given bean definition.
 	 * <li>Will always take {@code abstract}, {@code scope},
@@ -915,6 +917,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Return information about methods to be overridden by the IoC
 	 * container. This will be empty if there are no method overrides.
 	 * <p>Never returns {@code null}.
+	 * 返回有关要由 IoC 容器重写的方法的信息。如果没有方法重写，这将是空的。<p>从不返回 {@code null}。
 	 */
 	public MethodOverrides getMethodOverrides() {
 		return this.methodOverrides;

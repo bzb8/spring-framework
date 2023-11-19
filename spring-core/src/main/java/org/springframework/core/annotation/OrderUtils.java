@@ -35,12 +35,14 @@ import org.springframework.util.ConcurrentReferenceHashMap;
  */
 public abstract class OrderUtils {
 
+	// 非注解类的缓存标记
 	/** Cache marker for a non-annotated Class. */
 	private static final Object NOT_ANNOTATED = new Object();
 
 	private static final String JAVAX_PRIORITY_ANNOTATION = "javax.annotation.Priority";
 
 	/** Cache for @Order value (or NOT_ANNOTATED marker) per Class. */
+	// 缓存每个类的@Order值（或NOT_ANNOTATED标记）。
 	static final Map<AnnotatedElement, Object> orderCache = new ConcurrentReferenceHashMap<>(64);
 
 
@@ -100,8 +102,11 @@ public abstract class OrderUtils {
 	 * Return the order from the specified annotations collection.
 	 * <p>Takes care of {@link Order @Order} and
 	 * {@code @javax.annotation.Priority}.
+	 *
+	 * 从指定的注解集合中返回order。负责 {@link Order @Order} 和 {@code @javax.annotation.Priority}。
+	 *
 	 * @param element the source element
-	 * @param annotations the annotation to consider
+	 * @param annotations the annotation to consider 要考虑的注释
 	 * @return the order value, or {@code null} if none can be found
 	 */
 	@Nullable

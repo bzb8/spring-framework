@@ -26,21 +26,21 @@ package org.springframework.core;
  * with the first object (with the lowest order value) having the highest
  * priority.
  *
- * <p>实际的{@link getOrder()顺序}可以解释为优先级，第一个对象（具有最低顺序值）具有最高优先级。
+ * <p>实际的{@link #getOrder()}可以解释为优先级，第一个对象（具有最低顺序值）具有最高优先级。
  *
  * <p>Note that there is also a <em>priority</em> marker for this interface:
  * {@link PriorityOrdered}. Consult the Javadoc for {@code PriorityOrdered} for
  * details on how {@code PriorityOrdered} objects are ordered relative to
  * <em>plain</em> {@link Ordered} objects.
  *
- * <p>请注意，此接口还有一个<em>优先级<em>标记：{@link PriorityOrdered}。
- * 有关 {@code PriorityOrdered} 对象如何相对于 <em>plain<em> {@link Ordered} 对象进行排序的详细信息，
- * 请参阅 {@code PriorityOrdered} 的 Javadoc
+ * 请注意，此接口还有一个优先级标记：{@link PriorityOrdered}。
+ * 有关 {@code PriorityOrdered} 对象如何相对于普通的{@link Ordered}对象进行排序的详细信息，
+ * 请参阅{@code PriorityOrdered}的Javadoc
  *
  * <p>Consult the Javadoc for {@link OrderComparator} for details on the
  * sort semantics for non-ordered objects.
  *
- * <p>有关非有序对象的排序语义的详细信息，请参阅 {@link OrderComparator} 的 Javadoc。
+ * 有关非有序对象的排序语义的详细信息，请参阅 {@link OrderComparator} 的 Javadoc。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -72,6 +72,9 @@ public interface Ordered {
 	 * analogous to Servlet {@code load-on-startup} values).
 	 * <p>Same order values will result in arbitrary sort positions for the
 	 * affected objects.
+	 *
+	 * 获取此对象的order值。较高的值被解释为较低的优先级。因此，具有最低值的对象具有最高优先级（有点类似于 Servlet {@code load-on-startup} 值）。相同的顺序值将导致受影响对象的任意排序位置。
+	 *
 	 * @return the order value
 	 * @see #HIGHEST_PRECEDENCE
 	 * @see #LOWEST_PRECEDENCE

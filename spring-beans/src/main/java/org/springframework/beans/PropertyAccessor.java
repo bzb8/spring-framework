@@ -24,8 +24,10 @@ import org.springframework.lang.Nullable;
 /**
  * Common interface for classes that can access named properties
  * (such as bean properties of an object or fields in an object).
+ * 可以访问命名属性（例如对象的 Bean 属性或对象中的字段）的类的通用接口。
  *
  * <p>Serves as base interface for {@link BeanWrapper}.
+ * <p>用作 {@link BeanWrapper} 的基本接口。
  *
  * @author Juergen Hoeller
  * @since 1.1

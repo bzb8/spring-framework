@@ -38,9 +38,11 @@ public interface PathMatcher {
 	/**
 	 * Does the given {@code path} represent a pattern that can be matched
 	 * by an implementation of this interface?
+	 * 给定的 {@code path} 是否表示可以通过此接口的实现匹配的模式？
 	 * <p>If the return value is {@code false}, then the {@link #match}
 	 * method does not have to be used because direct equality comparisons
 	 * on the static path Strings will lead to the same result.
+	 * 如果返回值为 {@code false}，则不必使用 {@link match} 方法，因为静态路径 Strings 上的直接相等性比较将导致相同的结果。
 	 * @param path the path to check
 	 * @return {@code true} if the given {@code path} represents a pattern
 	 */

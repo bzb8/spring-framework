@@ -233,6 +233,7 @@ public abstract class CollectionUtils {
 	 * '{@code source}'. If no element in '{@code candidates}' is present in
 	 * '{@code source}' returns {@code null}. Iteration order is
 	 * {@link Collection} implementation specific.
+	 * 返回“{@code 个候选者}”中的第一个元素，该元素包含在“{@code source}”中。如果“{@code 个候选者}”中不存在“{@code 个源}”中的元素，则返回 {@code null}。迭代顺序特定于 {@link Collection} 实现。
 	 * @param source the source Collection
 	 * @param candidates the candidates to search for
 	 * @return the first present object, or {@code null} if not found

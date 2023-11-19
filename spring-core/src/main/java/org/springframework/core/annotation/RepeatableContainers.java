@@ -32,10 +32,15 @@ import org.springframework.util.ObjectUtils;
  * strategy that respects Java's {@link Repeatable @Repeatable} support and
  * should be suitable for most situations.
  *
+ * 用于确定充当其他注解容器的注解的策略。{@link #standardRepeatables()} 方法提供了一个默认策略，该策略遵循 Java 的 {@link Repeatable @Repeatable} 支持，并且应该适用于大多数情况。
+ *
  * <p>The {@link #of} method can be used to register relationships for
  * annotations that do not wish to use {@link Repeatable @Repeatable}.
  *
+ * {@link #of}方法可用于为不希望使用{@link Repeatable @Repeatable}的注解注册关系。
+ *
  * <p>To completely disable repeatable support use {@link #none()}.
+ * 若要完全禁用可重复支持，请使用{@link #none()}。
  *
  * @author Phillip Webb
  * @author Sam Brannen

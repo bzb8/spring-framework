@@ -34,11 +34,14 @@ import org.springframework.util.ObjectUtils;
  * {@code BeanPostProcessor} that detects beans which implement the {@code ApplicationListener}
  * interface. This catches beans that can't reliably be detected by {@code getBeanNamesForType}
  * and related operations which only work against top-level beans.
+ * {@code BeanPostProcessor}，用于检测实现 {@code ApplicationListener} 接口的 bean。这将捕获 {@code getBeanNamesForType} 无法可靠检测到的 bean 以及仅适用于顶级 Bean 的相关操作。
  *
  * <p>With standard Java serialization, this post-processor won't get serialized as part of
  * {@code DisposableBeanAdapter} to begin with. However, with alternative serialization
  * mechanisms, {@code DisposableBeanAdapter.writeReplace} might not get used at all, so we
  * defensively mark this post-processor's field state as {@code transient}.
+ * 使用标准 Java 序列化时，此后处理器一开始不会作为 {@code DisposableBeanAdapter} 的一部分进行序列化。但是，使用其他序列化机制时，
+ * {@code DisposableBeanAdapter.writeReplace} 可能根本不会被使用，因此我们防御性地将此后处理器的字段状态标记为 {@code transient}。
  *
  * @author Juergen Hoeller
  * @since 4.3.4
@@ -72,6 +75,7 @@ class ApplicationListenerDetector implements DestructionAwareBeanPostProcessor, 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) {
 		if (bean instanceof ApplicationListener) {
+			// getBeanNamesForType 检索可能未检测到侦听器
 			// potentially not detected as a listener by getBeanNamesForType retrieval
 			Boolean flag = this.singletonNames.get(beanName);
 			if (Boolean.TRUE.equals(flag)) {

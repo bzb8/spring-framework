@@ -24,9 +24,11 @@ import org.springframework.lang.Nullable;
  * Simple {@link ArrayDeque}-based structure for tracking the logical position during
  * a parsing process. {@link Entry entries} are added to the ArrayDeque at each point
  * during the parse phase in a reader-specific manner.
+ * 基于 {@link ArrayDeque} 的简单结构，用于在解析过程中跟踪逻辑位置。{@link Entry entries} 在解析阶段的每个点以特定于读取器的方式添加到 ArrayDeque 中。
  *
  * <p>Calling {@link #toString()} will render a tree-style view of the current logical
  * position in the parse phase. This representation is intended for use in error messages.
+ * <p>调用 {@link toString（）} 将在解析阶段呈现当前逻辑位置的树形视图。此表示形式旨在用于错误消息。
  *
  * @author Rob Harrop
  * @author Juergen Hoeller

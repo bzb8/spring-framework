@@ -41,7 +41,10 @@ public abstract class MergedAnnotationSelectors {
 
 	/**
 	 * Select the nearest annotation, i.e. the one with the lowest distance.
-	 * @return a selector that picks the annotation with the lowest distance
+	 *
+	 * 选择最近的注释，即距离最小的注释。
+	 *
+	 * @return a selector that picks the annotation with the lowest distance 选取距离最小的注解的选择器
 	 */
 	@SuppressWarnings("unchecked")
 	public static <A extends Annotation> MergedAnnotationSelector<A> nearest() {

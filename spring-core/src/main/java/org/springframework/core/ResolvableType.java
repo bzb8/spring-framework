@@ -48,8 +48,8 @@ import org.springframework.util.StringUtils;
  * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately
  * {@link #resolve() resolve} to a {@link java.lang.Class}.
  *
- * 封装 Java {@link java.lang.reflect.Type}，提供对 {@link getSuperType() 超类型}、{@link getInterfaces() 接口}和 {@link getGeneric(int...) 泛型参数}
- * 的访问以及最终将 {@link resolve() 解析} 为 {@link java.lang.Class} 的能力。
+ * 封装 Java {@link java.lang.reflect.Type}，提供对 {@link #getSuperType() 超类型}、{@link #getInterfaces() 接口}和 {@link #getGeneric(int...) 泛型参数}
+ * 的访问以及最终将 {@link #resolve() 解析} 为 {@link java.lang.Class} 的能力。
  *
  * <p>A {@code ResolvableType} may be obtained from a {@linkplain #forField(Field) field},
  * a {@linkplain #forMethodParameter(Method, int) method parameter},
@@ -57,8 +57,8 @@ import org.springframework.util.StringUtils;
  * {@linkplain #forClass(Class) class}. Most methods on this class will themselves return
  * a {@code ResolvableType}, allowing for easy navigation. For example:
  *
- * <p>可以从{@linkplain forField(Field)字段}、{@linkplain forMethodParameter(Method, int)方法参数}、
- * {@linkplain forMethodReturnType(Method)方法返回类型}获取{@code ResolvableType} ，或一个 {@linkplain forClass(Class) 类}。
+ * 可以从{@linkplain #forField(Field) 字段}、{@linkplain #forMethodParameter(Method, int) 方法参数}、
+ * {@linkplain #forMethodReturnType(Method) 方法返回类型}获取{@code ResolvableType} ，或一个 {@linkplain #forClass(Class) 类}。
  * 此类上的大多数方法本身都会返回一个 {@code ResolvableType}，以便轻松导航。例如
  *
  * <pre class="code">
@@ -468,9 +468,12 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return a {@link ResolvableType} representing the direct supertype of this type.
+	 * 返回一个 {@link ResolvableType}，表示此类型的直接超类型。
 	 * <p>If no supertype is available this method returns {@link #NONE}.
 	 * <p>Note: The resulting {@link ResolvableType} instance may not be {@link Serializable}.
 	 * @see #getInterfaces()
+	 *
+	 * 如果没有可用的超类型，此方法将返回 {@link #NONE}。注意：生成的 {@link ResolvableType} 实例可能不是 {@link Serializable}。 @see getInterfaces（）
 	 */
 	public ResolvableType getSuperType() {
 		Class<?> resolved = resolve();
@@ -1037,8 +1040,15 @@ public class ResolvableType implements Serializable {
 	 * doing assignability checks against the raw class only (analogous to
 	 * {@link Class#isAssignableFrom}, which this serves as a wrapper for).
 	 * <p>For example: {@code ResolvableType.forRawClass(List.class)}.
+	 *
+	 * 返回指定 {@link Class} 的 {@link ResolvableType}，仅对原始类执行可分配性检查（类似于 {@link Class#isAssignableFrom}，用作包装器）。
+	 * 例如：{@code ResolvableType.forRawClass（List.class）}。
+	 *
 	 * @param clazz the class to introspect ({@code null} is semantically
 	 * equivalent to {@code Object.class} for typical use cases here)
+	 *
+	 * 对于此处的典型用例，要 introspect （{@code null} 的类在语义上等同于 {@code Object.class}）
+	 *
 	 * @return a {@link ResolvableType} for the specified class
 	 * @since 4.2
 	 * @see #forClass(Class)

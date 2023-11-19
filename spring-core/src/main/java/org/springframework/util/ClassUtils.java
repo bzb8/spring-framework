@@ -100,6 +100,7 @@ public abstract class ClassUtils {
 	/**
 	 * Map with primitive type as key and corresponding wrapper
 	 * type as value, for example: int.class -> Integer.class.
+	 * 映射以基元类型为键，对应的包装类型为值，例如：int.class -> Integer.class。
 	 */
 	private static final Map<Class<?>, Class<?>> primitiveTypeToWrapperMap = new IdentityHashMap<>(9);
 
@@ -241,9 +242,12 @@ public abstract class ClassUtils {
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
 	 * Furthermore, it is also capable of resolving nested class names in Java source
 	 * style (e.g. "java.lang.Thread.State" instead of "java.lang.Thread$State").
+	 * 替换 {@code Class.forName（）}，它还返回基元（例如“int”）和数组类名（例如“String[]”）的类实例。
+	 * 此外，它还能够解析 Java 源代码样式中的嵌套类名（例如“java.lang.Thread.State”而不是“java.lang.Thread$State”）。
 	 * @param name the name of the Class
 	 * @param classLoader the class loader to use
 	 * (may be {@code null}, which indicates the default class loader)
+	 * 要使用的类装入器（可能是 {@code null}，表示缺省类装入器）
 	 * @return a class instance for the supplied name
 	 * @throws ClassNotFoundException if the class was not found
 	 * @throws LinkageError if the class file could not be loaded
@@ -266,6 +270,7 @@ public abstract class ClassUtils {
 		if (name.endsWith(ARRAY_SUFFIX)) {
 			String elementClassName = name.substring(0, name.length() - ARRAY_SUFFIX.length());
 			Class<?> elementClass = forName(elementClassName, classLoader);
+			// 创建数组，并返回实例
 			return Array.newInstance(elementClass, 0).getClass();
 		}
 
@@ -460,6 +465,7 @@ public abstract class ClassUtils {
 	 * <p>Also supports the JVM's internal class names for primitive arrays.
 	 * Does <i>not</i> support the "[]" suffix notation for primitive arrays;
 	 * this is only supported by {@link #forName(String, ClassLoader)}.
+	 * 根据 JVM 的原始类命名规则，将给定的类名解析为原始类（如果适用）。<p>还支持原始数组的 JVM 内部类名。不支持<i><i>基元数组的“[]”后缀表示法;只有 {@link forName（String， ClassLoader）} 支持此功能。
 	 * @param name the name of the potentially primitive class
 	 * @return the primitive class, or {@code null} if the name does not denote
 	 * a primitive class or primitive array class
@@ -469,8 +475,10 @@ public abstract class ClassUtils {
 		Class<?> result = null;
 		// Most class names will be quite long, considering that they
 		// SHOULD sit in a package, so a length check is worthwhile.
+		// 考虑到它们应该放在一个包中，大多数类名都会很长，因此长度检查是值得的。
 		if (name != null && name.length() <= 7) {
 			// Could be a primitive - likely.
+			// 可能是原始的 - 可能。
 			result = primitiveTypeNameMap.get(name);
 		}
 		return result;
@@ -539,6 +547,9 @@ public abstract class ClassUtils {
 	 * Check if the right-hand side type may be assigned to the left-hand side
 	 * type, assuming setting by reflection. Considers primitive wrapper
 	 * classes as assignable to the corresponding primitive types.
+	 *
+	 * 假设通过反射进行设置，请检查是否可以将右侧类型分配给左侧类型。将基元包装类视为可分配给相应的基元类型。
+	 *
 	 * @param lhsType the target type
 	 * @param rhsType the value type that should be assigned to the target type
 	 * @return if the target type is assignable from the value type

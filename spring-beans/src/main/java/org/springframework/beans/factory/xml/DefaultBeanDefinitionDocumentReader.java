@@ -44,11 +44,17 @@ import org.springframework.util.StringUtils;
  * reads bean definitions according to the "spring-beans" DTD and XSD format
  * (Spring's default XML bean definition format).
  *
+ * {@link BeanDefinitionDocumentReader} 接口的默认实现，
+ * 该接口根据“spring-beans”DTD 和 XSD 格式（Spring 的默认 XML Bean 定义格式）读取 Bean 定义。
+ *
  * <p>The structure, elements, and attribute names of the required XML document
  * are hard-coded in this class. (Of course a transform could be run if necessary
  * to produce this format). {@code <beans>} does not need to be the root
  * element of the XML document: this class will parse all bean definition elements
  * in the XML file, regardless of the actual root element.
+ *
+ * <p>所需 XML 文档的结构、元素和属性名称在此类中是硬编码的。 （当然，如果需要，可以运行转换来生成此格式）。
+ * {@code <beans>} 不需要是 XML 文档的根元素：此类将解析 XML 文件中的所有 Bean 定义元素，而不考虑实际的根元素。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -125,6 +131,8 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// the new (child) delegate with a reference to the parent for fallback purposes,
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
+		// 在此方法中，任何嵌套<beans>元素都会导致递归。为了正确传播和保留<beans>默认属性，请跟踪当前（父）委托，该委托可能为 null。创建新的（子）委托，并引用父级以进行回退，然后最终将 this.delegate 重置回其原始（父级）引用。
+		// 此行为模拟一堆委托，而实际上不需要一个委托。
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 

@@ -31,6 +31,8 @@ import org.springframework.util.Assert;
  * Provides access to a collection of merged annotations, usually obtained
  * from a source such as a {@link Class} or {@link Method}.
  *
+ * 提供对合并注解集合的访问，这些注解通常从 {@link Class} 或 {@link Method} 等源获取。
+ *
  * <p>Each merged annotation represents a view where the attribute values may be
  * "merged" from different source values, typically:
  *
@@ -177,6 +179,9 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * Get the {@linkplain MergedAnnotationSelectors#nearest() nearest} matching
 	 * annotation or meta-annotation of the specified type, or
 	 * {@link MergedAnnotation#missing()} if none is present.
+	 *
+	 * 获取 {@linkplain MergedAnnotationSelectors#nearest() nearest} 匹配的指定类型的注释或元注释，如果不存在，则获取 {@link MergedAnnotation#missing()}。
+	 *
 	 * @param annotationType the annotation type to get
 	 * @return a {@link MergedAnnotation} instance
 	 */
@@ -304,6 +309,9 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * Create a new {@link MergedAnnotations} instance containing all
 	 * annotations and meta-annotations from the specified element and,
 	 * depending on the {@link SearchStrategy}, related inherited elements.
+	 *
+	 * 创建一个新的{@link MergedAnnotations}实例，其中包含来自指定元素的所有注解和元注解，以及相关的继承元素（具体取决于 {@link SearchStrategy}）
+	 *
 	 * @param element the source element
 	 * @param searchStrategy the search strategy to use
 	 * @return a {@code MergedAnnotations} instance containing the merged
@@ -334,12 +342,21 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * Create a new {@link MergedAnnotations} instance containing all
 	 * annotations and meta-annotations from the specified element and,
 	 * depending on the {@link SearchStrategy}, related inherited elements.
+	 *
+	 * 创建一个新的 {@link MergedAnnotations} 实例，其中包含来自指定元素的所有注释和元注释，以及相关的继承元素（具体取决于 {@link SearchStrategy}）。
+	 *
 	 * @param element the source element
 	 * @param searchStrategy the search strategy to use
 	 * @param repeatableContainers the repeatable containers that may be used by
 	 * the element annotations or the meta-annotations
+	 *
+	 * 元素注解或元注解可以使用的可重复容器
+	 *
 	 * @param annotationFilter an annotation filter used to restrict the
 	 * annotations considered
+	 *
+	 * 用于限制所考虑的注解的注解过滤器
+	 *
 	 * @return a {@code MergedAnnotations} instance containing the merged
 	 * annotations for the supplied element
 	 */
@@ -473,6 +490,9 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 		 * Perform a full search of the entire type hierarchy, including
 		 * superclasses and implemented interfaces.
 		 * <p>Superclass annotations do not need to be meta-annotated with
+		 *
+		 * 对整个类型层次结构（包括超类和实现的接口）执行完整搜索。超类注解不需要用元注解
+		 *
 		 * {@link Inherited @Inherited}.
 		 */
 		TYPE_HIERARCHY,
@@ -480,18 +500,33 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 		/**
 		 * Perform a full search of the entire type hierarchy on the source
 		 * <em>and</em> any enclosing classes.
+		 *
+		 * 对源和任何封闭类上的整个类型层次结构执行完整搜索。
+		 *
 		 * <p>This strategy is similar to {@link #TYPE_HIERARCHY} except that
 		 * {@linkplain Class#getEnclosingClass() enclosing classes} are also
 		 * searched.
+		 *
+		 * 他的策略类似于 {@link #TYPE_HIERARCHY}，只是 {@linkplain Class#getEnclosingClass() 包围类} 也被搜索。
+		 *
 		 * <p>Superclass and enclosing class annotations do not need to be
 		 * meta-annotated with {@link Inherited @Inherited}.
+		 *
+		 * 超类和封闭类注释不需要使用 {@link Inherited @Inherited} 进行元注释。
+		 *
 		 * <p>When searching a {@link Method} source, this strategy is identical
 		 * to {@link #TYPE_HIERARCHY}.
+		 *
+		 * 搜索 {@link Method} 源时，此策略与{@link #TYPE_HIERARCHY}相同。
+		 *
 		 * <p><strong>WARNING:</strong> This strategy searches recursively for
 		 * annotations on the enclosing class for any source type, regardless
 		 * whether the source type is an <em>inner class</em>, a {@code static}
 		 * nested class, or a nested interface. Thus, it may find more annotations
 		 * than you would expect.
+		 *
+		 * 警告：此策略以递归方式搜索任何源类型的封闭类上的注解，无论源类型是内部类、{@code static}嵌套类还是嵌套接口。因此，它可能会找到比您预期的更多的注释。
+		 *
 		 */
 		TYPE_HIERARCHY_AND_ENCLOSING_CLASSES
 

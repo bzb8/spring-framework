@@ -28,6 +28,7 @@ import org.springframework.util.Assert;
 /**
  * {@link EntityResolver} implementation that delegates to a {@link BeansDtdResolver}
  * and a {@link PluggableSchemaResolver} for DTDs and XML schemas, respectively.
+ * {@link EntityResolver} 实现，该实现分别委托给 DTD 和 XML 模式的 {@link BeansDtdResolver} 和 {@link PluggableSchemaResolver}。
  *
  * @author Rob Harrop
  * @author Juergen Hoeller

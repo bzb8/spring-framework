@@ -37,6 +37,8 @@ import org.springframework.util.ReflectionUtils;
  * Scanner to search for relevant annotations in the annotation hierarchy of an
  * {@link AnnotatedElement}.
  *
+ * 扫描程序，用于在 {@link AnnotatedElement} 的注解层次结构中搜索相关注释。
+ *
  * @author Phillip Webb
  * @author Sam Brannen
  * @since 5.2

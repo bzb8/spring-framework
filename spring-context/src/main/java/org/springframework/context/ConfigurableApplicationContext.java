@@ -32,10 +32,12 @@ import org.springframework.lang.Nullable;
  * Provides facilities to configure an application context in addition
  * to the application context client methods in the
  * {@link org.springframework.context.ApplicationContext} interface.
+ * SPI接口由大多数（如果不是全部）应用程序上下文实现。除了 {@link org.springframework.context.ApplicationContext} 接口中的应用程序上下文客户端方法外，还提供用于配置应用程序上下文的工具。
  *
  * <p>Configuration and lifecycle methods are encapsulated here to avoid
  * making them obvious to ApplicationContext client code. The present
  * methods should only be used by startup and shutdown code.
+ * 此处封装了配置和生命周期方法，以避免使它们对 ApplicationContext 客户端代码显而易见。当前方法只能由启动和关闭代码使用。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -154,6 +156,7 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	 * Add a new BeanFactoryPostProcessor that will get applied to the internal
 	 * bean factory of this application context on refresh, before any of the
 	 * bean definitions get evaluated. To be invoked during context configuration.
+	 * 添加一个新的 BeanFactoryPostProcessor，在计算任何 Bean 定义之前，它将在刷新时应用于此应用程序上下文的内部 Bean 工厂。在上下文配置期间调用。
 	 * @param postProcessor the factory processor to register
 	 */
 	void addBeanFactoryPostProcessor(BeanFactoryPostProcessor postProcessor);

@@ -1436,6 +1436,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 				else {
 					// Child bean definition: needs to be merged with parent.
+					// 子 Bean 定义：需要与父 Bean 合并。
 					BeanDefinition pbd;
 					try {
 						String parentBeanName = transformedBeanName(bd.getParentName());
@@ -1553,6 +1554,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * Resolve the bean class for the specified bean definition,
 	 * resolving a bean class name into a Class reference (if necessary)
 	 * and storing the resolved Class in the bean definition for further use.
+	 *
+	 * 解析指定 Bean 定义的 Bean 类，将 Bean 类名解析为 Class 引用（如有必要），并将解析的 Class 存储在 Bean 定义中以供进一步使用。
+	 *
 	 * @param mbd the merged bean definition to determine the class for
 	 * @param beanName the name of the bean (for error handling purposes)
 	 * @param typesToMatch the types to match in case of internal type matching purposes
@@ -1599,6 +1603,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (!ObjectUtils.isEmpty(typesToMatch)) {
 			// When just doing type checks (i.e. not creating an actual instance yet),
 			// use the specified temporary class loader (e.g. in a weaving scenario).
+			// 当只做类型检查时（即还没有创建一个实际的实例），使用指定的临时类装入器（例如，在编织场景中）。
 			ClassLoader tempClassLoader = getTempClassLoader();
 			if (tempClassLoader != null) {
 				dynamicLoader = tempClassLoader;
@@ -1652,6 +1657,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Evaluate the given String as contained in a bean definition,
 	 * potentially resolving it as an expression.
+	 *
+	 * 评估 Bean 定义中包含的给定字符串，并可能将其解析为表达式。
+	 *
 	 * @param value the value to check
 	 * @param beanDefinition the bean definition that the value comes from
 	 * @return the resolved value
@@ -1683,10 +1691,18 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * handle factory methods and InstantiationAwareBeanPostProcessors.
 	 * It only predicts the bean type correctly for a standard bean.
 	 * To be overridden in subclasses, applying more sophisticated type detection.
+	 *
+	 * 预测指定 Bean 的最终 Bean 类型（已处理的 Bean 实例）。由 {@link #getType} 和 {@link #isTypeMatch} 调用。
+	 * 不需要专门处理 FactoryBeans，因为它只应该对原始 Bean 类型进行操作。此实现很简单，因为它无法处理工厂方法和 InstantiationAwareBeanPostProcessors。
+	 * 它只能正确预测标准 Bean 的 Bean 类型。在子类中被覆盖，应用更复杂的类型检测。
+	 *
 	 * @param beanName the name of the bean
 	 * @param mbd the merged bean definition to determine the type for
 	 * @param typesToMatch the types to match in case of internal type matching purposes
 	 * (also signals that the returned {@code Class} will never be exposed to application code)
+	 *
+	 * 在内部类型匹配的情况下要匹配的类型（还表示返回的 {@code Class} 永远不会暴露给应用程序代码）
+	 *
 	 * @return the type of the bean, or {@code null} if not predictable
 	 */
 	@Nullable
@@ -2017,6 +2033,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * just amounts to a local hash lookup: The operation is therefore part of the
 	 * public interface there. The same implementation can serve for both this
 	 * template method and the public interface method in that case.
+	 *
+	 * 检查此 Bean 工厂是否包含具有给定名称的 Bean 定义。不考虑此工厂可能参与的任何层次结构。当未找到缓存的单例实例时，由 {@code containsBean} 调用。
+	 * 根据具体Bean工厂实现的性质，此操作可能代价高昂（例如，由于外部注册表中的目录查找）。但是，对于可列出的 Bean工厂，这通常只相当于本地哈希查找：因此，该操作是公共接口的一部分。
+	 * 在这种情况下，相同的实现可以同时用于此模板方法和公共接口方法。
+	 *
 	 * @param beanName the name of the bean to look for
 	 * @return if this bean factory contains a bean definition with the given name
 	 * @see #containsBean
@@ -2034,6 +2055,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * just amounts to a local hash lookup: The operation is therefore part of the
 	 * public interface there. The same implementation can serve for both this
 	 * template method and the public interface method in that case.
+	 *
+	 * 返回给定 Bean 名称的 Bean 定义。
+	 * 子类通常应该实现缓存，因为每次需要 Bean 定义元数据时，此类都会调用此方法。根据具体 Bean 工厂实现的性质，此操作可能代价高昂（例如，由于外部注册表中的目录查找）。
+	 * 但是，对于可列出的 Bean 工厂，这通常只相当于本地哈希查找：因此，该操作是公共接口的一部分。在这种情况下，相同的实现可以同时用于此模板方法和公共接口方法。
+	 *
 	 * @param beanName the name of the bean to find a definition for
 	 * @return the BeanDefinition for this prototype name (never {@code null})
 	 * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException

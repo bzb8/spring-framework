@@ -38,22 +38,27 @@ public interface SingletonBeanRegistry {
 	 * Register the given existing object as singleton in the bean registry,
 	 * under the given bean name.
 	 * 在 bean 注册表中，在给定的 bean 名称下将给定的现有对象注册为单例。
+	 *
 	 * <p>The given instance is supposed to be fully initialized; the registry
 	 * will not perform any initialization callbacks (in particular, it won't
 	 * call InitializingBean's {@code afterPropertiesSet} method).
 	 * 给定的实例应该被完全初始化；注册表不会执行任何初始化回调（特别是，它不会调用InitializingBean的{@code afterPropertiesSet}方法）
+	 *
 	 * The given instance will not receive any destruction callbacks
 	 * (like DisposableBean's {@code destroy} method) either.
 	 * 给定的实例也不会收到任何销毁回调（如 DisposableBean 的 {@code destroy} 方法）.
+	 *
 	 * <p>When running within a full BeanFactory: <b>Register a bean definition
 	 * instead of an existing instance if your bean is supposed to receive
 	 * initialization and/or destruction callbacks.</b>
 	 * 在完整的 BeanFactory 中运行时：<b>如果您的 Bean 应该接收初始化和/或销毁回调，则注册一个 Bean 定义而不是现有实例。
+	 *
 	 * <p>Typically invoked during registry configuration, but can also be used
 	 * for runtime registration of singletons. As a consequence, a registry
 	 * implementation should synchronize singleton access; it will have to do
 	 * this anyway if it supports a BeanFactory's lazy initialization of singletons.
 	 * 通常在注册表配置期间调用，但也可用于单例的运行时注册。因此，注册表实现应该同步单例访问；如果它支持 BeanFactory 的单例延迟初始化，无论如何它都必须这样做。
+	 *
 	 * @param beanName the name of the bean
 	 * @param singletonObject the existing singleton object
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet

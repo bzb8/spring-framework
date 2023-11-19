@@ -24,6 +24,7 @@ import java.io.InputStream;
  * 作为 {@link InputStream} 源的对象的简单接口。
  *
  * <p>This is the base interface for Spring's more extensive {@link Resource} interface.
+ * 这是 Spring 更广泛的 {@link Resource} 接口的基本接口。
  *
  * <p>For single-use streams, {@link InputStreamResource} can be used for any
  * given {@code InputStream}. Spring's {@link ByteArrayResource} or any
@@ -31,6 +32,8 @@ import java.io.InputStream;
  * instance, allowing one to read the underlying content stream multiple times.
  * This makes this interface useful as an abstract content source for mail
  * attachments, for example.
+ * <p>对于一次性流，{@link InputStreamResource} 可用于任何给定的 {@code InputStream}。Spring 的 {@link ByteArrayResource}
+ * 或任何基于文件的 {@code Resource} 实现都可以用作具体实例，允许多次读取底层内容流。例如，这使得此接口可用作邮件附件的抽象内容源。
  *
  * @author Juergen Hoeller
  * @since 20.01.2004

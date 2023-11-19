@@ -28,6 +28,7 @@ import org.springframework.util.StringUtils;
 /**
  * Utility methods that are useful for bean definition reader implementations.
  * Mainly intended for internal use.
+ * 对 Bean 定义读取器实现有用的实用工具方法。主要供内部使用。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -47,10 +48,11 @@ public abstract class BeanDefinitionReaderUtils {
 	/**
 	 * Create a new GenericBeanDefinition for the given parent name and class name,
 	 * eagerly loading the bean class if a ClassLoader has been specified.
-	 * @param parentName the name of the parent bean, if any
+	 * 为给定的父级名称和类名创建一个新的 GenericBeanDefinition，如果指定了 ClassLoader，则急切地加载 Bean 类
+	 * @param parentName the name of the parent bean, if any 父 Bean 的名称（如果有）
 	 * @param className the name of the bean class, if any
 	 * @param classLoader the ClassLoader to use for loading bean classes
-	 * (can be {@code null} to just register bean classes by name)
+	 * (can be {@code null} to just register bean classes by name) 用于加载 Bean 类的 ClassLoader（可以是 {@code null}，以便仅按名称注册 Bean 类）
 	 * @return the bean definition
 	 * @throws ClassNotFoundException if the bean class could not be loaded
 	 */
@@ -90,12 +92,14 @@ public abstract class BeanDefinitionReaderUtils {
 	/**
 	 * Generate a bean name for the given bean definition, unique within the
 	 * given bean factory.
+	 * 为给定的 Bean 定义生成一个 Bean 名称，该名称在给定的 Bean 工厂中是唯一的。
 	 * @param definition the bean definition to generate a bean name for
 	 * @param registry the bean factory that the definition is going to be
 	 * registered with (to check for existing bean names)
 	 * @param isInnerBean whether the given bean definition will be registered
 	 * as inner bean or as top-level bean (allowing for special name generation
 	 * for inner beans versus top-level beans)
+	 * 给定的 Bean 定义是注册为内部 Bean 还是顶级 Bean（允许为内部 Bean 和顶级 Bean 生成特殊名称）
 	 * @return the generated bean name
 	 * @throws BeanDefinitionStoreException if no unique name can be generated
 	 * for the given bean definition
@@ -159,8 +163,9 @@ public abstract class BeanDefinitionReaderUtils {
 			BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)
 			throws BeanDefinitionStoreException {
 
-		// Register bean definition under primary name.
+		// Register bean definition under primary name. 在主名称下注册 Bean 定义。
 		String beanName = definitionHolder.getBeanName();
+		// 往Map中注册BeanDefinition，Map<String, BeanDefinition>，List<String> （按照注册的顺序）
 		registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());
 
 		// Register aliases for bean name, if any.

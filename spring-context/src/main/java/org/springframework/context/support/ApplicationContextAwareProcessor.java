@@ -42,11 +42,18 @@ import org.springframework.util.StringValueResolver;
  * {@link ResourceLoaderAware}, {@link ApplicationEventPublisherAware},
  * {@link MessageSourceAware}, and/or {@link ApplicationContextAware} interfaces.
  *
+ * {@link BeanPostProcessor} 实现，用于向实现 {@code ApplicationAware}、{@link org.springframework.core.env.Environment Environment} 或
+ * {@link StringValueResolver} 的 {@code ApplicationContext} 实现 {@link EnvironmentAware}、
+ * {@link EmbeddedValueResolverAware}、{@link ResourceLoaderAware}、{@link ApplicationEventPublisherAware}、{@link MessageSourceAware}
+ * 和 {@link ApplicationContextAware} 接口的 { MessageValueResolver}。
+ *
  * <p>Implemented interfaces are satisfied in the order in which they are
  * mentioned above.
+ * 实现的接口按照上面提到的顺序得到满足。
  *
  * <p>Application contexts will automatically register this with their
  * underlying bean factory. Applications do not use this directly.
+ * 应用程序上下文将自动将其注册到其底层 Bean 工厂。应用程序不直接使用它。
  *
  * @author Juergen Hoeller
  * @author Costin Leau

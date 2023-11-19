@@ -22,11 +22,15 @@ import org.springframework.util.StringValueResolver;
 /**
  * {@link StringValueResolver} adapter for resolving placeholders and
  * expressions against a {@link ConfigurableBeanFactory}.
+ * {@link StringValueResolver} 适配器，用于针对 {@link ConfigurableBeanFactory} 解析占位符和表达式。
  *
  * <p>Note that this adapter resolves expressions as well, in contrast
  * to the {@link ConfigurableBeanFactory#resolveEmbeddedValue} method.
  * The {@link BeanExpressionContext} used is for the plain bean factory,
  * with no scope specified for any contextual objects to access.
+ *
+ * 请注意，此适配器还解析表达式，这与 {@link ConfigurableBeanFactory#resolveEmbeddedValue} 方法相反。
+ * 使用的 {@link BeanExpressionContext} 用于普通 Bean 工厂，没有为任何上下文对象指定访问范围。
  *
  * @author Juergen Hoeller
  * @since 4.3

@@ -21,10 +21,15 @@ import java.lang.annotation.Annotation;
 /**
  * Callback interface that can be used to filter specific annotation types.
  *
+ * 可用于过滤特定注解类型的回调接口。
+ *
  * <p>Note that the {@link MergedAnnotations} model (which this interface has been
  * designed for) always ignores lang annotations according to the {@link #PLAIN}
  * filter (for efficiency reasons). Any additional filters and even custom filter
  * implementations apply within this boundary and may only narrow further from here.
+ *
+ * 请注意，{@link MergedAnnotations} 模型（此接口已设计用于此模型）始终根据 {@link #PLAIN} 过滤器忽略 lang 注释（出于效率原因）。任何其他筛选器甚至自定义筛选器实现都适用于此边界，
+ * 并且可能只会从此处进一步缩小范围。
  *
  * @author Phillip Webb
  * @author Juergen Hoeller
@@ -39,6 +44,10 @@ public interface AnnotationFilter {
 	 * {@code java.lang} and {@code org.springframework.lang} packages
 	 * and their subpackages.
 	 * <p>This is the default filter in the {@link MergedAnnotations} model.
+	 *
+	 * {@link AnnotationFilter}，与{@code java.lang}和{@code org.springframework.lang}包及其子包中的注解匹配。
+	 * 这是{@link MergedAnnotations}模型中的默认筛选器。
+	 *
 	 */
 	AnnotationFilter PLAIN = packages("java.lang", "org.springframework.lang");
 

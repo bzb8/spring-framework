@@ -36,9 +36,13 @@ import org.springframework.lang.Nullable;
  * collection. Presents a view onto an annotation where attribute values may
  * have been "merged" from different source values.
  *
+ * 从{@link MergedAnnotations}集合返回的单个合并注解。在注解上显示一个视图，其中属性值可能已从不同的源值“合并”而来
+ *
  * <p>Attribute values may be accessed using the various {@code get} methods.
  * For example, to access an {@code int} attribute the {@link #getInt(String)}
  * method would be used.
+ *
+ * 可以使用各种{@code get}方法访问属性值。例如，要访问{@code int}属性，将使用{@link #getInt(String)}方法。
  *
  * <p>Note that attribute values are <b>not</b> converted when accessed.
  * For example, it is not possible to call {@link #getString(String)} if the
@@ -47,8 +51,13 @@ import org.springframework.lang.Nullable;
  * {@code String} and {@code String[]} respectively to prevent potential early
  * class initialization.
  *
+ * 请注意，属性值在访问时不会转换。例如，如果基础属性是{@code int}，则无法调用 {@link #getString(String)}。
+ * 此规则的唯一例外是{@code Class}和{@code Class[]}值，它们可以分别作为 {@code String}和{@code String[]}访问，以防止潜在的早期类初始化。
+ *
  * <p>If necessary, a {@code MergedAnnotation} can be {@linkplain #synthesize()
  * synthesized} back into an actual {@link java.lang.annotation.Annotation}.
+ *
+ * 如有必要，可以将 {@code MergedAnnotation} {@linkplain #synthesize() synthesized} 转换回实际的 {@link java.lang.annotation.Annotation}。
  *
  * @author Phillip Webb
  * @author Juergen Hoeller
@@ -480,6 +489,9 @@ public interface MergedAnnotation<A extends Annotation> {
 	/**
 	 * Create a type-safe synthesized version of this merged annotation that can
 	 * be used directly in code.
+	 *
+	 * 创建此合并注解的类型安全合成版本，该版本可直接在代码中使用。
+	 *
 	 * <p>The result is synthesized using a JDK {@link java.lang.reflect.Proxy Proxy}
 	 * and as a result may incur a computational cost when first invoked.
 	 * <p>If this merged annotation was created {@linkplain #of(AnnotatedElement, Class, Map)
@@ -489,15 +501,27 @@ public interface MergedAnnotation<A extends Annotation> {
 	 * an annotation instance, that annotation will be returned unmodified if it is
 	 * not <em>synthesizable</em>. An annotation is considered synthesizable if
 	 * it has not already been synthesized and one of the following is true.
+	 *
+	 * 结果是使用 JDK {@link java.lang.reflect.Proxy Proxy} 合成的，因此在首次调用时可能会产生计算成本。如果此合并的注解是从注解属性或默认属性值的映射中创建的
+	 * {@linkplain #of(AnnotatedElement, Class, Map)，则这些属性将始终合成到注解实例中。<p>如果此合并的注解是 {@linkplain #from(Annotation) from} 一个注解实例创建的，则如果该注解不可合成，
+	 * 则该注解将原封不动地返回。如果注释尚未被合成，并且满足以下条件之一，则认为该注释是可合成的。
+	 *
 	 * <ul>
-	 * <li>The annotation declares attributes annotated with {@link AliasFor @AliasFor}.</li>
+	 * <li>The annotation declares attributes annotated with {@link AliasFor @AliasFor}. 注解声明使用 {@link AliasFor @AliasFor} 注解的属性。</li>
 	 * <li>The annotation is a composed annotation that relies on convention-based
 	 * annotation attribute overrides in meta-annotations.</li>
+	 *
+	 * 注解是一种组合注解，它依赖于元注解中基于约定的注解属性覆盖。
+	 *
 	 * <li>The annotation declares attributes that are annotations or arrays of
 	 * annotations that are themselves synthesizable.</li>
+	 * 注解声明属性是注解或注解数组，这些注解本身是可合成的。
 	 * </ul>
 	 * @return a synthesized version of the annotation or the original annotation
 	 * unmodified
+	 *
+	 * 注释的合成版本或未经修改的原始注解
+	 *
 	 * @throws NoSuchElementException on a missing annotation
 	 */
 	A synthesize() throws NoSuchElementException;
