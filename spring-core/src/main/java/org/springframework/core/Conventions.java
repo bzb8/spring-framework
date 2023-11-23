@@ -29,6 +29,8 @@ import org.springframework.util.ClassUtils;
  * Provides methods to support various naming and other conventions used
  * throughout the framework. Mainly for internal use within the framework.
  *
+ * 提供支持整个框架中使用的各种命名和其他约定的方法。主要供框架内的内部使用。
+ *
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @author Rossen Stoyanchev
@@ -248,6 +250,8 @@ public final class Conventions {
 	 * Return an attribute name qualified by the given enclosing {@link Class}.
 	 * For example the attribute name '{@code foo}' qualified by {@link Class}
 	 * '{@code com.myapp.SomeClass}' would be '{@code com.myapp.SomeClass.foo}'
+	 *
+	 * 返回由给定的封闭式 {@link Class} 限定的属性名称。例如，由 {@link Class} “{@code com.myapp.SomeClass}” 限定的属性名称“{@code foo}”将为“{@code com.myapp.SomeClass.foo}”
 	 */
 	public static String getQualifiedAttributeName(Class<?> enclosingClass, String attributeName) {
 		Assert.notNull(enclosingClass, "'enclosingClass' must not be null");

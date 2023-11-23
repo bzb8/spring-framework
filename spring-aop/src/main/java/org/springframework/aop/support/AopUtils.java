@@ -44,11 +44,17 @@ import org.springframework.util.ReflectionUtils;
 /**
  * Utility methods for AOP support code.
  *
+ * AOP 支持代码的实用工具方法。
+ *
  * <p>Mainly for internal use within Spring's AOP support.
+ *
+ * 主要供 Spring 的 AOP 支持内部使用。
  *
  * <p>See {@link org.springframework.aop.framework.AopProxyUtils} for a
  * collection of framework-specific AOP utility methods which depend
  * on internals of Spring's AOP framework implementation.
+ *
+ * 请参阅 {@link org.springframework.aop.framework.AopProxyUtils} 获取特定于框架的 AOP 实用程序方法的集合，这些方法依赖于 Spring 的 AOP 框架实现的内部结构。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -61,6 +67,10 @@ public abstract class AopUtils {
 	 * Check whether the given object is a JDK dynamic proxy or a CGLIB proxy.
 	 * <p>This method additionally checks if the given object is an instance
 	 * of {@link SpringProxy}.
+	 *
+	 * 检查给定对象是 JDK 动态代理还是 CGLIB 代理。
+	 * 此方法还会检查给定对象是否是 {@link SpringProxy} 的实例。
+	 *
 	 * @param object the object to check
 	 * @see #isJdkDynamicProxy
 	 * @see #isCglibProxy
@@ -87,6 +97,10 @@ public abstract class AopUtils {
 	 * <p>This method goes beyond the implementation of
 	 * {@link ClassUtils#isCglibProxy(Object)} by additionally checking if
 	 * the given object is an instance of {@link SpringProxy}.
+	 *
+	 * 检查给定对象是否为 CGLIB 代理。
+	 * 此方法通过额外检查给定对象是否是 {@link SpringProxy} 的实例，超越了 {@link ClassUtils#isCglibProxy(Object)} 的实现。
+	 *
 	 * @param object the object to check
 	 * @see ClassUtils#isCglibProxy(Object)
 	 */
@@ -98,6 +112,9 @@ public abstract class AopUtils {
 	/**
 	 * Determine the target class of the given bean instance which might be an AOP proxy.
 	 * <p>Returns the target class for an AOP proxy or the plain class otherwise.
+	 *
+	 * 确定给定 Bean 实例的目标类，该实例可能是 AOP 代理。返回 AOP 代理的目标类，否则返回普通类。
+	 *
 	 * @param candidate the instance to check (might be an AOP proxy)
 	 * @return the target class (or the plain class of the given object as fallback;
 	 * never {@code null})

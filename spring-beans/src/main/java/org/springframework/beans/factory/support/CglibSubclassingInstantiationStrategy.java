@@ -90,6 +90,9 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 	/**
 	 * An inner class created for historical reasons to avoid external CGLIB dependency
 	 * in Spring versions earlier than 3.2.
+	 *
+	 * 出于历史原因创建的内部类，用于避免 Spring 3.2 之前版本中的外部 CGLIB 依赖。
+	 *
 	 */
 	private static class CglibSubclassCreator {
 
@@ -108,10 +111,19 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		/**
 		 * Create a new instance of a dynamically generated subclass implementing the
 		 * required lookups.
+		 *
+		 * 创建动态生成的子类的新实例，以实现所需的查找。
+		 *
 		 * @param ctor constructor to use. If this is {@code null}, use the
 		 * no-arg constructor (no parameterization, or Setter Injection)
+		 *
+		 * 要使用的构造函数。如果这是 {@code null}，请使用 no-arg 构造函数（无参数化或 Setter 注入）
+		 *
 		 * @param args arguments to use for the constructor.
 		 * Ignored if the {@code ctor} parameter is {@code null}.
+		 *
+		 * 用于构造函数的参数。如果 {@code ctor} 参数为 {@code null}，则忽略。
+		 *
 		 * @return new instance of the dynamically generated subclass
 		 */
 		public Object instantiate(@Nullable Constructor<?> ctor, Object... args) {
@@ -142,6 +154,8 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		/**
 		 * Create an enhanced subclass of the bean class for the provided bean
 		 * definition, using CGLIB.
+		 *
+		 * 使用 CGLIB 为提供的 Bean 定义创建 Bean 类的增强子类。
 		 */
 		private Class<?> createEnhancedSubclass(RootBeanDefinition beanDefinition) {
 			Enhancer enhancer = new Enhancer();

@@ -156,6 +156,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private boolean allowEagerClassLoading = true;
 
 	/** Optional OrderComparator for dependency Lists and arrays. */
+	// 依赖项列表和数组的可选 OrderComparator。
 	@Nullable
 	private Comparator<Object> dependencyComparator;
 
@@ -292,6 +293,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	/**
 	 * Return the dependency comparator for this BeanFactory (may be {@code null}).
+	 * 返回此 BeanFactory 的依赖项比较器（可能是 {@code null}）。
 	 * @since 4.0
 	 */
 	@Nullable
@@ -303,6 +305,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Set a custom autowire candidate resolver for this BeanFactory to use
 	 * when deciding whether a bean definition should be considered as a
 	 * candidate for autowiring.
+	 *
+	 * 为此 BeanFactory 设置一个自定义的 autowire 候选解析器，以便在决定是否应将 Bean 定义视为自动注入的候选解析器时使用。
 	 */
 	public void setAutowireCandidateResolver(AutowireCandidateResolver autowireCandidateResolver) {
 		Assert.notNull(autowireCandidateResolver, "AutowireCandidateResolver must not be null");

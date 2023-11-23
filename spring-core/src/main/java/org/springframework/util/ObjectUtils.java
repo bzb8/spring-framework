@@ -175,9 +175,15 @@ public abstract class ObjectUtils {
 
 	/**
 	 * Unwrap the given object which is potentially a {@link java.util.Optional}.
+	 *
+	 * 解包给定对象，该对象可能是 {@link java.util.Optional}。
+	 *
 	 * @param obj the candidate object
 	 * @return either the value held within the {@code Optional}, {@code null}
 	 * if the {@code Optional} is empty, or simply the given object as-is
+	 *
+	 * 如果 {@code Optional} 为空，则为 @code{@code Optional} 中的值，或者只是给定对象的原样 { null}。
+	 *
 	 * @since 5.0
 	 */
 	@Nullable

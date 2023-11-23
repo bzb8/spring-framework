@@ -70,18 +70,23 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
- * 扫描的入口
  * {@link BeanFactoryPostProcessor} used for bootstrapping processing of
  * {@link Configuration @Configuration} classes.
+ *
+ * {@link BeanFactoryPostProcessor} 用于 {@link Configuration @Configuration} 类的引导处理。
  *
  * <p>Registered by default when using {@code <context:annotation-config/>} or
  * {@code <context:component-scan/>}. Otherwise, may be declared manually as
  * with any other {@link BeanFactoryPostProcessor}.
  *
+ * 使用 {@code <context：annotation-config>} 或 {@code <context：component-scan>} 时默认注册。否则，可以像使用任何其他 {@link BeanFactoryPostProcessor} 一样手动声明。
+ *
  * <p>This post processor is priority-ordered as it is important that any
  * {@link Bean @Bean} methods declared in {@code @Configuration} classes have
  * their corresponding bean definitions registered before any other
  * {@code BeanFactoryPostProcessor} executes.
+ *
+ * 此后处理器是按优先级排序的，因为在 {@code @Configuration} 类中声明的任何 {@link Bean @Bean} 方法都必须在执行任何其他 {@code BeanFactoryPostProcessor} 之前注册其相应的 Bean 定义。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -273,6 +278,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	/**
 	 * Build and validate a configuration model based on the registry of
 	 * {@link Configuration} classes.
+	 *
+	 * 基于 {@link Configuration} 类的注册表生成和验证配置模型。
+	 *
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();

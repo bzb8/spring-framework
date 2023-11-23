@@ -22,6 +22,8 @@ import org.springframework.lang.Nullable;
  * Interface that defines abstract metadata of a specific class,
  * in a form that does not require that class to be loaded yet.
  *
+ * 定义特定类的抽象元数据的接口，其形式尚不需要加载该类。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  * @see StandardClassMetadata

@@ -33,7 +33,7 @@ import org.springframework.lang.Nullable;
  * a Spring {@link org.springframework.context.ApplicationContext}, can use an
  * {@code ApplicationEventMulticaster} as a delegate for actually publishing events.
  *
- * <p>{@link org.springframework.context.ApplicationEventPublisher}（通常是 Spring {@link org.springframework.context.ApplicationContext}）
+ * {@link org.springframework.context.ApplicationEventPublisher}（通常是 Spring {@link org.springframework.context.ApplicationContext}）
  * 可以使用 {@code ApplicationEventMulticaster} 作为实际发布事件的委托。
  *
  * @author Rod Johnson
@@ -45,6 +45,9 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Add a listener to be notified of all events.
+	 *
+	 * 添加一个侦听器以接收所有事件的通知。
+	 *
 	 * @param listener the listener to add
 	 * @see #removeApplicationListener(ApplicationListener)
 	 * @see #removeApplicationListeners(Predicate)
@@ -115,6 +118,9 @@ public interface ApplicationEventMulticaster {
 	 * Multicast the given application event to appropriate listeners.
 	 * <p>Consider using {@link #multicastEvent(ApplicationEvent, ResolvableType)}
 	 * if possible as it provides better support for generics-based events.
+	 *
+	 * 将给定的应用程序事件多播到相应的侦听器。如果可能，请考虑使用 {@link #multicastEvent(ApplicationEvent, ResolvableType)}，因为它为基于泛型的事件提供了更好的支持。
+	 *
 	 * @param event the event to multicast
 	 */
 	void multicastEvent(ApplicationEvent event);
@@ -123,6 +129,9 @@ public interface ApplicationEventMulticaster {
 	 * Multicast the given application event to appropriate listeners.
 	 * <p>If the {@code eventType} is {@code null}, a default type is built
 	 * based on the {@code event} instance.
+	 *
+	 * 将给定的应用程序事件多播到相应的侦听器。如果 {@code eventType} 为 {@code null}，则基于 {@code event} 实例生成默认类型。
+	 *
 	 * @param event the event to multicast
 	 * @param eventType the type of event (can be {@code null})
 	 * @since 4.2

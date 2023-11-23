@@ -28,7 +28,12 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 /**
  * Interface that defines abstract access to the annotations of a specific
  * class, in a form that does not require that class to be loaded yet.
+ *
  * 定义对特定类的注解的抽象访问的接口，其形式尚不需要加载该类。
+ * AnnotationMetadata 是 Spring Framework 中的一个接口，用于表示类的注解元数据。它提供了一种方便的方式来检查和访问类上的注解信息。
+ * 在 Spring 中，AnnotationMetadata 接口的实现类通常包括 StandardAnnotationMetadata 和 StandardMethodMetadata
+ * 。这些实现类提供了对类和方法级别的注解元数据的访问。
+ *
  * @author Juergen Hoeller
  * @author Mark Fisher
  * @author Phillip Webb
@@ -119,6 +124,9 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	/**
 	 * Factory method to create a new {@link AnnotationMetadata} instance
 	 * for the given class using standard reflection.
+	 *
+	 * 使用标准反射为给定类创建新的 {@link AnnotationMetadata} 实例的工厂方法。
+	 *
 	 * @param type the class to introspect
 	 * @return a new {@link AnnotationMetadata} instance
 	 * @since 5.2

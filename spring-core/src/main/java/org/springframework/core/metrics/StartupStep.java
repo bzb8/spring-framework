@@ -22,18 +22,27 @@ import org.springframework.lang.Nullable;
 
 /**
  * Step recording metrics about a particular phase or action happening during the {@link ApplicationStartup}.
+ *
  * 步骤记录有关 {@link ApplicationStartup} 期间发生的特定阶段或操作的指标。
  *
  * <p>The lifecycle of a {@code StartupStep} goes as follows:
+ *
  * {@code StartupStep} 的生命周期如下：
+ *
  * <ol>
  * <li>the step is created and starts by calling {@link ApplicationStartup#start(String) the application startup}
  * and is assigned a unique {@link StartupStep#getId() id}.
- * 通过调用 {@link ApplicationStartupstart（String） 应用程序启动} 来创建和启动该步骤，并为其分配唯一的 {@link StartupStepgetId（） id}。
+ *
+ * 通过调用 {@link ApplicationStartup#start(String) 应用程序启动} 来创建和启动该步骤，并为其分配唯一的 {@link StartupStep#getId() id}。
+ *
  * <li>we can then attach information with {@link Tags} during processing
+ *
  * 然后，我们可以在处理过程中附加带有 {@link Tags} 的信息
+ *
  * <li>we then need to mark the {@link #end()} of the step
- * 然后，我们需要标记该步骤的 {@link end（）}
+ *
+ * 然后，我们需要标记该步骤的 {@link #end()}
+ *
  * </ol>
  *
  * <p>Implementations can track the "execution time" or other metrics for steps.

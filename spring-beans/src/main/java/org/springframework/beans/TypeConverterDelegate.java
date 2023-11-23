@@ -42,8 +42,12 @@ import org.springframework.util.StringUtils;
 /**
  * Internal helper class for converting property values to target types.
  *
+ * 用于将属性值转换为目标类型的内部帮助程序类。
+ *
  * <p>Works on a given {@link PropertyEditorRegistrySupport} instance.
  * Used as a delegate by {@link BeanWrapperImpl} and {@link SimpleTypeConverter}.
+ *
+ * 适用于给定的 {@link PropertyEditorRegistrySupport} 实例。由 {@link BeanWrapperImpl} 和 {@link SimpleTypeConverter} 用作委托。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop

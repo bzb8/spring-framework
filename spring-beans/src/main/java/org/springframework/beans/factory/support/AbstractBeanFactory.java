@@ -140,6 +140,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	private BeanExpressionResolver beanExpressionResolver;
 
 	/** Spring ConversionService to use instead of PropertyEditors. */
+	// 使用 Spring ConversionService 代替 PropertyEditors
 	@Nullable
 	private ConversionService conversionService;
 
@@ -154,6 +155,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	private TypeConverter typeConverter;
 
 	/** String resolvers to apply e.g. to annotation attribute values. */
+	// 字符串解析器，例如应用于注解属性值。
 	private final List<StringValueResolver> embeddedValueResolvers = new CopyOnWriteArrayList<>();
 
 	/** BeanPostProcessors to apply. */
@@ -244,7 +246,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param requiredType the required type of the bean to retrieve 要检索的 Bean 所需的类型
 	 * @param args arguments to use when creating a bean instance using explicit arguments
 	 * (only applied when creating a new instance as opposed to retrieving an existing one)
-	 * 使用显式参数创建 bean 实例时使用的参数（仅在创建新实例时应用，而不是检索现有实例）
+	 *
+	 * 使用显式参数创建bean实例时使用的参数（仅在创建新实例时应用，而不是检索现有实例）
+	 *
 	 * @param typeCheckOnly whether the instance is obtained for a type check,
 	 * not for actual use 获取实例是否是为了类型检查，而不是为了实际使用
 	 * @return an instance of the bean
@@ -285,6 +289,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			// Check if bean definition exists in this factory.
 			// 检查该工厂中是否存在 bean 定义
 			BeanFactory parentBeanFactory = getParentBeanFactory();
+			// 如果没有找到，则从父类获取
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
@@ -319,6 +324,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
+				// 保证当前 Bean 所依赖的 Bean 的初始化。
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
@@ -411,6 +417,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	<T> T adaptBeanInstance(String name, Object bean, @Nullable Class<?> requiredType) {
 		// Check if required type matches the type of the actual bean instance.
+		// 检查所需的类型是否与实际 Bean 实例的类型匹配。
 		if (requiredType != null && !requiredType.isInstance(bean)) {
 			try {
 				Object convertedBean = getTypeConverter().convertIfNecessary(bean, requiredType);
@@ -531,6 +538,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * Internal extended variant of {@link #isTypeMatch(String, ResolvableType)}
 	 * to check whether the bean with the given name matches the specified type. Allow
 	 * additional constraints to be applied to ensure that beans are not created early.
+	 *
+	 * {@link #isTypeMatch(String, ResolvableType)的内部扩展变体，用于检查具有给定名称的 Bean 是否与指定类型匹配。允许应用其他约束以确保不会过早创建 Bean。
+	 *
 	 * @param name the name of the bean to query
 	 * @param typeToMatch the type to match against (as a
 	 * {@code ResolvableType})
@@ -901,7 +911,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Return the custom TypeConverter to use, if any.
+	 * Return the custom TypeConverter to use, if any. 返回要使用的自定义 TypeConverter（如果有）。
 	 * @return the custom TypeConverter, or {@code null} if none specified
 	 */
 	@Nullable
@@ -917,6 +927,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		}
 		else {
 			// Build default TypeConverter, registering custom editors.
+			// 构建默认的 TypeConverter，注册自定义编辑器。
 			SimpleTypeConverter typeConverter = new SimpleTypeConverter();
 			typeConverter.setConversionService(getConversionService());
 			registerCustomEditors(typeConverter);
@@ -1029,6 +1040,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Return whether this factory holds a InstantiationAwareBeanPostProcessor
 	 * that will get applied to singleton beans on creation.
+	 *
+	 * 返回此工厂是否包含将在创建时应用于单一实例 Bean 的 InstantiationAwareBeanPostProcessor。
+	 *
 	 * @see #addBeanPostProcessor
 	 * @see org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor
 	 */
@@ -1307,6 +1321,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * and populate bean instances.
 	 * <p>The default implementation delegates to {@link #registerCustomEditors}.
 	 * Can be overridden in subclasses.
+	 *
+	 * 使用在此工厂注册的自定义编辑器初始化给定的 BeanWrapper。为将创建和填充 Bean 实例的 BeanWrappers 调用。
+	 * 默认实现委托给 {@link #registerCustomEditors}。可以在子类中被覆盖。
+	 *
 	 * @param bw the BeanWrapper to initialize
 	 */
 	protected void initBeanWrapper(BeanWrapper bw) {
@@ -1320,6 +1338,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * <p>To be called for BeanWrappers that will create and populate bean
 	 * instances, and for SimpleTypeConverter used for constructor argument
 	 * and factory method type conversion.
+	 *
+	 * 使用已在此 BeanFactory 中注册的自定义编辑器初始化给定的 PropertyEditorRegistry。
+	 * 对于将创建和填充 Bean 实例的 BeanWrapper，以及用于构造函数参数和工厂方法类型转换的 SimpleTypeConverter，调用该函数。
+	 *
 	 * @param registry the PropertyEditorRegistry to initialize
 	 */
 	protected void registerCustomEditors(PropertyEditorRegistry registry) {
@@ -1509,6 +1531,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Check the given merged bean definition,
 	 * potentially throwing validation exceptions.
+	 *
+	 * 检查给定的合并 Bean 定义，可能会引发验证异常。
+	 *
 	 * @param mbd the merged bean definition to check
 	 * @param beanName the name of the bean
 	 * @param args the arguments for bean creation, if any
@@ -1557,10 +1582,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 *
 	 * 解析指定 Bean 定义的 Bean 类，将 Bean 类名解析为 Class 引用（如有必要），并将解析的 Class 存储在 Bean 定义中以供进一步使用。
 	 *
-	 * @param mbd the merged bean definition to determine the class for
-	 * @param beanName the name of the bean (for error handling purposes)
+	 * @param mbd the merged bean definition to determine the class for 用于确定 的类的合并 Bean 定义
+	 * @param beanName the name of the bean (for error handling purposes) Bean 的名称（用于错误处理目的）
 	 * @param typesToMatch the types to match in case of internal type matching purposes
 	 * (also signals that the returned {@code Class} will never be exposed to application code)
+	 *
+	 * 在内部类型匹配的情况下要匹配的类型（还表示返回的 {@code Class} 永远不会暴露给应用程序代码）
+	 *
 	 * @return the resolved bean class (or {@code null} if none)
 	 * @throws CannotLoadBeanClassException if we failed to load the class
 	 */
@@ -1833,7 +1861,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * <p>This allows the bean factory to optimize its caching for repeated
 	 * creation of the specified bean.
 	 *
-	 * 将指定的 bean 标记为已创建（或即将创建）。 <p>这允许 Bean 工厂优化其缓存，以重复创建指定的 Bean。
+	 * 将指定的 bean 标记为已创建（或即将创建）。 这允许 Bean 工厂优化其缓存，以重复创建指定的 Bean。
 	 *
 	 * @param beanName the name of the bean
 	 */
@@ -1908,7 +1936,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param name the name that may include factory dereference prefix 可能包含工厂解引用前缀的名称
 	 * @param beanName the canonical bean name 规范的 bean 名称
 	 * @param mbd the merged bean definition 合并的bean定义
-	 * @return the object to expose for the bean
+	 * @return the object to expose for the bean 要为 Bean 公开的对象
 	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
@@ -2076,9 +2104,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * The bean definition will already have been merged with the parent definition
 	 * in case of a child definition.
 	 * <p>All bean retrieval methods delegate to this method for actual bean creation.
+	 *
+	 * 为给定的合并 Bean 定义（和参数）创建一个 Bean 实例。如果是子定义，Bean 定义将已与父定义合并。所有 Bean 检索方法都委托给此方法以创建实际的 Bean。
+	 *
 	 * @param beanName the name of the bean
 	 * @param mbd the merged bean definition for the bean
-	 * @param args explicit arguments to use for constructor or factory method invocation
+	 * @param args explicit arguments to use for constructor or factory method invocation 用于构造函数或工厂方法调用的显式参数
 	 * @return a new instance of the bean
 	 * @throws BeanCreationException if the bean could not be created
 	 */

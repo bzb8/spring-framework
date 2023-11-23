@@ -21,10 +21,14 @@ import java.lang.reflect.Method;
 /**
  * A strategy for handling uncaught exceptions thrown from asynchronous methods.
  *
+ * 用于处理从异步方法引发的未捕获异常的策略。
+ *
  * <p>An asynchronous method usually returns a {@link java.util.concurrent.Future}
  * instance that gives access to the underlying exception. When the method does
  * not provide that return type, this handler can be used to manage such
  * uncaught exceptions.
+ *
+ * 异步方法通常返回一个 {@link java.util.concurrent.Future} 实例，该实例提供对底层异常的访问。当该方法未提供该返回类型时，此处理程序可用于管理此类未捕获的异常。
  *
  * @author Stephane Nicoll
  * @since 4.1

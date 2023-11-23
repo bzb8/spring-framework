@@ -30,12 +30,18 @@ import org.springframework.util.ReflectionUtils;
  * instance fields. Allows for direct binding to fields instead of going through
  * JavaBean setters.
  *
+ * {@link ConfigurablePropertyAccessor} 实现，用于直接访问实例字段。允许直接绑定到字段，而不是通过 JavaBean setter。
+ *
  * <p>As of Spring 4.2, the vast majority of the {@link BeanWrapper} features have
  * been merged to {@link AbstractPropertyAccessor}, which means that property
  * traversal as well as collections and map access is now supported here as well.
  *
+ * 从 Spring 4.2 开始，绝大多数 {@link BeanWrapper} 功能已合并到 {@link AbstractPropertyAccessor}，这意味着这里现在也支持属性遍历以及集合和映射访问。
+ *
  * <p>A DirectFieldAccessor's default for the "extractOldValueForEditor" setting
  * is "true", since a field can always be read without side effects.
+ *
+ * DirectFieldAccessor 的“extractOldValueForEditor”设置默认值为“true”，因为始终可以读取字段而不会产生副作用。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll

@@ -23,9 +23,12 @@ import org.springframework.lang.Nullable;
  * Interface that encapsulates configuration methods for a PropertyAccessor.
  * Also extends the PropertyEditorRegistry interface, which defines methods
  * for PropertyEditor management.
+ *
  * 封装 PropertyAccessor 的配置方法的接口。还扩展了 PropertyEditorRegistry 接口，该接口定义了 PropertyEditor 管理的方法。
  *
  * <p>Serves as base interface for {@link BeanWrapper}.
+ *
+ * 用作 {@link BeanWrapper} 的基本接口。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll

@@ -604,6 +604,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Return the resolved autowire code,
 	 * (resolving AUTOWIRE_AUTODETECT to AUTOWIRE_CONSTRUCTOR or AUTOWIRE_BY_TYPE).
+	 *
+	 * 返回已解析的自动注入代码（将AUTOWIRE_AUTODETECT解析为 AUTOWIRE_CONSTRUCTOR 或 AUTOWIRE_BY_TYPE）。
+	 *
 	 * @see #AUTOWIRE_AUTODETECT
 	 * @see #AUTOWIRE_CONSTRUCTOR
 	 * @see #AUTOWIRE_BY_TYPE
@@ -764,6 +767,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return a callback for creating an instance of the bean, if any.
+	 *
+	 * 返回用于创建 Bean 实例的回调（如果有）。
+	 *
 	 * @since 5.0
 	 */
 	@Nullable
@@ -1134,10 +1140,14 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Validate and prepare the method overrides defined for this bean.
 	 * Checks for existence of a method with the specified name.
+	 *
+	 * 验证并准备为此 Bean 定义的方法覆盖。检查是否存在具有指定名称的方法。
+	 *
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
 	public void prepareMethodOverrides() throws BeanDefinitionValidationException {
 		// Check that lookup methods exist and determine their overloaded status.
+		// 检查查找方法是否存在，并确定其重载状态。
 		if (hasMethodOverrides()) {
 			getMethodOverrides().getOverrides().forEach(this::prepareMethodOverride);
 		}
@@ -1162,6 +1172,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 		}
 		else if (count == 1) {
 			// Mark override as not overloaded, to avoid the overhead of arg type checking.
+			// 将 override 标记为 not overload，以避免 arg 类型检查的开销。
 			mo.setOverloaded(false);
 		}
 	}

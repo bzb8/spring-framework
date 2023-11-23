@@ -24,6 +24,8 @@ import org.springframework.lang.Nullable;
  * implementations in order to expose their singleton management facility
  * in a uniform manner.
  *
+ * 定义共享 Bean 实例的注册表的接口。可以通过{@link org.springframework.beans.factory.BeanFactory}实现来实现，以便以统一的方式公开其单例管理工具。
+ *
  * <p>The {@link ConfigurableBeanFactory} interface extends this interface.
  *
  * @author Juergen Hoeller

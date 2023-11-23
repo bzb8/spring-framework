@@ -78,9 +78,13 @@ abstract class ConfigurationClassUtils {
 	 * Check whether the given bean definition is a candidate for a configuration class
 	 * (or a nested component class declared within a configuration/component class,
 	 * to be auto-registered as well), and mark it accordingly.
+	 *
+	 * 检查给定的 Bean 定义是否是配置类的候选者（或在 configuration/component 类中声明的嵌套组件类，也要自动注册），并相应地对其进行标记。
+	 *
 	 * @param beanDef the bean definition to check
-	 * @param metadataReaderFactory the current factory in use by the caller
+	 * @param metadataReaderFactory the current factory in use by the caller 调用方正在使用的当前工厂
 	 * @return whether the candidate qualifies as (any kind of) configuration class
+	 * 候选者是否有资格成为（任何类型的）配置类
 	 */
 	public static boolean checkConfigurationClassCandidate(
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
@@ -94,11 +98,13 @@ abstract class ConfigurationClassUtils {
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
+			// 可以重用给定 BeanDefinition 中预解析的元数据...
 			metadata = ((AnnotatedBeanDefinition) beanDef).getMetadata();
 		}
 		else if (beanDef instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) beanDef).hasBeanClass()) {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.
+			// 检查已加载的类（如果存在）...因为我们甚至可能无法加载这个类的类文件。
 			Class<?> beanClass = ((AbstractBeanDefinition) beanDef).getBeanClass();
 			if (BeanFactoryPostProcessor.class.isAssignableFrom(beanClass) ||
 					BeanPostProcessor.class.isAssignableFrom(beanClass) ||

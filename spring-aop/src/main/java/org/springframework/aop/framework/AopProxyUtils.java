@@ -39,8 +39,12 @@ import org.springframework.util.ReflectionUtils;
  * Utility methods for AOP proxy factories.
  * Mainly for internal use within the AOP framework.
  *
+ * AOP 代理工厂的实用方法。主要供 AOP 框架内的内部使用。
+ *
  * <p>See {@link org.springframework.aop.support.AopUtils} for a collection of
  * generic AOP utility methods which do not depend on AOP framework internals.
+ *
+ * 请参阅 {@link org.springframework.aop.support.AopUtils} 获取不依赖于 AOP 框架内部的通用 AOP 实用程序方法的集合。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -56,11 +60,15 @@ public abstract class AopProxyUtils {
 
 	/**
 	 * Obtain the singleton target object behind the given proxy, if any.
+	 *
 	 * 获取给定代理后面的单一实例目标对象（如果有）。
+	 *
 	 * @param candidate the (potential) proxy to check 要检查的（潜在）代理
 	 * @return the singleton target object managed in a {@link SingletonTargetSource},
 	 * or {@code null} in any other case (not a proxy, not an existing singleton target)
+	 *
 	 * 在 {@link SingletonTargetSource} 中管理的单例目标对象，或在任何其他情况下 {@code null}（不是代理，不是现有的单例目标）
+	 *
 	 * @since 4.3.8
 	 * @see Advised#getTargetSource()
 	 * @see SingletonTargetSource#getTarget()

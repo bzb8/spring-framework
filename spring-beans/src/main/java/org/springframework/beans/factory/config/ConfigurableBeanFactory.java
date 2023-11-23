@@ -104,8 +104,11 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * <i>load-time weaving</i> is involved, to make sure that actual bean
 	 * classes are loaded as lazily as possible. The temporary loader is
 	 * then removed once the BeanFactory completes its bootstrap phase.
-	 * 指定用于类型匹配目的的临时类加载器。默认为无，仅使用标准 bean 类加载器。 <p>如果涉及<i>加载时编织<i>，通常只指定临时类加载器，以确保尽可能延迟加载实际的bean类。
+	 *
+	 * 指定用于类型匹配目的的临时类加载器。默认为无，仅使用标准 bean 类加载器。
+	 * 如果涉及加载时编织，通常只指定临时类加载器，以确保尽可能延迟加载实际的bean类。
 	 * 一旦 BeanFactory 完成其引导阶段，临时加载器就会被删除
+	 *
 	 * @since 2.5
 	 */
 	void setTempClassLoader(@Nullable ClassLoader tempClassLoader);
@@ -224,6 +227,9 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Determine whether an embedded value resolver has been registered with this
 	 * bean factory, to be applied through {@link #resolveEmbeddedValue(String)}.
+	 *
+	 * 确定是否已在此 Bean 工厂中注册嵌入值解析器，以便通过 {@link #resolveEmbeddedValue(String)} 应用。
+	 *
 	 * @since 4.3
 	 */
 	boolean hasEmbeddedValueResolver();
@@ -245,15 +251,18 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * {@link org.springframework.core.Ordered} interface will be ignored. Note
 	 * that autodetected post-processors (e.g. as beans in an ApplicationContext)
 	 * will always be applied after programmatically registered ones.
-	 * 加一个新的 BeanPostProcessor，它将应用于此工厂创建的 bean。在出厂配置期间调用。<p>注意：此处提交的后处理器将按注册顺序应用;
+	 *
+	 * 加一个新的 BeanPostProcessor，它将应用于此工厂创建的 bean。在出厂配置期间调用。注意：此处提交的后处理器将按注册顺序应用;
 	 * 通过实现{@link org.springframework.core.Ordered}接口表达的任何排序语义都将被忽略。
 	 * 请注意，自动检测到的后处理器（例如，作为 ApplicationContext 中的 bean）将始终在以编程方式注册的后处理器之后应用。
+	 *
 	 * @param beanPostProcessor the post-processor to register
 	 */
 	void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 
 	/**
 	 * Return the current number of registered BeanPostProcessors, if any.
+	 * 返回当前已注册的 BeanPostProcessor 数（如果有）。
 	 */
 	int getBeanPostProcessorCount();
 

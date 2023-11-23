@@ -105,6 +105,9 @@ public class OrderComparator implements Comparator<Object> {
 	 * Determine the order value for the given object.
 	 * <p>The default implementation checks against the given {@link OrderSourceProvider}
 	 * using {@link #findOrder} and falls back to a regular {@link #getOrder(Object)} call.
+	 *
+	 * 确定给定对象的order值。默认实现使用 {@link #findOrder} 检查给定的 {@link OrderSourceProvider}，并回退到常规的 {@link #getOrder(Object)} 调用。
+	 *
 	 * @param obj the object to check
 	 * @return the order value, or {@code Ordered.LOWEST_PRECEDENCE} as fallback
 	 */
@@ -133,6 +136,9 @@ public class OrderComparator implements Comparator<Object> {
 	 * Determine the order value for the given object.
 	 * <p>The default implementation checks against the {@link Ordered} interface
 	 * through delegating to {@link #findOrder}. Can be overridden in subclasses.
+	 *
+	 * 确定给定对象的订单值。默认实现通过委托给 {@link #findOrder} 来检查 {@link Ordered} 接口。可以在子类中被覆盖。
+	 *
 	 * @param obj the object to check
 	 * @return the order value, or {@code Ordered.LOWEST_PRECEDENCE} as fallback
 	 */

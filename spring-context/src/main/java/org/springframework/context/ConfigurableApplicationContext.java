@@ -58,6 +58,9 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	/**
 	 * Name of the ConversionService bean in the factory.
 	 * If none is supplied, default conversion rules apply.
+	 *
+	 * 工厂中 ConversionService Bean 的名称。如果未提供任何转换规则，则应用默认转换规则。
+	 *
 	 * @since 3.0
 	 * @see org.springframework.core.convert.ConversionService
 	 */
@@ -67,6 +70,7 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	 * Name of the LoadTimeWeaver bean in the factory. If such a bean is supplied,
 	 * the context will use a temporary ClassLoader for type matching, in order
 	 * to allow the LoadTimeWeaver to process all actual bean classes.
+	 *
 	 * 工厂中 LoadTimeWeaver bean 的名称。如果提供了这样的 bean，上下文将使用临时 ClassLoader 进行类型匹配，以便允许 LoadTimeWeaver 处理所有实际的 bean 类。
 	 * @since 2.5
 	 * @see org.springframework.instrument.classloading.LoadTimeWeaver

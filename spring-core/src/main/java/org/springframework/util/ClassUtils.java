@@ -911,6 +911,9 @@ public abstract class ClassUtils {
 	 * Return the user-defined class for the given instance: usually simply
 	 * the class of the given instance, but the original class in case of a
 	 * CGLIB-generated subclass.
+	 *
+	 * 返回给定实例的用户定义类：通常只是给定实例的类，但如果是 CGLIB 生成的子类，则返回原始类。
+	 *
 	 * @param instance the instance to check
 	 * @return the user-defined class
 	 */
@@ -1219,6 +1222,9 @@ public abstract class ClassUtils {
 	/**
 	 * Return the number of methods with a given name (with any argument types),
 	 * for the given class and/or its superclasses. Includes non-public methods.
+	 *
+	 * 返回给定类及其超类的具有给定名称（具有任何参数类型）的方法数。包括非公共方法。
+	 *
 	 * @param clazz	the clazz to check
 	 * @param methodName the name of the method
 	 * @return the number of methods with the given name

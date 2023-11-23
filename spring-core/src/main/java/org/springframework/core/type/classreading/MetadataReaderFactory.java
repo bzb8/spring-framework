@@ -24,6 +24,14 @@ import org.springframework.core.io.Resource;
  * Factory interface for {@link MetadataReader} instances.
  * Allows for caching a MetadataReader per original resource.
  *
+ * {@link MetadataReader} 实例的工厂接口。允许缓存每个原始资源的 MetadataReader。
+ * MetadataReaderFactory 是 Spring Framework 中用于读取类元数据（metadata）的工厂接口。
+ * 它提供了一种方式来获取包含有关类的元数据的 MetadataReader 实例。元数据通常包括有关类的注解、类名、接口信息等。
+ *
+ * 在 Spring 中，MetadataReaderFactory 的主要实现是 SimpleMetadataReaderFactory。
+ * 这个工厂类用于创建 MetadataReader 对象，以便检索类的元数据。MetadataReader 接口提供了一系列方法，用于获取关于类的详细信息，
+ * 包括类的注解、类名、接口信息等。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  * @see SimpleMetadataReaderFactory

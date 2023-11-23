@@ -58,15 +58,17 @@ import org.springframework.util.Assert;
  * {@link org.springframework.context.ApplicationContextAware}, auto-detecting
  * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessors},
  * etc).
+ *
  * 典型的用法是通过{@link org.springframework.beans.factory.support.BeanDefinitionRegistry}接口注册各种bean定义，
- * 然后调用{@link refresh（）}以使用应用程序上下文语义初始化这些bean（处理{@link org.springframework.context.ApplicationContextAware}，
+ * 然后调用{@link #refresh()}以使用应用程序上下文语义初始化这些bean（处理{@link org.springframework.context.ApplicationContextAware}，
  * 自动检测{@link org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessors}等）。
  *
  * <p>In contrast to other ApplicationContext implementations that create a new
  * internal BeanFactory instance for each refresh, the internal BeanFactory of
  * this context is available right from the start, to be able to register bean
  * definitions on it. {@link #refresh()} may only be called once.
- * 与其他为每次刷新创建一个新的内部 BeanFactory 实例的 ApplicationContext 实现相比，此上下文的内部 BeanFactory 从一开始就可用，以便能够在其上注册 Bean 定义。{@link refresh（）} 只能调用一次。
+ *
+ * 与其他为每次刷新创建一个新的内部 BeanFactory 实例的 ApplicationContext 实现相比，此上下文的内部 BeanFactory 从一开始就可用，以便能够在其上注册 Bean 定义。{@link #refresh()} 只能调用一次。
  * <p>Usage example:
  *
  * <pre class="code">
@@ -86,6 +88,7 @@ import org.springframework.util.Assert;
  * resource locations for XML bean definitions, rather than mixing arbitrary bean
  * definition formats. The equivalent in a web environment is
  * {@link org.springframework.web.context.support.XmlWebApplicationContext}.
+ *
  * 对于 XML Bean 定义的典型情况，只需使用 {@link ClassPathXmlApplicationContext} 或 {@link FileSystemXmlApplicationContext}，它们更易于设置，
  * 但不太灵活，因为您可以只对 XML Bean 定义使用标准资源位置，而不是混合任意 Bean 定义格式。
  * Web环境中的等效项是{@link org.springframework.web.context.support.XmlWebApplicationContext}。
@@ -93,6 +96,7 @@ import org.springframework.util.Assert;
  * <p>For custom application context implementations that are supposed to read
  * special bean definition formats in a refreshable manner, consider deriving
  * from the {@link AbstractRefreshableApplicationContext} base class.
+ *
  * 对于应该以可刷新的方式读取特殊 Bean 定义格式的自定义应用程序上下文实现，请考虑从 {@link AbstractRefreshableApplicationContext} 基类派生。
  *
  * @author Juergen Hoeller

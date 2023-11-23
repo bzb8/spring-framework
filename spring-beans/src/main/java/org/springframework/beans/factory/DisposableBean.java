@@ -22,10 +22,16 @@ package org.springframework.beans.factory;
  * scoped bean. An {@link org.springframework.context.ApplicationContext} is supposed
  * to dispose all of its singletons on shutdown, driven by the application lifecycle.
  *
+ * 由希望在销毁时释放资源的 Bean 实现的接口。{@link BeanFactory} 将在单独销毁作用域 Bean 时调用 destroy 方法。
+ * {@link org.springframework.context.ApplicationContext}应该在关闭时释放其所有单例，由应用程序生命周期驱动。
+ *
  * <p>A Spring-managed bean may also implement Java's {@link AutoCloseable} interface
  * for the same purpose. An alternative to implementing an interface is specifying a
  * custom destroy method, for example in an XML bean definition. For a list of all
  * bean lifecycle methods, see the {@link BeanFactory BeanFactory javadocs}.
+ *
+ * Spring 管理的 Bean 也可以实现 Java 的 {@link AutoCloseable} 接口来实现相同的目的。实现接口的替代方法是指定自定义销毁方法，例如在 XML Bean 定义中。
+ * 有关所有 Bean 生命周期方法的列表，请参见 {@link BeanFactory BeanFactory javadocs}。
  *
  * @author Juergen Hoeller
  * @since 12.08.2003
@@ -38,6 +44,9 @@ public interface DisposableBean {
 
 	/**
 	 * Invoked by the containing {@code BeanFactory} on destruction of a bean.
+	 *
+	 * 由包含的 {@code BeanFactory} 在销毁 Bean 时调用。
+	 *
 	 * @throws Exception in case of shutdown errors. Exceptions will get logged
 	 * but not rethrown to allow other beans to release their resources as well.
 	 */

@@ -101,20 +101,26 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	volatile String resolvedDestroyMethodName;
 
 	/** Common lock for the four constructor fields below. */
+	// 以下四个构造函数字段的公共锁。
+
 	final Object constructorArgumentLock = new Object();
 
 	/** Package-visible field for caching the resolved constructor or factory method. */
+	// 用于缓存已解析的构造函数或工厂方法的 Package-visible 字段。
 	@Nullable
 	Executable resolvedConstructorOrFactoryMethod;
 
 	/** Package-visible field that marks the constructor arguments as resolved. */
+	// 将构造函数参数标记为已解析的包可见字段
 	boolean constructorArgumentsResolved = false;
 
 	/** Package-visible field for caching fully resolved constructor arguments. */
+	// 用于缓存完全解析的构造函数参数的 Package-visible 字段。
 	@Nullable
 	Object[] resolvedConstructorArguments;
 
 	/** Package-visible field for caching partly prepared constructor arguments. */
+	// 用于缓存部分准备好的构造函数参数的 Package-visible 字段
 	@Nullable
 	Object[] preparedConstructorArguments;
 
@@ -125,6 +131,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	boolean postProcessed = false;
 
 	/** Package-visible field that indicates a before-instantiation post-processor having kicked in. */
+	// 包可见字段，指示实例化前的后处理器已启动。
 	@Nullable
 	volatile Boolean beforeInstantiationResolved;
 
@@ -152,7 +159,13 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Create a new RootBeanDefinition for a singleton.
+	 *
+	 * 为单例创建新的 RootBeanDefinition。
+	 *
 	 * @param beanClass the class of the bean to instantiate
+	 *
+	 * 要实例化的 Bean 的类
+	 *
 	 * @see #setBeanClass
 	 */
 	public RootBeanDefinition(@Nullable Class<?> beanClass) {

@@ -25,12 +25,14 @@ import org.springframework.lang.Nullable;
 /**
  * Interface that defines type conversion methods. Typically (but not necessarily)
  * implemented in conjunction with the {@link PropertyEditorRegistry} interface.
+ *
  * 定义类型转换方法的接口。通常（但不一定）与 {@link PropertyEditorRegistry} 接口一起实现。
  *
  * <p><b>Note:</b> Since TypeConverter implementations are typically based on
  * {@link java.beans.PropertyEditor PropertyEditors} which aren't thread-safe,
  * TypeConverters themselves are <em>not</em> to be considered as thread-safe either.
- * <p><b>注意：<b>由于 TypeConverter 实现通常基于 {@link java.beans.PropertyEditor PropertyEditors}，这些实现不是线程安全的，因此 TypeConverter 本身<em><em>也不应被视为线程安全。
+ *
+ * 注意：由于 TypeConverter 实现通常基于 {@link java.beans.PropertyEditor PropertyEditors}，这些实现不是线程安全的，因此 TypeConverter 本身也不应被视为线程安全。
  *
  * @author Juergen Hoeller
  * @since 2.0
@@ -43,11 +45,13 @@ public interface TypeConverter {
 	 * Convert the value to the required type (if necessary from a String).
 	 * <p>Conversions from String to any type will typically use the {@code setAsText}
 	 * method of the PropertyEditor class, or a Spring Converter in a ConversionService.
-	 * 将值转换为所需的类型（如有必要，请从 String 转换）。<p>从 String 到任何类型的转换通常使用 PropertyEditor 类的 {@code setAsText} 方法，
+	 *
+	 * 将值转换为所需的类型（如有必要，请从 String 转换）。从 String 到任何类型的转换通常使用 PropertyEditor 类的 {@code setAsText} 方法，
 	 * 或 ConversionService 中的 Spring Converter。
+	 *
 	 * @param value the value to convert
 	 * @param requiredType the type we must convert to
-	 * (or {@code null} if not known, for example in case of a collection element)
+	 * (or {@code null} if not known, for example in case of a collection element) 我们必须转换为的类型（或 {@code null}，如果未知，例如在集合元素的情况下）
 	 * @return the new value, possibly the result of type conversion
 	 * @throws TypeMismatchException if type conversion failed
 	 * @see java.beans.PropertyEditor#setAsText(String)

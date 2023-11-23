@@ -177,6 +177,9 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	/**
 	 * Switch the target object, replacing the cached introspection results only
 	 * if the class of the new object is different to that of the replaced object.
+	 *
+	 * 切换目标对象，仅当新对象的类与被替换对象的类不同时，才替换缓存的自省结果。
+	 *
 	 * @param object the new target object
 	 */
 	public void setWrappedInstance(Object object) {
@@ -187,8 +190,8 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	 * Switch the target object, replacing the cached introspection results only
 	 * if the class of the new object is different to that of the replaced object.
 	 * @param object the new target object
-	 * @param nestedPath the nested path of the object
-	 * @param rootObject the root object at the top of the path
+	 * @param nestedPath the nested path of the object 对象的嵌套路径
+	 * @param rootObject the root object at the top of the path 路径顶部的根对象
 	 */
 	public void setWrappedInstance(Object object, @Nullable String nestedPath, @Nullable Object rootObject) {
 		this.wrappedObject = ObjectUtils.unwrapOptional(object);

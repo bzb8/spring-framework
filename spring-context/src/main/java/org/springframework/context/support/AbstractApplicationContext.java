@@ -94,6 +94,8 @@ import org.springframework.util.ReflectionUtils;
  * implements common context functionality. Uses the Template Method design pattern,
  * requiring concrete subclasses to implement abstract methods.
  *
+ * {@link org.springframework.context.ApplicationContext}接口的抽象实现。不强制要求用于配置的存储类型;只需实现通用上下文功能。使用模板方法设计模式，需要具体的子类来实现抽象方法。
+ *
  * <p>In contrast to a plain BeanFactory, an ApplicationContext is supposed
  * to detect special beans defined in its internal bean factory:
  * Therefore, this class automatically registers
@@ -101,6 +103,11 @@ import org.springframework.util.ReflectionUtils;
  * {@link org.springframework.beans.factory.config.BeanPostProcessor BeanPostProcessors},
  * and {@link org.springframework.context.ApplicationListener ApplicationListeners}
  * which are defined as beans in the context.
+ *
+ * 与普通的 BeanFactory 相比，ApplicationContext 应该检测其内部 Bean 工厂中定义的特殊 bean：
+ * 因此，此类会自动注册 {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessors}、
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor BeanPostProcessors} 和
+ * {@link org.springframework.context.ApplicationListener ApplicationListeners}，它们在上下文中定义为 bean。
  *
  * <p>A {@link org.springframework.context.MessageSource} may also be supplied
  * as a bean in the context, with the name "messageSource"; otherwise, message
@@ -110,12 +117,19 @@ import org.springframework.util.ReflectionUtils;
  * in the context; otherwise, a default multicaster of type
  * {@link org.springframework.context.event.SimpleApplicationEventMulticaster} will be used.
  *
+ * {@link org.springframework.context.MessageSource} 也可以作为上下文中的 bean 提供，名称为“messageSource”;
+ * 否则，消息解析将委托给父上下文。此外，应用程序事件的多播者可以在上下文中作为 {@link org.springframework.context.event.ApplicationEventMulticaster}
+ * 类型的“applicationEventMulticaster”bean提供;否则，将使用{@link org.springframework.context.event.SimpleApplicationEventMulticaster}类型的默认多播者。
+ *
  * <p>Implements resource loading by extending
  * {@link org.springframework.core.io.DefaultResourceLoader}.
  * Consequently treats non-URL resource paths as class path resources
  * (supporting full class path resource names that include the package path,
  * e.g. "mypackage/myresource.dat"), unless the {@link #getResourceByPath}
  * method is overridden in a subclass.
+ *
+ * 通过扩展{@link org.springframework.core.io.DefaultResourceLoader}来实现资源加载。因此，除非在子类中重写了 {@link #getResourceByPath} 方法，
+ * 否则将非 URL 资源路径视为类路径资源（支持包含包路径的完整类路径资源名称，例如“mypackagemyresource.dat”）。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -139,6 +153,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Name of the MessageSource bean in the factory.
 	 * If none is supplied, message resolution is delegated to the parent.
+	 *
+	 * 工厂中 MessageSource Bean 的名称。如果未提供任何消息，则将消息解析委派给父级。
+	 *
 	 * @see MessageSource
 	 */
 	public static final String MESSAGE_SOURCE_BEAN_NAME = "messageSource";
@@ -228,6 +245,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	private ApplicationEventMulticaster applicationEventMulticaster;
 
 	/** Application startup metrics. **/
+	// 应用程序启动指标。
 	private ApplicationStartup applicationStartup = ApplicationStartup.DEFAULT;
 
 	/** Statically specified listeners. */
@@ -238,6 +256,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	private Set<ApplicationListener<?>> earlyApplicationListeners;
 
 	/** ApplicationEvents published before the multicaster setup. */
+	// 在多播器设置之前发布的 ApplicationEvents
 	@Nullable
 	private Set<ApplicationEvent> earlyApplicationEvents;
 
@@ -442,6 +461,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Return the internal ApplicationEventMulticaster used by the context.
+	 *
+	 * 返回上下文使用的内部 ApplicationEventMulticaster。
+	 *
 	 * @return the internal ApplicationEventMulticaster (never {@code null})
 	 * @throws IllegalStateException if the context has not been initialized yet
 	 */
@@ -555,6 +577,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Return the list of statically specified ApplicationListeners.
+	 * 返回静态指定的 ApplicationListener 的列表。
 	 */
 	public Collection<ApplicationListener<?>> getApplicationListeners() {
 		return this.applicationListeners;
@@ -594,6 +617,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
+				// 初始化此上下文的消息源。
+				// 注册国际化消息
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
@@ -605,7 +630,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				onRefresh();
 
 				// Check for listener beans and register them.
-				// 检查侦听器 bean 并注册它们。
+				// 检查listener bean 并注册它们。
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
@@ -805,6 +830,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Instantiate and register all BeanPostProcessor beans,
 	 * respecting explicit order if given.
 	 * <p>Must be called before any instantiation of application beans.
+	 *
+	 * 实例化并注册所有 BeanPostProcessor bean，如果给定，请遵循显式顺序。
+	 * 必须在应用程序 Bean 的任何实例化之前调用。
 	 */
 	protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
 		PostProcessorRegistrationDelegate.registerBeanPostProcessors(beanFactory, this);
@@ -819,11 +847,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		if (beanFactory.containsLocalBean(MESSAGE_SOURCE_BEAN_NAME)) {
 			this.messageSource = beanFactory.getBean(MESSAGE_SOURCE_BEAN_NAME, MessageSource.class);
 			// Make MessageSource aware of parent MessageSource.
+			// 使 MessageSource 知道父 MessageSource。
 			if (this.parent != null && this.messageSource instanceof HierarchicalMessageSource) {
 				HierarchicalMessageSource hms = (HierarchicalMessageSource) this.messageSource;
 				if (hms.getParentMessageSource() == null) {
 					// Only set parent context as parent MessageSource if no parent MessageSource
 					// registered already.
+					// 仅当尚未注册父 MessageSource 时，才将父上下文设置为父 MessageSource。
 					hms.setParentMessageSource(getInternalParentMessageSource());
 				}
 			}
@@ -833,6 +863,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 		else {
 			// Use empty MessageSource to be able to accept getMessage calls.
+			// 使用空 MessageSource 能够接受 getMessage 调用。
 			DelegatingMessageSource dms = new DelegatingMessageSource();
 			dms.setParentMessageSource(getInternalParentMessageSource());
 			this.messageSource = dms;
@@ -846,6 +877,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Initialize the ApplicationEventMulticaster.
 	 * Uses SimpleApplicationEventMulticaster if none defined in the context.
+	 *
+	 * 初始化 ApplicationEventMulticaster。如果上下文中未定义任何内容，则使用 SimpleApplicationEventMulticaster。
+	 *
 	 * @see org.springframework.context.event.SimpleApplicationEventMulticaster
 	 */
 	protected void initApplicationEventMulticaster() {
@@ -897,6 +931,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Template method which can be overridden to add context-specific refresh work.
 	 * Called on initialization of special beans, before instantiation of singletons.
 	 * <p>This implementation is empty.
+	 *
+	 * 模板方法，可以重写以添加特定于上下文的刷新工作。在实例化单例之前调用特殊 Bean 的初始化。
+	 * 此实现为空。
+	 *
 	 * @throws BeansException in case of errors
 	 * @see #refresh()
 	 */
@@ -908,7 +946,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Add beans that implement ApplicationListener as listeners.
 	 * Doesn't affect other listeners, which can be added without being beans.
 	 *
-	 * 添加实现 ApplicationListener 作为侦听器的 bean。不影响其他监听器，无需成为bean即可添加。
+	 * 添加实现 ApplicationListener 作为listeners的 bean。不影响其他listeners，无需成为bean即可添加。
 	 */
 	protected void registerListeners() {
 		// Register statically specified listeners first.
@@ -939,6 +977,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Finish the initialization of this context's bean factory,
 	 * initializing all remaining singleton beans.
+	 *
+	 * 完成此上下文的 Bean 工厂的初始化，初始化所有剩余的单例 Bean。
+	 *
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
@@ -953,7 +994,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
 
-		// 如果之前没有注册任何 BeanFactoryPostProcessor（例如 PropertySourcesPlaceholderConfigurer bean），则注册默认嵌入值解析器：此时，主要用于注释属性值中的解析。
+		// 如果之前没有注册任何 BeanFactoryPostProcessor（例如 PropertySourcesPlaceholderConfigurer bean），则注册默认嵌入值解析器：此时，主要用于注解属性值中的解析。
 
 		if (!beanFactory.hasEmbeddedValueResolver()) {
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
@@ -983,13 +1024,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Finish the refresh of this context, invoking the LifecycleProcessor's
 	 * onRefresh() method and publishing the
 	 * {@link org.springframework.context.event.ContextRefreshedEvent}.
+	 *
+	 * 完成此上下文的刷新，调用 LifecycleProcessor 的 onRefresh（） 方法并发布 {@link org.springframework.context.event.ContextRefreshedEvent}。
+	 *
 	 */
 	@SuppressWarnings("deprecation")
 	protected void finishRefresh() {
 		// Clear context-level resource caches (such as ASM metadata from scanning).
+		// 清除上下文级资源缓存（例如扫描的 ASM 元数据）。
 		clearResourceCaches();
 
 		// Initialize lifecycle processor for this context.
+		// 为此上下文初始化生命周期处理器。
 		initLifecycleProcessor();
 
 		// Propagate refresh to lifecycle processor first.

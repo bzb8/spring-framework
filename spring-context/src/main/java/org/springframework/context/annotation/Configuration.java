@@ -32,6 +32,8 @@ import org.springframework.stereotype.Component;
  * may be processed by the Spring container to generate bean definitions and
  * service requests for those beans at runtime, for example:
  *
+ * 指示一个类声明一个或多个 {@link Bean @Bean} 方法，并且可以由 Spring 容器处理，以在运行时为这些 Bean 生成 Bean 定义和服务请求，例如：
+ *
  * <pre class="code">
  * &#064;Configuration
  * public class AppConfig {
@@ -44,12 +46,17 @@ import org.springframework.stereotype.Component;
  *
  * <h2>Bootstrapping {@code @Configuration} classes</h2>
  *
+ * 引导 {@code @Configuration} 类
+ *
  * <h3>Via {@code AnnotationConfigApplicationContext}</h3>
  *
  * <p>{@code @Configuration} classes are typically bootstrapped using either
  * {@link AnnotationConfigApplicationContext} or its web-capable variant,
  * {@link org.springframework.web.context.support.AnnotationConfigWebApplicationContext
  * AnnotationConfigWebApplicationContext}. A simple example with the former follows:
+ *
+ * {@code @Configuration} 类通常使用 {@link AnnotationConfigApplicationContext} 或其支持 Web 的变体
+ * {@link org.springframework.web.context.support.AnnotationConfigWebApplicationContext AnnotationConfigWebApplicationContext} 进行引导。以下是前者的简单示例：
  *
  * <pre class="code">
  * AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
@@ -64,11 +71,16 @@ import org.springframework.stereotype.Component;
  * AnnotationConfigWebApplicationContext} for web configuration instructions in a
  * {@code Servlet} container.
  *
+ * 有关详细信息，请参阅 {@link AnnotationConfigApplicationContext} javadocs，
+ * 并参阅 {@link org.springframework.web.context.support.AnnotationConfigWebApplicationContext AnnotationConfigWebApplicationContext} 以获取 {@code Servlet} 容器中的 Web 配置说明。
+ *
  * <h3>Via Spring {@code <beans>} XML</h3>
  *
  * <p>As an alternative to registering {@code @Configuration} classes directly against an
  * {@code AnnotationConfigApplicationContext}, {@code @Configuration} classes may be
  * declared as normal {@code <bean>} definitions within Spring XML files:
+ *
+ * 作为直接针对 {@code AnnotationConfigApplicationContext} 注册 {@code @Configuration} 类的替代方法，{@code @Configuration} 类可以在 Spring XML 文件中声明为正常的 {@code <bean>} 定义：
  *
  * <pre class="code">
  * &lt;beans&gt;
@@ -81,6 +93,8 @@ import org.springframework.stereotype.Component;
  * enable {@link ConfigurationClassPostProcessor} and other annotation-related
  * post processors that facilitate handling {@code @Configuration} classes.
  *
+ * 在上面的示例中，需要 {@code <context:annotation-config/>} 才能启用 {@link ConfigurationClassPostProcessor} 和其他与注解相关的后处理器，以便于处理 {@code @Configuration} 类。
+ *
  * <h3>Via component scanning</h3>
  *
  * <p>{@code @Configuration} is meta-annotated with {@link Component @Component}, therefore
@@ -89,6 +103,9 @@ import org.springframework.stereotype.Component;
  * advantage of {@link Autowired @Autowired}/{@link javax.inject.Inject @Inject}
  * like any regular {@code @Component}. In particular, if a single constructor is present
  * autowiring semantics will be applied transparently for that constructor:
+ *
+ * {@code @Configuration} 使用 {@link Component @Component} 进行元注解，因此 {@code @Configuration} 类是组件扫描的候选类（通常使用 Spring XML 的 {@code <context：component-scan>} 元素），
+ * 因此也可以像任何常规 {@code @Component} 一样利用 {@link Autowired @Autowired}{@link javax.inject.Inject @Inject}。具体而言，如果存在单个构造函数，则会自动注入语义透明地应用于该构造函数：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -108,6 +125,8 @@ import org.springframework.stereotype.Component;
  * component scanning, but may also themselves <em>configure</em> component scanning using
  * the {@link ComponentScan @ComponentScan} annotation:
  *
+ * {@code @Configuration} 类不仅可以使用组件扫描进行引导，还可以使用 {@link ComponentScan @ComponentScan} 注解来配置组件扫描：
+ *
  * <pre class="code">
  * &#064;Configuration
  * &#064;ComponentScan("com.acme.app.services")
@@ -117,13 +136,19 @@ import org.springframework.stereotype.Component;
  *
  * <p>See the {@link ComponentScan @ComponentScan} javadocs for details.
  *
+ * 有关详细信息，请参阅 {@link ComponentScan @ComponentScan} javadocs。
+ *
  * <h2>Working with externalized values</h2>
+ *
+ * 使用外部化值
  *
  * <h3>Using the {@code Environment} API</h3>
  *
  * <p>Externalized values may be looked up by injecting the Spring
  * {@link org.springframework.core.env.Environment} into a {@code @Configuration}
  * class &mdash; for example, using the {@code @Autowired} annotation:
+ *
+ * 可以通过将 Spring {@link org.springframework.core.env.Environment} 注入 {@code @Configuration} 类来查找外部化值——例如，使用 {@code @Autowired} 注解：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -143,6 +168,9 @@ import org.springframework.stereotype.Component;
  * source" objects, and {@code @Configuration} classes may contribute property sources to
  * the {@code Environment} object using the {@link PropertySource @PropertySource}
  * annotation:
+ *
+ * 通过 {@code Environment} 解析的属性驻留在一个或多个“属性源”对象中，并且 {@code @Configuration} 类可以使用
+ * {@link PropertySource @PropertySource}注解将属性源提供给 {@code Environment} 对象：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -164,6 +192,8 @@ import org.springframework.stereotype.Component;
  *
  * <p>Externalized values may be injected into {@code @Configuration} classes using
  * the {@link Value @Value} annotation:
+ *
+ * 可以使用 {@link Value @Value} 注释将外部化值注入到 {@code @Configuration} 类中：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -197,6 +227,15 @@ import org.springframework.stereotype.Component;
  * on working with {@code BeanFactoryPostProcessor} types such as
  * {@code PropertySourcesPlaceholderConfigurer}.
  *
+ * 这种方法通常与 Spring 的 {@link org.springframework.context.support.PropertySourcesPlaceholderConfigurer PropertySourcesPlaceholderConfigurer} 结合使用，
+ * 该配置可以通过 {@code <context:property-placeholder/>} 在 XML 配置中自动启用，也可以通过专用的 {@code static} {@code @Bean} 方法
+ * 在 {@code @Configuration} 类中显式启用（请参阅 {@link Bean @Bean} 的 javadocs 的“关于 BeanFactoryPostProcessor-returning {@code @Bean} 方法的注释”，以获取详细信息）。
+ * 但请注意，通常只有在需要自定义配置（如占位符语法等）时，才需要通过 {@code static} {@code @Bean} 方法显式注册 { PropertySourcesPlaceholderConfigurer}。
+ * 具体来说，如果没有 Bean 后处理器（例如 {@code PropertySourcesPlaceholderConfigurer}）为 {@code ApplicationContext} 注册嵌入式值解析器，Spring 将注册一个默认的嵌入式值解析器，
+ * 该解析器针对 {@code Environment} 中注册的属性源解析占位符。请参阅下面有关使用 {@code @ImportResource} 使用 Spring XML 编写 {@code @Configuration} 类的部分;
+ * 请参阅 {@link Value @Value} javadocs;并参阅 {@link Bean @Bean} javadocs，了解有关使用 {@code BeanFactoryPostProcessor} 类型（如 {@code PropertySourcesPlaceholderConfigurer}）
+ * 的详细信息。
+ *
  * <h2>Composing {@code @Configuration} classes</h2>
  *
  * <h3>With the {@code @Import} annotation</h3>
@@ -205,6 +244,9 @@ import org.springframework.stereotype.Component;
  * similar to the way that {@code <import>} works in Spring XML. Because
  * {@code @Configuration} objects are managed as Spring beans within the container,
  * imported configurations may be injected &mdash; for example, via constructor injection:
+ *
+ * {@code @Configuration} 类可以使用 {@link Import @Import} 注解组成，类似于  {@code <import>}  在 Spring XML 中的工作方式。
+ * 由于 {@code @Configuration} 对象在容器中作为 Spring Bean 进行管理，因此可以注入导入的配置，例如，通过构造函数注入：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -236,6 +278,8 @@ import org.springframework.stereotype.Component;
  * <p>Now both {@code AppConfig} and the imported {@code DatabaseConfig} can be bootstrapped
  * by registering only {@code AppConfig} against the Spring context:
  *
+ * 现在，{@code AppConfig} 和导入的 {@code DatabaseConfig} 都可以通过在 Spring 上下文中仅注册 {@code AppConfig} 来引导：
+ *
  * <pre class="code">
  * new AnnotationConfigApplicationContext(AppConfig.class);</pre>
  *
@@ -243,6 +287,8 @@ import org.springframework.stereotype.Component;
  *
  * <p>{@code @Configuration} classes may be marked with the {@link Profile @Profile} annotation to
  * indicate they should be processed only if a given profile or profiles are <em>active</em>:
+ *
+ * {@code @Configuration} 类可以用 {@link Profile @Profile} 注释进行标记，以指示仅当给定的一个或多个配置文件处于活动状态时才应处理它们：
  *
  * <pre class="code">
  * &#064;Profile("development")
@@ -268,6 +314,8 @@ import org.springframework.stereotype.Component;
  * <p>Alternatively, you may also declare profile conditions at the {@code @Bean} method level
  * &mdash; for example, for alternative bean variants within the same configuration class:
  *
+ * 或者，您也可以在 {@code @Bean} 方法级别声明配置文件条件，例如，对于同一配置类中的替代 Bean 变体：
+ *
  * <pre class="code">
  * &#064;Configuration
  * public class ProfileDatabaseConfig {
@@ -284,13 +332,20 @@ import org.springframework.stereotype.Component;
  * <p>See the {@link Profile @Profile} and {@link org.springframework.core.env.Environment}
  * javadocs for further details.
  *
+ * 有关详细信息，请参阅 {@link Profile @Profile} 和 {@link org.springframework.core.env.Environment} javadocs。
+ *
  * <h3>With Spring XML using the {@code @ImportResource} annotation</h3>
+ *
+ * 使用 Spring XML 的 {@code @ImportResource} 注解
  *
  * <p>As mentioned above, {@code @Configuration} classes may be declared as regular Spring
  * {@code <bean>} definitions within Spring XML files. It is also possible to
  * import Spring XML configuration files into {@code @Configuration} classes using
  * the {@link ImportResource @ImportResource} annotation. Bean definitions imported from
  * XML can be injected &mdash; for example, using the {@code @Inject} annotation:
+ *
+ * 如上所述，{@code @Configuration} 类可以在 Spring XML 文件中声明为常规{@code <bean>} 的 Spring {@code <bean>} 定义。
+ * 也可以使用 {@link ImportResource @ImportResource} 注解将 Spring XML 配置文件导入 {@code @Configuration} 类。可以注入从 XML 导入的 Bean 定义，例如，使用 {@code @Inject} 注释：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -308,7 +363,11 @@ import org.springframework.stereotype.Component;
  *
  * <h3>With nested {@code @Configuration} classes</h3>
  *
+ * 使用嵌套的 {@code @Configuration} 类
+ *
  * <p>{@code @Configuration} classes may be nested within one another as follows:
+ *
+ * {@code @Configuration} 类可以相互嵌套，如下所示：
  *
  * <pre class="code">
  * &#064;Configuration
@@ -336,11 +395,18 @@ import org.springframework.stereotype.Component;
  * the need to use an {@code @Import} annotation when the relationship between
  * {@code AppConfig} and {@code DatabaseConfig} is already implicitly clear.
  *
+ * 引导此类安排时，只需针对应用程序上下文注册 {@code AppConfig}。由于是嵌套的 {@code @Configuration} 类，{@code DatabaseConfig} 将自动注册。
+ * 这样就避免了在 {@code AppConfig} 和 {@code DatabaseConfig} 之间的关系已经隐式明确时使用 {@code @Import} 注解。
+ *
  * <p>Note also that nested {@code @Configuration} classes can be used to good effect
  * with the {@code @Profile} annotation to provide two options of the same bean to the
  * enclosing {@code @Configuration} class.
  *
+ * 另请注意，嵌套的 {@code @Configuration} 类可以很好地与 {@code @Profile} 注释一起使用，以便为封闭的 {@code @Configuration} 类提供同一 Bean 的两个选项。
+ *
  * <h2>Configuring lazy initialization</h2>
+ *
+ * 配置延迟初始化
  *
  * <p>By default, {@code @Bean} methods will be <em>eagerly instantiated</em> at container
  * bootstrap time.  To avoid this, {@code @Configuration} may be used in conjunction with
@@ -348,12 +414,18 @@ import org.springframework.stereotype.Component;
  * within the class are by default lazily initialized. Note that {@code @Lazy} may be used
  * on individual {@code @Bean} methods as well.
  *
+ * 默认情况下，{@code @Bean} 方法将在容器引导时快速实例化。为了避免这种情况，可以将 {@code @Configuration} 与 {@link Lazy @Lazy} 注释结合使用，
+ * 以指示默认情况下类中声明的所有 {@code @Bean} 方法都是延迟初始化的。请注意，{@code @Lazy} 也可用于单个 {@code @Bean} 方法。
+ *
  * <h2>Testing support for {@code @Configuration} classes</h2>
  *
  * <p>The Spring <em>TestContext framework</em> available in the {@code spring-test} module
  * provides the {@code @ContextConfiguration} annotation which can accept an array of
  * <em>component class</em> references &mdash; typically {@code @Configuration} or
  * {@code @Component} classes.
+ *
+ * {@code spring-test} 模块中提供的 Spring TestContext 框架提供了 {@code @ContextConfiguration} 注解，它可以接受组件类引用数组——
+ * 通常是 {@code @Configuration} 或 {@code @Component} 类。
  *
  * <pre class="code">
  * &#064;RunWith(SpringRunner.class)
@@ -376,6 +448,8 @@ import org.springframework.stereotype.Component;
  *
  * <h2>Enabling built-in Spring features using {@code @Enable} annotations</h2>
  *
+ * 使用 {@code @Enable} 注解启用内置 Spring 功能
+ *
  * <p>Spring features such as asynchronous method execution, scheduled task execution,
  * annotation driven transaction management, and even Spring MVC can be enabled and
  * configured from {@code @Configuration} classes using their respective "{@code @Enable}"
@@ -387,7 +461,16 @@ import org.springframework.stereotype.Component;
  * and {@link org.springframework.web.servlet.config.annotation.EnableWebMvc @EnableWebMvc}
  * for details.
  *
+ * Spring 功能，如异步方法执行、计划任务执行、注解驱动的事务管理，甚至 Spring MVC，都可以使用它们各自的“{@code @Enable}”注解从 {@code @Configuration} 类启用和配置。
+ * 请参阅 {@link org.springframework.scheduling.annotation.EnableAsync @EnableAsync}、
+ * {@link org.springframework.scheduling.annotation.EnableScheduling @EnableScheduling}、
+ * {@link org.springframework.transaction.annotation.EnableTransactionManagement @EnableTransactionManagement}、
+ * {@link org.springframework.context.annotation.EnableAspectJAutoProxy @EnableAspectJAutoProxy} 和
+ * {@link org.springframework.web.servlet.config.annotation.EnableWebMvc @EnableWebMvc}详。
+ *
  * <h2>Constraints when authoring {@code @Configuration} classes</h2>
+ *
+ * 创作 {@code @Configuration} 类时的约束
  *
  * <ul>
  * <li>Configuration classes must be provided as classes (i.e. not as instances returned
@@ -401,6 +484,12 @@ import org.springframework.stereotype.Component;
  * (any such instances will be treated as regular beans, with their configuration
  * annotations remaining undetected).
  * </ul>
+ *
+ * 配置类必须作为类提供（即不能作为从工厂方法返回的实例），从而允许通过生成的子类进行运行时增强。
+ * 配置类必须是非最终的（允许在运行时使用子类），除非 {@link #proxyBeanMethods() proxyBeanMethods} 标志设置为 {@code false}，在这种情况下，不需要运行时生成的子类。
+ * 配置类必须是非本地的（即不能在方法中声明）。
+ * 任何嵌套的配置类都必须声明为 {@code static}。
+ * {@code @Bean} 方法可能不会反过来创建进一步的配置类（任何此类实例都将被视为常规 bean，其配置注释仍未被检测到）。
  *
  * @author Rod Johnson
  * @author Chris Beams
@@ -456,6 +545,14 @@ public @interface Configuration {
 	 * methods individually like when declared on non-{@code @Configuration} classes,
 	 * a.k.a. "@Bean Lite Mode" (see {@link Bean @Bean's javadoc}). It is therefore
 	 * behaviorally equivalent to removing the {@code @Configuration} stereotype.
+	 *
+	 * 指定是否应该对 {@code @Bean} 方法进行代理，以强制执行 Bean 生命周期行为，例如，即使在用户代码中直接调用 {@code @Bean} 方法的情况下，也要返回共享的单例 Bean 实例。
+	 * 此功能需要方法拦截，通过运行时生成的 CGLIB 子类实现，该子类具有限制，例如不允许配置类及其方法声明 {@code final}。
+	 * 默认值为 {@code true}，允许通过配置类中的直接方法调用进行“bean 间引用”，以及对此配置的 {@code @Bean} 方法进行外部调用，例如从另一个配置类调用。
+	 * 如果不需要这样做，因为此特定配置的每个 {@code @Bean} 方法都是独立的，并且设计为供容器使用的普通工厂方法，请将此标志切换为 {@code false} 以避免 CGLIB 子类处理。
+	 * 关闭 Bean 方法拦截可以有效地单独处理 {@code @Bean} 个方法，就像在非 {@code @Configuration} 类上声明时一样，也称为“@Bean Lite 模式”（参见 {@link Bean @Bean的 javadoc}）。
+	 * 因此，它在行为上等同于删除 {@code @Configuration} 构造型。
+	 *
 	 * @since 5.2
 	 */
 	boolean proxyBeanMethods() default true;

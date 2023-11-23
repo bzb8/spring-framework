@@ -20,6 +20,8 @@ package org.springframework.core.type;
  * Interface that defines abstract access to the annotations of a specific
  * method, in a form that does not require that method's class to be loaded yet.
  *
+ * 定义对特定方法注解的抽象访问的接口，其形式尚不需要加载该方法的类。
+ *
  * @author Juergen Hoeller
  * @author Mark Pollack
  * @author Chris Beams

@@ -34,15 +34,24 @@ import org.springframework.util.Assert;
  * {@link org.springframework.stereotype.Component @Component} types and JSR-330 compliant
  * classes using {@code javax.inject} annotations.
  *
+ * 独立的应用程序上下文，接受组件类作为输入——特别是 {@link Configuration @Configuration} 注释的类，
+ * 但也接受普通的 {@link org.springframework.stereotype.Component @Component} 类型和使用 {@code javax.inject} 注解的 JSR-330 兼容类。
+ *
  * <p>Allows for registering classes one by one using {@link #register(Class...)}
  * as well as for classpath scanning using {@link #scan(String...)}.
+ *
+ * 允许使用 {@link #register(Class...)} 逐个注册类，以及使用 {@link @link #scan(String...)} 进行类路径扫描。
  *
  * <p>In case of multiple {@code @Configuration} classes, {@link Bean @Bean} methods
  * defined in later classes will override those defined in earlier classes. This can
  * be leveraged to deliberately override certain bean definitions via an extra
  * {@code @Configuration} class.
  *
+ * 如果有多个 {@code @Configuration} 类，则在后面的类中定义的 {@link Bean @Bean} 方法将覆盖在前面的类中定义的方法。可以利用这一点，通过额外的 {@code @Configuration} 类故意覆盖某些 Bean 定义。
+ *
  * <p>See {@link Configuration @Configuration}'s javadoc for usage examples.
+ *
+ * 有关使用示例，请参阅 {@link Configuration @Configuration} 的 javadoc。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -63,6 +72,8 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	/**
 	 * Create a new AnnotationConfigApplicationContext that needs to be populated
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
+	 *
+	 * 创建一个新的 AnnotationConfigApplicationContext，需要通过 {@link #register} 调用填充，然后手动 {@linkplain #refresh refreshed}。
 	 */
 	public AnnotationConfigApplicationContext() {
 		StartupStep createAnnotatedBeanDefReader = getApplicationStartup().start("spring.context.annotated-bean-reader.create");

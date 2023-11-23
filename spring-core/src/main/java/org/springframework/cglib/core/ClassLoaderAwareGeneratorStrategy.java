@@ -22,6 +22,8 @@ package org.springframework.cglib.core;
  * The ASM ClassWriter in Spring's ASM variant will pick it up when doing
  * common superclass resolution.
  *
+ * CGLIB GeneratorStrategy 变体，它将应用程序 ClassLoader 公开为类生成时的当前线程上下文 ClassLoader。Spring 的 ASM 变体中的 ASM ClassWriter 在执行公共超类解析时会拾取它。
+ *
  * @author Juergen Hoeller
  * @since 5.2
  */

@@ -112,6 +112,12 @@ public interface FactoryBean<T> {
 	 * this method properly, using the current state of the FactoryBean.
 	 * @return the type of object that this FactoryBean creates,
 	 * or {@code null} if not known at the time of the call
+	 *
+	 * 返回此 FactoryBean 创建的对象的类型，如果事先不知道，则返回 {@code null}。这允许在不实例化对象的情况下检查特定类型的 bean，例如在自动注入上。
+	 * 在创建单例对象的实现中，此方法应尽量避免创建单例;它应该提前估计类型。对于原型，此处返回有意义的类型也是可取的。可以在此FactoryBean完全初始化之前调用此方法。它不能依赖于初始化期间创建的状态;
+	 * 当然，如果可用，它仍然可以使用这种状态。注意：自动注入将忽略此处返回 {@code null} 的 FactoryBeans。因此，强烈建议使用 FactoryBean 的当前状态正确实现此方法。
+	 * @return此 FactoryBean 创建的对象类型，如果在调用时不知道，则为 {@code null}
+	 *
 	 * @see ListableBeanFactory#getBeansOfType
 	 */
 	@Nullable

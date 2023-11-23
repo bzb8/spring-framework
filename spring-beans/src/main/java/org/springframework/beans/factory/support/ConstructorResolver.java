@@ -69,7 +69,11 @@ import org.springframework.util.StringUtils;
 /**
  * Delegate for resolving constructors and factory methods.
  *
- * <p>Performs constructor resolution through argument matching.
+ * 用于解析构造函数和工厂方法的委托。
+ *
+ * Performs constructor resolution through argument matching.
+ *
+ * 通过参数匹配执行构造函数解析。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -112,11 +116,18 @@ class ConstructorResolver {
 	 * <p>This corresponds to constructor injection: In this mode, a Spring
 	 * bean factory is able to host components that expect constructor-based
 	 * dependency resolution.
+	 *
+	 * “AutoWire 构造函数”（按类型使用构造函数参数）行为。如果指定了显式构造函数参数值，则也适用，将所有剩余参数与 Bean 工厂中的 Bean 进行匹配。
+	 * 这对应于构造函数注入：在这种模式下，Spring Bean 工厂能够托管需要基于构造函数的依赖项解析的组件。
+	 *
 	 * @param beanName the name of the bean
 	 * @param mbd the merged bean definition for the bean
-	 * @param chosenCtors chosen candidate constructors (or {@code null} if none)
+	 * @param chosenCtors chosen candidate constructors (or {@code null} if none) 选定的候选构造函数（如果没有，则为 {@code null}）
 	 * @param explicitArgs argument values passed in programmatically via the getBean method,
 	 * or {@code null} if none (-> use constructor argument values from bean definition)
+	 *
+	 * 通过 getBean 方法以编程方式传入的参数值，如果没有，则为 {@code null}（-> 使用 Bean 定义中的构造函数参数值）
+	 *
 	 * @return a BeanWrapper for the new instance
 	 */
 	public BeanWrapper autowireConstructor(String beanName, RootBeanDefinition mbd,
@@ -151,6 +162,7 @@ class ConstructorResolver {
 
 		if (constructorToUse == null || argsToUse == null) {
 			// Take specified constructors, if any.
+			// 采用指定的构造函数（如果有）。
 			Constructor<?>[] candidates = chosenCtors;
 			if (candidates == null) {
 				Class<?> beanClass = mbd.getBeanClass();
@@ -179,6 +191,7 @@ class ConstructorResolver {
 			}
 
 			// Need to resolve the constructor.
+			// 需要解析构造函数。
 			boolean autowiring = (chosenCtors != null ||
 					mbd.getResolvedAutowireMode() == AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR);
 			ConstructorArgumentValues resolvedValues = null;
@@ -380,6 +393,11 @@ class ConstructorResolver {
 	 * to match with the parameters. We don't have the types attached to constructor args,
 	 * so trial and error is the only way to go here. The explicitArgs array may contain
 	 * argument values passed in programmatically via the corresponding getBean method.
+	 *
+	 * 使用命名工厂方法实例化 Bean。如果 bean 定义参数指定了一个类，而不是“factory-bean”，或者使用依赖关系注入配置了工厂对象本身的实例变量，则该方法可能是静态的。
+	 * 实现需要使用 RootBeanDefinition 中指定的名称循环访问静态方法或实例方法（该方法可能重载），并尝试与参数匹配。我们没有附加到构造函数参数的类型，因此试错是唯一的方法。
+	 * explicitArgs 数组可以包含通过相应的 getBean 方法以编程方式传入的参数值。
+	 *
 	 * @param beanName the name of the bean
 	 * @param mbd the merged bean definition for the bean
 	 * @param explicitArgs argument values passed in programmatically via the getBean
@@ -412,9 +430,11 @@ class ConstructorResolver {
 		}
 		else {
 			// It's a static factory method on the bean class.
+			// 它是 Bean 类上的静态工厂方法。
 			if (!mbd.hasBeanClass()) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"bean definition declares neither a bean class nor a factory-bean reference");
+				// Bean 定义既不声明 Bean 类，也不声明工厂 Bean 引用
 			}
 			factoryBean = null;
 			factoryClass = mbd.getBeanClass();
@@ -448,6 +468,7 @@ class ConstructorResolver {
 		if (factoryMethodToUse == null || argsToUse == null) {
 			// Need to determine the factory method...
 			// Try all methods with this name to see if they match the given arguments.
+			// 需要确定工厂方法...尝试使用此名称的所有方法，看看它们是否与给定的参数匹配。
 			factoryClass = ClassUtils.getUserClass(factoryClass);
 
 			List<Method> candidates = null;
@@ -499,6 +520,7 @@ class ConstructorResolver {
 			else {
 				// We don't have arguments passed in programmatically, so we need to resolve the
 				// arguments specified in the constructor arguments held in the bean definition.
+				// 我们没有以编程方式传入的参数，因此我们需要解析 bean 定义中保存的构造函数参数中指定的参数。
 				if (mbd.hasConstructorArgumentValues()) {
 					ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 					resolvedValues = new ConstructorArgumentValues();

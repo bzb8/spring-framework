@@ -27,6 +27,8 @@ import org.springframework.util.StringUtils;
  * {@link ClassMetadata} implementation that uses standard reflection
  * to introspect a given {@code Class}.
  *
+ * {@link ClassMetadata} 实现，它使用标准反射来内省给定的 {@code Class}。
+ *
  * @author Juergen Hoeller
  * @author Sam Brannen
  * @since 2.5

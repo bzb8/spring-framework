@@ -45,15 +45,22 @@ import org.springframework.util.ObjectUtils;
  * Abstract implementation of the {@link ApplicationEventMulticaster} interface,
  * providing the basic listener registration facility.
  *
+ * {@link ApplicationEventMulticaster} 接口的抽象实现，提供基本的listener注册工具。
+ *
  * <p>Doesn't permit multiple instances of the same listener by default,
  * as it keeps listeners in a linked Set. The collection class used to hold
  * ApplicationListener objects can be overridden through the "collectionClass"
  * bean property.
  *
+ * 默认情况下，不允许同一侦听器的多个实例，因为它将侦听器保留在链接的 Set 中。用于保存 ApplicationListener 对象的集合类可以通过“collectionClass”bean 属性重写。
+ *
  * <p>Implementing ApplicationEventMulticaster's actual {@link #multicastEvent} method
  * is left to subclasses. {@link SimpleApplicationEventMulticaster} simply multicasts
  * all events to all registered listeners, invoking them in the calling thread.
  * Alternative implementations could be more sophisticated in those respects.
+ *
+ * 实现 ApplicationEventMulticaster 的实际 {@link #multicastEvent} 方法留给子类。{@link SimpleApplicationEventMulticaster} 只是将所有事件多播到所有已注册的侦听器，并在调用线程中调用它们。
+ * 在这些方面，替代实现可以更加复杂。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -440,6 +447,9 @@ public abstract class AbstractApplicationEventMulticaster
 	 * Helper class that encapsulates a specific set of target listeners,
 	 * allowing for efficient retrieval of pre-filtered listeners.
 	 * <p>An instance of this helper gets cached per event type and source type.
+	 *
+	 * 帮助程序类，该类封装了一组特定的目标侦听器，从而允许有效地检索预筛选的侦听器。此帮助程序的实例将按事件类型和源类型进行缓存。
+	 *
 	 */
 	private class CachedListenerRetriever {
 

@@ -139,11 +139,21 @@ public interface BeanFactory {
 	 * returned objects in the case of Singleton beans.
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 *
+	 * 返回指定 Bean 的实例，该实例可以是共享的，也可以是独立的。
+	 * 此方法允许将 Spring BeanFactory 用作 Singleton 或 Prototype 设计模式的替代品。对于 Singleton bean，调用方可以保留对返回对象的引用。
+	 * 将别名转换回相应的规范 Bean 名称。
+	 * 将询问父工厂是否在此工厂实例中找不到 bean。
+	 *
 	 * @param name the name of the bean to retrieve
 	 * @return an instance of the bean.
 	 * Note that the return value will never be {@code null} but possibly a stub for
 	 * {@code null} returned from a factory method, to be checked via {@code equals(null)}.
 	 * Consider using {@link #getBeanProvider(Class)} for resolving optional dependencies.
+	 *
+	 * 请注意，返回值永远不会是 {@code null}，而可能是从工厂方法返回的 {@code null} 的存根，可通过 {@code equals(null)} 进行检查。
+	 * 请考虑使用 {@link #getBeanProvider(Class)} 来解析可选依赖项。
+	 *
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
 	 * @throws BeansException if the bean could not be obtained
 	 */
@@ -161,15 +171,16 @@ public interface BeanFactory {
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
 	 *
-	 * <p>行为与 {@link getBean(String)} 相同，但如果 bean 不属于所需类型，则通过抛出 BeanNotOfRequiredTypeException 来提供类型安全措施。
-	 * 这意味着在正确转换结果时不能抛出 ClassCastException，就像 {@link getBean(String)} 可能发生的情况一样。
-	 * <p>将别名翻译回相应的规范 bean 名称。 <p>如果在该工厂实例中找不到该bean，将询问父工厂。
+	 * 行为与 {@link #getBean(String)} 相同，但如果 bean 不属于所需类型，则通过抛出 BeanNotOfRequiredTypeException 来提供类型安全措施。
+	 * 这意味着在正确转换结果时不能抛出 ClassCastException，就像 {@link #getBean(String)} 可能发生的情况一样。
+	 * 将别名翻译回相应的规范 bean 名称。如果在该工厂实例中找不到该bean，将询问父工厂。
 	 *
 	 * @param name the name of the bean to retrieve
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @return an instance of the bean.
 	 *
-	 * bean 的类型必须匹配；可以是接口或超类 @return bean 的实例。
+	 * bean 的类型必须匹配；可以是接口或超类
+	 * @return bean 的实例。
 	 *
 	 * Note that the return value will never be {@code null}. In case of a stub for
 	 * {@code null} from a factory method having been resolved for the requested bean, a
@@ -177,7 +188,7 @@ public interface BeanFactory {
 	 * Consider using {@link #getBeanProvider(Class)} for resolving optional dependencies.
 	 *
 	 * 请注意，返回值永远不会是 {@code null}。如果工厂方法中的 {@code null} 存根已针对所请求的 bean 进行解析，则会引发针对 NullBean 存根的 {@code BeanNotOfRequiredTypeException}。
-	 * 考虑使用 {@link getBeanProvider(Class)} 来解决可选依赖项。
+	 * 考虑使用 {@link #getBeanProvider(Class)} 来解决可选依赖项。
 	 *
 	 * @throws NoSuchBeanDefinitionException if there is no such bean definition
 	 * @throws BeanNotOfRequiredTypeException if the bean is not of the required type

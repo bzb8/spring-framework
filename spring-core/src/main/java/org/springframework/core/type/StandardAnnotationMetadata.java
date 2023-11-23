@@ -37,6 +37,8 @@ import org.springframework.util.ReflectionUtils;
  * {@link AnnotationMetadata} implementation that uses standard reflection
  * to introspect a given {@link Class}.
  *
+ * {@link AnnotationMetadata} 实现，它使用标准反射来内省给定的 {@link Class}。
+ *
  * @author Juergen Hoeller
  * @author Mark Fisher
  * @author Chris Beams
@@ -70,15 +72,26 @@ public class StandardAnnotationMetadata extends StandardClassMetadata implements
 	 * providing the option to return any nested annotations or annotation arrays in the
 	 * form of {@link org.springframework.core.annotation.AnnotationAttributes} instead
 	 * of actual {@link Annotation} instances.
+	 *
+	 * 使用标准反射为给定类创建新的 {@link AnnotationMetadata} 实例的工厂方法。
+	 *
 	 * @param introspectedClass the Class to introspect
 	 * @param nestedAnnotationsAsMap return nested annotations and annotation arrays as
 	 * {@link org.springframework.core.annotation.AnnotationAttributes} for compatibility
 	 * with ASM-based {@link AnnotationMetadata} implementations
+	 *
+	 * 将嵌套的注解和注解数组返回为 {@link org.springframework.core.annotation.AnnotationAttributes}，
+	 * 以便与基于 ASM 的 {@link AnnotationMetadata} 实现兼容
+	 *
 	 * @since 3.1.1
 	 * @deprecated since 5.2 in favor of the factory method {@link AnnotationMetadata#introspect(Class)}.
 	 * Use {@link MergedAnnotation#asMap(org.springframework.core.annotation.MergedAnnotation.Adapt...) MergedAnnotation.asMap}
 	 * from {@link #getAnnotations()} rather than {@link #getAnnotationAttributes(String)}
 	 * if {@code nestedAnnotationsAsMap} is {@code false}
+	 *
+	 * 从 5.2 开始支持工厂方法 {@link AnnotationMetadata#introspect(Class)}。
+	 * 使用 {@link MergedAnnotation#asMap(org.springframework.core.annotation.MergedAnnotation.Adapt...) MergedAnnotation.asMap）
+	 * 如果 {@code nestedAnnotationsAsMap} 是 {@code false}，则来自 {@link #getAnnotations()} 而不是 {@link #getAnnotationAttributes(String)} 的 MergedAnnotation.asMap}
 	 */
 	@Deprecated
 	public StandardAnnotationMetadata(Class<?> introspectedClass, boolean nestedAnnotationsAsMap) {

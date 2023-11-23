@@ -45,10 +45,14 @@ public interface HierarchicalBeanFactory extends BeanFactory {
 	/**
 	 * Return whether the local bean factory contains a bean of the given name,
 	 * ignoring beans defined in ancestor contexts.
+	 *
 	 * 返回本地 bean 工厂是否包含给定名称的 bean，忽略祖先上下文中定义的 bean。
+	 *
 	 * <p>This is an alternative to {@code containsBean}, ignoring a bean
 	 * of the given name from an ancestor bean factory.
+	 *
 	 * 这是 {@code containsBean} 的替代方案，忽略来自祖先 bean 工厂的给定名称的 bean。
+	 *
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is defined in the local factory
 	 * @see BeanFactory#containsBean

@@ -68,13 +68,16 @@ public interface InstantiationStrategy {
 	/**
 	 * Return an instance of the bean with the given name in this factory,
 	 * creating it via the given factory method.
+	 *
+	 * 在此工厂中返回具有给定名称的 Bean 实例，通过给定的工厂方法创建它。
+	 *
 	 * @param bd the bean definition
 	 * @param beanName the name of the bean when it is created in this context.
 	 * The name can be {@code null} if we are autowiring a bean which doesn't
-	 * belong to the factory.
-	 * @param owner the owning BeanFactory
+	 * belong to the factory. 在此上下文中创建 Bean 时的名称。如果我们要自动注入不属于工厂的 bean，则名称可以是 {@code null}。
+	 * @param owner the owning BeanFactory 拥有BeanFactory的
 	 * @param factoryBean the factory bean instance to call the factory method on,
-	 * or {@code null} in case of a static factory method
+	 * or {@code null} in case of a static factory method 要调用工厂方法的工厂 Bean 实例，如果是静态工厂方法，则为 {@code null}
 	 * @param factoryMethod the factory method to use
 	 * @param args the factory method arguments to apply
 	 * @return a bean instance for this bean definition

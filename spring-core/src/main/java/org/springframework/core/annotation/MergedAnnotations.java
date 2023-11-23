@@ -325,10 +325,16 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * Create a new {@link MergedAnnotations} instance containing all
 	 * annotations and meta-annotations from the specified element and,
 	 * depending on the {@link SearchStrategy}, related inherited elements.
+	 *
+	 * 创建一个新的 {@link MergedAnnotations} 实例，其中包含来自指定元素的所有注释和元注释，以及相关的继承元素（具体取决于 {@link SearchStrategy}）。
+	 *
 	 * @param element the source element
 	 * @param searchStrategy the search strategy to use
 	 * @param repeatableContainers the repeatable containers that may be used by
 	 * the element annotations or the meta-annotations
+	 *
+	 * 元素注释或元注释可以使用的可重复容器
+	 *
 	 * @return a {@code MergedAnnotations} instance containing the merged
 	 * element annotations
 	 */

@@ -30,6 +30,7 @@ package org.springframework.beans.factory;
  * {@link org.springframework.beans.factory.config.BeanPostProcessor}.
  * Refer to {@link org.springframework.context.support.ApplicationContextAwareProcessor}
  * for an example of processing specific {@code *Aware} interface callbacks.
+ *
  * 请注意，仅实现 {@link Aware} 不提供默认功能。相反，处理必须显式完成，例如在 {@link org.springframework.beans.factory.config.BeanPostProcessor} 中。
  * 请参阅 {@link org.springframework.context.support.ApplicationContextAwareProcessor} 以获取处理特定 {@code Aware} 接口回调的示例。
  *

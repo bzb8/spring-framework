@@ -29,14 +29,21 @@ import org.springframework.core.annotation.AliasFor;
 /**
  * Annotation that marks a method as a listener for application events.
  *
+ * 将方法标记为应用程序事件监听器的注解。
+ *
  * <p>If an annotated method supports a single event type, the method may
  * declare a single parameter that reflects the event type to listen to.
  * If an annotated method supports multiple event types, this annotation
  * may refer to one or more supported event types using the {@code classes}
  * attribute. See the {@link #classes} javadoc for further details.
  *
+ * 如果带注解的方法支持单个事件类型，则该方法可以声明反映要侦听的事件类型的单个参数。如果带注解的方法支持多个事件类型，则此注解可以使用 {@code classes} 属性引用一个或多个受支持的事件类型。
+ * 有关详细信息，请参阅 {@link #classes} javadoc。
+ *
  * <p>Events can be {@link ApplicationEvent} instances as well as arbitrary
  * objects.
+ *
+ * 事件可以是 {@link ApplicationEvent} 实例，也可以是任意对象。
  *
  * <p>Processing of {@code @EventListener} annotations is performed via
  * the internal {@link EventListenerMethodProcessor} bean which gets
@@ -44,41 +51,71 @@ import org.springframework.core.annotation.AliasFor;
  * {@code <context:annotation-config/>} or {@code <context:component-scan/>}
  * element when using XML config.
  *
+ * {@code @EventListener} 注解的处理是通过内部 {@link EventListenerMethodProcessor} bean 执行的，该 bean 在使用 Java 配置时会自动注册，
+ * 或者在使用 XML 配置时通过 {@code <context: annotation-config>} 或 {@code <context: component-scan>} 元素手动注册。
+ *
  * <p>Annotated methods may have a non-{@code void} return type. When they
  * do, the result of the method invocation is sent as a new event. If the
  * return type is either an array or a collection, each element is sent
  * as a new individual event.
  *
+ * 带注解的方法可能具有非 {@code void} 返回类型。当他们这样做时，方法调用的结果将作为新事件发送。如果返回类型是数组或集合，则每个元素都作为新的单个事件发送。
+ *
  * <p>This annotation may be used as a <em>meta-annotation</em> to create custom
  * <em>composed annotations</em>.
  *
+ * 此注释可用作元注释，以创建自定义组合注释。
+ *
  * <h3>Exception Handling</h3>
+ *
+ * 异常处理
+ *
  * <p>While it is possible for an event listener to declare that it
  * throws arbitrary exception types, any checked exceptions thrown
  * from an event listener will be wrapped in an
  * {@link java.lang.reflect.UndeclaredThrowableException UndeclaredThrowableException}
  * since the event publisher can only handle runtime exceptions.
  *
+ * 虽然事件监听器可以声明它抛出任意异常类型，但从事件监听器抛出的任何受检的异常都将包装在 {@link java.lang.reflect.UndeclaredThrowableException UndeclaredThrowableException} 中，
+ * 因为事件发布者只能处理运行时异常。
+ *
  * <h3>Asynchronous Listeners</h3>
+ *
+ * 异步侦听器
+ *
  * <p>If you want a particular listener to process events asynchronously, you
  * can use Spring's {@link org.springframework.scheduling.annotation.Async @Async}
  * support, but be aware of the following limitations when using asynchronous events.
+ *
+ * 如果您希望特定监听器异步处理事件，则可以使用 Spring 的 {@link org.springframework.scheduling.annotation.Async @Async} 支持，但在使用异步事件时请注意以下限制。
  *
  * <ul>
  * <li>If an asynchronous event listener throws an exception, it is not propagated
  * to the caller. See {@link org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler
  * AsyncUncaughtExceptionHandler} for more details.</li>
+ *
+ * 如果异步事件监听器引发异常，则不会将其传播到调用方。有关详细信息，请参阅 {@link org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler AsyncUncaughtExceptionHandler}。
+ *
  * <li>Asynchronous event listener methods cannot publish a subsequent event by returning a
  * value. If you need to publish another event as the result of the processing, inject an
  * {@link org.springframework.context.ApplicationEventPublisher ApplicationEventPublisher}
  * to publish the event manually.</li>
+ *
+ * 异步事件监听器方法无法通过返回值来发布后续事件。如果需要发布另一个事件作为处理的结果，
+ * 请注入 {@link org.springframework.context.ApplicationEventPublisher ApplicationEventPublisher} 以手动发布事件。
+ *
  * </ul>
  *
  * <h3>Ordering Listeners</h3>
+ *
+ * 对侦听器进行排序
+ *
  * <p>It is also possible to define the order in which listeners for a
  * certain event are to be invoked. To do so, add Spring's common
  * {@link org.springframework.core.annotation.Order @Order} annotation
  * alongside this event listener annotation.
+ *
+ * 还可以定义调用特定事件的监听器的顺序。为此，请在此事件监听器注解旁边添加 Spring 的通用 {@link org.springframework.core.annotation.Order @Order} 注解。
  *
  * @author Stephane Nicoll
  * @author Sam Brannen

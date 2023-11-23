@@ -29,6 +29,8 @@ import org.springframework.util.ClassUtils;
  * Simple implementation of the {@link MetadataReaderFactory} interface,
  * creating a new ASM {@link org.springframework.asm.ClassReader} for every request.
  *
+ * {@link MetadataReaderFactory}接口的简单实现，为每个请求创建一个新的ASM {@link org.springframework.asm.ClassReader}。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */

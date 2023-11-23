@@ -44,6 +44,7 @@ import org.springframework.lang.Nullable;
 public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanRegistry {
 
 	/** Cache of singleton objects created by FactoryBeans: FactoryBean name to object. */
+	// FactoryBeans 创建的单例对象缓存：对象的 FactoryBean 名称。
 	private final Map<String, Object> factoryBeanObjectCache = new ConcurrentHashMap<>(16);
 
 
@@ -155,6 +156,11 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 
 	/**
 	 * Obtain an object to expose from the given FactoryBean.
+	 *
+	 * 从给定的 FactoryBean 中获取要公开的对象。
+	 *
+	 * (调用FactoryBean的getObject()方法返回对象，如果为null，则赋值为NullBean)
+	 *
 	 * @param factory the FactoryBean instance
 	 * @param beanName the name of the bean
 	 * @return the object obtained from the FactoryBean
@@ -186,6 +192,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 
 		// Do not accept a null value for a FactoryBean that's not fully
 		// initialized yet: Many FactoryBeans just return null then.
+		// 对于尚未完全初始化的 FactoryBean，不要接受 null 值：许多 FactoryBean 只返回 null。
 		if (object == null) {
 			if (isSingletonCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(
@@ -202,7 +209,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	 * <p>The default implementation simply returns the given object as-is.
 	 * Subclasses may override this, for example, to apply post-processors.
 	 *
-	 * 对从 FactoryBean 获取的给定对象进行后处理。生成的对象将公开以供 bean 引用。 <p>默认实现只是按原样返回给定对象。子类可以覆盖它，例如，应用后处理器。
+	 * 对从 FactoryBean 获取的给定对象进行后处理。生成的对象将公开以供 bean 引用。默认实现只是按原样返回给定对象。子类可以覆盖它，例如，应用后处理器。
 	 *
 	 * @param object the object obtained from the FactoryBean.
 	 * @param beanName the name of the bean

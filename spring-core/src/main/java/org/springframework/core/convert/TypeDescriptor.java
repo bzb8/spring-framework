@@ -39,6 +39,8 @@ import org.springframework.util.ObjectUtils;
  * Contextual descriptor about a type to convert from or to.
  * <p>Capable of representing arrays and generic collection types.
  *
+ * 有关要转换的源或到的类型的上下文描述符。能够表示数组和泛型集合类型。
+ *
  * @author Keith Donald
  * @author Andy Clement
  * @author Juergen Hoeller
@@ -541,7 +543,11 @@ public class TypeDescriptor implements Serializable {
 	 * field is available to provide additional conversion context.
 	 * <p>Generally prefer use of {@link #forObject(Object)} for constructing type
 	 * descriptors from source objects, as it handles the {@code null} object case.
-	 * @param type the class (may be {@code null} to indicate {@code Object.class})
+	 *
+	 * 从给定类型创建新的类型描述符。当没有类型位置（如方法参数或字段）可用于提供其他转换上下文时，使用此选项指示转换系统将对象转换为特定目标类型。
+	 * 通常更喜欢使用 {@link #forObject(Object)} 从源对象构造类型描述符，因为它处理 {@code null} 对象情况。
+	 *
+	 * @param type the class (may be {@code null} to indicate {@code Object.class}) 类（可以是 {@code null} 以指示 {@code Object.class}）
 	 * @return the corresponding type descriptor
 	 */
 	public static TypeDescriptor valueOf(@Nullable Class<?> type) {
