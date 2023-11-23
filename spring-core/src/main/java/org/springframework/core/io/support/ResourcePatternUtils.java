@@ -53,8 +53,12 @@ public abstract class ResourcePatternUtils {
 	 * <p>This might be the {@code ResourceLoader} itself, if it implements the
 	 * {@code ResourcePatternResolver} extension, or a default
 	 * {@link PathMatchingResourcePatternResolver} built on the given {@code ResourceLoader}.
+	 *
+	 * 返回给定 {@link ResourceLoader} 的默认值 {@link ResourcePatternResolver}。如果 {@code ResourceLoader} 实现了 {@code ResourcePatternResolver} 扩展，
+	 * 则这可能是 {@link ResourceLoader} 本身，或者是基于给定的 {@code ResourceLoader} 构建的默认 { ResourcePatternResolver}。
+	 *
 	 * @param resourceLoader the ResourceLoader to build a pattern resolver for
-	 * (may be {@code null} to indicate a default ResourceLoader)
+	 * (may be {@code null} to indicate a default ResourceLoader) 可能是 {@code null} 表示默认的 ResourceLoader
 	 * @return the ResourcePatternResolver
 	 * @see PathMatchingResourcePatternResolver
 	 */

@@ -29,12 +29,20 @@ import org.springframework.util.ClassUtils;
  * A simple {@link TypeFilter} which matches classes with a given annotation,
  * checking inherited annotations as well.
  *
+ * 一个简单的 {@link TypeFilter}，它匹配具有给定注解的类，同时检查继承的注解。
+ *
  * <p>By default, the matching logic mirrors that of
  * {@link AnnotationUtils#getAnnotation(java.lang.reflect.AnnotatedElement, Class)},
  * supporting annotations that are <em>present</em> or <em>meta-present</em> for a
  * single level of meta-annotations. The search for meta-annotations may be disabled.
  * Similarly, the search for annotations on interfaces may optionally be enabled.
  * Consult the various constructors in this class for details.
+ *
+ * 缺省情况下，匹配逻辑镜像 {@link AnnotationUtils#getAnnotation(java.lang.reflect.AnnotatedElement, Class)} 的逻辑，
+ * 支持单级元注解存在或元存在的注解。对元注解的搜索可能会被禁用。同样，可以选择启用对接口注解的搜索。有关详细信息，请参阅此类中的各种构造函数。
+ *
+ * AnnotationTypeFilter 是 Spring Framework 中的一个类，它实现了 TypeFilter 接口，用于在类扫描过程中过滤出具有指定注解类型的类。
+ * 在 Spring 中，类扫描是指 Spring 容器在启动时自动检测和注册具有特定注解或实现特定接口的类。AnnotationTypeFilter 提供了一种方便的方式来指定只扫描具有特定注解的类。
  *
  * @author Mark Fisher
  * @author Ramnivas Laddad
@@ -55,6 +63,11 @@ public class AnnotationTypeFilter extends AbstractTypeHierarchyTraversingFilter 
 	 * meta-annotation matching, use the constructor that accepts a
 	 * '{@code considerMetaAnnotations}' argument.
 	 * <p>The filter will not match interfaces.
+	 *
+	 * 为给定的注解类型创建一个新的 {@code AnnotationTypeFilter}。
+	 * 过滤器还将匹配元注解。若要禁用元注解匹配，请使用接受“{@code considerMetaAnnotations}”参数的构造函数。
+	 * 筛选器将与接口不匹配。
+	 *
 	 * @param annotationType the annotation type to match
 	 */
 	public AnnotationTypeFilter(Class<? extends Annotation> annotationType) {
@@ -74,8 +87,8 @@ public class AnnotationTypeFilter extends AbstractTypeHierarchyTraversingFilter 
 	/**
 	 * Create a new {@code AnnotationTypeFilter} for the given annotation type.
 	 * @param annotationType the annotation type to match
-	 * @param considerMetaAnnotations whether to also match on meta-annotations
-	 * @param considerInterfaces whether to also match interfaces
+	 * @param considerMetaAnnotations whether to also match on meta-annotations 是否也匹配元注释
+	 * @param considerInterfaces whether to also match interfaces 是否也匹配接口
 	 */
 	public AnnotationTypeFilter(
 			Class<? extends Annotation> annotationType, boolean considerMetaAnnotations, boolean considerInterfaces) {

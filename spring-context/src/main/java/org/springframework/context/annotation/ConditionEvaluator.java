@@ -64,6 +64,10 @@ class ConditionEvaluator {
 	 * Determine if an item should be skipped based on {@code @Conditional} annotations.
 	 * The {@link ConfigurationPhase} will be deduced from the type of item (i.e. a
 	 * {@code @Configuration} class will be {@link ConfigurationPhase#PARSE_CONFIGURATION})
+	 *
+	 * 根据 {@code @Conditional} 注解确定是否应跳过某个项目。
+	 * {@link ConfigurationPhase} 将从项的类型中推导出来（即 {@code @Configuration} 类将是 {@link ConfigurationPhase#PARSE_CONFIGURATION}）
+	 *
 	 * @param metadata the meta data
 	 * @return if the item should be skipped
 	 */
@@ -73,6 +77,10 @@ class ConditionEvaluator {
 
 	/**
 	 * Determine if an item should be skipped based on {@code @Conditional} annotations.
+	 *
+	 * 根据 {@code @Conditional} 注解确定是否应跳过某个项目。
+	 *
+	 *
 	 * @param metadata the meta data
 	 * @param phase the phase of the call
 	 * @return if the item should be skipped

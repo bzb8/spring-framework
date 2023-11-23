@@ -100,6 +100,9 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	/**
 	 * Determine whether the underlying class has any methods that are
 	 * annotated (or meta-annotated) with the given annotation type.
+	 *
+	 * 确定基础类是否具有任何使用给定注解类型进行注解（或元注解）的方法。
+	 *
 	 * @param annotationName the fully qualified class name of the annotation
 	 * type to look for
 	 */
@@ -112,6 +115,10 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	 * (or meta-annotated) with the given annotation type.
 	 * <p>For any returned method, {@link MethodMetadata#isAnnotated} will
 	 * return {@code true} for the given annotation type.
+	 *
+	 * 检索使用给定注解类型进行注解（或元注解）的所有方法的方法元数据。
+	 * <p>对于任何返回的方法，{@link MethodMetadata#isAnnotated} 将为给定的注解类型返回 {@code true}。
+	 *
 	 * @param annotationName the fully qualified class name of the annotation
 	 * type to look for
 	 * @return a set of {@link MethodMetadata} for methods that have a matching

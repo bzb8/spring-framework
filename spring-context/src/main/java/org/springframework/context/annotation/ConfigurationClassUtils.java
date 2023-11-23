@@ -151,12 +151,19 @@ abstract class ConfigurationClassUtils {
 	/**
 	 * Check the given metadata for a configuration class candidate
 	 * (or nested component class declared within a configuration/component class).
-	 * @param metadata the metadata of the annotated class
+	 *
+	 * 检查给定元数据中是否有候选配置类（或在 configuration/component 类中声明的嵌套组件类）。
+	 *
+	 * @param metadata the metadata of the annotated class 带注解的类的元数据
 	 * @return {@code true} if the given class is to be registered for
 	 * configuration class processing; {@code false} otherwise
+	 *
+	 * {@code true} 如果要注册给定的类以进行配置类处理;{@code false} 否则
+	 *
 	 */
 	public static boolean isConfigurationCandidate(AnnotationMetadata metadata) {
 		// Do not consider an interface or an annotation...
+		// 不要考虑接口或注释......
 		if (metadata.isInterface()) {
 			return false;
 		}

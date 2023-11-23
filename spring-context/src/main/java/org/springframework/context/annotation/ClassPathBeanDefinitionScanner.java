@@ -40,6 +40,8 @@ import org.springframework.util.PatternMatchUtils;
  * registering corresponding bean definitions with a given registry ({@code BeanFactory}
  * or {@code ApplicationContext}).
  *
+ * 一个 Bean 定义扫描器，用于检测类路径上的 Bean 候选项，将相应的 Bean 定义注册到给定的注册表（{@code BeanFactory} 或 {@code ApplicationContext}）。
+ *
  * <p>Candidate classes are detected through configurable type filters. The
  * default filters include classes that are annotated with Spring's
  * {@link org.springframework.stereotype.Component @Component},
@@ -47,8 +49,14 @@ import org.springframework.util.PatternMatchUtils;
  * {@link org.springframework.stereotype.Service @Service}, or
  * {@link org.springframework.stereotype.Controller @Controller} stereotype.
  *
+ * 候选类通过可配置的类型筛选器进行检测。默认过滤器包括使用 Spring 的 {@link org.springframework.stereotype.Component @Component}、
+ * {@link org.springframework.stereotype.Repository @Repository}、{@link org.springframework.stereotype.Service @Service} 或
+ * {@link org.springframework.stereotype.Controller @Controller} 构造型注解的类。
+ *
  * <p>Also supports Java EE 6's {@link javax.annotation.ManagedBean} and
  * JSR-330's {@link javax.inject.Named} annotations, if available.
+ *
+ * 还支持 Java EE 6 的 {@link javax.annotation.ManagedBean} 和 JSR-330 的 {@link javax.inject.Named} 注解（如果可用）。
  *
  * @author Mark Fisher
  * @author Juergen Hoeller
@@ -144,6 +152,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	/**
 	 * Create a new {@code ClassPathBeanDefinitionScanner} for the given bean factory and
 	 * using the given {@link Environment} when evaluating bean definition profile metadata.
+	 *
+	 * 在评估 Bean 定义配置文件元数据时，为给定的 Bean 工厂创建一个新的 {@code ClassPathBeanDefinitionScanner}，并使用给定的 {@link Environment}。
+	 *
 	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
 	 * of a {@code BeanDefinitionRegistry}
 	 * @param useDefaultFilters whether to include the default filters for the

@@ -58,11 +58,17 @@ public interface AnnotatedTypeMetadata {
 	/**
 	 * Determine whether the underlying element has an annotation or meta-annotation
 	 * of the given type defined.
+	 *
+	 * 确定基础元素是否定义了给定类型的注解或元注解。
+	 *
 	 * <p>If this method returns {@code true}, then
 	 * {@link #getAnnotationAttributes} will return a non-null Map.
+	 *
+	 * 如果此方法返回 {@code true}，则 {@link #getAnnotationAttributes} 将返回非 null Map。
+	 *
 	 * @param annotationName the fully qualified class name of the annotation
-	 * type to look for
-	 * @return whether a matching annotation is defined
+	 * type to look for 要查找的批注类型的完全限定类名
+	 * @return whether a matching annotation is defined 是否定义了匹配的注解
 	 */
 	default boolean isAnnotated(String annotationName) {
 		return getAnnotations().isPresent(annotationName);

@@ -70,9 +70,15 @@ import org.springframework.util.ClassUtils;
  * supported: if any other include filter is specified, the index is ignored and
  * classpath scanning is used instead.
  *
+ * 从基本包提供候选组件的组件提供程序。可以使用 {@link CandidateComponentsIndex the index}（如果它可用）来扫描类路径。通过应用排除和包含过滤器来标识候选组件。
+ * {@link AnnotationTypeFilter}、{@link AssignableTypeFilter} 支持使用 {@link Indexed} 注释的 AnnotationSuperclass 上的筛选器：如果指定了任何其他包含筛选器，则忽略该索引，改用类路径扫描。
+ *
  * <p>This implementation is based on Spring's
  * {@link org.springframework.core.type.classreading.MetadataReader MetadataReader}
  * facility, backed by an ASM {@link org.springframework.asm.ClassReader ClassReader}.
+ *
+ * 此实现基于 Spring 的 {@link org.springframework.core.type.classreading.MetadataReader MetadataReader} 工具，
+ * 由 ASM {@link org.springframework.asm.ClassReader ClassReader} 提供支持。
  *
  * @author Mark Fisher
  * @author Juergen Hoeller
@@ -201,6 +207,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * <p>Also supports Java EE 6's {@link javax.annotation.ManagedBean} and
 	 * JSR-330's {@link javax.inject.Named} annotations, if available.
 	 *
+	 * 注册 {@link Component @Component} 的默认筛选器。
+	 * 这将隐式注册所有具有 {@link Component @Component} 元注解的注释，包括 {@link Repository @Repository}、{@link Service @Service} 和 {@link Controller @Controller} 构造型注释。
+	 * 还支持 Java EE 6 的 {@link javax.annotation.ManagedBean} 和 JSR-330 的 {@link javax.inject.Named} 注解（如果可用）。
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	protected void registerDefaultFilters() {
@@ -228,6 +238,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * Set the Environment to use when resolving placeholders and evaluating
 	 * {@link Conditional @Conditional}-annotated component classes.
 	 * <p>The default is a {@link StandardEnvironment}.
+	 *
+	 * 设置在解析占位符和计算 {@link Conditional @Conditional} 注解的组件类时要使用的环境。
+	 * 默认值为 {@link StandardEnvironment}。
+	 *
 	 * @param environment the Environment to use
 	 */
 	public void setEnvironment(Environment environment) {
@@ -257,6 +271,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 * This will typically be a {@link ResourcePatternResolver} implementation.
 	 * <p>Default is a {@code PathMatchingResourcePatternResolver}, also capable of
 	 * resource pattern resolving through the {@code ResourcePatternResolver} interface.
+	 *
+	 * 设置要用于资源位置的 {@link ResourceLoader}。这通常是 {@link ResourcePatternResolver} 实现。
+	 * 默认值为 {@code PathMatchingResourcePatternResolver}，也能够通过 {@code ResourcePatternResolver} 接口解析资源模式。
+	 *
 	 * @see org.springframework.core.io.support.ResourcePatternResolver
 	 * @see org.springframework.core.io.support.PathMatchingResourcePatternResolver
 	 */

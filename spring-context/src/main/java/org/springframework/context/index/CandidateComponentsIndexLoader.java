@@ -36,6 +36,8 @@ import org.springframework.util.ConcurrentReferenceHashMap;
 /**
  * Candidate components index loading mechanism for internal use within the framework.
  *
+ * 候选组件索引加载机制，供框架内内部使用。
+ *
  * @author Stephane Nicoll
  * @since 5.0
  */
@@ -55,6 +57,10 @@ public final class CandidateComponentsIndexLoader {
 	 * available for some libraries (or use cases) but couldn't be built for the whole
 	 * application. In this case, the application context fallbacks to a regular
 	 * classpath arrangement (i.e. as though no index were present at all).
+	 *
+	 * 指示 Spring 忽略组件索引的 System 属性，即始终从 {@link #loadIndex(ClassLoader)} 返回 {@code null}。
+	 * 默认值为“false”，允许定期使用索引。将此标志切换为 {@code true} 会满足极端情况，
+	 * 即索引部分可用于某些库（或用例），但无法为整个应用程序构建索引。在这种情况下，应用程序上下文回退到常规的类路径排列（即，就好像根本没有索引一样）。
 	 */
 	public static final String IGNORE_INDEX = "spring.index.ignore";
 
@@ -75,10 +81,15 @@ public final class CandidateComponentsIndexLoader {
 	 * Load and instantiate the {@link CandidateComponentsIndex} from
 	 * {@value #COMPONENTS_RESOURCE_LOCATION}, using the given class loader. If no
 	 * index is available, return {@code null}.
+	 *
+	 * 使用给定的类加载器从 {@value #COMPONENTS_RESOURCE_LOCATION} 加载并实例化 {@link CandidateComponentsIndex}。如果没有可用的索引，则返回 {@code null}。
+	 *
 	 * @param classLoader the ClassLoader to use for loading (can be {@code null} to use the default)
 	 * @return the index to use or {@code null} if no index was found
 	 * @throws IllegalArgumentException if any module index cannot
 	 * be loaded or if an error occurs while creating {@link CandidateComponentsIndex}
+	 *
+	 * 如果无法加载任何模块索引，或者在创建 {@link CandidateComponentsIndex} 时发生错误
 	 */
 	@Nullable
 	public static CandidateComponentsIndex loadIndex(@Nullable ClassLoader classLoader) {

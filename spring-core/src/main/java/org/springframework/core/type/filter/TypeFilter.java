@@ -22,8 +22,10 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 
 /**
- * Base interface for type filters using a
+ * # interface for type filters using a
  * {@link org.springframework.core.type.classreading.MetadataReader}.
+ *
+ * 使用 {@link org.springframework.core.type.classreading.MetadataReader} 的类型过滤器接口。
  *
  * @author Costin Leau
  * @author Juergen Hoeller
