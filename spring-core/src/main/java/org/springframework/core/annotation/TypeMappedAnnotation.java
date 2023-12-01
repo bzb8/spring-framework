@@ -120,7 +120,7 @@ final class TypeMappedAnnotation<A extends Annotation> extends AbstractMergedAnn
 	private TypeMappedAnnotation(AnnotationTypeMapping mapping, @Nullable ClassLoader classLoader,
 			@Nullable Object source, @Nullable Object rootAttributes, ValueExtractor valueExtractor,
 			int aggregateIndex, @Nullable int[] resolvedRootMirrors) {
-
+		// 当前合并注解对应的AnnotationTypeMapping
 		this.mapping = mapping;
 		this.classLoader = classLoader;
 		this.source = source;

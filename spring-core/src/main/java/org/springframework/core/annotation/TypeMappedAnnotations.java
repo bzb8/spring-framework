@@ -414,6 +414,7 @@ final class TypeMappedAnnotations implements MergedAnnotations {
 			if (repeatedAnnotations != null) {
 				return doWithAnnotations(type, aggregateIndex, source, repeatedAnnotations);
 			}
+			// 将该注解上的元注解解析为由多个AnnotationTypeMapping聚合的AnnotationTypeMappings
 			AnnotationTypeMappings mappings = AnnotationTypeMappings.forAnnotationType(
 					annotation.annotationType(), repeatableContainers, annotationFilter);
 			for (int i = 0; i < mappings.size(); i++) {

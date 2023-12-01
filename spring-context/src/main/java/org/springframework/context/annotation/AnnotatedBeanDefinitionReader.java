@@ -36,8 +36,12 @@ import org.springframework.util.Assert;
 /**
  * Convenient adapter for programmatic registration of bean classes.
  *
+ * 用于以编程方式注册 bean 类的便捷适配器。
+ *
  * <p>This is an alternative to {@link ClassPathBeanDefinitionScanner}, applying
  * the same resolution of annotations but for explicitly registered classes only.
+ *
+ * 这是 {@link ClassPathBeanDefinitionScanner} 的替代方案，应用相同的注解解析，但仅适用于显式注册的类。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -62,8 +66,16 @@ public class AnnotatedBeanDefinitionReader {
 	 * <p>If the registry is {@link EnvironmentCapable}, e.g. is an {@code ApplicationContext},
 	 * the {@link Environment} will be inherited, otherwise a new
 	 * {@link StandardEnvironment} will be created and used.
+	 *
+	 * 为给定的注册表创建一个新的 {@code AnnotatedBeanDefinitionReader}。
+	 * 如果注册表是{@link EnvironmentCapable}，例如是一个 {@code ApplicationContext}，则将继承 {@link Environment}，
+	 * 否则将创建并使用新的 {@link StandardEnvironment}。
+	 *
 	 * @param registry the {@code BeanFactory} to load bean definitions into,
 	 * in the form of a {@code BeanDefinitionRegistry}
+	 *
+	 * 以 {@code BeanDefinitionRegistry} 的形式
+	 *
 	 * @see #AnnotatedBeanDefinitionReader(BeanDefinitionRegistry, Environment)
 	 * @see #setEnvironment(Environment)
 	 */

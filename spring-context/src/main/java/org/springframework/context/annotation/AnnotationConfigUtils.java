@@ -132,9 +132,11 @@ public abstract class AnnotationConfigUtils {
 	/**
 	 * Register all relevant annotation post processors in the given registry.
 	 *
-	 * 在给定的注册表中注册所有相关的注解后处理器。
+	 * 在给定注册表中注册所有相关注解后处理器。
 	 *
 	 * @param registry the registry to operate on
+	 *
+	 * 要操作的注册表
 	 */
 	public static void registerAnnotationConfigProcessors(BeanDefinitionRegistry registry) {
 		registerAnnotationConfigProcessors(registry, null);
@@ -150,6 +152,8 @@ public abstract class AnnotationConfigUtils {
 	 *
 	 * @return a Set of BeanDefinitionHolders, containing all bean definitions
 	 * that have actually been registered by this call
+	 *
+	 * 一组 BeanDefinitionHolders，包含此调用实际注册的所有 bean 定义
 	 */
 	public static Set<BeanDefinitionHolder> registerAnnotationConfigProcessors(
 			BeanDefinitionRegistry registry, @Nullable Object source) {

@@ -25,12 +25,15 @@ import org.springframework.lang.Nullable;
  * Interface to be implemented by types that determine which @{@link Configuration}
  * class(es) should be imported based on a given selection criteria, usually one or
  * more annotation attributes.
+ *
  * 由类型实现的接口，这些类型根据给定的选择条件（通常是一个或多个注解属性）确定应导入哪些 @{@link Configuration} 类
  *
  * <p>An {@link ImportSelector} may implement any of the following
  * {@link org.springframework.beans.factory.Aware Aware} interfaces,
  * and their respective methods will be called prior to {@link #selectImports}:
- * {@link ImportSelector}可以实现以下任何{@link org.springframework.beans.factory.Aware Aware}接口，并且它们各自的方法将在{@link selectImports}之前调用:
+ *
+ * {@link ImportSelector}可以实现以下任何{@link org.springframework.beans.factory.Aware Aware}接口，并且它们各自的方法将在{@link #selectImports}之前调用:
+ *
  * <ul>
  * <li>{@link org.springframework.context.EnvironmentAware EnvironmentAware}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactoryAware BeanFactoryAware}</li>
@@ -40,7 +43,9 @@ import org.springframework.lang.Nullable;
  *
  * <p>Alternatively, the class may provide a single constructor with one or more of
  * the following supported parameter types:
+ *
  * 或者，该类可以为单个构造函数提供以下一个或多个受支持的参数类型：
+ *
  * <ul>
  * <li>{@link org.springframework.core.env.Environment Environment}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactory BeanFactory}</li>
@@ -52,6 +57,7 @@ import org.springframework.lang.Nullable;
  * as regular {@code @Import} annotations, however, it is also possible to defer
  * selection of imports until all {@code @Configuration} classes have been processed
  * (see {@link DeferredImportSelector} for details).
+ *
  * {@code ImportSelector} 实现的处理方式通常与常规 {@code @Import} 注解相同，但是，也可以推迟导入的选择，
  * 直到所有 {@code @Configuration} 类都处理完毕（有关详细信息，请参阅 {@link DeferredImportSelector}）。
  *

@@ -26,32 +26,34 @@ import java.lang.annotation.Target;
  * Indicates one or more <em>component classes</em> to import &mdash; typically
  * {@link Configuration @Configuration} classes.
  *
- * 指示要导入的一个或多个<em>组件类<em>，通常为 {@link Configuration @Configuration} 类。
+ * 指示要导入的一个或多个组件类，通常为 {@link Configuration @Configuration} 类。
  *
  * <p>Provides functionality equivalent to the {@code <import/>} element in Spring XML.
  * Allows for importing {@code @Configuration} classes, {@link ImportSelector} and
  * {@link ImportBeanDefinitionRegistrar} implementations, as well as regular component
  * classes (as of 4.2; analogous to {@link AnnotationConfigApplicationContext#register}).
  *
- * <p>提供与 <import>Spring XML 中的 {@code } 元素等效的功能。允许导入 {@code @Configuration} 类、
+ * 提供与 <import>Spring XML 中的 {@code } 元素等效的功能。允许导入 {@code @Configuration} 类、
  * {@link ImportSelector} 和 {@link ImportBeanDefinitionRegistrar} 实现，
- * 以及常规组件类（从 4.2 开始;类似于 {@link AnnotationConfigApplicationContextregister}）。
+ * 以及常规组件类（从 4.2 开始;类似于 {@link AnnotationConfigApplicationContext#register}）。
  *
  * <p>{@code @Bean} definitions declared in imported {@code @Configuration} classes should be
  * accessed by using {@link org.springframework.beans.factory.annotation.Autowired @Autowired}
  * injection. Either the bean itself can be autowired, or the configuration class instance
  * declaring the bean can be autowired. The latter approach allows for explicit, IDE-friendly
  * navigation between {@code @Configuration} class methods.
- * <p>应使用 {@link org.springframework.beans.factory.annotation.Autowired @Autowired} 注入来访问导入的 {@code @Configuration} Bean 本身可以自动连线，或者声明 Bean 的配置类实例可以自动连线。
- * 后一种方法允许在 {@code @Configuration} 类方法之间进行显式的、对 IDE 友好的导航。
+ *
+ * 应使用 {@link org.springframework.beans.factory.annotation.Autowired @Autowired} 注入来访问导入的 {@code @Configuration} Bean 本身可以自动注入，
+ * 或者声明 Bean 的配置类实例可以自动注入。后一种方法允许在 {@code @Configuration} 类方法之间进行显式的、对 IDE 友好的导航。
  *
  * <p>May be declared at the class level or as a meta-annotation.
+ *
  * 可以在类级别声明，也可以作为元注释声明。
  *
  * <p>If XML or other non-{@code @Configuration} bean definition resources need to be
  * imported, use the {@link ImportResource @ImportResource} annotation instead.
  *
- * <p>如果需要导入 XML 或其他非 {@code @Configuration} Bean 定义资源，请改用 {@link ImportResource @ImportResource} 注释。
+ * 如果需要导入 XML 或其他非 {@code @Configuration} Bean 定义资源，请改用 {@link ImportResource @ImportResource} 注释。
  *
  * @author Chris Beams
  * @author Juergen Hoeller

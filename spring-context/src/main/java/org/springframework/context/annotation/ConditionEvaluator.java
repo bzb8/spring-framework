@@ -41,6 +41,8 @@ import org.springframework.util.MultiValueMap;
 /**
  * Internal class used to evaluate {@link Conditional} annotations.
  *
+ * 用于评估{@link Conditional}注释的内部类。
+ *
  * @author Phillip Webb
  * @author Juergen Hoeller
  * @since 4.0
@@ -156,6 +158,7 @@ class ConditionEvaluator {
 				@Nullable Environment environment, @Nullable ResourceLoader resourceLoader) {
 
 			this.registry = registry;
+			// 推断BeanFactory
 			this.beanFactory = deduceBeanFactory(registry);
 			this.environment = (environment != null ? environment : deduceEnvironment(registry));
 			this.resourceLoader = (resourceLoader != null ? resourceLoader : deduceResourceLoader(registry));

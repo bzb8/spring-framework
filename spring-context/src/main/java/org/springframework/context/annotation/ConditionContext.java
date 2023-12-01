@@ -25,6 +25,8 @@ import org.springframework.lang.Nullable;
 /**
  * Context information for use by {@link Condition} implementations.
  *
+ * 供 {@link Condition} 实现使用的上下文信息。
+ *
  * @author Phillip Webb
  * @author Juergen Hoeller
  * @since 4.0

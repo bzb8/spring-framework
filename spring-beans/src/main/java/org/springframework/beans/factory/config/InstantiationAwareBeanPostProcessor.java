@@ -27,14 +27,20 @@ import org.springframework.lang.Nullable;
  * and a callback after instantiation but before explicit properties are set or
  * autowiring occurs.
  *
+ * {@link BeanPostProcessor} 的子接口，添加实例化前回调，以及实例化后但在设置显式属性或发生自动装配之前的回调。
+ *
  * <p>Typically used to suppress default instantiation for specific target beans,
  * for example to create proxies with special TargetSources (pooling targets,
  * lazily initializing targets, etc), or to implement additional injection strategies
  * such as field injection.
  *
+ * 通常用于抑制特定目标 bean 的默认实例化，例如创建具有特殊 TargetSource 的代理（池目标、延迟初始化目标等），或实现其他注入策略（例如字段注入）。
+ *
  * <p><b>NOTE:</b> This interface is a special purpose interface, mainly for
  * internal use within the framework. It is recommended to implement the plain
  * {@link BeanPostProcessor} interface as far as possible.
+ *
+ * 注意：该接口是一个特殊用途的接口，主要供框架内部使用。建议尽可能实现简单的{@link BeanPostProcessor}接口。
  *
  * @author Juergen Hoeller
  * @author Rod Johnson
@@ -59,10 +65,19 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * {@link SmartInstantiationAwareBeanPostProcessor} interface in order
 	 * to predict the type of the bean object that they are going to return here.
 	 * <p>The default implementation returns {@code null}.
+	 *
+	 * 在实例化目标 bean 之前应用此 BeanPostProcessor。返回的 bean 对象可以是代替目标 bean 的代理，从而有效地抑制目标 bean 的默认实例化。
+	 * 如果该方法返回一个非空对象，bean的创建过程将被短路。唯一应用的进一步处理是来自配置的 {@link BeanPostProcessor BeanPostProcessors} 的
+	 * {@link #postProcessAfterInitialization} 回调。 此回调将应用于 bean 定义及其 bean 类，以及工厂方法定义，在这种情况下，返回的 bean 类型将在此处传递。
+	 * 后处理器可以实现扩展的 {@link SmartInstantiationAwareBeanPostProcessor} 接口，以便预测它们将在此处返回的 bean 对象的类型。 认实现返回 {@code null}。
+	 *
 	 * @param beanClass the class of the bean to be instantiated
 	 * @param beanName the name of the bean
 	 * @return the bean object to expose instead of a default instance of the target bean,
 	 * or {@code null} to proceed with default instantiation
+	 *
+	 * 要公开的 bean 对象，而不是目标 bean 的默认实例，或 {@code null} 继续默认实例化
+	 *
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessAfterInstantiation
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getBeanClass()
@@ -79,12 +94,20 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * <p>This is the ideal callback for performing custom field injection on the given bean
 	 * instance, right before Spring's autowiring kicks in.
 	 * <p>The default implementation returns {@code true}.
+	 *
+	 * 在通过构造函数或工厂方法实例化 bean 之后，但在 Spring 属性填充（来自显式属性或自动装配）发生之前执行操作。
+	 * 这是在 Spring 自动装配启动之前对给定 bean 实例执行自定义字段注入的理想回调。 默认实现返回 {@code true}。
+	 *
 	 * @param bean the bean instance created, with properties not having been set yet
 	 * @param beanName the name of the bean
 	 * @return {@code true} if properties should be set on the bean; {@code false}
 	 * if property population should be skipped. Normal implementations should return {@code true}.
 	 * Returning {@code false} will also prevent any subsequent InstantiationAwareBeanPostProcessor
 	 * instances being invoked on this bean instance.
+	 *
+	 * 是否应该在 bean 上设置属性； {@code false} 是否应跳过属性注入。正常的实现应该返回 {@code true}。
+	 * 返回 {@code false} 还将阻止在此 bean 实例上调用任何后续的 InstantiationAwareBeanPostProcessor 实例。
+	 *
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessBeforeInstantiation
 	 */
