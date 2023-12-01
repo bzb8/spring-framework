@@ -32,9 +32,14 @@ import org.springframework.util.StringUtils;
  * {@link AnnotatedElementUtils}, and Spring's reflection- and ASM-based
  * {@link org.springframework.core.type.AnnotationMetadata} implementations.
  *
+ * {@link LinkedHashMap} 子类，表示由 {@link AnnotationUtils}、
+ * {@link <em><em> AnnotatedElementUtils} 以及 Spring 的基于 reflection 和 ASM 的 {@link org.springframework.core.type.AnnotationMetadata} 实现读取的注解属性键值对。
+ *
  * <p>Provides 'pseudo-reification' to avoid noisy Map generics in the calling
  * code as well as convenience methods for looking up annotation attributes
  * in a type-safe fashion.
+ *
+ * 提供“伪重新化”以避免调用代码中出现嘈杂的 Map 泛型，以及以类型安全的方式查找注解属性的便捷方法。
  *
  * @author Chris Beams
  * @author Sam Brannen
@@ -224,11 +229,19 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get the value stored under the specified {@code attributeName} as an enum.
+	 *
+	 * 获取存储在指定 {@code attributeName} 下的值作为枚举。
+	 *
 	 * @param attributeName the name of the attribute to get;
 	 * never {@code null} or empty
+	 *
+	 * 要获取的属性的名称;从不 {@code null} 或空
+	 *
 	 * @return the value
 	 * @throws IllegalArgumentException if the attribute does not exist or
 	 * if it is not of the expected type
+	 *
+	 * 如果该属性不存在或它不是预期类型
 	 */
 	@SuppressWarnings("unchecked")
 	public <E extends Enum<?>> E getEnum(String attributeName) {
@@ -339,6 +352,10 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * component type of the expected array type, the single element will be
 	 * wrapped in a single-element array of the appropriate type before
 	 * returning it.
+	 *
+	 * 获取存储在指定 {@code attributeName} 下的值，确保该值为 {@code expectedType}。
+	 * 如果 {@code expectedType} 是一个数组，并且存储在指定 {@code attributeName} 下的值是预期数组类型的组件类型的单个元素，则该单个元素将在返回之前包装在相应类型的单元素数组中。
+	 *
 	 * @param attributeName the name of the attribute to get;
 	 * never {@code null} or empty
 	 * @param expectedType the expected type; never {@code null}
@@ -419,6 +436,10 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * will be cast and returned immediately without creating a new instance.
 	 * Otherwise a new instance will be created by passing the supplied map
 	 * to the {@link #AnnotationAttributes(Map)} constructor.
+	 *
+	 * 根据给定的映射返回 {@link AnnotationAttributes} 实例。
+	 *如果映射已经是 {@code AnnotationAttributes} 实例，则它将被强制转换并立即返回，而无需创建新实例。否则，将通过将提供的映射传递给 {@link AnnotationAttributes（Map）} 构造函数来创建新实例。
+	 *
 	 * @param map original source of annotation attribute <em>key-value</em> pairs
 	 */
 	@Nullable

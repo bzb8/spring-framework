@@ -23,6 +23,9 @@ package org.springframework.context.annotation;
  * has already been registered might choose to only be evaluated during the
  * {@link ConfigurationPhase#REGISTER_BEAN REGISTER_BEAN} {@link ConfigurationPhase}.
  *
+ * 一个 {@link Condition}，与 {@code @Configuration} 一起使用时提供更精细的控制。允许某些条件在根据配置阶段匹配时进行调整。
+ * 例如，检查 Bean 是否已注册的条件可能会选择仅在 {@link ConfigurationPhase#REGISTER_BEAN REGISTER_BEAN} {@link ConfigurationPhase} 期间进行评估。
+ *
  * @author Phillip Webb
  * @since 4.0
  * @see Configuration

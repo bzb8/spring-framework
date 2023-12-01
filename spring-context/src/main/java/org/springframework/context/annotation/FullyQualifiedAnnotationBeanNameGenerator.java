@@ -25,14 +25,21 @@ import org.springframework.util.Assert;
  * a supported type-level annotation such as {@code @Component} (see
  * {@link AnnotationBeanNameGenerator} for details on supported annotations).
  *
+ * {@code AnnotationBeanNameGenerator} 的扩展，如果未通过受支持的类型级注解（如 {@code @Component}）提供显式 Bean 名称，
+ * 则使用完全限定的类名作为缺省 Bean 名称（有关支持的注释的详细信息，请参阅 {@link AnnotationBeanNameGenerator}）。
+ *
  * <p>Favor this bean naming strategy over {@code AnnotationBeanNameGenerator} if
  * you run into naming conflicts due to multiple autodetected components having the
  * same non-qualified class name (i.e., classes with identical names but residing in
  * different packages).
  *
+ * 如果由于多个自动检测的组件具有相同的非限定类名（即具有相同名称但驻留在不同包中的类）而遇到命名冲突，则支持此 Bean 命名策略而不是 {@code AnnotationBeanNameGenerator}。
+ *
  * <p>Note that an instance of this class is used by default for configuration-level
  * import purposes; whereas, the default for component scanning purposes is a plain
  * {@code AnnotationBeanNameGenerator}.
+ *
+ * 请注意，默认情况下，此类的实例用于配置级导入目的;而组件扫描的默认值是普通的 {@code AnnotationBeanNameGenerator}。
  *
  * @author Juergen Hoeller
  * @author Sam Brannen

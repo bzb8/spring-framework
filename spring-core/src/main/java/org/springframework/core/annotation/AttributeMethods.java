@@ -230,6 +230,9 @@ final class AttributeMethods {
 
 	/**
 	 * Get the attribute methods for the given annotation type.
+	 *
+	 * 获取给定注解类型的属性方法。
+	 *
 	 * @param annotationType the annotation type
 	 * @return the attribute methods for the annotation type
 	 */
@@ -240,6 +243,10 @@ final class AttributeMethods {
 		return cache.computeIfAbsent(annotationType, AttributeMethods::compute);
 	}
 
+	/**
+	 * 通过 Class.getDeclaredMethods 获取到的注解属性的 Method 数组，
+	 * 在 AnnotationTypeMapping 中，所有的属性都通过它在 AttributeMethods 中的数组下标访问和调用。
+	 */
 	private static AttributeMethods compute(Class<? extends Annotation> annotationType) {
 		Method[] methods = annotationType.getDeclaredMethods();
 		int size = methods.length;

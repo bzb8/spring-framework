@@ -36,6 +36,8 @@ import org.springframework.util.StringUtils;
  * exposing them through the {@link org.springframework.core.type.ClassMetadata}
  * interface.
  *
+ * ASM 类访问者，它只查找类名和实现的类型，通过 {@link org.springframework.core.type.ClassMetadata} 接口公开它们。
+ *
  * @author Rod Johnson
  * @author Costin Leau
  * @author Mark Fisher

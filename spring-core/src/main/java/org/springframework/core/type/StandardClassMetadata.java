@@ -40,6 +40,9 @@ public class StandardClassMetadata implements ClassMetadata {
 
 	/**
 	 * Create a new StandardClassMetadata wrapper for the given Class.
+	 *
+	 * 为给定的类创建新的 StandardClassMetadata 包装器。
+	 *
 	 * @param introspectedClass the Class to introspect
 	 * @deprecated since 5.2 in favor of {@link StandardAnnotationMetadata}
 	 */

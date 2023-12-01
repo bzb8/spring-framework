@@ -35,6 +35,11 @@ package org.springframework.asm;
  * visitInnerClass} | {@code visitRecordComponent} | {@code visitField} | {@code visitMethod} )*
  * {@code visitEnd}.
  *
+ * 访问 Java 类的访客。此类的方法必须按以下顺序调用：
+ * {@code visit} [ {@code visitSource} ] [ {@code visitModule} ][ {@code visitNestHost} ][ {@code visitOuterClass} ]
+ * （ {@code visitAnnotation} |{@code visitTypeAnnotation} |{@code visitAttribute} ）（ {@code visitNestMember} |[ {@code visitPermittedSubclass} ]
+ * |{@code visitInnerClass} |{@code visitRecordComponent} |{@code visitField} |{@code visitMethod} ）{@code visitEnd}。
+ *
  * @author Eric Bruneton
  */
 public abstract class ClassVisitor {

@@ -242,12 +242,16 @@ public abstract class ClassUtils {
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
 	 * Furthermore, it is also capable of resolving nested class names in Java source
 	 * style (e.g. "java.lang.Thread.State" instead of "java.lang.Thread$State").
+	 *
 	 * 替换 {@code Class.forName（）}，它还返回基元（例如“int”）和数组类名（例如“String[]”）的类实例。
 	 * 此外，它还能够解析 Java 源代码样式中的嵌套类名（例如“java.lang.Thread.State”而不是“java.lang.Thread$State”）。
+	 *
 	 * @param name the name of the Class
 	 * @param classLoader the class loader to use
 	 * (may be {@code null}, which indicates the default class loader)
+	 *
 	 * 要使用的类装入器（可能是 {@code null}，表示缺省类装入器）
+	 *
 	 * @return a class instance for the supplied name
 	 * @throws ClassNotFoundException if the class was not found
 	 * @throws LinkageError if the class file could not be loaded

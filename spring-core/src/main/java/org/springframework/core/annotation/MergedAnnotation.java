@@ -71,6 +71,8 @@ public interface MergedAnnotation<A extends Annotation> {
 
 	/**
 	 * The attribute name for annotations with a single element.
+	 *
+	 * 具有单个元素的注解的属性名称。
 	 */
 	String VALUE = "value";
 
@@ -641,17 +643,22 @@ public interface MergedAnnotation<A extends Annotation> {
 	 * Adaptations that can be applied to attribute values when creating
 	 * {@linkplain MergedAnnotation#asMap(Adapt...) Maps} or
 	 * {@link MergedAnnotation#asAnnotationAttributes(Adapt...) AnnotationAttributes}.
+	 *
+	 * 创建 {@linkplain MergedAnnotation#asMap(Adapt...) 时可应用于属性值的适配Maps} 或 {@link MergedAnnotation#asAnnotationAttributes(Adapt...) AnnotationAttributes}。
 	 */
 	enum Adapt {
 
 		/**
 		 * Adapt class or class array attributes to strings.
+		 * 使类或类数组属性适应字符串。
 		 */
 		CLASS_TO_STRING,
 
 		/**
 		 * Adapt nested annotation or annotation arrays to maps rather
 		 * than synthesizing the values.
+		 *
+		 * 使嵌套注解或注解数组适应映射，而不是合成值。
 		 */
 		ANNOTATION_TO_MAP;
 

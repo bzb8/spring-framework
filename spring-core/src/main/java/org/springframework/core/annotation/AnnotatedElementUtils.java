@@ -34,15 +34,24 @@ import org.springframework.util.MultiValueMap;
  * General utility methods for finding annotations, meta-annotations, and
  * repeatable annotations on {@link AnnotatedElement AnnotatedElements}.
  *
+ * 用于在 {@link AnnotatedElement AnnotatedElements} 上查找注解、元注解和可重复注解的通用实用方法。
+ *
  * <p>{@code AnnotatedElementUtils} defines the public API for Spring's
  * meta-annotation programming model with support for <em>annotation attribute
  * overrides</em>. If you do not need support for annotation attribute
  * overrides, consider using {@link AnnotationUtils} instead.
  *
+ * {@code AnnotatedElementUtils} 定义了 Spring 元注解编程模型的公共 API，支持注解属性覆盖。如果不需要对注解属性覆盖的支持，请考虑改用 {@link AnnotationUtils}。
+ *
  * <p>Note that the features of this class are not provided by the JDK's
  * introspection facilities themselves.
  *
+ * 请注意，此类的功能不是由 JDK 的自省工具本身提供的。
+ *
  * <h3>Annotation Attribute Overrides</h3>
+ *
+ * 注解属性覆盖
+ *
  * <p>Support for meta-annotations with <em>attribute overrides</em> in
  * <em>composed annotations</em> is provided by all variants of the
  * {@code getMergedAnnotationAttributes()}, {@code getMergedAnnotation()},
@@ -52,17 +61,27 @@ import org.springframework.util.MultiValueMap;
  * methods.
  *
  * <h3>Find vs. Get Semantics</h3>
+ *
+ * 查找语义与获取语义
+ *
  * <p>The search algorithms used by methods in this class follow either
  * <em>find</em> or <em>get</em> semantics. Consult the javadocs for each
  * individual method for details on which search algorithm is used.
+ *
+ * 此类中的方法使用的搜索算法遵循find 或 get 语义。有关使用哪种搜索算法的详细信息，请参阅每种方法的 javadocs。
  *
  * <p><strong>Get semantics</strong> are limited to searching for annotations
  * that are either <em>present</em> on an {@code AnnotatedElement} (i.e. declared
  * locally or {@linkplain java.lang.annotation.Inherited inherited}) or declared
  * within the annotation hierarchy <em>above</em> the {@code AnnotatedElement}.
  *
+ * Get 语义仅限于搜索存在于 {@code AnnotatedElement} 上的注解（即在本地声明或 {@linkplain java.lang.annotation.Inherited inherited}）
+ * 或在 {@code AnnotatedElement} 上方的注解层次结构中声明的注解。
+ *
  * <p><strong>Find semantics</strong> are much more exhaustive, providing
  * <em>get semantics</em> plus support for the following:
+ *
+ * 查找语义更加详尽，提供 get 语义以及对以下内容的支持：
  *
  * <ul>
  * <li>Searching on interfaces, if the annotated element is a class
@@ -80,6 +99,10 @@ import org.springframework.util.MultiValueMap;
  * will completely ignore the presence of {@code @Inherited} since the <em>find</em>
  * search algorithm manually traverses type and method hierarchies and thereby
  * implicitly supports annotation inheritance without a need for {@code @Inherited}.
+ *
+ * get 语义之后的方法将遵循 Java 的 {@link java.lang.annotation.Inherited @Inherited} 注解的约定，但本地声明的注解（包括自定义组合注解）将优先于继承的注解。
+ * 相反，遵循 find 语义的方法将完全忽略 {@code @Inherited} 的存在，
+ * 因为find 搜索算法手动遍历类型和方法层次结构，因此隐式支持注释继承，而无需 {@code @Inherited}。
  *
  * @author Phillip Webb
  * @author Juergen Hoeller
@@ -639,6 +662,7 @@ public abstract class AnnotatedElementUtils {
 			return element.getDeclaredAnnotation(annotationType);
 		}
 		// Exhaustive retrieval of merged annotations...
+		// 详尽地检索合并的注解...
 		return findAnnotations(element)
 				.get(annotationType, null, MergedAnnotationSelectors.firstDirectlyDeclared())
 				.synthesize(MergedAnnotation::isPresent).orElse(null);

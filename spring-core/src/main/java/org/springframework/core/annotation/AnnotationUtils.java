@@ -45,8 +45,12 @@ import org.springframework.util.StringUtils;
  * bridge methods (which the compiler generates for generic declarations) as well
  * as super methods (for optional <em>annotation inheritance</em>).
  *
+ * 用于处理注解、处理元注解、桥接方法（编译器为泛型声明生成的方法）以及超级方法（用于可选注解继承）的通用实用方法。
+ *
  * <p>Note that most of the features of this class are not provided by the
  * JDK's introspection facilities themselves.
+ *
+ * 请注意，此类的大多数功能不是由 JDK 的自省工具本身提供的。
  *
  * <p>As a general rule for runtime-retained application annotations (e.g. for
  * transaction control, authorization, or service exposure), always use the
@@ -57,10 +61,19 @@ import org.springframework.util.StringUtils;
  * and a <em>find</em> lookup in the entire inheritance hierarchy of the given
  * method ({@link #findAnnotation(Method, Class)}).
  *
+ * 作为运行时保留的应用程序注解（例如，用于事务控制、授权或服务公开）的一般规则，请始终对此类使用查找方法（例如 {@link #findAnnotation(Method, Class)}
+ * 或 {@link #getAnnotation(Method, Class)}），而不是 JDK 中的普通注解查找方法。您仍然可以在仅对给定类级别的 get 查找 （{@link #getAnnotation(Method, Class)}）
+ * 和给定方法的整个继承层次结构 （{@link #findAnnotation(Method, Class)} ） 中的查找查找之间进行显式选择。
+ *
  * <h3>Terminology</h3>
+ *
+ * 术语
+ *
  * The terms <em>directly present</em>, <em>indirectly present</em>, and
  * <em>present</em> have the same meanings as defined in the class-level
  * javadoc for {@link AnnotatedElement} (in Java 8).
+ *
+ * 术语直接存在、间接存在和存在的含义与类级 javadoc 中为 {@link AnnotatedElement}（在 Java 8 中）中定义的含义相同。
  *
  * <p>An annotation is <em>meta-present</em> on an element if the annotation
  * is declared as a meta-annotation on some other annotation which is
@@ -68,24 +81,44 @@ import org.springframework.util.StringUtils;
  * on another annotation if {@code A} is either <em>directly present</em> or
  * <em>meta-present</em> on the other annotation.
  *
+ * 如果将注解声明为元素上存在的其他注解上的元注释，则注解是存在于元素上的。
+ * 如果 {@code A} 直接存在或元存在于另一个注解上，则注解 {@code A} 在另一个注解上是元存在的。
+ *
  * <h3>Meta-annotation Support</h3>
+ *
+ * 元注解支持
+ *
  * <p>Most {@code find*()} methods and some {@code get*()} methods in this class
  * provide support for finding annotations used as meta-annotations. Consult the
  * javadoc for each method in this class for details. For fine-grained support for
  * meta-annotations with <em>attribute overrides</em> in <em>composed annotations</em>,
  * consider using {@link AnnotatedElementUtils}'s more specific methods instead.
  *
+ * 此类中的大多数 {@code find*()} 方法和一些 {@code get*()} 方法都支持查找用作元注解的注解。有关详细信息，请参阅此类中每个方法的 javadoc。
+ * 若要在组合注释中使用属性覆盖的元注释提供细粒度支持，请考虑改用 {@link AnnotatedElementUtils} 的更具体的方法。
+ *
  * <h3>Attribute Aliases</h3>
+ *
+ * 属性别名
+ *
  * <p>All public methods in this class that return annotations, arrays of
  * annotations, or {@link AnnotationAttributes} transparently support attribute
  * aliases configured via {@link AliasFor @AliasFor}. Consult the various
  * {@code synthesizeAnnotation*(..)} methods for details.
  *
+ * 此类中返回注解、注解数组或 {@link AnnotationAttributes} 的所有公共方法都透明地支持通过 {@link AliasFor @AliasFor} 配置的属性别名。
+ * 有关详细信息，请参阅各种 {@code synthesizeAnnotation*(..)} 方法。
+ *
  * <h3>Search Scope</h3>
+ *
+ * 搜索范围
+ *
  * <p>The search algorithms used by methods in this class stop searching for
  * an annotation once the first annotation of the specified type has been
  * found. As a consequence, additional annotations of the specified type will
  * be silently ignored.
+ *
+ * 一旦找到指定类型的第一个注解，此类中的方法使用的搜索算法将停止搜索注解。因此，指定类型的其他注解将被静默忽略。
  *
  * @author Rob Harrop
  * @author Juergen Hoeller

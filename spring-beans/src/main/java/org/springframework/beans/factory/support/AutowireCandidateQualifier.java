@@ -92,6 +92,8 @@ public class AutowireCandidateQualifier extends BeanMetadataAttributeAccessor {
 	 * Retrieve the type name. This value will be the same as the
 	 * type name provided to the constructor or the fully-qualified
 	 * class name if a Class instance was provided to the constructor.
+	 *
+	 * 检索类型名称。此值将与提供给构造函数的类型名称或完全限定的类名称（如果向构造函数提供了类实例）相同。
 	 */
 	public String getTypeName() {
 		return this.typeName;

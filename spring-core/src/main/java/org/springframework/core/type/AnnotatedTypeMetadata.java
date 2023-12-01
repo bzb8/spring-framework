@@ -34,6 +34,10 @@ import org.springframework.util.MultiValueMap;
  * class-loading.
  *
  * 定义对特定类型（{@link AnnotationMetadata 类} 或 {@link MethodMetadata 方法}）的注解的访问，其形式不一定需要类加载。
+ * AnnotatedTypeMetadata 是 Spring Framework 中的一个接口，用于表示类或方法的注解元数据。它提供了一种方便的方式来检查和访问类或方法上的注解信息。
+ *
+ * 什么叫注解元素(AnnotatedElement)？比如我们常见的Class、Method、Constructor、Parameter等等都属于它的子类都属于注解元素。
+ * 简单理解：只要能在上面标注注解都属于这种元素。Spring4.0新增的这个接口提供了对注解统一的、便捷的访问，使用起来更加的方便高效了。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -50,6 +54,9 @@ public interface AnnotatedTypeMetadata {
 	/**
 	 * Return annotation details based on the direct annotations of the
 	 * underlying element.
+	 *
+	 * 根据基础元素的直接注解返回注解详细信息。·
+	 *
 	 * @return merged annotations based on the direct annotations
 	 * @since 5.2
 	 */
@@ -78,11 +85,16 @@ public interface AnnotatedTypeMetadata {
 	 * Retrieve the attributes of the annotation of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation),
 	 * also taking attribute overrides on composed annotations into account.
+	 *
+	 * 检索给定类型的注解的属性（如果有）（即，如果在基础元素上定义，则为直接注解或元注解），同时考虑组合注解的属性覆盖。
+	 *
 	 * @param annotationName the fully qualified class name of the annotation
-	 * type to look for
+	 * type to look for 要查找的注解类型的完全限定类名
 	 * @return a Map of attributes, with the attribute name as key (e.g. "value")
 	 * and the defined attribute value as Map value. This return value will be
 	 * {@code null} if no matching annotation is defined.
+	 *
+	 * 属性映射，属性名称为键（例如“值”），定义的属性值为映射值。如果未定义匹配的注解，则此返回值将为 {@code null}。
 	 */
 	@Nullable
 	default Map<String, Object> getAnnotationAttributes(String annotationName) {
@@ -93,14 +105,19 @@ public interface AnnotatedTypeMetadata {
 	 * Retrieve the attributes of the annotation of the given type, if any (i.e. if
 	 * defined on the underlying element, as direct annotation or meta-annotation),
 	 * also taking attribute overrides on composed annotations into account.
+	 *
+	 * 检索给定类型的注解的属性（如果有）（即，如果在基础元素上定义，则为直接注解或元注解），同时考虑组合注释的属性覆盖。
+	 *
 	 * @param annotationName the fully qualified class name of the annotation
 	 * type to look for
 	 * @param classValuesAsString whether to convert class references to String
 	 * class names for exposure as values in the returned Map, instead of Class
-	 * references which might potentially have to be loaded first
+	 * references which might potentially have to be loaded first 是否将类引用转换为 String 类名，以便在返回的 Map 中公开为值，而不是可能必须首先加载的类引用
 	 * @return a Map of attributes, with the attribute name as key (e.g. "value")
 	 * and the defined attribute value as Map value. This return value will be
 	 * {@code null} if no matching annotation is defined.
+	 *
+	 * 属性映射，属性名称为键（例如“值”），定义的属性值为映射值。如果未定义匹配的注解，则此返回值将为 {@code null}。
 	 */
 	@Nullable
 	default Map<String, Object> getAnnotationAttributes(String annotationName,
