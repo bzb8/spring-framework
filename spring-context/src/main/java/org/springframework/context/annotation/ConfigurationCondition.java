@@ -23,8 +23,8 @@ package org.springframework.context.annotation;
  * has already been registered might choose to only be evaluated during the
  * {@link ConfigurationPhase#REGISTER_BEAN REGISTER_BEAN} {@link ConfigurationPhase}.
  *
- * 一个 {@link Condition}，与 {@code @Configuration} 一起使用时提供更精细的控制。允许某些条件在根据配置阶段匹配时进行调整。
- * 例如，检查 Bean 是否已注册的条件可能会选择仅在 {@link ConfigurationPhase#REGISTER_BEAN REGISTER_BEAN} {@link ConfigurationPhase} 期间进行评估。
+ * 与 {@code @Configuration} 一起使用时提供更细粒度控制的 {@link Condition}。允许某些条件在基于配置阶段匹配时进行调整。
+ * 例如，检查 Bean 是否已注册的条件可能选择仅在 {@link ConfigurationPhase#REGISTER_BEAN REGISTER_BEAN} {@link ConfigurationPhase} 期间进行评估。
  *
  * @author Phillip Webb
  * @since 4.0
@@ -40,6 +40,7 @@ public interface ConfigurationCondition extends Condition {
 
 	/**
 	 * The various configuration phases where the condition could be evaluated.
+	 * 可以评估条件的各个配置阶段。
 	 */
 	enum ConfigurationPhase {
 
@@ -48,6 +49,9 @@ public interface ConfigurationCondition extends Condition {
 		 * class is being parsed.
 		 * <p>If the condition does not match at this point, the {@code @Configuration}
 		 * class will not be added.
+		 *
+		 * {@link Condition} 应在解析 {@code @Configuration} 类时进行评估。
+		 * 如果此时条件不匹配，则不会添加 {@code @Configuration} 类。
 		 */
 		PARSE_CONFIGURATION,
 
@@ -57,6 +61,9 @@ public interface ConfigurationCondition extends Condition {
 		 * {@code @Configuration} classes from being added.
 		 * <p>At the time that the condition is evaluated, all {@code @Configuration}
 		 * classes will have been parsed.
+		 *
+		 * 添加常规（非 {@code @Configuration}）bean 时应评估 {@link Condition}。
+		 * 该条件不会阻止添加 {@code @Configuration} 类。 在评估条件时，所有 {@code @Configuration} 类都将被解析。
 		 */
 		REGISTER_BEAN
 	}

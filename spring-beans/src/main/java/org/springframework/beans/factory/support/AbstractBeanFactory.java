@@ -1550,6 +1550,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Remove the merged bean definition for the specified bean,
 	 * recreating it on next access.
+	 *
+	 * 删除指定 bean 的合并 bean 定义，并在下次访问时重新创建它。
+	 *
 	 * @param beanName the bean name to clear the merged definition for
 	 */
 	protected void clearMergedBeanDefinition(String beanName) {
@@ -1919,6 +1922,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Check whether this factory's bean creation phase already started,
 	 * i.e. whether any bean has been marked as created in the meantime.
+	 *
+	 * 检查该工厂的 bean 创建阶段是否已经开始，即是否有任何 bean 已同时标记为已创建。
+	 *
 	 * @since 4.2.2
 	 * @see #markBeanAsCreated
 	 */

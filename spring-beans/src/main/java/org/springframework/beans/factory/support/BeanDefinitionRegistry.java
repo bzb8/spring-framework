@@ -85,7 +85,7 @@ public interface BeanDefinitionRegistry extends AliasRegistry {
 
 	/**
 	 * Check if this registry contains a bean definition with the given name.
-	 * @param beanName the name of the bean to look for
+	 * @param beanName the name of the bean to look for 要查找的 bean 的名称
 	 * @return if this registry contains a bean definition with the given name
 	 */
 	boolean containsBeanDefinition(String beanName);

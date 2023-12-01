@@ -16,5 +16,6 @@ public class Main {
 		AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
 		BzbService bzbService = annotationConfigApplicationContext.getBean(BzbService.class);
 		System.out.println(bzbService);
+		Class<Main> mainClass = Main.class;
 	}
 }

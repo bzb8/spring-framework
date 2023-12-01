@@ -1035,6 +1035,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			else if (existingDefinition.getRole() < beanDefinition.getRole()) {
 				// e.g. was ROLE_APPLICATION, now overriding with ROLE_SUPPORT or ROLE_INFRASTRUCTURE
+				// 例如是 ROLE_APPLICATION，现在用 ROLE_SUPPORT 或 ROLE_INFRASTRUCTURE 覆盖
 				if (logger.isInfoEnabled()) {
 					logger.info("Overriding user-defined bean definition for bean '" + beanName +
 							"' with a framework-generated bean definition: replacing [" +
@@ -1122,6 +1123,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * triggering {@link #clearMergedBeanDefinition}, {@link #destroySingleton}
 	 * and {@link MergedBeanDefinitionPostProcessor#resetBeanDefinition} on the
 	 * given bean and on all bean definitions that have the given bean as parent.
+	 *
+	 * 重置给定 bean 的所有 bean 定义缓存，包括从其派生的 bean 的缓存。
+	 * >在替换或删除现有 bean 定义后调用，触发给定 bean 以及以给定 bean 作为父级的所有 bean 定义上的 {@link #clearMergedBeanDefinition}、
+	 * {@link #destroySingleton} 和 {@link MergedBeanDefinitionPostProcessor#resetBeanDefinition}。
+	 *
 	 * @param beanName the name of the bean to reset
 	 * @see #registerBeanDefinition
 	 * @see #removeBeanDefinition
