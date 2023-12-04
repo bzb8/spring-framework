@@ -79,6 +79,7 @@ public interface MergedAnnotation<A extends Annotation> {
 
 	/**
 	 * Get the {@code Class} reference for the actual annotation type.
+	 * 获取实际注解类型的 {@code Class} 引用。
 	 * @return the annotation type
 	 */
 	Class<A> getType();

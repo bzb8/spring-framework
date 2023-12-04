@@ -43,7 +43,7 @@ class FlightRecorderStartupStep implements StartupStep {
 			Consumer<FlightRecorderStartupStep> recordingCallback) {
 
 		this.event = new FlightRecorderStartupEvent(id, name, parentId);
-		this.event.begin();
+		//this.event.begin();
 		this.recordingCallback = recordingCallback;
 	}
 
@@ -82,15 +82,15 @@ class FlightRecorderStartupStep implements StartupStep {
 
 	@Override
 	public void end() {
-		this.event.end();
-		if (this.event.shouldCommit()) {
-			StringBuilder builder = new StringBuilder();
-			this.tags.forEach(tag ->
-					builder.append(tag.getKey()).append('=').append(tag.getValue()).append(',')
-			);
-			this.event.setTags(builder.toString());
-		}
-		this.event.commit();
+		//this.event.end();
+		//if (this.event.shouldCommit()) {
+		//	StringBuilder builder = new StringBuilder();
+		//	this.tags.forEach(tag ->
+		//			builder.append(tag.getKey()).append('=').append(tag.getValue()).append(',')
+		//	);
+		//	this.event.setTags(builder.toString());
+		//}
+		//this.event.commit();
 		this.recordingCallback.accept(this);
 	}
 

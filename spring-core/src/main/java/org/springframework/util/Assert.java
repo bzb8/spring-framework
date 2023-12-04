@@ -67,6 +67,10 @@ public abstract class Assert {
 	 * <p>Call {@link #isTrue} if you wish to throw an {@code IllegalArgumentException}
 	 * on an assertion failure.
 	 * <pre class="code">Assert.state(id == null, "The id property must not already be initialized");</pre>
+	 *
+	 * 断言布尔表达式， IllegalStateException 如果表达式的计算结果为 false。
+	 * 如果您希望抛出断言IllegalArgumentException失败，请调用isTrue。
+	 *
 	 * @param expression a boolean expression
 	 * @param message the exception message to use if the assertion fails
 	 * @throws IllegalStateException if {@code expression} is {@code false}

@@ -244,8 +244,11 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	/**
 	 * Get a matching annotation or meta-annotation of the specified type, or
 	 * {@link MergedAnnotation#missing()} if none is present.
+	 *
+	 * 获取指定类型的匹配注解或元注解，如果不存在，则获取 {@link MergedAnnotation#missing()}。
+	 *
 	 * @param annotationType the fully qualified class name of the annotation type
-	 * to get
+	 * to get 要获取的注解类型的完全限定类名
 	 * @param predicate a predicate that must match, or {@code null} if only
 	 * type matching is required
 	 * @param selector a selector used to choose the most appropriate annotation

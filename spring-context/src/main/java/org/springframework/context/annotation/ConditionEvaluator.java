@@ -161,10 +161,12 @@ class ConditionEvaluator {
 				@Nullable Environment environment, @Nullable ResourceLoader resourceLoader) {
 
 			this.registry = registry;
-			// 推断BeanFactory
+			// 推断BeanFactory org.springframework.beans.factory.support.DefaultListableBeanFactory
 			this.beanFactory = deduceBeanFactory(registry);
 			this.environment = (environment != null ? environment : deduceEnvironment(registry));
+			// AnnotationConfigApplicationContext
 			this.resourceLoader = (resourceLoader != null ? resourceLoader : deduceResourceLoader(registry));
+			// Launcher$AppClassLoader
 			this.classLoader = deduceClassLoader(resourceLoader, this.beanFactory);
 		}
 
@@ -173,7 +175,7 @@ class ConditionEvaluator {
 			if (source instanceof ConfigurableListableBeanFactory) {
 				return (ConfigurableListableBeanFactory) source;
 			}
-			if (source instanceof ConfigurableApplicationContext) {
+			if (source instanceof ConfigurableApplicationContext) { // true
 				return (((ConfigurableApplicationContext) source).getBeanFactory());
 			}
 			return null;

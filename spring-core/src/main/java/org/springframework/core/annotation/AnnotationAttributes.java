@@ -447,7 +447,7 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * to the {@link #AnnotationAttributes(Map)} constructor.
 	 *
 	 * 根据给定的映射返回 {@link AnnotationAttributes} 实例。
-	 *如果映射已经是 {@code AnnotationAttributes} 实例，则它将被强制转换并立即返回，而无需创建新实例。否则，将通过将提供的映射传递给 {@link AnnotationAttributes（Map）} 构造函数来创建新实例。
+	 * 如果映射已经是 {@code AnnotationAttributes} 实例，则它将被强制转换并立即返回，而无需创建新实例。否则，将通过将提供的映射传递给 {@link AnnotationAttributes（Map）} 构造函数来创建新实例。
 	 *
 	 * @param map original source of annotation attribute <em>key-value</em> pairs
 	 */

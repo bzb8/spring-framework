@@ -980,6 +980,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Get the class name without the qualified package name.
+	 * 获取不带限定包名称的类名。
 	 * @param className the className to get the short name for
 	 * @return the class name of the class without the package name
 	 * @throws IllegalArgumentException if the className is empty
@@ -991,7 +992,9 @@ public abstract class ClassUtils {
 		if (nameEndIndex == -1) {
 			nameEndIndex = className.length();
 		}
+		// 截取最后一个.和$$之间的字符串
 		String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+		// $替换为.
 		shortName = shortName.replace(NESTED_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
 		return shortName;
 	}
