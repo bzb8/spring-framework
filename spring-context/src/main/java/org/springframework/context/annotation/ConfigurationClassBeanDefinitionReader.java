@@ -61,9 +61,13 @@ import org.springframework.util.StringUtils;
  * Reads a given fully-populated set of ConfigurationClass instances, registering bean
  * definitions with the given {@link BeanDefinitionRegistry} based on its contents.
  *
+ * 读取一组给定的完全填充的 ConfigurationClass 实例，并根据其内容向给定的 {@link BeanDefinitionRegistry} 注册 Bean 定义。
+ *
  * <p>This class was modeled after the {@link BeanDefinitionReader} hierarchy, but does
  * not implement/extend any of its artifacts as a set of configuration classes is not a
  * {@link Resource}.
+ *
+ * 此类是按照 {@link BeanDefinitionReader} 层次结构建模的，但未实现扩展其任何工件，因为一组配置类不是 {@link Resource}。
  *
  * @author Chris Beams
  * @author Juergen Hoeller

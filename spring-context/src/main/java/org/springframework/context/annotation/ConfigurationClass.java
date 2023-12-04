@@ -39,6 +39,9 @@ import org.springframework.util.ClassUtils;
  * <p>Includes a set of {@link Bean} methods, including all such methods
  * defined in the ancestry of the class, in a 'flattened-out' manner.
  *
+ * 表示用户定义的 {@link Configuration @Configuration} 类。
+ * 包括一组 {@link Bean} 方法，包括在类的祖先中定义的所有此类方法，以“扁平化”方式定义。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Phillip Webb
@@ -124,8 +127,8 @@ final class ConfigurationClass {
 
 	/**
 	 * Create a new {@link ConfigurationClass} with the given name.
-	 * @param metadata the metadata for the underlying class to represent
-	 * @param beanName name of the {@code @Configuration} class bean
+	 * @param metadata the metadata for the underlying class to represent 要表示的基础类的元数据
+	 * @param beanName name of the {@code @Configuration} class bean {@code @Configuration} 类 Bean 的 AME
 	 * @see ConfigurationClass#ConfigurationClass(Class, ConfigurationClass)
 	 */
 	ConfigurationClass(AnnotationMetadata metadata, String beanName) {
@@ -160,8 +163,13 @@ final class ConfigurationClass {
 	/**
 	 * Return whether this configuration class was registered via @{@link Import} or
 	 * automatically registered due to being nested within another configuration class.
+	 *
+	 * 返回此配置类是通过 @{@link Import} 注册的，还是由于嵌套在另一个配置类中而自动注册的。
+	 *
 	 * @since 3.1.1
 	 * @see #getImportedBy()
+	 *
+	 *
 	 */
 	public boolean isImported() {
 		return !this.importedBy.isEmpty();

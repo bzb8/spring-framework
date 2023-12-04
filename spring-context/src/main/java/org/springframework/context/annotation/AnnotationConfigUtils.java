@@ -45,6 +45,10 @@ import org.springframework.util.ClassUtils;
  * definitions for annotation-based configuration. Also registers a common
  * {@link org.springframework.beans.factory.support.AutowireCandidateResolver}.
  *
+ * 实用程序类，允许方便地注册基于注解的配置的通用 {@link org.springframework.beans.factory.config.BeanPostProcessor} 和
+ * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor} 定义。
+ * 还注册了一个通用的{@link org.springframework.beans.factory.support.AutowireCandidateResolver}。
+ *
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -71,6 +75,11 @@ public abstract class AnnotationConfigUtils {
 	 * and {@code AnnotationConfigWebApplicationContext} during bootstrap in order to make
 	 * any custom name generation strategy available to the underlying
 	 * {@link ConfigurationClassPostProcessor}.
+	 *
+	 * 内部管理的 BeanNameGenerator 的 BeanNameGenerator 的 Bean 名称，用于处理 {@link Configuration} 类。
+	 * 在引导期间由 {@link AnnotationConfigApplicationContext} 和 {@code AnnotationConfigWebApplicationContext} 设置，
+	 * 以便使任何自定义名称生成策略可用于基础 {@link ConfigurationClassPostProcessor}。
+	 *
 	 * @since 3.1.1
 	 */
 	public static final String CONFIGURATION_BEAN_NAME_GENERATOR =
@@ -308,9 +317,11 @@ public abstract class AnnotationConfigUtils {
 		Set<AnnotationAttributes> result = new LinkedHashSet<>();
 
 		// Direct annotation present?
+		// 存在直接注解？
 		addAttributesIfNotNull(result, metadata.getAnnotationAttributes(annotationClassName));
 
 		// Container annotation present?
+		// 存在容器注解？
 		Map<String, Object> container = metadata.getAnnotationAttributes(containerClassName);
 		if (container != null && container.containsKey("value")) {
 			for (Map<String, Object> containedAttributes : (Map<String, Object>[]) container.get("value")) {

@@ -37,6 +37,8 @@ import org.springframework.util.Assert;
  * Common delegate code for the handling of parser strategies, e.g.
  * {@code TypeFilter}, {@code ImportSelector}, {@code ImportBeanDefinitionRegistrar}
  *
+ * 用于处理解析器策略的通用委托代码，例如 {@code TypeFilter}、{@code ImportSelector}、{@code ImportBeanDefinitionRegistrar}
+ *
  * @author Juergen Hoeller
  * @author Phillip Webb
  * @since 4.3.3
@@ -49,6 +51,10 @@ abstract class ParserStrategyUtils {
 	 * have {@link BeanClassLoaderAware}, {@link BeanFactoryAware},
 	 * {@link EnvironmentAware}, and {@link ResourceLoaderAware} contracts
 	 * invoked if they are implemented by the given object.
+	 *
+	 * 使用适当的构造函数实例化类，并将新实例作为指定的可分配类型返回。如果返回的实例由给定对象实现，
+	 * 则将调用 {@link BeanClassLoaderAware}、{@link BeanFactoryAware}、{@link EnvironmentAware} 和 {@link ResourceLoaderAware} 合约。
+	 *
 	 * @since 5.2
 	 */
 	@SuppressWarnings("unchecked")
@@ -56,6 +62,7 @@ abstract class ParserStrategyUtils {
 			ResourceLoader resourceLoader, BeanDefinitionRegistry registry) {
 
 		Assert.notNull(clazz, "Class must not be null");
+		// clazz是assignableTo的本身或子类
 		Assert.isAssignable(assignableTo, clazz);
 		if (clazz.isInterface()) {
 			throw new BeanInstantiationException(clazz, "Specified class is an interface");

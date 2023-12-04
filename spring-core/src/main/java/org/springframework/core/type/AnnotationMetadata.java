@@ -48,6 +48,9 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	/**
 	 * Get the fully qualified class names of all annotation types that
 	 * are <em>present</em> on the underlying class.
+	 *
+	 * 获取基础类上存在的所有注解类型的完全限定类名。
+	 *
 	 * @return the annotation type names
 	 */
 	default Set<String> getAnnotationTypes() {
@@ -117,13 +120,14 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	 * return {@code true} for the given annotation type.
 	 *
 	 * 检索使用给定注解类型进行注解（或元注解）的所有方法的方法元数据。
-	 * <p>对于任何返回的方法，{@link MethodMetadata#isAnnotated} 将为给定的注解类型返回 {@code true}。
+	 * 对于任何返回的方法，{@link MethodMetadata#isAnnotated} 将为给定的注解类型返回 {@code true}。
 	 *
 	 * @param annotationName the fully qualified class name of the annotation
 	 * type to look for
 	 * @return a set of {@link MethodMetadata} for methods that have a matching
 	 * annotation. The return value will be an empty set if no methods match
 	 * the annotation type.
+	 * 一组 {@link MethodMetadata}，用于具有匹配注解的方法。如果没有与注解类型匹配的方法，则返回值将为空集。
 	 */
 	Set<MethodMetadata> getAnnotatedMethods(String annotationName);
 

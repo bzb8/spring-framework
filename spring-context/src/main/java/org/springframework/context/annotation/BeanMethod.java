@@ -25,6 +25,8 @@ import org.springframework.lang.Nullable;
  * Represents a {@link Configuration @Configuration} class method annotated with
  * {@link Bean @Bean}.
  *
+ * 表示用 {@link Bean @Bean} 注解的 {@link Configuration @Configuration} 类方法。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Sam Brannen

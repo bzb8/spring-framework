@@ -37,6 +37,8 @@ import org.springframework.util.StringUtils;
 /**
  * Parser for the @{@link ComponentScan} annotation.
  *
+ * @{@link ComponentScan} 注解的解析器。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -69,6 +71,7 @@ class ComponentScanAnnotationParser {
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
 
+		// 解析nameGenerator
 		Class<? extends BeanNameGenerator> generatorClass = componentScan.getClass("nameGenerator");
 		boolean useInheritedGenerator = (BeanNameGenerator.class == generatorClass);
 		scanner.setBeanNameGenerator(useInheritedGenerator ? this.beanNameGenerator :
@@ -83,8 +86,10 @@ class ComponentScanAnnotationParser {
 			scanner.setScopeMetadataResolver(BeanUtils.instantiateClass(resolverClass));
 		}
 
+		// 解析resourcePattern
 		scanner.setResourcePattern(componentScan.getString("resourcePattern"));
 
+		// 解析并实例化includeFilters对象
 		for (AnnotationAttributes includeFilterAttributes : componentScan.getAnnotationArray("includeFilters")) {
 			List<TypeFilter> typeFilters = TypeFilterUtils.createTypeFiltersFor(includeFilterAttributes, this.environment,
 					this.resourceLoader, this.registry);
@@ -92,6 +97,7 @@ class ComponentScanAnnotationParser {
 				scanner.addIncludeFilter(typeFilter);
 			}
 		}
+
 		for (AnnotationAttributes excludeFilterAttributes : componentScan.getAnnotationArray("excludeFilters")) {
 			List<TypeFilter> typeFilters = TypeFilterUtils.createTypeFiltersFor(excludeFilterAttributes, this.environment,
 				this.resourceLoader, this.registry);
@@ -112,19 +118,25 @@ class ComponentScanAnnotationParser {
 					ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
 			Collections.addAll(basePackages, tokenized);
 		}
+
+		// 类的包名作为basePackage
 		for (Class<?> clazz : componentScan.getClassArray("basePackageClasses")) {
 			basePackages.add(ClassUtils.getPackageName(clazz));
 		}
+
+		// 如果basePackages为空，则为声明类的包名
 		if (basePackages.isEmpty()) {
 			basePackages.add(ClassUtils.getPackageName(declaringClass));
 		}
 
+		// 添加AbstractTypeHierarchyTraversingFilter过滤器，过滤className和声明类相同的类
 		scanner.addExcludeFilter(new AbstractTypeHierarchyTraversingFilter(false, false) {
 			@Override
 			protected boolean matchClassName(String className) {
 				return declaringClass.equals(className);
 			}
 		});
+
 		return scanner.doScan(StringUtils.toStringArray(basePackages));
 	}
 

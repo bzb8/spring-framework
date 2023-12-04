@@ -132,6 +132,9 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * certain user-defined property sources have search precedence over default property
 	 * sources such as the set of system properties or the set of system environment
 	 * variables.
+	 *
+	 * 以可变形式返回此 {@code Environment} 的 {@link PropertySources}，允许操作在针对此 {@code Environment} 对象解析属性时应搜索的 {@link PropertySource} 对象集。各种 {@link MutablePropertySources} 方法（如 {@link MutablePropertySourcesaddFirst addFirst}、{@link MutablePropertySourcesaddLast addLast}、{@link MutablePropertySourcesaddBefore addBefore} 和 {@link MutablePropertySourcesaddAfter addAfter} 允许对属性源排序进行精细控制。例如，这在确保某些用户定义的属性源优先于默认属性源（如系统属性集或系统环境变量集）时非常有用。
+	 *
 	 * @see AbstractEnvironment#customizePropertySources
 	 */
 	MutablePropertySources getPropertySources();

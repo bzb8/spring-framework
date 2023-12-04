@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
  * {@link org.springframework.core.type.AnnotationMetadata} implementations.
  *
  * {@link LinkedHashMap} 子类，表示由 {@link AnnotationUtils}、
- * {@link <em><em> AnnotatedElementUtils} 以及 Spring 的基于 reflection 和 ASM 的 {@link org.springframework.core.type.AnnotationMetadata} 实现读取的注解属性键值对。
+ * {@link AnnotatedElementUtils} 以及 Spring 的基于 reflection 和 ASM 的 {@link org.springframework.core.type.AnnotationMetadata} 实现读取的注解属性键值对。
  *
  * <p>Provides 'pseudo-reification' to avoid noisy Map generics in the calling
  * code as well as convenience methods for looking up annotation attributes
@@ -266,6 +266,10 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * array of classes.
 	 * <p>If the value stored under the specified {@code attributeName} is a class,
 	 * it will be wrapped in a single-element array before returning it.
+	 *
+	 * 获取存储在指定 {@code attributeName} 下的值作为类数组。
+	 * 如果存储在指定 {@code attributeName} 下的值是一个类，则在返回之前，它将被包装在单元素数组中。
+	 *
 	 * @param attributeName the name of the attribute to get;
 	 * never {@code null} or empty
 	 * @return the value
@@ -314,6 +318,11 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * a single-element array before returning it.
 	 * <p>Note: if you expect an actual array of annotations, invoke
 	 * {@link #getAnnotationArray(String, Class)} instead.
+	 *
+	 * 获取存储在指定 {@code attributeName} 下的 {@link AnnotationAttributes} 数组。
+	 * 如果存储在指定 {@code attributeName} 下的值是 {@code AnnotationAttributes} 的实例，则在返回之前，它将被包装在单元素数组中。
+	 * 注意：如果您需要实际的注解数组，请改为调用 {@link #getAnnotationArray(String, Class)}。
+	 *
 	 * @param attributeName the name of the attribute to get;
 	 * never {@code null} or empty
 	 * @return the array of {@code AnnotationAttributes}

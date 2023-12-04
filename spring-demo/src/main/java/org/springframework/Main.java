@@ -17,5 +17,7 @@ public class Main {
 		BzbService bzbService = annotationConfigApplicationContext.getBean(BzbService.class);
 		System.out.println(bzbService);
 		Class<Main> mainClass = Main.class;
+
+		System.out.println(Main.class.getName());
 	}
 }

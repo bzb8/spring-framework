@@ -35,16 +35,24 @@ import org.springframework.util.ClassUtils;
 /**
  * Convenient proxy factory bean for scoped objects.
  *
+ * 方便的用于作用域对象的代理工厂 bean。
+ *
  * <p>Proxies created using this factory bean are thread-safe singletons
  * and may be injected into shared objects, with transparent scoping behavior.
+ *
+ * 使用此工厂 Bean 创建的代理是线程安全的单例，可以注入到共享对象中，具有透明的作用域行为。
  *
  * <p>Proxies returned by this class implement the {@link ScopedObject} interface.
  * This presently allows for removing the corresponding object from the scope,
  * seamlessly creating a new instance in the scope on next access.
  *
+ * 此类返回的代理实现 {@link ScopedObject} 接口。目前，这允许从作用域中删除相应的对象，从而在下次访问时在作用域中无缝地创建新实例。
+ *
  * <p>Please note that the proxies created by this factory are
  * <i>class-based</i> proxies by default. This can be customized
  * through switching the "proxyTargetClass" property to "false".
+ *
+ * 请注意，默认情况下，此工厂创建的代理是基于类的代理。这可以通过将“proxyTargetClass”属性切换为“false”来自定义。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

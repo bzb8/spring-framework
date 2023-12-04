@@ -103,10 +103,14 @@ public abstract class MergedAnnotationPredicates {
 	 * annotations that are unique based on the extracted key. For example
 	 * {@code MergedAnnotationPredicates.unique(MergedAnnotation::getType)} will
 	 * match the first time a unique type is encountered.
+	 *
+	 * 创建一个新的有状态的一次性使用 {@link Predicate}，它与基于提取的键的唯一注解匹配。
+	 * 例如，{@code MergedAnnotationPredicates.unique(MergedAnnotation::getType)} 将在第一次遇到唯一类型时匹配。
+	 *
 	 * @param keyExtractor function used to extract the key used to test for
-	 * uniqueness
+	 * uniqueness 用于提取用于测试唯一性的密钥的函数
 	 * @return a {@link Predicate} that matches a unique annotation based on the
-	 * extracted key
+	 * extracted key 一个 {@link Predicate}，它根据提取的键匹配唯一注解
 	 */
 	public static <A extends Annotation, K> Predicate<MergedAnnotation<A>> unique(
 			Function<? super MergedAnnotation<A>, K> keyExtractor) {

@@ -59,6 +59,9 @@ public class ScannedGenericBeanDefinition extends GenericBeanDefinition implemen
 	/**
 	 * Create a new ScannedGenericBeanDefinition for the class that the
 	 * given MetadataReader describes.
+	 *
+	 * 为给定的 MetadataReader 描述的类创建新的 ScannedGenericBeanDefinition。
+	 *
 	 * @param metadataReader the MetadataReader for the scanned target class
 	 */
 	public ScannedGenericBeanDefinition(MetadataReader metadataReader) {

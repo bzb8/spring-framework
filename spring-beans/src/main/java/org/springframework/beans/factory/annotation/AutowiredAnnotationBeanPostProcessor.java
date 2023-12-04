@@ -80,8 +80,13 @@ import org.springframework.util.StringUtils;
  * by default, Spring's {@link Autowired @Autowired} and {@link Value @Value}
  * annotations.
  *
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor BeanPostProcessor} 实现，用于自动注入带注解的字段、setter 方法和任意配置方法。
+ * 要注入的此类成员是通过注解来检测的：默认情况下，Spring 的 {@link Autowired @Autowired} 和 {@link Value @Value} 注解。
+ *
  * <p>Also supports JSR-330's {@link javax.inject.Inject @Inject} annotation,
  * if available, as a direct alternative to Spring's own {@code @Autowired}.
+ *
+ * 还支持 JSR-330 的 {@link javax.inject.Inject @Inject} 注解（如果可用），作为 Spring 自己的 {@code @Autowired} 的直接替代品。
  *
  * <h3>Autowired Constructors</h3>
  * <p>Only one constructor of any given bean class may declare this annotation with
@@ -95,6 +100,11 @@ import org.springframework.util.StringUtils;
  * then a primary/default constructor (if present) will be used. If a class only
  * declares a single constructor to begin with, it will always be used, even if not
  * annotated. An annotated constructor does not have to be public.
+ *
+ * 任何给定 bean 类的一个构造函数都可以声明此注解，并将 'required' 属性设置为 {@code true}，指示构造函数在用作 Spring Bean 时自动注入。
+ * 此外，如果“required”属性设置为 {@code true}，则只能使用 {@code @Autowired} 注释单个构造函数。如果多个非必需的构造函数声明了注解，则它们将被视为自动注解的候选项。
+ * 将选择具有最多依赖项的构造函数，这些构造函数可以通过匹配 Spring 容器中的 bean 来满足。如果不能满足任何候选者，则将使用 primary/default 构造函数（如果存在）。
+ * 如果一个类一开始只声明一个构造函数，那么即使没有注释，它也将始终被使用。带注解的构造函数不必是公共的。
  *
  * <h3>Autowired Fields</h3>
  * <p>Fields are injected right after construction of a bean, before any
@@ -112,9 +122,14 @@ import org.springframework.util.StringUtils;
  * Remove or turn off the default annotation configuration there if you intend
  * to specify a custom {@code AutowiredAnnotationBeanPostProcessor} bean definition.
  *
+ * 默认的 {@code AutowiredAnnotationBeanPostProcessor} 将由 "context:annotation-config" and "context:component-scan" XML 标记注册。
+ * 如果您打算指定自定义 {@code AutowiredAnnotationBeanPostProcessor} bean 定义，请删除或关闭那里的缺省注解配置。
+ *
  * <p><b>NOTE:</b> Annotation injection will be performed <i>before</i> XML injection;
  * thus the latter configuration will override the former for properties wired through
  * both approaches.
+ *
+ * 注意：注解注入将在 XML 注入之前执行;因此，对于通过这两种方法连接的属性，后一种配置将覆盖前一种配置
  *
  * <h3>{@literal @}Lookup Methods</h3>
  * <p>In addition to regular injection points as discussed above, this post-processor
@@ -122,6 +137,9 @@ import org.springframework.util.StringUtils;
  * methods to be replaced by the container at runtime. This is essentially a type-safe
  * version of {@code getBean(Class, args)} and {@code getBean(String, args)}.
  * See {@link Lookup @Lookup's javadoc} for details.
+ *
+ * 除了上面讨论的常规注入点之外，这个后处理器还处理 Spring 的 {@link Lookup @Lookup} 注解，该注解标识要在运行时被容器替换的查找方法。
+ * 这实质上是 {@code getBean(Class, args)} 和 {@code getBean(String, args)} 的类型安全版本。有关详细信息，请参阅 {@link Lookup @Lookup's javadoc}。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher

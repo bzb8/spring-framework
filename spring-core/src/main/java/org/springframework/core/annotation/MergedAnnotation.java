@@ -170,6 +170,10 @@ public interface MergedAnnotation<A extends Annotation> {
 	 * Get the complete list of annotation types within the annotation hierarchy
 	 * from this annotation to the {@link #getRoot() root}.
 	 * <p>Provides a useful way to uniquely identify a merged annotation instance.
+	 *
+	 * 获取从此注解到 {@link #getRoot() root} 的注解层次结构中注解类型的完整列表。
+	 * 提供唯一标识合并注释实例的有用方法。
+	 *
 	 * @return the meta types for the annotation
 	 * @see MergedAnnotationPredicates#unique(Function)
 	 * @see #getRoot()
@@ -456,6 +460,10 @@ public interface MergedAnnotation<A extends Annotation> {
 	 * <p>Methods from this view will return attribute values with only alias mirroring
 	 * rules applied. Aliases to {@link #getMetaSource() meta-source} attributes will
 	 * not be applied.
+	 *
+	 * 创建注解的新视图，以显示未合并的属性值。
+	 * 此视图中的方法将返回仅应用别名镜像规则的属性值。
+	 * {@link #getMetaSource() meta-source} 属性的别名将不会被应用。
 	 * @return a non-merged view of the annotation
 	 */
 	MergedAnnotation<A> withNonMergedAttributes();
@@ -465,7 +473,14 @@ public interface MergedAnnotation<A extends Annotation> {
 	 * merged annotation.
 	 * <p>The {@link Adapt adaptations} may be used to change the way that values
 	 * are added.
+	 *
+	 * 从这个合并的注解创建一个新的可变 {@link AnnotationAttributes} 实例。
+	 * {@link Adapt adaptations} 可用于更改添加值的方式。
+	 *
 	 * @param adaptations the adaptations that should be applied to the annotation values
+	 *
+	 * 应用于注释值的适配
+	 *
 	 * @return an immutable map containing the attributes and values
 	 */
 	AnnotationAttributes asAnnotationAttributes(Adapt... adaptations);
@@ -673,6 +688,9 @@ public interface MergedAnnotation<A extends Annotation> {
 
 		/**
 		 * Factory method to create an {@link Adapt} array from a set of boolean flags.
+		 *
+		 * 从一组布尔标志创建 {@link Adapt} 数组的工厂方法。
+		 *
 		 * @param classToString if {@link Adapt#CLASS_TO_STRING} is included
 		 * @param annotationsToMap if {@link Adapt#ANNOTATION_TO_MAP} is included
 		 * @return a new {@link Adapt} array

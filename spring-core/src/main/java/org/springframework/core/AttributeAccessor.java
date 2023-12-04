@@ -47,6 +47,10 @@ public interface AttributeAccessor {
 	/**
 	 * Get the value of the attribute identified by {@code name}.
 	 * <p>Return {@code null} if the attribute doesn't exist.
+	 *
+	 * 获取由 {@code name} 标识的属性的值。
+	 * 如果属性不存在，则返回 {@code null}。
+	 *
 	 * @param name the unique attribute key
 	 * @return the current value of the attribute, if any
 	 */

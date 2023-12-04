@@ -33,18 +33,27 @@ public enum FilterType {
 
 	/**
 	 * Filter candidates marked with a given annotation.
+	 *
+	 * 筛选标有给定注解的候选项。
+	 *
 	 * @see org.springframework.core.type.filter.AnnotationTypeFilter
 	 */
 	ANNOTATION,
 
 	/**
 	 * Filter candidates assignable to a given type.
+	 *
+	 * 筛选可分配给给定类型的候选者。
+	 *
 	 * @see org.springframework.core.type.filter.AssignableTypeFilter
 	 */
 	ASSIGNABLE_TYPE,
 
 	/**
 	 * Filter candidates matching a given AspectJ type pattern expression.
+	 *
+	 * 筛选与给定 AspectJ 类型模式表达式匹配的候选对象。
+	 *
 	 * @see org.springframework.core.type.filter.AspectJTypeFilter
 	 */
 	ASPECTJ,

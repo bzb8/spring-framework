@@ -38,9 +38,12 @@ public interface TypeFilter {
 	/**
 	 * Determine whether this filter matches for the class described by
 	 * the given metadata.
-	 * @param metadataReader the metadata reader for the target class
+	 *
+	 * 确定此筛选器是否与给定元数据所描述的类匹配。
+	 *
+	 * @param metadataReader the metadata reader for the target class 目标类的元数据读取器
 	 * @param metadataReaderFactory a factory for obtaining metadata readers
-	 * for other classes (such as superclasses and interfaces)
+	 * for other classes (such as superclasses and interfaces) 用于获取其他类（如超类和接口）的元数据读取器的工厂
 	 * @return whether this filter matches
 	 * @throws IOException in case of I/O failure when reading metadata
 	 */

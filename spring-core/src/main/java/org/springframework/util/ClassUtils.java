@@ -1047,9 +1047,12 @@ public abstract class ClassUtils {
 	/**
 	 * Determine the name of the package of the given fully-qualified class name,
 	 * e.g. "java.lang" for the {@code java.lang.String} class name.
+	 *
+	 * 确定给定的完全限定类名的包名称，例如，{@code java.lang.String} 类名的“java.lang”。
+	 *
 	 * @param fqClassName the fully-qualified class name
 	 * @return the package name, or the empty String if the class
-	 * is defined in the default package
+	 * is defined in the default package 包名称，如果类在默认包中定义，则为空 String
 	 */
 	public static String getPackageName(String fqClassName) {
 		Assert.notNull(fqClassName, "Class name must not be null");

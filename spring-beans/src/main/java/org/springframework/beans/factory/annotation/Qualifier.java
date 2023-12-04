@@ -28,6 +28,8 @@ import java.lang.annotation.Target;
  * candidate beans when autowiring. It may also be used to annotate other
  * custom annotations that can then in turn be used as qualifiers.
  *
+ * 此注解可用于字段或参数，作为自动注入时候选 Bean 的限定符。它还可用于注解其他自定义注解，然后这些注解又可以用作限定符。
+ *
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @since 2.5

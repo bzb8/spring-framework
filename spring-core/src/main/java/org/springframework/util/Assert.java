@@ -636,7 +636,7 @@ public abstract class Assert {
 	/**
 	 * Assert that {@code superType.isAssignableFrom(subType)} is {@code true}.
 	 * <pre class="code">Assert.isAssignable(Number.class, myClass, "Number expected");</pre>
-	 * @param superType the supertype to check against
+	 * @param superType the supertype to check against 要检查的超类型
 	 * @param subType the subtype to check
 	 * @param message a message which will be prepended to provide further context.
 	 * If it is empty or ends in ":" or ";" or "," or ".", a full exception message

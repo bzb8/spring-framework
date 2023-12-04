@@ -43,6 +43,7 @@ public class AutowireCandidateQualifier extends BeanMetadataAttributeAccessor {
 	/**
 	 * Construct a qualifier to match against an annotation of the
 	 * given type.
+	 * 构造一个限定符以匹配给定类型的注解。
 	 * @param type the annotation type
 	 */
 	public AutowireCandidateQualifier(Class<?> type) {
