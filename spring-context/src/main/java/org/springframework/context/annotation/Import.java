@@ -71,6 +71,8 @@ public @interface Import {
 	/**
 	 * {@link Configuration @Configuration}, {@link ImportSelector},
 	 * {@link ImportBeanDefinitionRegistrar}, or regular component classes to import.
+	 *
+	 * {@link Configuration @Configuration}、{@link ImportSelector}、{@link ImportBeanDefinitionRegistrar} 或要导入的常规组件类。
 	 */
 	Class<?>[] value();
 

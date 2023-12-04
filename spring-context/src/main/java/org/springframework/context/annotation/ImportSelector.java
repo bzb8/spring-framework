@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
  * class(es) should be imported based on a given selection criteria, usually one or
  * more annotation attributes.
  *
- * 由类型实现的接口，这些类型根据给定的选择条件（通常是一个或多个注解属性）确定应导入哪些 @{@link Configuration} 类
+ * 由类型实现的接口，这些类型确定应根据给定的选择标准（通常是一个或多个注释属性）导入哪些 @{@link Configuration} 类。
  *
  * <p>An {@link ImportSelector} may implement any of the following
  * {@link org.springframework.beans.factory.Aware Aware} interfaces,
@@ -74,7 +74,9 @@ public interface ImportSelector {
 	/**
 	 * Select and return the names of which class(es) should be imported based on
 	 * the {@link AnnotationMetadata} of the importing @{@link Configuration} class.
+	 *
 	 * 根据导入 @{@link Configuration} 类的 {@link AnnotationMetadata} 选择并返回应导入的类的名称。
+	 *
 	 * @return the class names, or an empty array if none 类名，如果没有，则为空数组
 	 */
 	String[] selectImports(AnnotationMetadata importingClassMetadata);
@@ -85,11 +87,16 @@ public interface ImportSelector {
 	 * <p>If this predicate returns {@code true} for a given fully-qualified
 	 * class name, said class will not be considered as an imported configuration
 	 * class, bypassing class file loading as well as metadata introspection.
-	 * 返回一个谓词，用于从导入候选项中排除类，以传递方式应用于通过此选择器的导入找到的所有类。<p>如果此谓词为给定的完全限定类名返回 {@code true}，则该类将不被视为导入的配置类，从而绕过类文件加载和元数据自省。
+	 *
+	 * 返回一个谓词，用于从导入候选项中排除类，以传递方式应用于通过此选择器的导入找到的所有类。
+	 * 如果此谓词为给定的完全限定类名返回 {@code true}，则该类将不被视为导入的配置类，从而绕过类文件加载和元数据自省。
 	 * 为传递导入的配置类的完全限定候选类名称
 	 *
 	 * @return the filter predicate for fully-qualified candidate class names
 	 * of transitively imported configuration classes, or {@code null} if none
+	 *
+	 * 传递导入的配置类的完全限定候选类名的过滤谓词，如果没有则为 {@code null}
+	 *
 	 * @since 5.2.4
 	 */
 	@Nullable

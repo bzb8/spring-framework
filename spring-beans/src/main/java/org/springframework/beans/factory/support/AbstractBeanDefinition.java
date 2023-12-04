@@ -821,6 +821,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Specify the factory bean to use, if any.
 	 * This the name of the bean to call the specified factory method on.
+	 *
+	 * 指定要使用的工厂 bean（如果有）。这是调用指定工厂方法的 bean 的名称。
+	 *
 	 * @see #setFactoryMethodName
 	 */
 	@Override
@@ -842,6 +845,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * constructor arguments, or with no arguments if none are specified.
 	 * The method will be invoked on the specified factory bean, if any,
 	 * or otherwise as a static method on the local bean class.
+	 *
+	 * 指定工厂方法（如果有）。该方法将使用构造函数参数调用，如果未指定参数，则不使用任何参数。该方法将在指定的工厂 bean（如果有）上调用，或者作为本地 bean 类上的静态方法调用。
+	 *
 	 * @see #setFactoryBeanName
 	 * @see #setBeanClassName
 	 */

@@ -71,6 +71,11 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 	 * {@link org.springframework.context.annotation.ScannedGenericBeanDefinition
 	 * ScannedGenericBeanDefinition}, however the semantics of the latter indicate that a
 	 * bean was discovered specifically via component-scanning as opposed to other means.
+	 *
+	 * 为给定的注解元数据创建一个新的 AnnotatedGenericBeanDefinition，允许基于 ASM 的处理并避免早期加载 bean 类。
+	 * 请注意，此构造函数在功能上等同于 {@link org.springframework.context.annotation.ScannedGenericBeanDefinition ScannedGenericBeanDefinition}，
+	 * 但是后者的语义表明 bean 是专门通过组件扫描而不是其他方式发现的。
+	 *
 	 * @param metadata the annotation metadata for the bean class in question
 	 * @since 3.1.1
 	 */
@@ -80,6 +85,7 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 			setBeanClass(((StandardAnnotationMetadata) metadata).getIntrospectedClass());
 		}
 		else {
+			// 不需要加载Bean类
 			setBeanClassName(metadata.getClassName());
 		}
 		this.metadata = metadata;

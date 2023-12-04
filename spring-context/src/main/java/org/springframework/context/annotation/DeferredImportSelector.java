@@ -36,7 +36,7 @@ import org.springframework.lang.Nullable;
  * <p>Implementations may also provide an {@link #getImportGroup() import group} which
  * can provide additional sorting and filtering logic across different selectors.
  *
- * 实现还可以提供一个{@link #getImportGroup()导入组}，它可以在不同的选择器之间提供额外的排序和过滤逻辑。
+ * 实现还可以提供一个{@link #getImportGroup() 导入组}，它可以在不同的选择器之间提供额外的排序和过滤逻辑。
  *
  * @author Phillip Webb
  * @author Stephane Nicoll
@@ -48,6 +48,11 @@ public interface DeferredImportSelector extends ImportSelector {
 	 * Return a specific import group.
 	 * <p>The default implementations return {@code null} for no grouping required.
 	 * @return the import group class, or {@code null} if none
+	 *
+	 * 返回特定的导入组。
+	 * 默认实现返回 {@code null} ，无需分组。
+	 * @return 导入组类，如果没有则返回 {@code null}
+	 *
 	 * @since 5.0
 	 */
 	@Nullable
@@ -58,6 +63,9 @@ public interface DeferredImportSelector extends ImportSelector {
 
 	/**
 	 * Interface used to group results from different import selectors.
+	 *
+	 * 用于对来自不同导入选择器的结果进行分组的接口。
+	 *
 	 * @since 5.0
 	 */
 	interface Group {
@@ -65,12 +73,16 @@ public interface DeferredImportSelector extends ImportSelector {
 		/**
 		 * Process the {@link AnnotationMetadata} of the importing @{@link Configuration}
 		 * class using the specified {@link DeferredImportSelector}.
+		 *
+		 * 使用指定的 {@link DeferredImportSelector} 处理导入 @{@link Configuration} 类的 {@link AnnotationMetadata}。
 		 */
 		void process(AnnotationMetadata metadata, DeferredImportSelector selector);
 
 		/**
 		 * Return the {@link Entry entries} of which class(es) should be imported
 		 * for this group.
+		 *
+		 * 返回应为此组导入哪个类的{@link Entry 条目}。
 		 */
 		Iterable<Entry> selectImports();
 

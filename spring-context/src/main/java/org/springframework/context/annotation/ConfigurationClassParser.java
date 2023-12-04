@@ -220,7 +220,12 @@ class ConfigurationClassParser {
 		return this.configurationClasses.keySet();
 	}
 
-
+	/**
+	 *
+	 * @param configClass @Configuration配置类
+	 * @param filter
+	 * @throws IOException
+	 */
 	protected void processConfigurationClass(ConfigurationClass configClass, Predicate<String> filter) throws IOException {
 		if (this.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) {
 			return;
@@ -257,8 +262,8 @@ class ConfigurationClassParser {
 	 * Apply processing and build a complete {@link ConfigurationClass} by reading the
 	 * annotations, members and methods from the source class. This method can be called
 	 * multiple times as relevant sources are discovered.
-	 * @param configClass the configuration class being build
-	 * @param sourceClass a source class
+	 * @param configClass the configuration class being build 正在构建的配置类
+	 * @param sourceClass a source class 配置类
 	 * @return the superclass, or {@code null} if none found or previously processed
 	 */
 	@Nullable
@@ -517,6 +522,10 @@ class ConfigurationClassParser {
 
 	/**
 	 * Returns {@code @Import} class, considering all meta-annotations.
+	 *
+	 * 返回 {@code @Import} 类，考虑所有元注解。
+	 *
+	 * @param sourceClass @Configuration类
 	 */
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
 		Set<SourceClass> imports = new LinkedHashSet<>();
@@ -533,9 +542,15 @@ class ConfigurationClassParser {
 	 * <p>For example, it is common for a {@code @Configuration} class to declare direct
 	 * {@code @Import}s in addition to meta-imports originating from an {@code @Enable}
 	 * annotation.
-	 * @param sourceClass the class to search
-	 * @param imports the imports collected so far
-	 * @param visited used to track visited classes to prevent infinite recursion
+	 *
+	 * 递归收集所有声明的 {@code @Import} 值。与大多数元注解不同，使用不同的值声明多个 {@code @Import} 是有效的；从类的第一个元注解返回值的通常过程是不够的。
+	 * 例如，除了源自 {@code @Enable} 注解的元导入之外，{@code @Configuration} 类通常还声明直接的 {@code @Import}。
+	 *
+	 * 递归收集@Import的value值列表
+	 *
+	 * @param sourceClass the class to search 要搜索的类
+	 * @param imports the imports collected so far 迄今为止收集的@Import类
+	 * @param visited used to track visited classes to prevent infinite recursion 用于跟踪访问的类以防止无限递归
 	 * @throws IOException if there is any problem reading metadata from the named class
 	 */
 	private void collectImports(SourceClass sourceClass, Set<SourceClass> imports, Set<SourceClass> visited)
@@ -552,6 +567,14 @@ class ConfigurationClassParser {
 		}
 	}
 
+	/**
+	 *
+	 * @param configClass 配置类
+	 * @param currentSourceClass 配置类
+	 * @param importCandidates 递归解析的@Import的所有value值
+	 * @param exclusionFilter
+	 * @param checkForCircularImports true
+	 */
 	private void processImports(ConfigurationClass configClass, SourceClass currentSourceClass,
 			Collection<SourceClass> importCandidates, Predicate<String> exclusionFilter,
 			boolean checkForCircularImports) {
@@ -569,6 +592,7 @@ class ConfigurationClassParser {
 				for (SourceClass candidate : importCandidates) {
 					if (candidate.isAssignable(ImportSelector.class)) {
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
+						// 候选类是一个 ImportSelector -> 委托给它来确定导入
 						Class<?> candidateClass = candidate.loadClass();
 						ImportSelector selector = ParserStrategyUtils.instantiateClass(candidateClass, ImportSelector.class,
 								this.environment, this.resourceLoader, this.registry);
@@ -580,6 +604,7 @@ class ConfigurationClassParser {
 							this.deferredImportSelectorHandler.handle(configClass, (DeferredImportSelector) selector);
 						}
 						else {
+							// 递归处理ImportSelector的selectImports的配置类
 							String[] importClassNames = selector.selectImports(currentSourceClass.getMetadata());
 							Collection<SourceClass> importSourceClasses = asSourceClasses(importClassNames, exclusionFilter);
 							processImports(configClass, currentSourceClass, importSourceClasses, exclusionFilter, false);
@@ -588,6 +613,7 @@ class ConfigurationClassParser {
 					else if (candidate.isAssignable(ImportBeanDefinitionRegistrar.class)) {
 						// Candidate class is an ImportBeanDefinitionRegistrar ->
 						// delegate to it to register additional bean definitions
+						// 候选类是一个 ImportBeanDefinitionRegistrar -> 委托给它来注册其他 bean 定义
 						Class<?> candidateClass = candidate.loadClass();
 						ImportBeanDefinitionRegistrar registrar =
 								ParserStrategyUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class,
@@ -597,8 +623,8 @@ class ConfigurationClassParser {
 					else {
 						// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar ->
 						// process it as an @Configuration class
-						this.importStack.registerImport(
-								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
+						// 候选类不是 ImportSelector 或 ImportBeanDefinitionRegistrar -> 将其作为 @Configuration 类处理
+						this.importStack.registerImport(currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
 						processConfigurationClass(candidate.asConfigClass(configClass), exclusionFilter);
 					}
 				}
@@ -757,6 +783,10 @@ class ConfigurationClassParser {
 		 * selectors are being collected, this registers this instance to the list. If
 		 * they are being processed, the {@link DeferredImportSelector} is also processed
 		 * immediately according to its {@link DeferredImportSelector.Group}.
+		 *
+		 * 处理指定的 {@link DeferredImportSelector}。如果正在收集延迟导入选择器，则会将此实例注册到列表中。
+		 * 如果正在处理它们，则 {@link DeferredImportSelector} 也会根据其 {@link DeferredImportSelector.Group} 立即进行处理。
+		 *
 		 * @param configClass the source configuration class
 		 * @param importSelector the selector to handle
 		 */
@@ -875,7 +905,9 @@ class ConfigurationClassParser {
 
 		/**
 		 * Return the imports defined by the group.
-		 * @return each import with its associated configuration class
+		 * 返回组定义的导入。
+		 *
+		 * @return each import with its associated configuration class 每个导入及其关联的配置类
 		 */
 		public Iterable<Group.Entry> getImports() {
 			for (DeferredImportSelectorHolder deferredImport : this.deferredImports) {
@@ -1063,6 +1095,13 @@ class ConfigurationClassParser {
 			return result;
 		}
 
+		/**
+		 * 获取注解上的注解属性
+		 * @param annType
+		 * @param attribute
+		 * @return
+		 * @throws IOException
+		 */
 		public Collection<SourceClass> getAnnotationAttributes(String annType, String attribute) throws IOException {
 			Map<String, Object> annotationAttributes = this.metadata.getAnnotationAttributes(annType, true);
 			if (annotationAttributes == null || !annotationAttributes.containsKey(attribute)) {

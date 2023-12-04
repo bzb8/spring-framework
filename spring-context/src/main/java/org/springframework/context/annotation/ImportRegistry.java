@@ -22,6 +22,8 @@ import org.springframework.lang.Nullable;
 /**
  * Registry of imported class {@link AnnotationMetadata}.
  *
+ * 导入类的注册表{@link AnnotationMetadata}
+ *
  * @author Juergen Hoeller
  * @author Phillip Webb
  */
