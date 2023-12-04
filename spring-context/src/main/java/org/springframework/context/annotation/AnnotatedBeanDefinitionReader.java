@@ -276,6 +276,7 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
+		// 根据@Conditional判断是否符合条件，不符合就直接返回了
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}

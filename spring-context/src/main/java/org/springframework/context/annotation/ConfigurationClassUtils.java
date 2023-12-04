@@ -163,12 +163,13 @@ abstract class ConfigurationClassUtils {
 	 */
 	public static boolean isConfigurationCandidate(AnnotationMetadata metadata) {
 		// Do not consider an interface or an annotation...
-		// 不要考虑接口或注释......
+		// 不要考虑接口或注解......
 		if (metadata.isInterface()) {
 			return false;
 		}
 
 		// Any of the typical annotations found?
+		// 找到任何典型的注解吗？
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
 				return true;
@@ -176,6 +177,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// Finally, let's look for @Bean methods...
+		// 最后，让我们寻找 @Bean 方法......
 		return hasBeanMethods(metadata);
 	}
 
