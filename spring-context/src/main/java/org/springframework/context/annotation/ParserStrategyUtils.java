@@ -52,8 +52,8 @@ abstract class ParserStrategyUtils {
 	 * {@link EnvironmentAware}, and {@link ResourceLoaderAware} contracts
 	 * invoked if they are implemented by the given object.
 	 *
-	 * 使用适当的构造函数实例化类，并将新实例作为指定的可分配类型返回。如果返回的实例由给定对象实现，
-	 * 则将调用 {@link BeanClassLoaderAware}、{@link BeanFactoryAware}、{@link EnvironmentAware} 和 {@link ResourceLoaderAware} 合约。
+	 * 使用适当的构造函数实例化一个类，并返回新实例作为指定的可分配类型。
+	 * 返回的实例将调用 {@link BeanClassLoaderAware}、{@link BeanFactoryAware}、{@link EnvironmentAware} 和 {@link ResourceLoaderAware} 合约（如果它们是由给定对象实现的）。
 	 *
 	 * @since 5.2
 	 */

@@ -181,6 +181,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// Finally, let's look for @Bean methods...
+		// 最后，让我们寻找 @Bean 方法......
 		return hasBeanMethods(metadata);
 	}
 
