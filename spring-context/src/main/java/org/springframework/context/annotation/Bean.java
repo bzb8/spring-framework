@@ -117,8 +117,8 @@ import org.springframework.core.annotation.AliasFor;
  * order values determine the order of resolved elements in case of collection
  * injection points (with several target beans matching by type and qualifier).
  *
- * 此外，{@code @Bean} 方法还可以声明限定符注释和 {@link org.springframework.core.annotation.Order @Order} 值，
- * 这些值将在注入点解析期间考虑在内，就像相应组件类上的相应注释一样，但每个 Bean 定义可能非常个性化（如果具有同一 Bean 类的多个定义）。
+ * 此外，{@code @Bean} 方法还可以声明限定符注解和 {@link org.springframework.core.annotation.Order @Order} 值，
+ * 这些值将在注入点解析期间考虑在内，就像相应组件类上的相应主角儿一样，但每个 Bean 定义可能非常个性化（如果具有同一 Bean 类的多个定义）。
  * 限定符在初始类型匹配后缩小候选者集的范围;顺序值决定了在集合注入点的情况下解析元素的顺序（多个目标 Bean 按类型和限定符匹配）。
  *
  * <p><b>NOTE:</b> {@code @Order} values may influence priorities at injection points,

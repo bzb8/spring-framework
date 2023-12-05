@@ -90,6 +90,7 @@ abstract class ConfigurationClassUtils {
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
 
 		String className = beanDef.getBeanClassName();
+		// className == null，或者 beanDefinition的工厂方法不为空，则返回false
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
@@ -140,6 +141,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// It's a full or lite configuration candidate... Let's determine the order value, if any.
+		// 这是一个完整或精简的配置候选者......让我们确定其order值（如果有）。
 		Integer order = getOrder(metadata);
 		if (order != null) {
 			beanDef.setAttribute(ORDER_ATTRIBUTE, order);
@@ -153,6 +155,7 @@ abstract class ConfigurationClassUtils {
 	 * (or nested component class declared within a configuration/component class).
 	 *
 	 * 检查给定元数据中是否有候选配置类（或在 configuration/component 类中声明的嵌套组件类）。
+	 * 带有Component.class, ComponentScan.class, Import.class, ImportResource.class注解或有@Bean注解的方法就是配置候选类
 	 *
 	 * @param metadata the metadata of the annotated class 带注解的类的元数据
 	 * @return {@code true} if the given class is to be registered for
@@ -170,6 +173,7 @@ abstract class ConfigurationClassUtils {
 
 		// Any of the typical annotations found?
 		// 找到任何典型的注解吗？
+		// Component.class, ComponentScan.class, Import.class, ImportResource.class
 		for (String indicator : candidateIndicators) {
 			if (metadata.isAnnotated(indicator)) {
 				return true;
@@ -209,6 +213,9 @@ abstract class ConfigurationClassUtils {
 	/**
 	 * Determine the order for the given configuration class bean definition,
 	 * as set by {@link #checkConfigurationClassCandidate}.
+	 *
+	 * 确定给定配置类 Bean 定义的顺序，由 {@link #checkConfigurationClassCandidate} 设置。
+	 *
 	 * @param beanDef the bean definition to check
 	 * @return the {@link Order @Order} annotation value on the configuration class,
 	 * or {@link Ordered#LOWEST_PRECEDENCE} if none declared

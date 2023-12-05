@@ -261,7 +261,7 @@ public class AnnotatedBeanDefinitionReader {
 	 * @param beanClass the class of the bean
 	 * @param name an explicit name for the bean (Bean 的显式名称)
 	 * @param qualifiers specific qualifier annotations to consider, if any,
-	 * in addition to qualifiers at the bean class level (除了 Bean 类级别的限定符之外，还要考虑的特定限定符注释（如果有）)
+	 * in addition to qualifiers at the bean class level (除了 Bean 类级别的限定符之外，还要考虑的特定限定符注解（如果有）)
 	 * @param supplier a callback for creating an instance of the bean
 	 * (may be {@code null}) 用于创建 Bean 实例的回调（可能是 {@code null}）
 	 * @param customizers one or more callbacks for customizing the factory's
@@ -319,6 +319,7 @@ public class AnnotatedBeanDefinitionReader {
 	private static Environment getOrCreateEnvironment(BeanDefinitionRegistry registry) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		if (registry instanceof EnvironmentCapable) {
+			// StandardEnvironment
 			return ((EnvironmentCapable) registry).getEnvironment();
 		}
 		return new StandardEnvironment();

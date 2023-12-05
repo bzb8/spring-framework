@@ -36,6 +36,8 @@ import org.springframework.util.Assert;
  * Collection of utilities for working with {@link ComponentScan @ComponentScan}
  * {@linkplain ComponentScan.Filter type filters}.
  *
+ * 用于处理 {@link ComponentScan @ComponentScan} {@linkplain ComponentScan.Filter 类型过滤器} 的实用程序集合。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -53,12 +55,18 @@ public abstract class TypeFilterUtils {
 	 * constructor, with {@code BeanClassLoaderAware}, {@code BeanFactoryAware},
 	 * {@code EnvironmentAware}, and {@code ResourceLoaderAware} contracts
 	 * invoked if they are implemented by the type filter.
+	 *
+	 * 从提供的 {@link AnnotationAttributes} 创建 {@linkplain TypeFilter 类型过滤器}，例如源自 {@link ComponentScan#includeFilters()} 或 {@link ComponentScan#excludeFilters()} 的过滤器。
+	 * 每个 {@link TypeFilter} 都将使用适当的构造函数进行实例化，如果 {@code BeanClassLoaderAware}、{@code BeanFactoryAware}、{@code EnvironmentAware} 和
+	 * {@code ResourceLoaderAware} 合约由类型筛选器实现，则调用它们。
+	 *
 	 * @param filterAttributes {@code AnnotationAttributes} for a
-	 * {@link ComponentScan.Filter @Filter} declaration
+	 * {@link ComponentScan.Filter @Filter} declaration {@code AnnotationAttributes} 用于 {@link ComponentScan.Filter @Filter} 声明
 	 * @param environment the {@code Environment} to make available to filters
 	 * @param resourceLoader the {@code ResourceLoader} to make available to filters
 	 * @param registry the {@code BeanDefinitionRegistry} to make available to filters
 	 * as a {@link org.springframework.beans.factory.BeanFactory} if applicable
+	 *
 	 * @return a list of instantiated and configured type filters
 	 * @see TypeFilter
 	 * @see AnnotationTypeFilter
@@ -76,6 +84,7 @@ public abstract class TypeFilterUtils {
 		List<TypeFilter> typeFilters = new ArrayList<>();
 		FilterType filterType = filterAttributes.getEnum("type");
 
+		// 实例话classes对象，并存入typeFilters中
 		for (Class<?> filterClass : filterAttributes.getClassArray("classes")) {
 			switch (filterType) {
 				case ANNOTATION:

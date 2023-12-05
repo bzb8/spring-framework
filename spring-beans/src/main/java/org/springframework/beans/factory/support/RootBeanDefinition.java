@@ -298,6 +298,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Register a target definition that is being decorated by this bean definition.
+	 * 注册由此 Bean 定义修饰的目标定义。
 	 */
 	public void setDecoratedDefinition(@Nullable BeanDefinitionHolder decoratedDefinition) {
 		this.decoratedDefinition = decoratedDefinition;

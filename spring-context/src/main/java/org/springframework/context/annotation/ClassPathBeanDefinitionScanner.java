@@ -163,7 +163,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * {@link org.springframework.stereotype.Service @Service}, and
 	 * {@link org.springframework.stereotype.Controller @Controller} stereotype annotations
 	 * @param environment the Spring {@link Environment} to use when evaluating bean
-	 * definition profile metadata
+	 * definition profile metadata 评估 Bean 定义配置文件元数据时使用的 Spring {@link Environment}
 	 * @param resourceLoader the {@link ResourceLoader} to use
 	 * @since 4.3.6
 	 */
@@ -173,6 +173,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		this.registry = registry;
 
+		// 向includeFilters中添加@Component、javax.annotation.ManagedBean、javax.inject.Named
 		if (useDefaultFilters) {
 			registerDefaultFilters();
 		}
@@ -277,8 +278,12 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * returning the registered bean definitions.
 	 * <p>This method does <i>not</i> register an annotation config processor
 	 * but rather leaves this up to the caller.
+	 *
+	 * 在指定的基础包中执行扫描，返回已注册的 Bean 定义。
+	 * 此方法不注册注解配置处理器，而是将其留给调用方。
+	 *
 	 * @param basePackages the packages to check for annotated classes
-	 * @return set of beans registered if any for tooling registration purposes (never {@code null})
+	 * @return set of beans registered if any for tooling registration purposes (never {@code null}) 为工具注册目的注册的 Bean 集（如果有）（从不 {@code null}）
 	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
@@ -286,8 +291,10 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		for (String basePackage : basePackages) {
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
 			for (BeanDefinition candidate : candidates) {
+				// 解析Scope
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
+
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
@@ -297,8 +304,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				}
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
-					definitionHolder =
-							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+					definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
@@ -310,6 +316,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	/**
 	 * Apply further settings to the given bean definition,
 	 * beyond the contents retrieved from scanning the component class.
+	 *
+	 * 将进一步的设置应用于给定的 Bean 定义，而不仅仅是从扫描组件类中检索到的内容。
+	 *
 	 * @param beanDefinition the scanned bean definition
 	 * @param beanName the generated bean name for the given bean
 	 */
@@ -335,11 +344,17 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	/**
 	 * Check the given candidate's bean name, determining whether the corresponding
 	 * bean definition needs to be registered or conflicts with an existing definition.
+	 *
+	 * 检查给定候选项的 Bean 名称，确定是否需要注册相应的 Bean 定义或与现有定义冲突。
+	 *
 	 * @param beanName the suggested name for the bean
 	 * @param beanDefinition the corresponding bean definition
 	 * @return {@code true} if the bean can be registered as-is;
 	 * {@code false} if it should be skipped because there is an
 	 * existing, compatible bean definition for the specified name
+	 *
+	 * {@code true} 如果 Bean 可以按原样注册;{@code false}，如果应该跳过它，因为指定名称存在现有的兼容 Bean 定义
+	 *
 	 * @throws IllegalStateException if an existing, incompatible bean definition
 	 * has been found for the specified name
 	 */

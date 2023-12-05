@@ -91,13 +91,20 @@ import org.springframework.util.StringUtils;
  * any number of ConfigurationClass objects because one Configuration class may import
  * another using the {@link Import} annotation).
  *
+ * 分析 {@link Configuration} 类定义，填充 {@link ConfigurationClass} 对象的集合（分析单个 Configuration 类可能会生成任意数量的 ConfigurationClass 对象，
+ * 因为一个 Configuration 类可以使用 {@link Import} 注解导入另一个 Configuration 类）。
+ *
  * <p>This class helps separate the concern of parsing the structure of a Configuration
  * class from the concern of registering BeanDefinition objects based on the content of
  * that model (with the exception of {@code @ComponentScan} annotations which need to be
  * registered immediately).
  *
+ * 此类有助于将分析 Configuration 类的结构与基于该模型的内容注册 BeanDefinition 对象的关注点分开（需要立即注册的 {@code @ComponentScan} 注解除外）。
+ *
  * <p>This ASM-based implementation avoids reflection and eager class loading in order to
  * interoperate effectively with lazy class loading in a Spring ApplicationContext.
+ *
+ * 这种基于 ASM 的实现避免了反射和急切的类加载，以便与 Spring ApplicationContext 中的惰性类加载有效地互操作。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -138,6 +145,7 @@ class ConfigurationClassParser {
 
 	private final Map<String, ConfigurationClass> knownSuperclasses = new HashMap<>();
 
+	// 属性源的名字
 	private final List<String> propertySourceNames = new ArrayList<>();
 
 	private final ImportStack importStack = new ImportStack();
@@ -249,6 +257,7 @@ class ConfigurationClassParser {
 		}
 
 		// Recursively process the configuration class and its superclass hierarchy.
+		// 递归处理配置类及其超类层次结构。
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		do {
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
@@ -262,9 +271,12 @@ class ConfigurationClassParser {
 	 * Apply processing and build a complete {@link ConfigurationClass} by reading the
 	 * annotations, members and methods from the source class. This method can be called
 	 * multiple times as relevant sources are discovered.
-	 * @param configClass the configuration class being build 正在构建的配置类
-	 * @param sourceClass a source class 配置类
-	 * @return the superclass, or {@code null} if none found or previously processed
+	 *
+	 * 应用处理，通过读取源类中的注解、成员和方法来构建完整的 {@link ConfigurationClass}。当发现相关源时，可以多次调用此方法。
+	 *
+	 * @param configClass the configuration class being build
+	 * @param sourceClass a source class
+	 * @return the superclass, or {@code null} if none found or previously processed 超类，如果未找到或之前未处理，则为 {@code null}
 	 */
 	@Nullable
 	protected final SourceClass doProcessConfigurationClass(
@@ -273,10 +285,12 @@ class ConfigurationClassParser {
 
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
 			// Recursively process any member (nested) classes first
+			// 首先递归处理任何成员（嵌套）类
 			processMemberClasses(configClass, sourceClass, filter);
 		}
 
 		// Process any @PropertySource annotations
+		// 属性源
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
 				org.springframework.context.annotation.PropertySource.class)) {
@@ -290,15 +304,18 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @ComponentScan annotations
+		// @ComponentScan注解的所有注解属性
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
 		if (!componentScans.isEmpty() &&
 				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
+				// config 类带有注解@ComponentScan -> 立即执行扫描
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
+				// 检查扫描的定义集是否有任何其他配置类，并在需要时递归解析
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();
 					if (bdCand == null) {
@@ -327,12 +344,14 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
+		// 处理单个@Bean方法
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
 		// Process default methods on interfaces
+		// 处理接口上的默认方法
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any
@@ -352,13 +371,17 @@ class ConfigurationClassParser {
 
 	/**
 	 * Register member (nested) classes that happen to be configuration classes themselves.
+	 *
+	 * 注册恰好是配置类本身的成员（嵌套）类。
 	 */
 	private void processMemberClasses(ConfigurationClass configClass, SourceClass sourceClass,
 			Predicate<String> filter) throws IOException {
 
+		// 获取内部声明的所有类或接口
 		Collection<SourceClass> memberClasses = sourceClass.getMemberClasses();
 		if (!memberClasses.isEmpty()) {
 			List<SourceClass> candidates = new ArrayList<>(memberClasses.size());
+			// 迭代判断内部类是否Configuration配置类并添加到candidates
 			for (SourceClass memberClass : memberClasses) {
 				if (ConfigurationClassUtils.isConfigurationCandidate(memberClass.getMetadata()) &&
 						!memberClass.getMetadata().getClassName().equals(configClass.getMetadata().getClassName())) {
@@ -401,6 +424,7 @@ class ConfigurationClassParser {
 
 	/**
 	 * Retrieve the metadata for all <code>@Bean</code> methods.
+	 * 检索所有@Bean方法的元数据。
 	 */
 	private Set<MethodMetadata> retrieveBeanMethodMetadata(SourceClass sourceClass) {
 		AnnotationMetadata original = sourceClass.getMetadata();
@@ -409,6 +433,7 @@ class ConfigurationClassParser {
 			// Try reading the class file via ASM for deterministic declaration order...
 			// Unfortunately, the JVM's standard reflection returns methods in arbitrary
 			// order, even between different runs of the same application on the same JVM.
+			// 尝试通过 ASM 读取类文件以获得确定性声明顺序...不幸的是，JVM 的标准反射以任意顺序返回方法，即使在同一 JVM 上同一应用程序的不同运行之间也是如此。
 			try {
 				AnnotationMetadata asm =
 						this.metadataReaderFactory.getMetadataReader(original.getClassName()).getAnnotationMetadata();
@@ -443,6 +468,9 @@ class ConfigurationClassParser {
 
 	/**
 	 * Process the given <code>@PropertySource</code> annotation metadata.
+	 *
+	 * 处理给定的@PropertySource注解元数据。
+	 *
 	 * @param propertySource metadata for the <code>@PropertySource</code> annotation found
 	 * @throws IOException if loading a property source failed
 	 */
@@ -483,12 +511,17 @@ class ConfigurationClassParser {
 		}
 	}
 
+	/**
+	 * 记录属性源的名字，并向environment中添加属性源
+	 * @param propertySource
+	 */
 	private void addPropertySource(PropertySource<?> propertySource) {
 		String name = propertySource.getName();
 		MutablePropertySources propertySources = ((ConfigurableEnvironment) this.environment).getPropertySources();
 
 		if (this.propertySourceNames.contains(name)) {
 			// We've already added a version, we need to extend it
+			// 我们已经添加了一个版本，我们需要扩展它
 			PropertySource<?> existing = propertySources.get(name);
 			if (existing != null) {
 				PropertySource<?> newSource = (propertySource instanceof ResourcePropertySource ?
@@ -513,6 +546,7 @@ class ConfigurationClassParser {
 			propertySources.addLast(propertySource);
 		}
 		else {
+			// 添加到倒数第二个？
 			String firstProcessed = this.propertySourceNames.get(this.propertySourceNames.size() - 1);
 			propertySources.addBefore(firstProcessed, propertySource);
 		}
@@ -683,6 +717,7 @@ class ConfigurationClassParser {
 		try {
 			// Sanity test that we can reflectively read annotations,
 			// including Class attributes; if not -> fall back to ASM
+			// 健全性测试，我们可以反射性地阅读注解，包括类属性;如果不是 ->回退到 ASM
 			for (Annotation ann : classType.getDeclaredAnnotations()) {
 				AnnotationUtils.validateAnnotation(ann);
 			}
@@ -951,6 +986,8 @@ class ConfigurationClassParser {
 	/**
 	 * Simple wrapper that allows annotated source classes to be dealt with
 	 * in a uniform manner, regardless of how they are loaded.
+	 *
+	 * 简单的包装器，允许以统一的方式处理带注解的源类，而不管它们是如何加载的。
 	 */
 	private class SourceClass implements Ordered {
 
@@ -1015,6 +1052,7 @@ class ConfigurationClassParser {
 				catch (NoClassDefFoundError err) {
 					// getDeclaredClasses() failed because of non-resolvable dependencies
 					// -> fall back to ASM below
+					// getDeclaredClasses（） 失败，因为存在不可解析的依赖项 ->回退到下面的 ASM
 					sourceToProcess = metadataReaderFactory.getMetadataReader(sourceClass.getName());
 				}
 			}

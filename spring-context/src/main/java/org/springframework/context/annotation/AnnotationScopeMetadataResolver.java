@@ -27,8 +27,12 @@ import org.springframework.util.Assert;
  * A {@link ScopeMetadataResolver} implementation that by default checks for
  * the presence of Spring's {@link Scope @Scope} annotation on the bean class.
  *
+ * 一个 {@link ScopeMetadataResolver} 实现，默认情况下检查 Bean 类上是否存在 Spring 的 {@link Scope @Scope} 注解。
+ *
  * <p>The exact type of annotation that is checked for is configurable via
  * {@link #setScopeAnnotationType(Class)}.
+ *
+ * 检查的注解的确切类型可通过 {@link #setScopeAnnotationType(Class)} 进行配置。
  *
  * @author Mark Fisher
  * @author Juergen Hoeller

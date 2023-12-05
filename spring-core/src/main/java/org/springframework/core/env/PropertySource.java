@@ -30,27 +30,37 @@ import org.springframework.util.ObjectUtils;
  * objects, {@code ServletContext} and {@code ServletConfig} objects (for access to init
  * parameters). Explore the {@code PropertySource} type hierarchy to see provided
  * implementations.
- * 属性源
+ *
+ * 表示 name/value 属性对源的抽象基类。底层 {@linkplain #getSource() source object} 可以是封装属性的任何类型 {@code T}。
+ * 示例包括 {@link java.util.Properties} 对象、{@link java.util.Map} 对象、{@code ServletContext} 和 {@code ServletConfig} 对象（用于访问 init 参数）。
+ * 浏览 {@code PropertySource} 类型层次结构以查看提供的实现。
  *
  * <p>{@code PropertySource} objects are not typically used in isolation, but rather
  * through a {@link PropertySources} object, which aggregates property sources and in
  * conjunction with a {@link PropertyResolver} implementation that can perform
  * precedence-based searches across the set of {@code PropertySources}.
  *
- * 不会单独使用，而是通过PropertySources聚合属性源，可以基于优先级的搜索
+ * {@code PropertySource} 对象通常不是单独使用，而是通过 {@link PropertySources} 对象（该对象聚合属性源）以及与
+ * {@link PropertyResolver} 实现结合使用，该实现可以跨 {@code PropertySources} 集执行基于优先级的搜索。
  *
  * <p>{@code PropertySource} identity is determined not based on the content of
  * encapsulated properties, but rather based on the {@link #getName() name} of the
  * {@code PropertySource} alone. This is useful for manipulating {@code PropertySource}
  * objects when in collection contexts. See operations in {@link MutablePropertySources}
  * as well as the {@link #named(String)} and {@link #toString()} methods for details.
- * 它的标识是基于getName()方法的，而不是基于内容
+ *
+ * {@code PropertySource} 标识不是基于封装属性的内容，而是仅基于 {@code PropertySource} 的 {@link #getName() name}。
+ * 这对于在集合上下文中操作 {@code PropertySource} 对象非常有用。有关详细信息，请参阅 {@link MutablePropertySources} 中的操作以及
+ * {@link #named(String)} 和 {@link #toString()} 方法。
  *
  * <p>Note that when working with @{@link
  * org.springframework.context.annotation.Configuration Configuration} classes that
  * the @{@link org.springframework.context.annotation.PropertySource PropertySource}
  * annotation provides a convenient and declarative way of adding property sources to the
  * enclosing {@code Environment}.
+ *
+ * 请注意，在使用 @{@link org.springframework.context.annotation.Configuration Configuration} 类时，
+ * @{@link org.springframework.context.annotation.PropertySource， PropertySource} 注解提供了一种方便的声明性方式，用于将属性源添加到封闭的 {@code Environment}。
  *
  * @author Chris Beams
  * @since 3.1

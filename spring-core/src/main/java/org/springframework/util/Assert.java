@@ -67,6 +67,10 @@ public abstract class Assert {
 	 * <p>Call {@link #isTrue} if you wish to throw an {@code IllegalArgumentException}
 	 * on an assertion failure.
 	 * <pre class="code">Assert.state(id == null, "The id property must not already be initialized");</pre>
+	 *
+	 * 断言布尔表达式， IllegalStateException 如果表达式的计算结果为 false。
+	 * 如果您希望抛出断言IllegalArgumentException失败，请调用isTrue。
+	 *
 	 * @param expression a boolean expression
 	 * @param message the exception message to use if the assertion fails
 	 * @throws IllegalStateException if {@code expression} is {@code false}
@@ -636,7 +640,7 @@ public abstract class Assert {
 	/**
 	 * Assert that {@code superType.isAssignableFrom(subType)} is {@code true}.
 	 * <pre class="code">Assert.isAssignable(Number.class, myClass, "Number expected");</pre>
-	 * @param superType the supertype to check against
+	 * @param superType the supertype to check against 要检查的超类型
 	 * @param subType the subtype to check
 	 * @param message a message which will be prepended to provide further context.
 	 * If it is empty or ends in ":" or ";" or "," or ".", a full exception message

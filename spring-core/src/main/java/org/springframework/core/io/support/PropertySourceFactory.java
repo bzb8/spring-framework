@@ -24,6 +24,8 @@ import org.springframework.lang.Nullable;
 /**
  * Strategy interface for creating resource-based {@link PropertySource} wrappers.
  *
+ * 用于创建基于资源的 {@link PropertySource} 包装器的策略接口。
+ *
  * @author Juergen Hoeller
  * @since 4.3
  * @see DefaultPropertySourceFactory
@@ -35,6 +37,9 @@ public interface PropertySourceFactory {
 	 * @param name the name of the property source
 	 * (can be {@code null} in which case the factory implementation
 	 * will have to generate a name based on the given resource)
+	 *
+	 * 创建一个包装给定资源的 {@link PropertySource}。@param name 属性源的名称（可以是 {@code null}，在这种情况下，工厂实现必须根据给定的资源生成一个名称）
+	 *
 	 * @param resource the resource (potentially encoded) to wrap
 	 * @return the new {@link PropertySource} (never {@code null})
 	 * @throws IOException if resource resolution failed

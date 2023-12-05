@@ -60,7 +60,7 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 	 */
 	public AnnotatedGenericBeanDefinition(Class<?> beanClass) {
 		setBeanClass(beanClass);
-		// StandardAnnotationMetadata
+		// StandardAnnotationMetadata 使用标准反射api获取注解
 		this.metadata = AnnotationMetadata.introspect(beanClass);
 	}
 

@@ -26,8 +26,12 @@ import org.springframework.lang.Nullable;
  * Simple {@link Resource} implementation that holds a resource description
  * but does not point to an actually readable resource.
  *
+ * 简单的 {@link Resource} 实现，它包含资源描述，但不指向实际可读的资源。
+ *
  * <p>To be used as placeholder if a {@code Resource} argument is
  * expected by an API but not necessarily used for actual reading.
+ *
+ * 如果 API 需要 {@code Resource} 参数，但不一定用于实际读取，则用作占位符。
  *
  * @author Juergen Hoeller
  * @since 1.2.6

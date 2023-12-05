@@ -32,6 +32,8 @@ public enum ScopedProxyMode {
 	/**
 	 * Default typically equals {@link #NO}, unless a different default
 	 * has been configured at the component-scan instruction level.
+	 *
+	 * 默认值通常等于 {@link #NO}，除非在组件扫描指令级别配置了不同的默认值。
 	 */
 	DEFAULT,
 
@@ -41,6 +43,10 @@ public enum ScopedProxyMode {
 	 * non-singleton scoped instance, which should favor the use of the
 	 * {@link #INTERFACES} or {@link #TARGET_CLASS} proxy-modes instead if it
 	 * is to be used as a dependency.
+	 *
+	 * 不要创建作用域内代理。
+	 * 当与非单例范围的实例一起使用时，此代理模式通常没有用，
+	 * 如果要将其用作依赖项，则应支持使用 {@link #INTERFACES} 或 {@link #TARGET_CLASS} 代理模式。
 	 */
 	NO,
 

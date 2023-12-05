@@ -141,6 +141,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	private boolean localBeanNameGeneratorSet = false;
 
 	/* Using short class names as default bean names by default. */
+	// 缺省情况下，使用短类名作为缺省 Bean 名称。
 	private BeanNameGenerator componentScanBeanNameGenerator = AnnotationBeanNameGenerator.INSTANCE;
 
 	/* Using fully qualified class names as default bean names by default. */
@@ -236,10 +237,14 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 	/**
 	 * Derive further bean definitions from the configuration classes in the registry.
+	 *
+	 * 从注册表中的配置类派生出进一步的 Bean 定义。
+	 *
 	 */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
 		int registryId = System.identityHashCode(registry);
+		// postProcessBeanDefinitionRegistry 已在此后处理器上调用
 		if (this.registriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
 					"postProcessBeanDefinitionRegistry already called on this post-processor against " + registry);
@@ -256,6 +261,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	/**
 	 * Prepare the Configuration classes for servicing bean requests at runtime
 	 * by replacing them with CGLIB-enhanced subclasses.
+	 *
+	 * 准备配置类，以便在运行时处理 Bean 请求，方法是将其替换为 CGLIB 增强的子类。
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
@@ -283,7 +290,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 *
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
-		// @Configuration标注的类
+		// config 候选项, 所有被@Configuration标记的配置候选类
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		// 获取注册表中所有的BeanDefinition的名字
 		String[] candidateNames = registry.getBeanDefinitionNames();
@@ -301,11 +308,13 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Return immediately if no @Configuration classes were found
+		// 如果未找到@Configuration类，直接返回
 		if (configCandidates.isEmpty()) {
 			return;
 		}
 
 		// Sort by previously determined @Order value, if applicable
+		// 按先前确定的@Order值排序（如果适用）
 		configCandidates.sort((bd1, bd2) -> {
 			int i1 = ConfigurationClassUtils.getOrder(bd1.getBeanDefinition());
 			int i2 = ConfigurationClassUtils.getOrder(bd2.getBeanDefinition());
@@ -313,7 +322,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		});
 
 		// Detect any custom bean name generation strategy supplied through the enclosing application context
-		// 检测通过封闭的应用程序上下文提供的任何自定义 bean 名称生成策略
+		// 检测通过封闭的应用程序上下文提供的任何自定义 Bean 名称生成策略
 		SingletonBeanRegistry sbr = null;
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
@@ -332,6 +341,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Parse each @Configuration class
+		// 解析每个@Configuration类
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);

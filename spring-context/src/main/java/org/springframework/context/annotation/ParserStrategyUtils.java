@@ -37,6 +37,8 @@ import org.springframework.util.Assert;
  * Common delegate code for the handling of parser strategies, e.g.
  * {@code TypeFilter}, {@code ImportSelector}, {@code ImportBeanDefinitionRegistrar}
  *
+ * 用于处理解析器策略的通用委托代码，例如 {@code TypeFilter}、{@code ImportSelector}、{@code ImportBeanDefinitionRegistrar}
+ *
  * @author Juergen Hoeller
  * @author Phillip Webb
  * @since 4.3.3
@@ -60,6 +62,7 @@ abstract class ParserStrategyUtils {
 			ResourceLoader resourceLoader, BeanDefinitionRegistry registry) {
 
 		Assert.notNull(clazz, "Class must not be null");
+		// clazz是assignableTo的本身或子类
 		Assert.isAssignable(assignableTo, clazz);
 		if (clazz.isInterface()) {
 			throw new BeanInstantiationException(clazz, "Specified class is an interface");

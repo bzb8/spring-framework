@@ -49,8 +49,11 @@ public interface MetadataReaderFactory {
 
 	/**
 	 * Obtain a MetadataReader for the given resource.
-	 * @param resource the resource (pointing to a ".class" file)
-	 * @return a holder for the ClassReader instance (never {@code null})
+	 *
+	 * 获取给定资源的 MetadataReader。
+	 *
+	 * @param resource the resource (pointing to a ".class" file) 资源（指向“.class”文件）
+	 * @return a holder for the ClassReader instance (never {@code null}) ClassReader 实例的持有者 （从不 {@code null}）
 	 * @throws IOException in case of I/O failure
 	 */
 	MetadataReader getMetadataReader(Resource resource) throws IOException;

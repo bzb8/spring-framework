@@ -23,6 +23,7 @@ import org.springframework.lang.Nullable;
  * in a form that does not require that class to be loaded yet.
  *
  * 定义特定类的抽象元数据的接口，其形式尚不需要加载该类。
+ * 对Class的抽象和适配。
  *
  * @author Juergen Hoeller
  * @since 2.5
@@ -34,6 +35,7 @@ public interface ClassMetadata {
 
 	/**
 	 * Return the name of the underlying class.
+	 * 返回基础类的名称。
 	 */
 	String getClassName();
 
@@ -44,6 +46,9 @@ public interface ClassMetadata {
 
 	/**
 	 * Return whether the underlying class represents an annotation.
+	 *
+	 * 返回基础类是否表示注解。
+	 *
 	 * @since 4.1
 	 */
 	boolean isAnnotation();
@@ -56,6 +61,8 @@ public interface ClassMetadata {
 	/**
 	 * Return whether the underlying class represents a concrete class,
 	 * i.e. neither an interface nor an abstract class.
+	 *
+	 * 返回基础类是否表示具体类，即既不是接口也不是抽象类。
 	 */
 	default boolean isConcrete() {
 		return !(isInterface() || isAbstract());
@@ -70,6 +77,8 @@ public interface ClassMetadata {
 	 * Determine whether the underlying class is independent, i.e. whether
 	 * it is a top-level class or a nested class (static inner class) that
 	 * can be constructed independently of an enclosing class.
+	 *
+	 * 确定基础类是否是独立的，即它是顶级类还是可以独立于封闭类构造的嵌套类（静态内部类）。
 	 */
 	boolean isIndependent();
 
@@ -79,6 +88,9 @@ public interface ClassMetadata {
 	 * local class within a method).
 	 * <p>If this method returns {@code false}, then the underlying
 	 * class is a top-level class.
+	 *
+	 * 返回基础类是在封闭类中声明的（即基础类是内部嵌套类还是方法中的局部类）。
+	 * 如果此方法返回 {@code false}，则基础类是顶级类。
 	 */
 	default boolean hasEnclosingClass() {
 		return (getEnclosingClassName() != null);
@@ -87,6 +99,8 @@ public interface ClassMetadata {
 	/**
 	 * Return the name of the enclosing class of the underlying class,
 	 * or {@code null} if the underlying class is a top-level class.
+	 *
+	 * 返回基础类的封闭类的名称，如果基础类是顶级类，则返回 {@code null}。
 	 */
 	@Nullable
 	String getEnclosingClassName();
@@ -118,6 +132,10 @@ public interface ClassMetadata {
 	 * inherited classes and interfaces. An empty array is returned if no member classes
 	 * or interfaces exist.
 	 * @since 3.1
+	 *
+	 * 返回声明为由此 ClassMetadata 对象表示的类的成员的所有类的名称。这包括公共、受保护、默认（包）访问以及由类声明的私有类和接口，但不包括继承的类和接口。
+	 * 如果不存在成员类或接口，则返回空数组。
+	 *
 	 */
 	String[] getMemberClassNames();
 

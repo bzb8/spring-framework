@@ -62,6 +62,9 @@ public class ResourcePropertySource extends PropertiesPropertySource {
 	 * Create a PropertySource based on Properties loaded from the given resource.
 	 * The name of the PropertySource will be generated based on the
 	 * {@link Resource#getDescription() description} of the given resource.
+	 *
+	 * 基于从给定资源加载的 Properties 创建 PropertySource。PropertySource 的名称将根据给定资源的 {@link Resource#getDescription() description} 生成。
+	 *
 	 */
 	public ResourcePropertySource(EncodedResource resource) throws IOException {
 		super(getNameForResource(resource.getResource()), PropertiesLoaderUtils.loadProperties(resource));

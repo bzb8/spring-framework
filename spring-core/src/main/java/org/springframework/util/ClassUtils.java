@@ -242,12 +242,16 @@ public abstract class ClassUtils {
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
 	 * Furthermore, it is also capable of resolving nested class names in Java source
 	 * style (e.g. "java.lang.Thread.State" instead of "java.lang.Thread$State").
+	 *
 	 * 替换 {@code Class.forName（）}，它还返回基元（例如“int”）和数组类名（例如“String[]”）的类实例。
 	 * 此外，它还能够解析 Java 源代码样式中的嵌套类名（例如“java.lang.Thread.State”而不是“java.lang.Thread$State”）。
+	 *
 	 * @param name the name of the Class
 	 * @param classLoader the class loader to use
 	 * (may be {@code null}, which indicates the default class loader)
+	 *
 	 * 要使用的类装入器（可能是 {@code null}，表示缺省类装入器）
+	 *
 	 * @return a class instance for the supplied name
 	 * @throws ClassNotFoundException if the class was not found
 	 * @throws LinkageError if the class file could not be loaded
@@ -976,6 +980,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Get the class name without the qualified package name.
+	 * 获取不带限定包名称的类名。
 	 * @param className the className to get the short name for
 	 * @return the class name of the class without the package name
 	 * @throws IllegalArgumentException if the className is empty
@@ -987,7 +992,9 @@ public abstract class ClassUtils {
 		if (nameEndIndex == -1) {
 			nameEndIndex = className.length();
 		}
+		// 截取最后一个.和$$之间的字符串
 		String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+		// $替换为.
 		shortName = shortName.replace(NESTED_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
 		return shortName;
 	}
@@ -1043,9 +1050,12 @@ public abstract class ClassUtils {
 	/**
 	 * Determine the name of the package of the given fully-qualified class name,
 	 * e.g. "java.lang" for the {@code java.lang.String} class name.
+	 *
+	 * 确定给定的完全限定类名的包名称，例如，{@code java.lang.String} 类名的“java.lang”。
+	 *
 	 * @param fqClassName the fully-qualified class name
 	 * @return the package name, or the empty String if the class
-	 * is defined in the default package
+	 * is defined in the default package 包名称，如果类在默认包中定义，则为空 String
 	 */
 	public static String getPackageName(String fqClassName) {
 		Assert.notNull(fqClassName, "Class name must not be null");

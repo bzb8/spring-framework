@@ -24,6 +24,8 @@ import org.springframework.context.ApplicationListener;
  * Strategy interface for creating {@link ApplicationListener} for methods
  * annotated with {@link EventListener}.
  *
+ * 策略接口，用于为使用 {@link EventListener} 注释的方法创建 @link{ ApplicationListener}。
+ *
  * @author Stephane Nicoll
  * @since 4.2
  */

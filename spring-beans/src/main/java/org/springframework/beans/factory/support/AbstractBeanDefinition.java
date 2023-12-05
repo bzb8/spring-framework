@@ -101,18 +101,27 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Constant that indicates no dependency check at all.
+	 *
+	 * 表示容器不会进行依赖关系检查，即不会检查 Bean 的依赖是否都已经满足。
+	 *
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_NONE = 0;
 
 	/**
 	 * Constant that indicates dependency checking for object references.
+	 *
+	 * 表示容器会检查 Bean 的依赖是否存在，并且会验证所有引用类型的属性是否已经设置，但不会检查基本数据类型的属性。
+	 *
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_OBJECTS = 1;
 
 	/**
 	 * Constant that indicates dependency checking for "simple" properties.
+	 *
+	 * 表示容器会检查 Bean 的所有依赖是否都存在于容器中，但不会检查其依赖的属性是否已经设置。
+	 *
 	 * @see #setDependencyCheck
 	 * @see org.springframework.beans.BeanUtils#isSimpleProperty
 	 */
@@ -121,6 +130,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Constant that indicates dependency checking for all properties
 	 * (object references as well as "simple" properties).
+	 *
+	 * 表示容器会进行最严格的依赖关系检查，包括检查 Bean 的所有依赖是否都存在、验证所有引用类型属性是否已经设置，并且检查基本数据类型的属性。
+	 *
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_ALL = 3;
@@ -631,6 +643,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Set the dependency check code.
+	 *
+	 * 用于指定容器在创建 Bean 实例时对其依赖关系进行检查的方式
+	 *
 	 * @param dependencyCheck the code to set.
 	 * Must be one of the four constants defined in this class.
 	 * @see #DEPENDENCY_CHECK_NONE
@@ -676,6 +691,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * It does not affect explicit references by name, which will get resolved even
 	 * if the specified bean is not marked as an autowire candidate. As a consequence,
 	 * autowiring by name will nevertheless inject a bean if the name matches.
+	 *
+	 * 设置此 Bean 是否是自动注入到其他 Bean 的候选项。
+	 * 请注意，此标志旨在仅影响基于类型的自动注入。它不会影响按名称划分的显式引用，即使指定的 Bean 未标记为自动注入候选项，也会被解析。因此，如果名称匹配，则按名称自动注入仍将注入 bean。
+	 *
 	 * @see #AUTOWIRE_BY_TYPE
 	 * @see #AUTOWIRE_BY_NAME
 	 */
@@ -967,6 +986,13 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * but switched to {@code false} for a shared setting in a defaults section
 	 * (e.g. {@code bean init-method} versus {@code beans default-init-method}
 	 * level in XML) which might not apply to all contained bean definitions.
+	 *
+	 * 指定配置的初始值设定项方法是否为默认值。
+	 * 对于本地指定的 init 方法，缺省值为 {@code true}，
+	 * 但对于缺省部分中的共享设置（例如，在 XML 中，{@code bean init-method} 与 {@code bean default-init-method} 级别），缺省值切换为 {@code false}，这可能不适用于所有包含的 Bean 定义。
+	 *
+	 * setEnforceInitMethod 方法允许你指定是否要强制执行初始化方法，即使在 lazy-init 模式下也会执行
+	 *
 	 * @see #setInitMethodName
 	 * @see #applyDefaults
 	 */

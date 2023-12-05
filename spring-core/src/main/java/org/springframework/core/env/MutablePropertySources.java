@@ -30,10 +30,13 @@ import org.springframework.lang.Nullable;
  * Allows manipulation of contained property sources and provides a constructor
  * for copying an existing {@code PropertySources} instance.
  *
+ * {@link PropertySources} 接口的默认实现。允许操作包含的属性源，并提供用于复制现有 {@code PropertySources} 实例的构造函数。
+ *
  * <p>Where <em>precedence</em> is mentioned in methods such as {@link #addFirst}
  * and {@link #addLast}, this is with regard to the order in which property sources
  * will be searched when resolving a given property with a {@link PropertyResolver}.
- * addFirst和addLast的添加顺序就是解析的顺序
+ *
+ * 在 {@link #addFirst} 和 {@link #addLast} 等方法中提到优先级时，这与使用 {@link PropertyResolver} 解析给定属性时搜索属性源的顺序有关。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -112,6 +115,8 @@ public class MutablePropertySources implements PropertySources {
 
 	/**
 	 * Add the given property source object with the lowest precedence.
+	 *
+	 * 添加具有最低优先级的给定属性源对象。
 	 */
 	public void addLast(PropertySource<?> propertySource) {
 		synchronized (this.propertySourceList) {
@@ -123,6 +128,8 @@ public class MutablePropertySources implements PropertySources {
 	/**
 	 * Add the given property source object with precedence immediately higher
 	 * than the named relative property source.
+	 *
+	 * 添加给定的属性源对象，其优先级直接高于命名的相对属性源。
 	 */
 	public void addBefore(String relativePropertySourceName, PropertySource<?> propertySource) {
 		assertLegalRelativeAddition(relativePropertySourceName, propertySource);

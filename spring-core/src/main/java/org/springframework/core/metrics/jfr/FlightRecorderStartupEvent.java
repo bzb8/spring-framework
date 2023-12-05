@@ -35,17 +35,17 @@ package org.springframework.core.metrics.jfr;
 //@Label("Startup Step")
 //@Description("Spring Application Startup")
 class FlightRecorderStartupEvent
-//		extends Event
+		//extends Event
 {
 
 	public final long eventId;
 
 	public final long parentId;
 
-//	@Label("Name")
+	//@Label("Name")
 	public final String name;
 
-//	@Label("Tags")
+	//@Label("Tags")
 	String tags = "";
 
 	public FlightRecorderStartupEvent(long eventId, String name, long parentId) {

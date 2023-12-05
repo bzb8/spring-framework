@@ -244,8 +244,11 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	/**
 	 * Get a matching annotation or meta-annotation of the specified type, or
 	 * {@link MergedAnnotation#missing()} if none is present.
+	 *
+	 * 获取指定类型的匹配注解或元注解，如果不存在，则获取 {@link MergedAnnotation#missing()}。
+	 *
 	 * @param annotationType the fully qualified class name of the annotation type
-	 * to get
+	 * to get 要获取的注解类型的完全限定类名
 	 * @param predicate a predicate that must match, or {@code null} if only
 	 * type matching is required
 	 * @param selector a selector used to choose the most appropriate annotation
@@ -272,6 +275,10 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * Stream all annotations and meta-annotations that match the specified
 	 * type.
 	 * <p>The resulting stream follows the same ordering rules as {@link #stream()}.
+	 *
+	 * 流式传输与指定类型匹配的所有注解和元注解。
+	 * 生成的流遵循与 {@link #stream()} 相同的排序规则。
+	 *
 	 * @param annotationType the fully qualified class name of the annotation type
 	 * to match
 	 * @return a stream of matching annotations
@@ -326,7 +333,7 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * annotations and meta-annotations from the specified element and,
 	 * depending on the {@link SearchStrategy}, related inherited elements.
 	 *
-	 * 创建一个新的 {@link MergedAnnotations} 实例，其中包含来自指定元素的所有注释和元注释，以及相关的继承元素（具体取决于 {@link SearchStrategy}）。
+	 * 创建一个新的 {@link MergedAnnotations} 实例，其中包含来自指定元素的所有注解和元注解，以及相关的继承元素（具体取决于 {@link SearchStrategy}）。
 	 *
 	 * @param element the source element
 	 * @param searchStrategy the search strategy to use

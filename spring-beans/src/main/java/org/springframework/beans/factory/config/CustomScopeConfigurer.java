@@ -31,13 +31,20 @@ import org.springframework.util.ClassUtils;
  * Simple {@link BeanFactoryPostProcessor} implementation that registers
  * custom {@link Scope Scope(s)} with the containing {@link ConfigurableBeanFactory}.
  *
+ * 简单的 {@link BeanFactoryPostProcessor} 实现，将自定义 {@link Scope Scope（s）} 注册到包含的 {@link ConfigurableBeanFactory}。
+ *
  * <p>Will register all of the supplied {@link #setScopes(java.util.Map) scopes}
  * with the {@link ConfigurableListableBeanFactory} that is passed to the
  * {@link #postProcessBeanFactory(ConfigurableListableBeanFactory)} method.
  *
+ * 将所有提供的 {@link #setScopes(java.util.Map) scopes} 注册到传递给
+ * {@link #postProcessBeanFactory(ConfigurableListableBeanFactory)} 方法的 {@link ConfigurableListableBeanFactory}。
+ *
  * <p>This class allows for <i>declarative</i> registration of custom scopes.
  * Alternatively, consider implementing a custom {@link BeanFactoryPostProcessor}
  * that calls {@link ConfigurableBeanFactory#registerScope} programmatically.
+ *
+ * 此类允许以声明方式注册自定义范围。或者，考虑实现以编程方式调用 {@link ConfigurableBeanFactory#registerScope} 的自定义 {@link BeanFactoryPostProcessor}。
  *
  * @author Juergen Hoeller
  * @author Rick Evans

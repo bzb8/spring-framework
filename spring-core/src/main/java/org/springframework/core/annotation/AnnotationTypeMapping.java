@@ -92,12 +92,18 @@ final class AnnotationTypeMapping {
 				source != null ? source.getMetaTypes() : null,
 				annotationType);
 		this.annotation = annotation;
+		// ================ 属性解析 ================
+		// 解析注解的属性，将其转为 AttributeMethods 对象；
 		this.attributes = AttributeMethods.forAnnotationType(annotationType);
+
 		this.mirrorSets = new MirrorSets();
+
+		// 这些数组都与属性映射有关，任何一个属性的相关映射信息，都可以通过其在 AttributeMethods 中对应的数组下标，从这些关联的数组对应位置获得。
 		this.aliasMappings = filledIntArray(this.attributes.size());
 		this.conventionMappings = filledIntArray(this.attributes.size());
 		this.annotationValueMappings = filledIntArray(this.attributes.size());
 		this.annotationValueSource = new AnnotationTypeMapping[this.attributes.size()];
+
 		this.aliasedBy = resolveAliasedForTargets();
 		processAliases();
 		addConventionMappings();
@@ -116,12 +122,19 @@ final class AnnotationTypeMapping {
 		return Collections.unmodifiableList(merged);
 	}
 
+	/**
+	 * 解析带@AliasFor的别名属性
+	 * AnnotationTypeMapping 会将所有带有 @AliasFor 注解，
+	 * 或者被子注解直接/间接通过 @AliasFor 指向的属性都解析到一个名为 aliasedBy 的类型为 Map<Method, List<Method>> 的成员变量中：
+	 */
 	private Map<Method, List<Method>> resolveAliasedForTargets() {
 		Map<Method, List<Method>> aliasedBy = new HashMap<>();
 		for (int i = 0; i < this.attributes.size(); i++) {
+			// 遍历当前注解的属性方法，并获取其中的带有@AliasFor的方法
 			Method attribute = this.attributes.get(i);
 			AliasFor aliasFor = AnnotationsScanner.getDeclaredAnnotation(attribute, AliasFor.class);
 			if (aliasFor != null) {
+				// 获取别名指定的注解类中的方法，并建立别名属性 -> [属性1]的映射集合
 				Method target = resolveAliasTarget(attribute, aliasFor);
 				aliasedBy.computeIfAbsent(target, key -> new ArrayList<>()).add(attribute);
 			}
@@ -612,6 +625,8 @@ final class AnnotationTypeMapping {
 	/**
 	 * A collection of {@link MirrorSet} instances that provides details of all
 	 * defined mirrors.
+	 *
+	 * {@link MirrorSet} 实例的集合，提供所有已定义镜像的详细信息。
 	 */
 	class MirrorSets {
 
@@ -681,6 +696,7 @@ final class AnnotationTypeMapping {
 
 		/**
 		 * A single set of mirror attributes.
+		 * 一组镜像属性。
 		 */
 		class MirrorSet {
 
