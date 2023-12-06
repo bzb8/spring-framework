@@ -28,9 +28,14 @@ import org.springframework.util.ObjectUtils;
  * a map keyed by property name, allows for more flexibility, and the
  * ability to handle indexed properties etc in an optimized way.
  *
+ * 对象保存单个 bean 属性的信息和值。在这里使用对象，而不是仅仅将所有属性存储在按属性名称键控的映射中，
+ * 可以提供更大的灵活性，并能够以优化的方式处理索引属性等。
+ *
  * <p>Note that the value doesn't need to be the final required type:
  * A {@link BeanWrapper} implementation should handle any necessary conversion,
  * as this object doesn't know anything about the objects it will be applied to.
+ *
+ * 请注意，该值不需要是最终所需的类型：{@link BeanWrapper} 实现应该处理任何必要的转换，因为该对象不知道有关它将应用到的对象的任何信息。
  *
  * @author Rod Johnson
  * @author Rob Harrop

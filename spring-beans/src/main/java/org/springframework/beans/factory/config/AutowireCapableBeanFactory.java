@@ -67,6 +67,9 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
+	 *
+	 * 指示没有外部定义的自动装配的常量。请注意，BeanFactoryAware 等和注解驱动的注入仍将应用。
+	 *
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties

@@ -179,7 +179,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	void setAutowireCandidate(boolean autowireCandidate);
 
 	/**
-	 * Return whether this bean is a candidate for getting autowired into some other bean.
+	 * Return whether this bean is a candidate for getting autowired into some other bean. 返回此 bean 是否是自动装配到其他 bean 中的候选者。
 	 */
 	boolean isAutowireCandidate();
 
@@ -187,6 +187,9 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Set whether this bean is a primary autowire candidate.
 	 * <p>If this value is {@code true} for exactly one bean among multiple
 	 * matching candidates, it will serve as a tie-breaker.
+	 *
+	 * 设置此 bean 是否是主要自动装配候选者。
+	 * 如果对于多个匹配候选者中的恰好一个 bean，此值为 {@code true}，则它将充当决胜局。
 	 */
 	void setPrimary(boolean primary);
 
@@ -199,6 +202,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Specify the factory bean to use, if any.
 	 * This the name of the bean to call the specified factory method on.
 	 * @see #setFactoryMethodName
+	 *
+	 * 指定要使用的工厂 bean（如果有）。这是调用指定工厂方法的 bean 的名称。
 	 */
 	void setFactoryBeanName(@Nullable String factoryBeanName);
 
@@ -228,6 +233,9 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Return the constructor argument values for this bean.
 	 * <p>The returned instance can be modified during bean factory post-processing.
 	 * @return the ConstructorArgumentValues object (never {@code null})
+	 *
+	 * 返回此 bean 的构造函数参数值。
+	 * 返回的实例可以在bean工厂后处理期间修改。
 	 */
 	ConstructorArgumentValues getConstructorArgumentValues();
 

@@ -27,6 +27,9 @@ import org.springframework.util.Assert;
  *
  * 定义通用协定的接口，用于将元数据附加到任意对象并访问元数据。
  *
+ * AttributeAccessor 是 Spring 框架中的一个接口，用于表示具有属性存储和检索功能的对象。它提供了一种通用的方式，
+ * 使对象能够添加、获取、修改和删除属性。这种设计模式在 Spring 中被广泛使用，以实现与对象相关的元数据和配置。
+ *
  * @author Rob Harrop
  * @author Sam Brannen
  * @since 2.0
@@ -39,6 +42,11 @@ public interface AttributeAccessor {
 	 * <p>In general, users should take care to prevent overlaps with other
 	 * metadata attributes by using fully-qualified names, perhaps using
 	 * class or package names as prefix.
+	 *
+	 * 将 {@code name} 定义的属性设置为提供的 {@code value}。
+	 * 如果 {@code value} 为 {@code null}，则该属性为 {@link #removeAttribute removed}。
+	 * 一般来说，用户应该注意通过使用完全限定的名称（可能使用类或包名称作为前缀）来防止与其他元数据属性重叠。
+	 *
 	 * @param name the unique attribute key
 	 * @param value the attribute value to be attached
 	 */

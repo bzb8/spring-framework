@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
  * Strategy interface for determining whether a specific bean definition
  * qualifies as an autowire candidate for a specific dependency.
  *
- * 策略接口，用于确定特定 Bean 定义是否有资格作为特定依赖项的自动注入候选项。
+ * 策略接口，用于确定特定 Bean 定义是否有资格作为特定依赖项的自动装配候选项。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -38,9 +38,13 @@ public interface AutowireCandidateResolver {
 	 * autowire candidate for the given dependency.
 	 * <p>The default implementation checks
 	 * {@link org.springframework.beans.factory.config.BeanDefinition#isAutowireCandidate()}.
+	 *
+	 * 确定给定的 bean 定义是否有资格作为给定依赖项的自动装配候选者。
+	 * 默认实现检查{@link org.springframework.beans.factory.config.BeanDefinition#isAutowireCandidate()}。
+	 *
 	 * @param bdHolder the bean definition including bean name and aliases
-	 * @param descriptor the descriptor for the target method parameter or field
-	 * @return whether the bean definition qualifies as autowire candidate
+	 * @param descriptor the descriptor for the target method parameter or field 目标方法参数或字段的描述符
+	 * @return whether the bean definition qualifies as autowire candidate bean 定义是否符合自动装配候选者的资格
 	 * @see org.springframework.beans.factory.config.BeanDefinition#isAutowireCandidate()
 	 */
 	default boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
@@ -77,9 +81,13 @@ public interface AutowireCandidateResolver {
 	/**
 	 * Determine whether a default value is suggested for the given dependency.
 	 * <p>The default implementation simply returns {@code null}.
-	 * @param descriptor the descriptor for the target method parameter or field
+	 * @param descriptor the descriptor for the target method parameter or field 目标方法参数或字段的描述符
 	 * @return the value suggested (typically an expression String),
 	 * or {@code null} if none found
+	 *
+	 * 确定是否为给定的依赖项建议默认值。
+	 * 默认实现只是返回 {@code null}。
+	 *
 	 * @since 3.0
 	 */
 	@Nullable

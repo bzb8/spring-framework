@@ -88,6 +88,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
 	/** Set of registered singletons, containing the bean names in registration order. */
+	// 一组已注册的单例，包含按注册顺序排列的 Bean 名称。
 	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
 
 	/** Names of beans that are currently in creation. */
@@ -309,6 +310,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Remove the bean with the given name from the singleton cache of this factory,
 	 * to be able to clean up eager registration of a singleton if creation failed.
+	 *
+	 * 从该工厂的单例缓存中删除具有给定名称的 bean，以便在创建失败时能够清除单例的急切注册。
+	 *
 	 * @param beanName the name of the bean
 	 * @see #getSingletonMutex()
 	 */
@@ -591,6 +595,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		removeSingleton(beanName);
 
 		// Destroy the corresponding DisposableBean instance.
+		// 销毁对应的DisposableBean实例。
 		DisposableBean disposableBean;
 		synchronized (this.disposableBeans) {
 			disposableBean = this.disposableBeans.remove(beanName);
@@ -613,6 +618,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		Set<String> dependencies;
 		synchronized (this.dependentBeanMap) {
 			// Within full synchronization in order to guarantee a disconnected Set
+			// 内部完全同步以保证断开的Set
 			dependencies = this.dependentBeanMap.remove(beanName);
 		}
 		// 销毁依赖的bean集合

@@ -153,7 +153,10 @@ public abstract class AnnotationConfigUtils {
 
 	/**
 	 * Register all relevant annotation post processors in the given registry.
-	 * @param registry the registry to operate on
+	 *
+	 * 在给定注册表中注册所有相关注解后处理器。
+	 *
+	 * @param registry the registry to operate on 要操作的注册表
 	 * @param source the configuration source element (already extracted)
 	 * that this registration was triggered from. May be {@code null}.
 	 *
@@ -169,10 +172,13 @@ public abstract class AnnotationConfigUtils {
 
 		DefaultListableBeanFactory beanFactory = unwrapDefaultListableBeanFactory(registry);
 		if (beanFactory != null) {
+			// 给DefaultListableBeanFactory设置了AnnotationAwareOrderComparator
 			if (!(beanFactory.getDependencyComparator() instanceof AnnotationAwareOrderComparator)) {
 				beanFactory.setDependencyComparator(AnnotationAwareOrderComparator.INSTANCE);
 			}
+			// beanFactory.getAutowireCandidateResolver() = SimpleAutowireCandidateResolver
 			if (!(beanFactory.getAutowireCandidateResolver() instanceof ContextAnnotationAutowireCandidateResolver)) {
+				// 给DefaultListableBeanFactory设置了ContextAnnotationAutowireCandidateResolver
 				beanFactory.setAutowireCandidateResolver(new ContextAnnotationAutowireCandidateResolver());
 			}
 		}

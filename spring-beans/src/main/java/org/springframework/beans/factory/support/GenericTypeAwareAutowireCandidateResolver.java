@@ -35,9 +35,13 @@ import org.springframework.util.ClassUtils;
  * match with the candidate's type if the dependency is declared as a generic type
  * (e.g. {@code Repository<Customer>}).
  *
+ * 基本的 {@link AutowireCandidateResolver}，如果依赖项被声明为泛型类型（例如 {@code Repository<Customer>}），则执行与候选类型的完整泛型类型匹配。
+ *
  * <p>This is the base class for
  * {@link org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver},
  * providing an implementation all non-annotation-based resolution steps at this level.
+ *
+ * 这是 {@link org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver} 的基类，提供此级别上所有非基于注解的解析步骤的实现。
  *
  * @author Juergen Hoeller
  * @since 4.0
