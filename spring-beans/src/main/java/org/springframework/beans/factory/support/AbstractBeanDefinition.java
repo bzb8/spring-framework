@@ -43,9 +43,16 @@ import org.springframework.util.StringUtils;
  * factoring out common properties of {@link GenericBeanDefinition},
  * {@link RootBeanDefinition}, and {@link ChildBeanDefinition}.
  *
+ * 具体的、成熟的 {@link BeanDefinition} 类的基类，
+ * 分解出 {@link GenericBeanDefinition}、
+ * {@link RootBeanDefinition}
+ * 和 {@link ChildBeanDefinition} 的公共属性。
+ *
  * <p>The autowire constants match the ones defined in the
  * {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory}
  * interface.
+ *
+ * 自动装配常量与 {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory} 接口中定义的常量匹配。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -67,6 +74,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Constant that indicates no external autowiring at all.
+	 *
+	 * 表示根本没有外部自动装配的常量。
+	 *
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;
@@ -149,7 +159,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 */
 	public static final String INFER_METHOD = "(inferred)";
 
-
+	// Class or String
 	@Nullable
 	private volatile Object beanClass;
 

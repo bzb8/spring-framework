@@ -34,7 +34,7 @@ import org.springframework.lang.Nullable;
  * instance overriding a statically defined annotation value (if any).
  *
  * {@code AnnotationAwareOrderComparator} 是 {@link OrderComparator} 的扩展，它支持 Spring 的 {@link org.springframework.core.Ordered}
- * 接口以及 {@link Order @Order} 和 {@link javax.annotation.Priority @Priority} 注解，其中 {@code Ordered} 实例提供的顺序值覆盖静态定义的注解值（如果有）。
+ * 接口以及 {@link Order @Order} 和 {@link javax.annotation.Priority @Priority} 注解，其中 {@code Ordered} 实例提供的order值覆盖静态定义的注解值（如果有）。
  *
  * <p>Consult the Javadoc for {@link OrderComparator} for details on the
  * sort semantics for non-ordered objects.
@@ -53,6 +53,7 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 
 	/**
 	 * Shared default instance of {@code AnnotationAwareOrderComparator}.
+	 * 从@Order或@Priority注解中获取value值
 	 */
 	public static final AnnotationAwareOrderComparator INSTANCE = new AnnotationAwareOrderComparator();
 

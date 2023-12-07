@@ -47,7 +47,12 @@ import org.springframework.util.ObjectUtils;
  * against {@link Qualifier qualifier annotations} on the field or parameter to be autowired.
  * Also supports suggested expression values through a {@link Value value} annotation.
  *
+ * {@link AutowireCandidateResolver} 实现，将 bean 定义限定符与要自动装配的字段或参数上的 {@link Qualifier 限定符注解} 相匹配。
+ * 还通过 {@link Value value} 注解支持建议的表达式值。
+ *
  * <p>Also supports JSR-330's {@link javax.inject.Qualifier} annotation, if available.
+ *
+ * 还支持 JSR-330 的 {@link javax.inject.Qualifier} 注释（如果可用）。
  *
  * @author Mark Fisher
  * @author Juergen Hoeller

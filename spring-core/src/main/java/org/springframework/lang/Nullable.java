@@ -30,14 +30,22 @@ import javax.annotation.meta.When;
  * A common Spring annotation to declare that annotated elements can be {@code null} under
  * some circumstance.
  *
+ * 一个常见的 Spring 注解，用于声明被注解的元素在某些情况下可以为 {@code null}。
+ *
  * <p>Leverages JSR-305 meta-annotations to indicate nullability in Java to common
  * tools with JSR-305 support and used by Kotlin to infer nullability of Spring API.
+ *
+ * 利用 JSR-305 元注解向支持 JSR-305 的常用工具指示 Java 中的可为空性，并由 Kotlin 用于推断 Spring API 的可为空性。
  *
  * <p>Should be used at parameter, return value, and field level. Methods override should
  * repeat parent {@code @Nullable} annotations unless they behave differently.
  *
+ * 应该在参数、返回值和字段级别使用。方法重写应重复父 {@code @Nullable} 注释，除非它们的行为不同。
+ *
  * <p>Can be used in association with {@code @NonNullApi} or {@code @NonNullFields} to
  * override the default non-nullable semantic to nullable.
+ *
+ * 可以与 {@code @NonNullApi} 或 {@code @NonNullFields} 结合使用，将默认的不可空语义覆盖为可空。
  *
  * @author Sebastien Deleuze
  * @author Juergen Hoeller

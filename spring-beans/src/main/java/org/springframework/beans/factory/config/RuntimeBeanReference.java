@@ -20,8 +20,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Immutable placeholder class used for a property value object when it's
+ * immutable placeholder class used for a property value object when it's
  * a reference to another bean in the factory, to be resolved at runtime.
+ *
+ * 当属性值对象是对工厂中另一个 bean 的引用时，用于属性值对象的不可变占位符类，将在运行时解析。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

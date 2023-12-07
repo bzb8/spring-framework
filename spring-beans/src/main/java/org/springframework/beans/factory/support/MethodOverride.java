@@ -27,8 +27,15 @@ import org.springframework.util.ObjectUtils;
  * Object representing the override of a method on a managed object by the IoC
  * container.
  *
+ * 表示由 IoC 容器覆盖托管对象上的方法的对象。
+ *
  * <p>Note that the override mechanism is <em>not</em> intended as a generic
  * means of inserting crosscutting code: use AOP for that.
+ *
+ * 请注意，覆盖机制并不是作为插入横切代码的通用方法：为此使用 AOP。
+ *
+ * MethodOverride 是 Spring 框架中的一个概念，用于表示方法覆盖（method override）的信息。
+ * 它允许在子类或子类的配置中重写父类的方法，特别是在 AOP 和容器中的方法覆盖。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -67,6 +74,9 @@ public abstract class MethodOverride implements BeanMetadataElement {
 	 * type matching needs to occur to disambiguate methods of the same name).
 	 * <p>Default is {@code true}; can be switched to {@code false} to optimize
 	 * runtime performance.
+	 *
+	 * 设置重写的方法是否重载（即是否需要进行参数类型匹配以消除同名方法的歧义）。
+	 * 默认为{@code true}；可以切换到 {@code false} 以优化运行时性能。
 	 */
 	protected void setOverloaded(boolean overloaded) {
 		this.overloaded = overloaded;

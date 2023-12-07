@@ -105,7 +105,7 @@ public abstract class OrderUtils {
 	 *
 	 * 从指定的注解集合中返回order。负责 {@link Order @Order} 和 {@code @javax.annotation.Priority}。
 	 *
-	 * @param element the source element
+	 * @param element the source element 源元素
 	 * @param annotations the annotation to consider 要考虑的注释
 	 * @return the order value, or {@code null} if none can be found
 	 */

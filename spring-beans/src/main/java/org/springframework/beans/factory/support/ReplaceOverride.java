@@ -28,8 +28,12 @@ import org.springframework.util.ObjectUtils;
  * Extension of {@link MethodOverride} that represents an arbitrary
  * override of a method by the IoC container.
  *
+ * {@link MethodOverride} 的扩展，表示 IoC 容器对方法的任意重写。
+ *
  * <p>Any non-final method can be overridden, irrespective of its
  * parameters and return types.
+ *
+ * 任何非最终方法都可以被重写，无论其参数和返回类型如何。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
