@@ -84,7 +84,7 @@ class ConditionEvaluator {
 	 *
 	 *
 	 * @param metadata the meta data
-	 * @param phase the phase of the call
+	 * @param phase the phase of the call (null)
 	 * @return if the item should be skipped
 	 */
 	public boolean shouldSkip(@Nullable AnnotatedTypeMetadata metadata, @Nullable ConfigurationPhase phase) {

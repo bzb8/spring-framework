@@ -83,7 +83,7 @@ final class PostProcessorRegistrationDelegate {
 		// 已经处理过的BeanDefinitionRegistry
 		Set<String> processedBeans = new HashSet<>();
 
-		if (beanFactory instanceof BeanDefinitionRegistry) {
+		if (beanFactory instanceof BeanDefinitionRegistry) { // true
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
 			// 常规后处理器
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
@@ -116,6 +116,8 @@ final class PostProcessorRegistrationDelegate {
 			// 首先，调用实现 PriorityOrdered 的 BeanDefinitionRegistryPostProcessors。
 			// 不会实例化，或者从BeanDefinition中获取，或者从FactoryBean的getObjectType()获取
 			// 获取实现了PriorityOrdered的BeanDefinitionRegistryPostProcessor
+			// org.springframework.context.annotation.internalConfigurationAnnotationProcessor
+			// ConfigurationClassPostProcessor
 			String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {

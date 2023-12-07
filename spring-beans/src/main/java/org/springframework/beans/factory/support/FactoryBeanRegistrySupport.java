@@ -93,9 +93,9 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	 *
 	 * 获取要从给定 FactoryBean 公开的对象。
 	 *
-	 * @param factory the FactoryBean instance
+	 * @param factory the FactoryBean instance FactoryBean 实例
 	 * @param beanName the name of the bean
-	 * @param shouldPostProcess whether the bean is subject to post-processing 该bean是否经过后处理
+	 * @param shouldPostProcess whether the bean is subject to post-processing 该bean是否经过后处理，非合成的，由应用程序自定义的
 	 * @return the object obtained from the FactoryBean
 	 * @throws BeanCreationException if FactoryBean object creation failed
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
@@ -141,9 +141,11 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 			}
 		}
 		else {
+			// 调用getObject()方法返回实例
 			Object object = doGetObjectFromFactoryBean(factory, beanName);
 			if (shouldPostProcess) {
 				try {
+					// 调用Post
 					object = postProcessObjectFromFactoryBean(object, beanName);
 				}
 				catch (Throwable ex) {

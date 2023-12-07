@@ -298,7 +298,7 @@ public interface BeanFactory {
 	 * return value from this method does not necessarily indicate that {@link #getBean}
 	 * will be able to obtain an instance for the same name.
 	 * 如果找到与给定名称匹配的 bean 定义或单例实例，则无论命名 bean 定义是具体的还是抽象的、惰性的还是急切的、是否在范围内，此方法都将返回 {@code true}。
-	 * 因此，请注意，此方法的 {@code true} 返回值并不一定表明 {@link getBean} 将能够获取同名的实例。
+	 * 因此，请注意，此方法的 {@code true} 返回值并不一定表明 {@link #getBean} 将能够获取同名的实例。
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is present
 	 */

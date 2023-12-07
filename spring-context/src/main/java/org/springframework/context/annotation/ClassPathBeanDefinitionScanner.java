@@ -157,7 +157,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 *
 	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
 	 * of a {@code BeanDefinitionRegistry}
-	 * @param useDefaultFilters whether to include the default filters for the
+	 * @param useDefaultFilters whether to include the default filters for the (true)
 	 * {@link org.springframework.stereotype.Component @Component},
 	 * {@link org.springframework.stereotype.Repository @Repository},
 	 * {@link org.springframework.stereotype.Service @Service}, and

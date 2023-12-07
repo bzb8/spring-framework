@@ -48,6 +48,7 @@ public class EmbeddedValueResolver implements StringValueResolver {
 
 	public EmbeddedValueResolver(ConfigurableBeanFactory beanFactory) {
 		this.exprContext = new BeanExpressionContext(beanFactory, null);
+		// StandardBeanExpressionResolver
 		this.exprResolver = beanFactory.getBeanExpressionResolver();
 	}
 

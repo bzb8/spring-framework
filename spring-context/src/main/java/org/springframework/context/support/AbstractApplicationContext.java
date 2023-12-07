@@ -249,9 +249,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	private ApplicationStartup applicationStartup = ApplicationStartup.DEFAULT;
 
 	/** Statically specified listeners. */
+	// 静态指定的侦听器。
 	private final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
 
 	/** Local listeners registered before refresh. */
+	// 刷新前注册的本地侦听器。
 	@Nullable
 	private Set<ApplicationListener<?>> earlyApplicationListeners;
 
@@ -593,16 +595,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 准备此上下文以进行刷新。
 			prepareRefresh();
 
-			// 告诉子类刷新内部bean工厂, 注册BeanDefinition
 			// Tell the subclass to refresh the internal bean factory.
+			// 告诉子类刷新内部bean工厂, 注册BeanDefinition
+			// DefaultListableBeanFactory
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
 			prepareBeanFactory(beanFactory);
 
 			try {
-				// 允许在上下文子类中对 bean 工厂进行后处理。
 				// Allows post-processing of the bean factory in context subclasses.
+				// 允许在上下文子类中对 bean 工厂进行后处理。
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
@@ -689,8 +692,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 
-		// 初始化上下文环境中的任何占位符属性源
 		// Initialize any placeholder property sources in the context environment.
+		// 初始化上下文环境中的任何占位符属性源
 		initPropertySources();
 
 		// 验证所有标记为必需的属性都是可解析的
@@ -704,14 +707,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
 		else {
-			// Reset local application listeners to pre-refresh state.
+			// Reset local application listeners to pre-refresh state. 将本地应用程序侦听器重置为刷新前状态。
 			this.applicationListeners.clear();
 			this.applicationListeners.addAll(this.earlyApplicationListeners);
 		}
 
-		// 允许收集早期应用程序事件，一旦多播器可用即可发布
 		// Allow for the collection of early ApplicationEvents,
 		// to be published once the multicaster is available...
+		// 允许收集早期应用程序事件，一旦多播器可用即可发布
 		this.earlyApplicationEvents = new LinkedHashSet<>();
 	}
 
@@ -744,11 +747,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Tell the internal bean factory to use the context's class loader etc.
 		beanFactory.setBeanClassLoader(getClassLoader());
 		if (!shouldIgnoreSpel) {
+			// 设置spring el表达式解析器
 			beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		}
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
-		// Configure the bean factory with context callbacks.
+		// Configure the bean factory with context callbacks. 使用上下文回调配置 bean 工厂。
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
