@@ -295,18 +295,25 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Override settings in this bean definition (presumably a copied parent
 	 * from a parent-child inheritance relationship) from the given bean
 	 * definition (presumably the child).
+	 *
 	 * 覆盖此 Bean 定义中的设置（可能是从父子继承关系中复制的父定义）与给定的 Bean 定义（可能是子定义）中的设置。
 	 *
 	 * <ul>
-	 * <li>Will override beanClass if specified in the given bean definition.
+	 * <li>Will override beanClass if specified in the given bean definition. 如果在给定的 bean 定义中指定，将覆盖 beanClass。
 	 * <li>Will always take {@code abstract}, {@code scope},
 	 * {@code lazyInit}, {@code autowireMode}, {@code dependencyCheck},
 	 * and {@code dependsOn} from the given bean definition.
+	 *
+	 * 将始终从给定的 bean 定义中获取 {@code abstract}、{@code scope}、{@code lazyInit}、{@code autowireMode}、{@code dependencyCheck} 和 {@code dependsOn}。
+	 *
 	 * <li>Will add {@code constructorArgumentValues}, {@code propertyValues},
 	 * {@code methodOverrides} from the given bean definition to existing ones.
 	 * <li>Will override {@code factoryBeanName}, {@code factoryMethodName},
 	 * {@code initMethodName}, and {@code destroyMethodName} if specified
 	 * in the given bean definition.
+	 *
+	 * 将 {@code constructorArgumentValues}、{@code propertyValues}、{@code methodOverrides} 从给定的 bean 定义添加到现有 bean 定义中。
+	 * 如果在给定的 Bean 定义中指定，将覆盖 {@code factoryBeanName}、{@code factoryMethodName}、{@code initMethodName} 和 {@code destroyMethodName}。
 	 * </ul>
 	 */
 	public void overrideFrom(BeanDefinition other) {
@@ -544,6 +551,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * rather just serving as parent for concrete child bean definitions.
 	 * <p>Default is "false". Specify true to tell the bean factory to not try to
 	 * instantiate that particular bean in any case.
+	 *
+	 * 如果这个 Bean 是“抽象的”，即不打算本身实例化，而只是作为具体子 Bean 定义的父级，则设置为该 bean。
+	 * 默认值为“false”。指定 true 可告知 Bean 工厂在任何情况下都不要尝试实例化该特定 Bean。
 	 */
 	public void setAbstract(boolean abstractFlag) {
 		this.abstractFlag = abstractFlag;
@@ -776,6 +786,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * <p>If such a callback is set, it will override any other constructor
 	 * or factory method metadata. However, bean property population and
 	 * potential annotation-driven injection will still apply as usual.
+	 *
+	 * 指定用于创建 Bean 实例的回调，作为以声明方式指定的工厂方法的替代方法。
+	 * 如果设置了此类回调，它将覆盖任何其他构造函数或工厂方法元数据。但是，bean 属性填充和潜在的注解驱动注入仍将照常应用。
+	 *
 	 * @since 5.0
 	 * @see #setConstructorArgumentValues(ConstructorArgumentValues)
 	 * @see #setPropertyValues(MutablePropertyValues)

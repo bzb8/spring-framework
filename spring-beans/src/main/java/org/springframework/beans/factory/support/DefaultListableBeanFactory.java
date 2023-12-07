@@ -181,6 +181,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<Class<?>, String[]> singletonBeanNamesByType = new ConcurrentHashMap<>(64);
 
 	/** List of bean definition names, in registration order. */
+	// Bean 定义名称列表（按注册顺序排列）
 	private volatile List<String> beanDefinitionNames = new ArrayList<>(256);
 
 	/** List of names of manually registered singletons, in registration order. */
@@ -632,6 +633,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		// Check manually registered singletons too.
+		// 还要检查手动注册的单例。
 		for (String beanName : this.manualSingletonNames) {
 			try {
 				// In case of FactoryBean, match object created by FactoryBean.
@@ -645,6 +647,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					beanName = FACTORY_BEAN_PREFIX + beanName;
 				}
 				// Match raw bean instance (might be raw FactoryBean).
+				// 匹配原始 Bean 实例（可能是原始 FactoryBean）。
 				if (isTypeMatch(beanName, type)) {
 					result.add(beanName);
 				}
@@ -1139,18 +1142,22 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// Remove corresponding bean from singleton cache, if any. Shouldn't usually
 		// be necessary, rather just meant for overriding a context's default beans
 		// (e.g. the default StaticMessageSource in a StaticApplicationContext).
+		// 从单例缓存中删除相应的 bean（如果有）。通常不应该是必需的，而只是用于覆盖上下文的默认 bean（例如，StaticApplicationContext 中的默认 StaticMessageSource）。
 		destroySingleton(beanName);
 
 		// Notify all post-processors that the specified bean definition has been reset.
+		// 通知所有后处理器指定的 Bean 定义已重置。
 		for (MergedBeanDefinitionPostProcessor processor : getBeanPostProcessorCache().mergedDefinition) {
 			processor.resetBeanDefinition(beanName);
 		}
 
 		// Reset all bean definitions that have the given bean as parent (recursively).
+		// 重置所有将给定 Bean 作为父 Bean 的 Bean 定义（递归）。
 		for (String bdName : this.beanDefinitionNames) {
 			if (!beanName.equals(bdName)) {
 				BeanDefinition bd = this.beanDefinitionMap.get(bdName);
 				// Ensure bd is non-null due to potential concurrent modification of beanDefinitionMap.
+				// 确保 bd 为非 null，因为 beanDefinitionMap 可能会同时修改。
 				if (bd != null && beanName.equals(bd.getParentName())) {
 					resetBeanDefinition(bdName);
 				}

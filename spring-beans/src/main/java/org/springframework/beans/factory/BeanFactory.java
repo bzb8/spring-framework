@@ -313,6 +313,12 @@ public interface BeanFactory {
 	 * check for independent instances.
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 *
+	 * 这个 Bean 是共享的单例吗？也就是说，{@link #getBean} 是否总是返回相同的实例？
+	 * 注意：此方法返回 {@code false} 并不明确指示独立实例。它表示非单例实例，这些实例也可能对应于作用域 bean。
+	 * 使用 {@link #isPrototype} 操作显式检查独立实例。
+	 * 将别名转换回相应的规范 Bean 名称。将询问父工厂是否在此工厂实例中找不到 bean。
+	 *
 	 * @param name the name of the bean to query
 	 * @return whether this bean corresponds to a singleton instance
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name

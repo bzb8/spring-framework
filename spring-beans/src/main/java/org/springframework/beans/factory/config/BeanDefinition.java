@@ -101,6 +101,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return the name of the parent definition of this bean definition, if any.
+	 *
+	 * 返回此 Bean 定义的父定义的名称（如果有）。
 	 */
 	@Nullable
 	String getParentName();
@@ -175,6 +177,10 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * It does not affect explicit references by name, which will get resolved even
 	 * if the specified bean is not marked as an autowire candidate. As a consequence,
 	 * autowiring by name will nevertheless inject a bean if the name matches.
+	 *
+	 * 设置此 Bean 是否是自动注入到其他 Bean 的候选项。
+	 * 请注意，此标志旨在仅影响基于类型的自动注入。它不会影响按名称划分的显式引用，即使指定的 Bean 未标记为自动注入候选项，也会被解析。因此，如果名称匹配，则按名称自动布线仍将注入 bean。
+	 *
 	 */
 	void setAutowireCandidate(boolean autowireCandidate);
 

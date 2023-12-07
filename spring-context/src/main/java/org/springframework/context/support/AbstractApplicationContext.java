@@ -560,6 +560,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the list of BeanFactoryPostProcessors that will get applied
 	 * to the internal BeanFactory.
+	 *
 	 * 返回将应用于内部 BeanFactory 的 BeanFactoryPostProcessors 列表。
 	 */
 	public List<BeanFactoryPostProcessor> getBeanFactoryPostProcessors() {
@@ -812,7 +813,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Instantiate and invoke all registered BeanFactoryPostProcessor beans,
 	 * respecting explicit order if given.
 	 * <p>Must be called before singleton instantiation.
-	 * 实例化并调用所有已注册的 BeanFactoryPostProcessor bean，并遵守明确的顺序（如果给定）。 <p>必须在单例实例化之前调用。
+	 *
+	 * 实例化并调用所有已注册的 BeanFactoryPostProcessor bean，并遵守明确的顺序（如果给定）。
+	 * 必须在单例实例化之前调用。
 	 */
 	protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
 		PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());

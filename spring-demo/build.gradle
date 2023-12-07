@@ -2,6 +2,10 @@ plugins {
     id 'java'
 }
 
+apply plugin: "groovy"
+apply plugin: "kotlin"
+
+
 group 'org.springframework'
 version '5.3.31-SNAPSHOT'
 
