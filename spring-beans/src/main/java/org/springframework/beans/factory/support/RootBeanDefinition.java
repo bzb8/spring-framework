@@ -80,6 +80,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	volatile ResolvableType targetType;
 
 	/** Package-visible field for caching the determined Class of a given bean definition. */
+	// Package-visible 字段，用于缓存给定 Bean 定义的确定类。
 	@Nullable
 	volatile Class<?> resolvedTargetType;
 
@@ -89,6 +90,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	volatile Boolean isFactoryBean;
 
 	/** Package-visible field for caching the return type of a generically typed factory method. */
+	// 用于缓存泛型类型化工厂方法的返回类型的 Package-visible 字段
 	@Nullable
 	volatile ResolvableType factoryMethodReturnType;
 

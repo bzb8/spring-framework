@@ -105,6 +105,7 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * The underlying Java type being managed.
+	 * 正在管理的基础 Java 类型。
 	 */
 	private final Type type;
 
@@ -194,6 +195,10 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@link ResolvableType} on a {@link Class} basis.
 	 * <p>Avoids all {@code instanceof} checks in order to create a straight {@link Class} wrapper.
+	 *
+	 * 用于在 {@link Class} 的基础上创建新的 {@link ResolvableType} 的私有构造函数。
+	 * 避免所有 {@code instanceof} 检查，以便创建直接的 {@link Class} 包装器。
+	 *
 	 * @since 4.2
 	 */
 	private ResolvableType(@Nullable Class<?> clazz) {

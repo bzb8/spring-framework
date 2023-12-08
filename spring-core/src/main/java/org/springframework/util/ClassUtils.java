@@ -406,9 +406,12 @@ public abstract class ClassUtils {
 	/**
 	 * Check whether the given class is cache-safe in the given context,
 	 * i.e. whether it is loaded by the given ClassLoader or a parent of it.
+	 *
+	 * 检查给定的类在给定的上下文中是否是缓存安全的，即它是否由给定的 ClassLoader 或它的父类加载。
+	 *
 	 * @param clazz the class to analyze
 	 * @param classLoader the ClassLoader to potentially cache metadata in
-	 * (may be {@code null} which indicates the system class loader)
+	 * (may be {@code null} which indicates the system class loader)  ClassLoader 可能将元数据缓存在 （可能是 {@code null}，表示系统类加载器）
 	 */
 	public static boolean isCacheSafe(Class<?> clazz, @Nullable ClassLoader classLoader) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -929,6 +932,9 @@ public abstract class ClassUtils {
 	/**
 	 * Return the user-defined class for the given class: usually simply the given
 	 * class, but the original class in case of a CGLIB-generated subclass.
+	 *
+	 * 返回给定类的用户定义类：通常只是给定的类，但如果是 CGLIB 生成的子类，则返回原始类。
+	 *
 	 * @param clazz the class to check
 	 * @return the user-defined class
 	 */

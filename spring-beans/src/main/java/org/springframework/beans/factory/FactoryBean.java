@@ -127,6 +127,9 @@ public interface FactoryBean<T> {
 	 * Is the object managed by this factory a singleton? That is,
 	 * will {@link #getObject()} always return the same object
 	 * (a reference that can be cached)?
+	 *
+	 * 此工厂管理的对象是单例吗？也就是说，{@link #getObject()} 是否总是返回相同的对象（可以缓存的引用）？
+	 *
 	 * <p><b>NOTE:</b> If a FactoryBean indicates to hold a singleton object,
 	 * the object returned from {@code getObject()} might get cached
 	 * by the owning BeanFactory. Hence, do not return {@code true}
@@ -134,6 +137,11 @@ public interface FactoryBean<T> {
 	 * <p>The singleton status of the FactoryBean itself will generally
 	 * be provided by the owning BeanFactory; usually, it has to be
 	 * defined as singleton there.
+	 *
+	 * 注意：如果 FactoryBean 指示保存单例对象，则从 {@code getObject()} 返回的对象可能会被拥有的 BeanFactory 缓存。
+	 * 因此，除非 FactoryBean 始终公开相同的引用，否则不要返回 {@code true}。
+	 * FactoryBean 本身的单例状态通常由拥有 BeanFactory 的 BeanFactory 提供;通常，它必须在那里定义为单例。
+	 *
 	 * <p><b>NOTE:</b> This method returning {@code false} does not
 	 * necessarily indicate that returned objects are independent instances.
 	 * An implementation of the extended {@link SmartFactoryBean} interface
@@ -144,6 +152,12 @@ public interface FactoryBean<T> {
 	 * {@code isSingleton()} implementation returns {@code false}.
 	 * <p>The default implementation returns {@code true}, since a
 	 * {@code FactoryBean} typically manages a singleton instance.
+	 *
+	 * 注意：此方法返回 {@code false} 并不一定表示返回的对象是独立的实例。
+	 * 扩展的 {@link SmartFactoryBean} 接口的实现可以通过其 {@link SmartFactoryBean#isPrototype()} 方法显式指示独立实例。
+	 * 如果 {@code isSingleton（）} 实现返回 {@code false}，则简单地假定未实现此扩展接口的普通 {@link FactoryBean} 实现始终返回独立实例。
+	 * 认实现返回 {@code true}，因为 {@code FactoryBean} 通常管理一个单例实例。
+	 *
 	 * @return whether the exposed object is a singleton
 	 * @see #getObject()
 	 * @see SmartFactoryBean#isPrototype()

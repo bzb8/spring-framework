@@ -100,6 +100,11 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * interface, it will be used as default {@code ResourceLoader} as well. This will
 	 * usually be the case for {@link org.springframework.context.ApplicationContext}
 	 * implementations.
+	 *
+	 * 为给定的 Bean 工厂创建一个新的 {@code ClassPathBeanDefinitionScanner}。
+	 * 如果传入的 Bean 工厂不仅实现了 {@code BeanDefinitionRegistry} 接口，还实现了 {@code ResourceLoader} 接口，
+	 * 那么它也将用作默认的 {@code ResourceLoader}。{@link org.springframework.context.ApplicationContext}实现通常就是这种情况。
+	 *
 	 * <p>If given a plain {@code BeanDefinitionRegistry}, the default {@code ResourceLoader}
 	 * will be a {@link org.springframework.core.io.support.PathMatchingResourcePatternResolver}.
 	 * <p>If the passed-in bean factory also implements {@link EnvironmentCapable} its
@@ -107,9 +112,14 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * use a {@link org.springframework.core.env.StandardEnvironment}. All
 	 * {@code ApplicationContext} implementations are {@code EnvironmentCapable}, while
 	 * normal {@code BeanFactory} implementations are not.
+	 *
+	 * 如果给定一个普通的{@code BeanDefinitionRegistry}，则默认的{@code ResourceLoader}将是{@link org.springframework.core.io.support.PathMatchingResourcePatternResolver}。
+	 * 如果传入的 Bean 工厂也实现了 {@link EnvironmentCapable}，则此读取器将使用其环境。否则，读取器将初始化并使用{@link org.springframework.core.env.StandardEnvironment}。
+	 * 所有 {@code ApplicationContext} 实现都是 {@code EnvironmentCapable}，而普通的 {@code BeanFactory} 实现则不是。
+	 *
 	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
 	 * of a {@code BeanDefinitionRegistry}
-	 * @param useDefaultFilters whether to include the default filters for the
+	 * @param useDefaultFilters whether to include the default filters for the (true)
 	 * {@link org.springframework.stereotype.Component @Component},
 	 * {@link org.springframework.stereotype.Repository @Repository},
 	 * {@link org.springframework.stereotype.Service @Service}, and
