@@ -31,15 +31,23 @@ import org.springframework.util.Assert;
  * {@link AspectJAwareAdvisorAutoProxyCreator} subclass that processes all AspectJ
  * annotation aspects in the current application context, as well as Spring Advisors.
  *
+ * {@link AspectJAwareAdvisorAutoProxyCreator} 子类，用于处理当前应用程序上下文中的所有 AspectJ 注解方面以及 Spring Advisor。
+ *
  * <p>Any AspectJ annotated classes will automatically be recognized, and their
  * advice applied if Spring AOP's proxy-based model is capable of applying it.
  * This covers method execution joinpoints.
  *
+ * 如果 Spring AOP 的基于代理的模型能够应用它们，则任何 AspectJ 带注解的类都将被自动识别，并且它们的建议将被应用。这涵盖了方法执行连接点。
+ *
  * <p>If the &lt;aop:include&gt; element is used, only @AspectJ beans with names matched by
  * an include pattern will be considered as defining aspects to use for Spring auto-proxying.
  *
+ * 如果使用 <aop:include> 元素，则只有名称与包含模式匹配的 @AspectJ beans 才会被视为定义用于 Spring 自动代理的切面。
+ *
  * <p>Processing of Spring Advisors follows the rules established in
  * {@link org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator}.
+ *
+ * Spring Advisor 的处理遵循 {@link org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator} 中建立的规则。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

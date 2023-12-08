@@ -1,9 +1,7 @@
 package org.springframework;
 
-import org.springframework.config.AppConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.entity.User;
+import org.springframework.service.AopService;
 
 public class Main {
 	public static void main(String[] args) {
@@ -16,8 +14,8 @@ public class Main {
 		AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
 		BzbService bzbService = annotationConfigApplicationContext.getBean(BzbService.class);
 		System.out.println(bzbService);
-		Class<Main> mainClass = Main.class;
 
-		System.out.println(Main.class.getName());
+		AopService aopService = annotationConfigApplicationContext.getBean(AopService.class);
+		aopService.testAop();
 	}
 }
