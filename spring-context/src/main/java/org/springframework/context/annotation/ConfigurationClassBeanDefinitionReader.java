@@ -159,6 +159,7 @@ class ConfigurationClassBeanDefinitionReader {
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
+			// 从@Configuration标记的类中读取@Bean标记的方法，并生成ConfigurationClassBeanDefinition类型的BeanDefinition
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
@@ -420,6 +421,9 @@ class ConfigurationClassBeanDefinitionReader {
 	 * was created from a configuration class as opposed to any other configuration source.
 	 * Used in bean overriding cases where it's necessary to determine whether the bean
 	 * definition was created externally.
+	 *
+	 * {@link RootBeanDefinition} 标记子类，用于表示 Bean 定义是从配置类创建的，而不是从任何其他配置源创建的。用于需要确定 Bean 定义是否在外部创建的 Bean 覆盖情况。
+	 *
 	 */
 	@SuppressWarnings("serial")
 	private static class ConfigurationClassBeanDefinition extends RootBeanDefinition implements AnnotatedBeanDefinition {

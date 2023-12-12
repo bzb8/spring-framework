@@ -184,10 +184,16 @@ public abstract class AbstractApplicationEventMulticaster
 	}
 
 	/**
-	 * Return a Collection of ApplicationListeners matching the given
-	 * event type. Non-matching listeners get excluded early.
+	 * return a collection of applicationlisteners matching the given
+	 * event type. non-matching listeners get excluded early.
+	 *
+	 * 返回与给定事件类型匹配的 ApplicationListener 的集合。不匹配的侦听器会提前被排除在外。
+	 *
 	 * @param event the event to be propagated. Allows for excluding
 	 * non-matching listeners early, based on cached matching information.
+	 *
+	 * 要传播的事件。允许根据缓存的匹配信息提前排除不匹配的侦听器
+	 *
 	 * @param eventType the event type
 	 * @return a Collection of ApplicationListeners
 	 * @see org.springframework.context.ApplicationListener
@@ -231,6 +237,9 @@ public abstract class AbstractApplicationEventMulticaster
 
 	/**
 	 * Actually retrieve the application listeners for the given event and source type.
+	 *
+	 * 实际检索给定事件和源类型的应用程序侦听器。
+	 *
 	 * @param eventType the event type
 	 * @param sourceType the event source type
 	 * @param retriever the ListenerRetriever, if supposed to populate one (for caching purposes)
@@ -252,6 +261,9 @@ public abstract class AbstractApplicationEventMulticaster
 
 		// Add programmatically registered listeners, including ones coming
 		// from ApplicationListenerDetector (singleton beans and inner beans).
+
+		// 添加以编程方式注册的侦听器，包括来自 ApplicationListenerDetector 的侦听器（单例 Bean 和内部 Bean）。
+
 		for (ApplicationListener<?> listener : listeners) {
 			if (supportsEvent(listener, eventType, sourceType)) {
 				if (retriever != null) {
@@ -493,6 +505,7 @@ public abstract class AbstractApplicationEventMulticaster
 
 	/**
 	 * Helper class that encapsulates a general set of target listeners.
+	 *
 	 * 封装一组通用目标侦听器的帮助程序类。
 	 */
 	private class DefaultListenerRetriever {

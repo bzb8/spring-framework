@@ -1,4 +1,4 @@
-package org.springframework;
+package org.springframework.service;
 
 public class BzbService {
 

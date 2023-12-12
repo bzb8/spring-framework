@@ -260,10 +260,12 @@ class ConfigurationClassParser {
 		// 递归处理配置类及其超类层次结构。
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		do {
+			// 返回值是它的父类，为了递归处理
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
 		}
 		while (sourceClass != null);
 
+		// 存储处理好的ConfigurationClass
 		this.configurationClasses.put(configClass, configClass);
 	}
 
@@ -290,7 +292,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @PropertySource annotations
-		// 属性源
+		// 封装成PropertySource并添加到Environment中
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
 				org.springframework.context.annotation.PropertySource.class)) {
@@ -345,6 +347,7 @@ class ConfigurationClassParser {
 
 		// Process individual @Bean methods
 		// 处理单个@Bean方法
+		// 获取@Bean标记的所有方法
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
@@ -408,6 +411,8 @@ class ConfigurationClassParser {
 
 	/**
 	 * Register default methods on interfaces implemented by the configuration class.
+	 * 在配置类实现的接口上注册默认方法。
+	 * 递归查找接口上标记有@Bean的非抽象方法
 	 */
 	private void processInterfaces(ConfigurationClass configClass, SourceClass sourceClass) throws IOException {
 		for (SourceClass ifc : sourceClass.getInterfaces()) {

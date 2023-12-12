@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * {@link ImportBeanDefinitionRegistrar} implementations, as well as regular component
  * classes (as of 4.2; analogous to {@link AnnotationConfigApplicationContext#register}).
  *
- * 提供与 <import>Spring XML 中的 {@code } 元素等效的功能。允许导入 {@code @Configuration} 类、
+ * 提供与 <import/>Spring XML 中的 {@code } 元素等效的功能。允许导入 {@code @Configuration} 类、
  * {@link ImportSelector} 和 {@link ImportBeanDefinitionRegistrar} 实现，
  * 以及常规组件类（从 4.2 开始;类似于 {@link AnnotationConfigApplicationContext#register}）。
  *

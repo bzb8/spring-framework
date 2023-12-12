@@ -262,7 +262,9 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 
 	/**
 	 * Return the current number of registered BeanPostProcessors, if any.
-	 * 返回当前已注册的 BeanPostProcessor 数（如果有）。
+	 *
+	 * 返回当前已注册的 BeanPostProcessor 数量（如果有）。
+	 *
 	 */
 	int getBeanPostProcessorCount();
 
