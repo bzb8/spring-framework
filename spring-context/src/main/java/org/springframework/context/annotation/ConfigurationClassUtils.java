@@ -80,6 +80,7 @@ abstract class ConfigurationClassUtils {
 	 * to be auto-registered as well), and mark it accordingly.
 	 *
 	 * 检查给定的 Bean 定义是否是配置类的候选者（或在 configuration/component 类中声明的嵌套组件类，也要自动注册），并相应地对其进行标记。
+	 * 具有@Configuration注解或带有Component.class, ComponentScan.class, Import.class, ImportResource.class注解或有@Bean注解的方法就是配置候选类，则return true
 	 *
 	 * @param beanDef the bean definition to check
 	 * @param metadataReaderFactory the current factory in use by the caller 调用方正在使用的当前工厂

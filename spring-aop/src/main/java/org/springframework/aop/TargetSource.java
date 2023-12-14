@@ -23,12 +23,18 @@ import org.springframework.lang.Nullable;
  * an AOP invocation, which will be invoked via reflection if no around
  * advice chooses to end the interceptor chain itself.
  *
+ * {@code TargetSource} 用于获取 AOP 调用的当前“目标”，如果没有 around 建议选择结束拦截器链本身，则将通过反射调用该目标。
+ *
  * <p>If a {@code TargetSource} is "static", it will always return
  * the same target, allowing optimizations in the AOP framework. Dynamic
  * target sources can support pooling, hot swapping, etc.
  *
+ * 如果 {@code TargetSource} 是“静态”的，它将始终返回相同的目标，从而允许在 AOP 框架中进行优化。动态目标源可以支持池化、热插拔等。
+ *
  * <p>Application developers don't usually need to work with
  * {@code TargetSources} directly: this is an AOP framework interface.
+ *
+ * 应用程序开发人员通常不需要直接使用 {@code TargetSources}：这是一个 AOP 框架接口。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

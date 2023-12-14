@@ -250,6 +250,7 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 
 	/**
 	 * Get the value stored under the specified {@code attributeName} as a class.
+	 * 获取作为类存储在指定 {@code attributeName} 下的值。
 	 * @param attributeName the name of the attribute to get;
 	 * never {@code null} or empty
 	 * @return the value

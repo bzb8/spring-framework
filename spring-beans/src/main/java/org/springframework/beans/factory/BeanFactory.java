@@ -364,12 +364,18 @@ public interface BeanFactory {
 
 	/**
 	 * Check whether the bean with the given name matches the specified type.
+	 *
 	 * 检查给定名称的 bean 是否与指定类型匹配。
+	 *
 	 * More specifically, check whether a {@link #getBean} call for the given name
 	 * would return an object that is assignable to the specified target type.
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
-	 * 更具体地说，检查给定名称的 {@link getBean} 调用是否会返回可分配给指定目标类型的对象。 <p>将别名翻译回相应的规范 bean 名称。 <p>如果在该工厂实例中找不到该bean，将询问父工厂。
+	 *
+	 * 更具体地说，检查给定名称的 {@link #getBean} 调用是否会返回可分配给指定目标类型的对象。
+	 * 将别名翻译回相应的规范 bean 名称。
+	 * 如果在该工厂实例中找不到该bean，将询问父工厂。
+	 *
 	 * @param name the name of the bean to query
 	 * @param typeToMatch the type to match against (as a {@code Class})
 	 * @return {@code true} if the bean type matches,

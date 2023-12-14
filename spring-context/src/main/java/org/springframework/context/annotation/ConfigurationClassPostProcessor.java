@@ -266,6 +266,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+		System.out.println("1111");
 		int factoryId = System.identityHashCode(beanFactory);
 		if (this.factoriesPostProcessed.contains(factoryId)) {
 			throw new IllegalStateException(
@@ -360,7 +361,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// Read the model and create bean definitions based on its content
 			// 读取模型并根据其内容创建 bean 定义
 			if (this.reader == null) {
-				this.reader = new ConfigurationClassBeanDefinitionReader(
+ 				this.reader = new ConfigurationClassBeanDefinitionReader(
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
@@ -398,6 +399,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (this.metadataReaderFactory instanceof CachingMetadataReaderFactory) {
 			// Clear cache in externally provided MetadataReaderFactory; this is a no-op
 			// for a shared cache since it'll be cleared by the ApplicationContext.
+			// 清除外部提供的 MetadataReaderFactory 中的缓存;这是共享缓存的空操作，因为它将由 ApplicationContext 清除
 			((CachingMetadataReaderFactory) this.metadataReaderFactory).clearCache();
 		}
 	}

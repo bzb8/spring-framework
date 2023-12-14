@@ -998,6 +998,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Add new BeanPostProcessors that will get applied to beans created
 	 * by this factory. To be invoked during factory configuration.
+	 *
+	 * 添加新的 BeanPostProcessors，这些 BeanPostProcessors 将应用于此工厂创建的 bean。在工厂配置期间调用。
+	 *
 	 * @since 5.3
 	 * @see #addBeanPostProcessor
 	 */
@@ -1322,7 +1325,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Return the bean name, stripping out the factory dereference prefix if necessary,
 	 * and resolving aliases to canonical names.
+	 *
 	 * 返回 bean 名称，必要时去掉工厂取消引用前缀，并将别名解析为规范名称。
+	 *
 	 * @param name the user-specified name
 	 * @return the transformed bean name
 	 */
@@ -1691,6 +1696,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			Object evaluated = evaluateBeanDefinitionString(className, mbd);
 			if (!className.equals(evaluated)) {
 				// A dynamically resolved expression, supported as of 4.2...
+				// 动态解析的表达式，从 4.2 开始支持...
 				if (evaluated instanceof Class) {
 					return (Class<?>) evaluated;
 				}
@@ -1974,7 +1980,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
 	 *
-	 * 获取给定 bean 实例的对象，可以是 bean 实例本身，也可以是它创建的对象（如果是 FactoryBean）。
+	 * 获取给定 bean 实例的对象，可以是 bean 实例本身，也可以是它创建的对象（如果是 FactoryBean, 以&开头的FactoryBean则返回FactoryBean本身，否则返回它的getObject()返回的对象）。
 	 *
 	 * @param beanInstance the shared bean instance
 	 * @param name the name that may include factory dereference prefix 可能包含工厂解引用前缀的名称

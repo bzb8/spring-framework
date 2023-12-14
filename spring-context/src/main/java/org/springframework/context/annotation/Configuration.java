@@ -522,6 +522,11 @@ public @interface Configuration {
 	 * {@link AnnotationConfigApplicationContext}. If the {@code @Configuration} class
 	 * is registered as a traditional XML bean definition, the name/id of the bean
 	 * element will take precedence.
+	 *
+	 * 显式指定与 {@code @Configuration} 类关联的 Spring bean 定义的名称。如果未指定（常见情况），将自动生成一个 Bean 名称。
+	 * 仅当 {@code @Configuration} 类通过组件扫描选取或直接提供给 {@link AnnotationConfigApplicationContext} 时，自定义名称才适用。
+	 * 如果将 {@code @Configuration} 类注册为传统的 XML Bean 定义，则 Bean 元素的 name/id 将优先。
+	 *
 	 * @return the explicit component name, if any (or empty String otherwise)
 	 * @see AnnotationBeanNameGenerator
 	 */

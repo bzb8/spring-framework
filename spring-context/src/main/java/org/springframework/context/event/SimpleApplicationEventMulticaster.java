@@ -99,6 +99,9 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 
 	/**
 	 * Return the current task executor for this multicaster.
+	 *
+	 * 返回此多播程序的当前任务执行程序。
+	 *
 	 * @since 2.0
 	 */
 	@Nullable
