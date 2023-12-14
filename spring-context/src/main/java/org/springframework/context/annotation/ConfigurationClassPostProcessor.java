@@ -408,6 +408,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * Post-processes a BeanFactory in search of Configuration class BeanDefinitions;
 	 * any candidates are then enhanced by a {@link ConfigurationClassEnhancer}.
 	 * Candidate status is determined by BeanDefinition attribute metadata.
+	 *
+	 * 后处理 BeanFactory 以搜索配置类 BeanDefinitions；然后，所有候选者都会通过 {@link ConfigurationClassEnhancer} 得到增强。候选状态由 BeanDefinition 属性元数据确定。
+	 *
 	 * @see ConfigurationClassEnhancer
 	 */
 	public void enhanceConfigurationClasses(ConfigurableListableBeanFactory beanFactory) {

@@ -862,13 +862,20 @@ class ConfigurationClassParser {
 
 	private class DeferredImportSelectorGroupingHandler {
 
+		// key为Group或者DeferredImportSelectorHolder（Group为null时）, value为DeferredImportSelector对应的组
 		private final Map<Object, DeferredImportSelectorGrouping> groupings = new LinkedHashMap<>();
 
 		private final Map<AnnotationMetadata, ConfigurationClass> configurationClasses = new HashMap<>();
 
+		/**
+		 * 将DeferredImportSelectorHolder放入它对应的分组中
+		 * @param deferredImport
+		 */
 		public void register(DeferredImportSelectorHolder deferredImport) {
+			// 获取DeferredImportSelectorHolder的分组
 			Class<? extends Group> group = deferredImport.getImportSelector().getImportGroup();
 			DeferredImportSelectorGrouping grouping = this.groupings.computeIfAbsent(
+					// key为Group或者DeferredImportSelectorHolder（Group为null时）
 					(group != null ? group : deferredImport),
 					key -> new DeferredImportSelectorGrouping(createGroup(group)));
 			grouping.add(deferredImport);
@@ -933,6 +940,9 @@ class ConfigurationClassParser {
 
 		private final DeferredImportSelector.Group group;
 
+		/**
+		 * 该组所持有的DeferredImportSelectorHolder
+		 */
 		private final List<DeferredImportSelectorHolder> deferredImports = new ArrayList<>();
 
 		DeferredImportSelectorGrouping(Group group) {
@@ -945,6 +955,7 @@ class ConfigurationClassParser {
 
 		/**
 		 * Return the imports defined by the group.
+		 *
 		 * 返回组定义的导入。
 		 *
 		 * @return each import with its associated configuration class 每个导入及其关联的配置类
@@ -957,6 +968,9 @@ class ConfigurationClassParser {
 			return this.group.selectImports();
 		}
 
+		/**
+		 * 以or的方式组合改组所有的ExclusionFilter
+		 */
 		public Predicate<String> getCandidateFilter() {
 			Predicate<String> mergedFilter = DEFAULT_EXCLUSION_FILTER;
 			for (DeferredImportSelectorHolder deferredImport : this.deferredImports) {
@@ -972,6 +986,9 @@ class ConfigurationClassParser {
 
 	private static class DefaultDeferredImportSelectorGroup implements Group {
 
+		/**
+		 * 保存组中所有的DeferredImportSelector的selectImports返回值的列表
+		 */
 		private final List<Entry> imports = new ArrayList<>();
 
 		@Override

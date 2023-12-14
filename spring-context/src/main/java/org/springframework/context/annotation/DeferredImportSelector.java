@@ -90,6 +90,8 @@ public interface DeferredImportSelector extends ImportSelector {
 		/**
 		 * An entry that holds the {@link AnnotationMetadata} of the importing
 		 * {@link Configuration} class and the class name to import.
+		 *
+		 * 保存导入 {@link Configuration} 类的 {@link AnnotationMetadata} 和要导入的类名的条目。
 		 */
 		class Entry {
 

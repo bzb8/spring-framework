@@ -3,10 +3,10 @@ package org.springframework.config;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 
-public class MyImportSelector implements ImportSelector {
+public class MyDefereredImportSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-		System.out.println("this is MyImportSelector");
-		return new String[]{"org.springframework.entity.Person"};
+		System.out.println("this is MyDefereredImportSelector");
+        return new String[]{"org.springframework.entity.Person"};
     }
 }

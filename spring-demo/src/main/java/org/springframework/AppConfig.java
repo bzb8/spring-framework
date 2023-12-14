@@ -1,5 +1,6 @@
 package org.springframework;
 
+import org.springframework.config.MyDefereredImportSelector;
 import org.springframework.config.MyImportBeanDefinitionRegistrar;
 import org.springframework.config.MyImportSelector;
 import org.springframework.context.annotation.*;
@@ -10,7 +11,7 @@ import org.springframework.service.BzbService;
 @Configuration
 @ComponentScan(basePackages = {"org.springframework.service", "org.springframework.aop", "org.springframework.config"})
 @PropertySource(value = {"classpath:test.properties"})
-@Import({Student.class, MyImportSelector.class, MyImportBeanDefinitionRegistrar.class})
+@Import({Student.class, MyImportSelector.class, MyImportBeanDefinitionRegistrar.class, MyDefereredImportSelector.class})
 public class AppConfig {
 
 	@Bean

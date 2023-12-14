@@ -102,19 +102,23 @@ import org.springframework.util.StringUtils;
  * annotated. An annotated constructor does not have to be public.
  *
  * 任何给定 bean 类的一个构造函数都可以声明此注解，并将 'required' 属性设置为 {@code true}，指示构造函数在用作 Spring Bean 时自动注入。
- * 此外，如果“required”属性设置为 {@code true}，则只能使用 {@code @Autowired} 注释单个构造函数。如果多个非必需的构造函数声明了注解，则它们将被视为自动注解的候选项。
+ * 此外，如果“required”属性设置为 {@code true}，则只能使用 {@code @Autowired} 注解单个构造函数。如果多个非必需的构造函数声明了注解，则它们将被视为自动注解的候选项。
  * 将选择具有最多依赖项的构造函数，这些构造函数可以通过匹配 Spring 容器中的 bean 来满足。如果不能满足任何候选者，则将使用 primary/default 构造函数（如果存在）。
- * 如果一个类一开始只声明一个构造函数，那么即使没有注释，它也将始终被使用。带注解的构造函数不必是公共的。
+ * 如果一个类一开始只声明一个构造函数，那么即使没有注注解，它也将始终被使用。带注解的构造函数不必是公共的。
  *
  * <h3>Autowired Fields</h3>
  * <p>Fields are injected right after construction of a bean, before any
  * config methods are invoked. Such a config field does not have to be public.
+ *
+ * 字段在 bean 构造之后、调用任何配置方法之前立即注入。这样的配置字段不必是公共的。
  *
  * <h3>Autowired Methods</h3>
  * <p>Config methods may have an arbitrary name and any number of arguments; each of
  * those arguments will be autowired with a matching bean in the Spring container.
  * Bean property setter methods are effectively just a special case of such a
  * general config method. Config methods do not have to be public.
+ *
+ * 配置方法可以有任意名称和任意数量的参数；这些参数中的每一个都将使用 Spring 容器中的匹配 bean 自动装配。 Bean 属性设置方法实际上只是这种通用配置方法的一个特例。配置方法不必是公共的。
  *
  * <h3>Annotation Config vs. XML Config</h3>
  * <p>A default {@code AutowiredAnnotationBeanPostProcessor} will be registered
