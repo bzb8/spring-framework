@@ -17,6 +17,7 @@
 package org.springframework.context.support;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -92,6 +93,11 @@ final class PostProcessorRegistrationDelegate {
 
 			// 对beanFactoryPostProcessors进行分类: List<BeanFactoryPostProcessor>和List<BeanDefinitionRegistryPostProcessor>
 			// 并应用BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry方法
+
+			System.out.println(">>> getBeanFactoryPostProcessors() S");
+			System.out.println(beanFactoryPostProcessors);
+			System.out.println(">>> getBeanFactoryPostProcessors() E");
+
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor = (BeanDefinitionRegistryPostProcessor) postProcessor;
@@ -116,8 +122,7 @@ final class PostProcessorRegistrationDelegate {
 			// 首先，调用实现 PriorityOrdered 的 BeanDefinitionRegistryPostProcessors。
 			// 不会实例化，或者从BeanDefinition中获取，或者从FactoryBean的getObjectType()获取
 			// 获取实现了PriorityOrdered的BeanDefinitionRegistryPostProcessor
-			// org.springframework.context.annotation.internalConfigurationAnnotationProcessor
-			// ConfigurationClassPostProcessor
+			// org.springframework.context.annotation.internalConfigurationAnnotationProcessor -> ConfigurationClassPostProcessor
 			String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
@@ -133,7 +138,7 @@ final class PostProcessorRegistrationDelegate {
 			currentRegistryProcessors.clear();
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
-			// 接下来，调用实现 Ordered 的 BeanDefinitionRegistryPostProcessors。
+			// 接下来，调用实现 Ordered 的 BeanDefinitionRegistryPostProcessors。 org.springframework.context.annotation.internalConfigurationAnnotationProcessor
 			postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (!processedBeans.contains(ppName) && beanFactory.isTypeMatch(ppName, Ordered.class)) {
@@ -168,7 +173,15 @@ final class PostProcessorRegistrationDelegate {
 			// 重复处理？
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
 			// 现在，调用迄今为止处理的所有处理器的 postProcessBeanFactory 回调。
+
+			System.out.println(">>> registryProcessors S");
+			System.out.println(registryProcessors);
+			System.out.println(">>> registryProcessors E");
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
+
+			System.out.println(">>> regularPostProcessors S");
+			System.out.println(regularPostProcessors);
+			System.out.println(">>> regularPostProcessors E");
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}
 
@@ -181,8 +194,15 @@ final class PostProcessorRegistrationDelegate {
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!
 		// 不要在这里初始化 FactoryBeans：我们需要让所有常规 bean 保持未初始化状态，以便让 bean 工厂后处理器应用到它们！
+		// org.springframework.context.annotation.internalConfigurationAnnotationProcessor
+		// org.springframework.context.event.internalEventListenerProcessor
+
 		String[] postProcessorNames =
 				beanFactory.getBeanNamesForType(BeanFactoryPostProcessor.class, true, false);
+
+		System.out.println(">>> postProcessorNames S");
+		System.out.println(Arrays.toString(postProcessorNames));
+		System.out.println(">>> postProcessorNames E");
 
 		// Separate between BeanFactoryPostProcessors that implement PriorityOrdered,
 		// Ordered, and the rest.
