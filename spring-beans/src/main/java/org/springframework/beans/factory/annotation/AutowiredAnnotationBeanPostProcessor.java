@@ -160,6 +160,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * @Autowired @Value @javax.inject.Inject
+	 */
 	private final Set<Class<? extends Annotation>> autowiredAnnotationTypes = new LinkedHashSet<>(4);
 
 	private String requiredParameterName = "required";
@@ -499,7 +502,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		do {
 			final List<InjectionMetadata.InjectedElement> fieldElements = new ArrayList<>();
+			// 查找指定bean类型所有字段上的@Autowired @Value @javax.inject.Inject注解，并存入fieldElements中
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
+				// 找到@Autowired或@Value或者@Inject注解
 				MergedAnnotation<?> ann = findAutowiredAnnotation(field);
 				if (ann != null) {
 					if (Modifier.isStatic(field.getModifiers())) {
@@ -550,8 +555,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	@Nullable
 	private MergedAnnotation<?> findAutowiredAnnotation(AccessibleObject ao) {
+		// ao上的注解
 		MergedAnnotations annotations = MergedAnnotations.from(ao);
 		for (Class<? extends Annotation> type : this.autowiredAnnotationTypes) {
+			// 查找是否具有指定类型的注解
 			MergedAnnotation<?> annotation = annotations.get(type);
 			if (annotation.isPresent()) {
 				return annotation;
@@ -565,6 +572,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 * <p>A 'required' dependency means that autowiring should fail when no beans
 	 * are found. Otherwise, the autowiring process will simply bypass the field
 	 * or method when no beans are found.
+	 *
+	 * 确定带注解的字段或方法是否需要其依赖项。
+	 * “必需”依赖意味着当没有找到 bean 时自动装配应该失败。否则，当没有找到 bean 时，自动装配过程将简单地绕过该字段或方法。
+	 *
 	 * @param ann the Autowired annotation
 	 * @return whether the annotation indicates that a dependency is required
 	 */
@@ -579,6 +590,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 * <p>A 'required' dependency means that autowiring should fail when no beans
 	 * are found. Otherwise, the autowiring process will simply bypass the field
 	 * or method when no beans are found.
+	 *
+	 * true：没有required属性，或required=true
+	 *
 	 * @param ann the Autowired annotation
 	 * @return whether the annotation indicates that a dependency is required
 	 * @deprecated since 5.2, in favor of {@link #determineRequiredStatus(MergedAnnotation)}

@@ -497,6 +497,7 @@ public interface MergedAnnotation<A extends Annotation> {
 	/**
 	 * Create a new {@link Map} instance of the given type that contains all the annotation
 	 * attributes.
+	 * 创建给定类型的新 {@link Map} 实例，其中包含所有注解属性。
 	 * <p>The {@link Adapt adaptations} may be used to change the way that values are added.
 	 * @param factory a map factory
 	 * @param adaptations the adaptations that should be applied to the annotation values

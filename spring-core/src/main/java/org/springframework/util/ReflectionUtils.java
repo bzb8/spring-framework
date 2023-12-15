@@ -661,8 +661,11 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Invoke the given callback on all locally declared fields in the given class.
+	 *
+	 * 对给定类中所有本地声明的字段调用给定回调。
+	 *
 	 * @param clazz the target class to analyze
-	 * @param fc the callback to invoke for each field
+	 * @param fc the callback to invoke for each field 为每个字段调用的回调
 	 * @throws IllegalStateException if introspection fails
 	 * @since 4.2
 	 * @see #doWithFields
@@ -721,6 +724,9 @@ public abstract class ReflectionUtils {
 	/**
 	 * This variant retrieves {@link Class#getDeclaredFields()} from a local cache
 	 * in order to avoid the JVM's SecurityManager check and defensive array copying.
+	 *
+	 * 此变体从本地缓存检索 {@link Class#getDeclaredFields()}，以避免 JVM 的 SecurityManager 检查和防御性数组复制。
+	 *
 	 * @param clazz the class to introspect
 	 * @return the cached array of fields
 	 * @throws IllegalStateException if introspection fails
@@ -844,12 +850,18 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Callback interface invoked on each field in the hierarchy.
+	 *
+	 * 在层次结构中的每个字段上调用回调接口。
+	 *
 	 */
 	@FunctionalInterface
 	public interface FieldCallback {
 
 		/**
 		 * Perform an operation using the given field.
+		 *
+		 * 使用给定字段执行操作。
+		 *
 		 * @param field the field to operate on
 		 */
 		void doWith(Field field) throws IllegalArgumentException, IllegalAccessException;
