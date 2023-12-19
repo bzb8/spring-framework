@@ -497,6 +497,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			return InjectionMetadata.EMPTY;
 		}
 
+		// 收集@Autowired、@Value、@Inject注解的所有元素，包括字段和方法
 		final List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
 
@@ -544,6 +545,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				}
 			});
 
+			// 按照声明顺序排序
 			elements.addAll(0, sortMethodElements(methodElements, targetClass));
 			elements.addAll(0, fieldElements);
 			targetClass = targetClass.getSuperclass();
@@ -621,6 +623,8 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Sort the method elements via ASM for deterministic declaration order if possible.
+	 *
+	 * 如果可能，通过 ASM 对方法元素进行排序以确定声明顺序。
 	 */
 	private List<InjectionMetadata.InjectedElement> sortMethodElements(
 			List<InjectionMetadata.InjectedElement> methodElements, Class<?> targetClass) {
@@ -629,6 +633,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			// Try reading the class file via ASM for deterministic declaration order...
 			// Unfortunately, the JVM's standard reflection returns methods in arbitrary
 			// order, even between different runs of the same application on the same JVM.
+			// 尝试通过 ASM 读取类文件以获得确定的声明顺序...不幸的是，JVM 的标准反射以任意顺序返回方法，即使在同一 JVM 上同一应用程序的不同运行之间也是如此。
 			try {
 				AnnotationMetadata asm =
 						this.metadataReaderFactory.getMetadataReader(targetClass.getName()).getAnnotationMetadata();

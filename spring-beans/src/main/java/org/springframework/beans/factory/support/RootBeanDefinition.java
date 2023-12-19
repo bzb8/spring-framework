@@ -474,6 +474,8 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Determine if the given method or field is an externally managed configuration member.
+	 *
+	 * 确定给定的方法或字段是否是外部管理的配置成员。
 	 */
 	public boolean isExternallyManagedConfigMember(Member configMember) {
 		synchronized (this.postProcessingLock) {

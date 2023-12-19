@@ -46,6 +46,8 @@ import org.springframework.util.ObjectUtils;
  * Wraps a constructor parameter, a method parameter or a field,
  * allowing unified access to their metadata.
  *
+ * 即将注入的特定依赖项的描述符。包装构造函数参数、方法参数或字段，允许统一访问它们的元数据。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  */
@@ -114,7 +116,7 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 
 	/**
 	 * Create a new descriptor for a field.
-	 * Considers the dependency as 'eager'.
+	 * Considers the dependency as 'eager'. 将依赖视为“渴望”
 	 * @param field the field to wrap
 	 * @param required whether the dependency is required
 	 */
@@ -292,6 +294,9 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * Optionally set the concrete class that contains this dependency.
 	 * This may differ from the class that declares the parameter/field in that
 	 * it may be a subclass thereof, potentially substituting type variables.
+	 *
+	 * 可选设置包含此依赖项的具体类。这可能与声明参数字段的类不同，因为它可能是其子类，可能替换类型变量。
+	 *
 	 * @since 4.0
 	 */
 	public void setContainingClass(Class<?> containingClass) {

@@ -485,7 +485,10 @@ public abstract class BeanUtils {
 
 	/**
 	 * Retrieve the JavaBeans {@code PropertyDescriptor}s of a given class.
-	 * @param clazz the Class to retrieve the PropertyDescriptors for
+	 *
+	 * 检索给定类的 JavaBeans {@code PropertyDescriptor}。
+	 *
+	 * @param clazz the Class to retrieve the PropertyDescriptors for 用于检索属性描述符的类
 	 * @return an array of {@code PropertyDescriptors} for the given class
 	 * @throws BeansException if PropertyDescriptor look fails
 	 */

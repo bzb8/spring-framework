@@ -179,6 +179,17 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		}
 	}
 
+	protected void addSingletonFactory1(String beanName, ObjectFactory<?> singletonFactory) {
+		Assert.notNull(singletonFactory, "Singleton factory must not be null");
+		synchronized (this.singletonObjects) {
+			if (!this.singletonObjects.containsKey(beanName)) {
+//				this.singletonFactories.put(beanName, singletonFactory);
+				this.earlySingletonObjects.put(beanName, singletonFactory.getObject());
+				this.registeredSingletons.add(beanName);
+			}
+		}
+	}
+
 	@Override
 	@Nullable
 	public Object getSingleton(String beanName) {

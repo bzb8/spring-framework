@@ -78,6 +78,10 @@ public class InjectionMetadata {
 	 * Create a new {@code InjectionMetadata instance}.
 	 * <p>Preferably use {@link #forElements} for reusing the {@link #EMPTY}
 	 * instance in case of no elements.
+	 *
+	 * 创建一个新的{@code InjectionMetadata 实例}。
+	 * 最好使用 {@link #forElements} 在没有元素的情况下重用 {@link #EMPTY} 实例。
+	 *
 	 * @param targetClass the target class
 	 * @param elements the associated elements to inject
 	 * @see #forElements
@@ -110,6 +114,13 @@ public class InjectionMetadata {
 		this.checkedElements = checkedElements;
 	}
 
+	/**
+	 * Inject the supplied property values into the supplied target object.
+	 * @param target bean to inject
+	 * @param beanName
+	 * @param pvs
+	 * @throws Throwable
+	 */
 	public void inject(Object target, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
 		Collection<InjectedElement> checkedElements = this.checkedElements;
 		Collection<InjectedElement> elementsToIterate =
@@ -218,6 +229,11 @@ public class InjectionMetadata {
 
 		/**
 		 * Either this or {@link #getResourceToInject} needs to be overridden.
+		 *
+		 * 需要覆盖此或 {@link #getResourceToInject}。
+		 *
+		 * @param target bean to inject
+		 * @param requestingBeanName the name of the bean requesting injection
 		 */
 		protected void inject(Object target, @Nullable String requestingBeanName, @Nullable PropertyValues pvs)
 				throws Throwable {

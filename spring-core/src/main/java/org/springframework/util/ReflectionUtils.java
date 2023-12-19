@@ -48,6 +48,9 @@ public abstract class ReflectionUtils {
 	/**
 	 * Pre-built {@link MethodFilter} that matches all non-bridge non-synthetic methods
 	 * which are not declared on {@code java.lang.Object}.
+	 *
+	 * 预构建的 {@link MethodFilter} 匹配所有未在 {@code java.lang.Object} 上声明的非桥接非合成方法。
+	 *
 	 * @since 3.0.5
 	 */
 	public static final MethodFilter USER_DECLARED_METHODS =
@@ -349,6 +352,10 @@ public abstract class ReflectionUtils {
 	 * class and superclasses (or given interface and super-interfaces).
 	 * <p>The same named method occurring on subclass and superclass will appear
 	 * twice, unless excluded by the specified {@link MethodFilter}.
+	 *
+	 * 对给定类和超类（或给定接口和超接口）的所有匹配方法执行给定回调操作。
+	 * 子类和超类上出现的相同命名方法将出现两次，除非被指定的 {@link MethodFilter} 排除。
+	 *
 	 * @param clazz the class to introspect
 	 * @param mc the callback to invoke for each method
 	 * @param mf the filter that determines the methods to apply the callback to
@@ -372,6 +379,7 @@ public abstract class ReflectionUtils {
 			}
 		}
 		// Keep backing up the inheritance hierarchy.
+		// 继续备份继承层次结构。
 		if (clazz.getSuperclass() != null && (mf != USER_DECLARED_METHODS || clazz.getSuperclass() != Object.class)) {
 			doWithMethods(clazz.getSuperclass(), mc, mf);
 		}
@@ -453,6 +461,10 @@ public abstract class ReflectionUtils {
 	 * In addition, it also includes Java 8 default methods from locally
 	 * implemented interfaces, since those are effectively to be treated just
 	 * like declared methods.
+	 *
+	 * {@link Class#getDeclaredMethods()} 的变体，使用本地缓存以避免 JVM 的 SecurityManager 检查和新的 Method 实例。
+	 * 此外，它还包括来自本地实现接口的 Java 8 默认方法，因为这些方法实际上可以像声明的方法一样对待。
+	 *
 	 * @param clazz the class to introspect
 	 * @return the cached array of methods
 	 * @throws IllegalStateException if introspection fails
@@ -463,6 +475,13 @@ public abstract class ReflectionUtils {
 		return getDeclaredMethods(clazz, true);
 	}
 
+	/**
+	 * Get all declared methods on the leaf class and all superclasses.
+	 *
+	 * @param clazz
+	 * @param defensive
+	 * @return
+	 */
 	private static Method[] getDeclaredMethods(Class<?> clazz, boolean defensive) {
 		Assert.notNull(clazz, "Class must not be null");
 		Method[] result = declaredMethodsCache.get(clazz);
@@ -823,12 +842,17 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Callback optionally used to filter methods to be operated on by a method callback.
+	 *
+	 * 回调可选地用于过滤要由方法回调操作的方法。
 	 */
 	@FunctionalInterface
 	public interface MethodFilter {
 
 		/**
 		 * Determine whether the given method matches.
+		 *
+		 * 判断给定的方法是否匹配。
+		 *
 		 * @param method the method to check
 		 */
 		boolean matches(Method method);

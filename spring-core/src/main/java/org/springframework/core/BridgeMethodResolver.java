@@ -76,6 +76,7 @@ public final class BridgeMethodResolver {
 		Method bridgedMethod = cache.get(bridgeMethod);
 		if (bridgedMethod == null) {
 			// Gather all methods with matching name and parameter size.
+			// 收集具有匹配名称和参数大小的所有方法。
 			List<Method> candidateMethods = new ArrayList<>();
 			MethodFilter filter = candidateMethod ->
 					isBridgedCandidateFor(candidateMethod, bridgeMethod);
@@ -100,6 +101,9 @@ public final class BridgeMethodResolver {
 	 * considered a valid candidate for the {@link Method} that is {@link Method#isBridge() bridged}
 	 * by the supplied {@link Method bridge Method}. This method performs inexpensive
 	 * checks and can be used quickly to filter for a set of possible matches.
+	 *
+	 * 如果提供的“{@code 候选方法}”可以被视为通过提供的{@link Method}进行{@link Method#isBridge() bridged}的{@link Method bridge Method}的有效候选者
+	 * ，则返回{@code true}。该方法执行廉价的检查，并且可以快速用于过滤一组可能的匹配。
 	 */
 	private static boolean isBridgedCandidateFor(Method candidateMethod, Method bridgeMethod) {
 		return (!candidateMethod.isBridge() && !candidateMethod.equals(bridgeMethod) &&
@@ -136,6 +140,8 @@ public final class BridgeMethodResolver {
 	/**
 	 * Determines whether the bridge {@link Method} is the bridge for the
 	 * supplied candidate {@link Method}.
+	 *
+	 * 确定桥 {@link Method} 是否是提供的候选 {@link Method} 的桥。
 	 */
 	static boolean isBridgeMethodFor(Method bridgeMethod, Method candidateMethod, Class<?> declaringClass) {
 		if (isResolvedTypeMatch(candidateMethod, bridgeMethod, declaringClass)) {
@@ -232,6 +238,11 @@ public final class BridgeMethodResolver {
 	 * the parameter and return types are the same, it is a 'visibility' bridge method
 	 * introduced in Java 6 to fix https://bugs.openjdk.org/browse/JDK-6342411.
 	 * See also https://stas-blogspot.blogspot.com/2010/03/java-bridge-methods-explained.html
+	 *
+	 * 比较桥接方法和它桥接的方法的签名。如果参数和返回类型相同，则为 Java 6 中引入的“可见性”桥接方法，
+	 * 用于修复 https://bugs.openjdk.orgbrowseJDK-6342411。
+	 * See also https://stas-blogspot.blogspot.com/2010/03/java-bridge-methods-explained.html
+	 *
 	 * @return whether signatures match as described
 	 */
 	public static boolean isVisibilityBridgeMethodPair(Method bridgeMethod, Method bridgedMethod) {
