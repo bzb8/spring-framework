@@ -46,6 +46,10 @@ public interface SmartInstantiationAwareBeanPostProcessor extends InstantiationA
 	 * Predict the type of the bean to be eventually returned from this
 	 * processor's {@link #postProcessBeforeInstantiation} callback.
 	 * <p>The default implementation returns {@code null}.
+	 *
+	 * 预测最终要从此处理器的 {@link #postProcessBeforeInstantiation} 回调返回的 Bean 类型。
+	 * 默认实现返回 {@code null}。
+	 *
 	 * @param beanClass the raw class of the bean
 	 * @param beanName the name of the bean
 	 * @return the type of the bean, or {@code null} if not predictable
@@ -90,6 +94,14 @@ public interface SmartInstantiationAwareBeanPostProcessor extends InstantiationA
 	 * for the affected bean has been built for a call to this method already,
 	 * it will be exposes as final bean reference by default).
 	 * <p>The default implementation returns the given {@code bean} as-is.
+	 *
+	 * 获取用于早期访问指定 Bean 的引用，通常用于解析循环引用。
+	 * 此回调使后处理器有机会提前暴露包装器 - 即在目标 Bean 实例完全初始化之前。
+	 * 公开的对象应等同于 {@link #postProcessBeforeInitialization} {@link #postProcessAfterInitialization} 否则将公开的内容。
+	 * 请注意，此方法返回的对象将用作 Bean 引用，除非后处理器返回与所述后处理回调不同的包装器。换言之：这些后处理回调可能最终公开相同的引用，
+	 * 或者从这些后续回调中返回原始 Bean 实例（如果受影响的 Bean 的包装器已经为调用此方法而构建，则默认情况下它将作为最终的 Bean 引用公开）。
+	 * 缺省实现按原样返回给定的 {@code bean}。
+	 *
 	 * @param bean the raw bean instance
 	 * @param beanName the name of the bean
 	 * @return the object to expose as bean reference

@@ -877,6 +877,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Determine whether the specified bean definition qualifies as an autowire candidate,
 	 * to be injected into other beans which declare a dependency of matching type.
+	 *
+	 * 确定指定的 Bean 定义是否有资格作为 autowire 候选项，以注入到声明匹配类型的依赖关系的其他 Bean 中。
+	 *
 	 * @param beanName the name of the bean definition to check
 	 * @param mbd the merged bean definition to check
 	 * @param descriptor the descriptor of the dependency to resolve
@@ -965,7 +968,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		// Trigger initialization of all non-lazy singleton beans...
 		// 触发所有非惰性单例 bean 的初始化...
-		for (String beanName : beanNames) {
+			for (String beanName : beanNames) {
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			// 非抽象类，单例的，非懒加载的BeanDefinition
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
@@ -1355,6 +1358,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
+			//
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {
@@ -1374,7 +1378,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (shortcut != null) {
 				return shortcut;
 			}
-
+			// BService
 			Class<?> type = descriptor.getDependencyType();
 			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
 			if (value != null) {
@@ -1461,6 +1465,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private Object resolveMultipleBeans(DependencyDescriptor descriptor, @Nullable String beanName,
 			@Nullable Set<String> autowiredBeanNames, @Nullable TypeConverter typeConverter) {
 
+		// field的类型
 		Class<?> type = descriptor.getDependencyType();
 
 		if (descriptor instanceof StreamDependencyDescriptor) {
@@ -1591,10 +1596,16 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Find bean instances that match the required type.
 	 * Called during autowiring for the specified bean.
+	 *
+	 * 查找与所需类型匹配的 Bean 实例。在指定 Bean 的自动注入期间调用。
+	 *
 	 * @param beanName the name of the bean that is about to be wired
 	 * @param requiredType the actual type of bean to look for
 	 * (may be an array component type or collection element type)
-	 * @param descriptor the descriptor of the dependency to resolve
+	 *
+	 * 要查找的实际 Bean 类型（可能是 Array 组件类型或 Collection 元素类型）
+	 *
+	 * @param descriptor the descriptor of the dependency to resolve 要解析的依赖项的描述符
 	 * @return a Map of candidate names and candidate instances that match
 	 * the required type (never {@code null})
 	 * @throws BeansException in case of errors
@@ -1651,6 +1662,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Add an entry to the candidate map: a bean instance if available or just the resolved
 	 * type, preventing early bean initialization ahead of primary candidate selection.
+	 *
+	 * 在候选映射中添加一个条目：Bean 实例（如果可用）或仅解析的类型，从而防止在选择主候选对象之前提前初始化 Bean。
 	 */
 	private void addCandidateEntry(Map<String, Object> candidates, String candidateName,
 			DependencyDescriptor descriptor, Class<?> requiredType) {
@@ -1830,6 +1843,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Determine whether the given beanName/candidateName pair indicates a self reference,
 	 * i.e. whether the candidate points back to the original bean or to a factory method
 	 * on the original bean.
+	 *
+	 * 确定给定的 beanName/candidateName 对是否表示自引用，即候选项是指向原始 Bean 还是指向原始 Bean 上的工厂方法。
 	 */
 	private boolean isSelfReference(@Nullable String beanName, @Nullable String candidateName) {
 		return (beanName != null && candidateName != null &&

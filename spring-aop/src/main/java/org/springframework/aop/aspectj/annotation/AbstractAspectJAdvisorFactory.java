@@ -74,6 +74,9 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	 * if it has the @Aspect annotation, and was not compiled by ajc. The reason for this latter test
 	 * is that aspects written in the code-style (AspectJ language) also have the annotation present
 	 * when compiled by ajc with the -1.5 flag, yet they cannot be consumed by Spring AOP.
+	 *
+	 * 如果某些东西具有 @Aspect 注解，并且不是由 ajc 编译的，则我们认为它是适合 Spring AOP 系统使用的 AspectJ aspect。
+	 * 后一个测试的原因是，用代码风格（AspectJ语言）编写的aspect在ajc使用-1.5标志编译时也存在注解，但它们不能被Spring AOP使用。
 	 */
 	@Override
 	public boolean isAspect(Class<?> clazz) {
@@ -87,11 +90,14 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	/**
 	 * We need to detect this as "code-style" AspectJ aspects should not be
 	 * interpreted by Spring AOP.
+	 *
+	 * 我们需要检测这一点，因为 Spring AOP 不应解释“代码风格”的 AspectJ aspects。
 	 */
 	private boolean compiledByAjc(Class<?> clazz) {
 		// The AJTypeSystem goes to great lengths to provide a uniform appearance between code-style and
 		// annotation-style aspects. Therefore there is no 'clean' way to tell them apart. Here we rely on
 		// an implementation detail of the AspectJ compiler.
+		// AJTypeSystem 竭尽全力在代码样式和注解样式方面之间提供统一的外观。因此，没有“干净”的方法来区分它们。在这里，我们依赖于 AspectJ 编译器的实现细节。
 		for (Field field : clazz.getDeclaredFields()) {
 			if (field.getName().startsWith(AJC_MAGIC)) {
 				return true;

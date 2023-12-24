@@ -30,6 +30,8 @@ import org.springframework.lang.Nullable;
  * Interface for factories that can create Spring AOP Advisors from classes
  * annotated with AspectJ annotation syntax.
  *
+ * 工厂的接口，可以从使用 AspectJ 注解语法注解的类创建 Spring AOP Advisors。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 2.0
@@ -46,6 +48,11 @@ public interface AspectJAdvisorFactory {
 	 * Will return true for some aspects that Spring AOP cannot process,
 	 * such as those with unsupported instantiation models.
 	 * Use the {@link #validate} method to handle these cases if necessary.
+	 *
+	 * 确定给定的类是否为 aspect，如 AspectJ 的 {@link org.aspectj.lang.reflect.AjTypeSystem} 所报告的那样。
+	 * 如果假定的aspect无效（例如具体方面类的扩展），则将简单地返回 {@code false}。对于 Spring AOP 无法处理的某些方面，
+	 * 例如那些具有不受支持的实例化模型的方面，将返回 true。如有必要，请使用 {@link #validate} 方法处理这些情况
+	 *
 	 * @param clazz the supposed annotation-style AspectJ class
 	 * @return whether this class is recognized by AspectJ as an aspect class
 	 */

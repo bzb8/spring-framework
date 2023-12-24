@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
  * an AOP invocation, which will be invoked via reflection if no around
  * advice chooses to end the interceptor chain itself.
  *
- * {@code TargetSource} 用于获取 AOP 调用的当前“目标”，如果没有 around 建议选择结束拦截器链本身，则将通过反射调用该目标。
+ * {@code TargetSource} 用于获取 AOP 调用的当前“目标”，如果没有 around advice选择结束拦截器链本身，则将通过反射调用该目标。
  *
  * <p>If a {@code TargetSource} is "static", it will always return
  * the same target, allowing optimizations in the AOP framework. Dynamic

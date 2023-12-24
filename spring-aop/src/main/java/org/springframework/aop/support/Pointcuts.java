@@ -27,8 +27,12 @@ import org.springframework.util.Assert;
  * Pointcut constants for matching getters and setters,
  * and static methods useful for manipulating and evaluating pointcuts.
  *
+ * 用于匹配 getter 和 setter 的切入常量，以及用于操作和计算切入点的静态方法。
+ *
  * <p>These methods are particularly useful for composing pointcuts
  * using the union and intersection methods.
+ *
+ * 这些方法对于使用 union 和 intersection 方法组合切入点特别有用。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

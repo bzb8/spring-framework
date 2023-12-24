@@ -84,6 +84,9 @@ public interface BeanWrapper extends ConfigurablePropertyAccessor {
 	/**
 	 * Obtain the PropertyDescriptors for the wrapped object
 	 * (as determined by standard JavaBeans introspection).
+	 *
+	 * 获取包装对象的 PropertyDescriptors（由标准 JavaBeans 自省确定）。
+	 *
 	 * @return the PropertyDescriptors for the wrapped object
 	 */
 	PropertyDescriptor[] getPropertyDescriptors();
@@ -91,8 +94,14 @@ public interface BeanWrapper extends ConfigurablePropertyAccessor {
 	/**
 	 * Obtain the property descriptor for a specific property
 	 * of the wrapped object.
+	 *
+	 * 获取包装对象的特定属性的属性描述符。
+	 *
 	 * @param propertyName the property to obtain the descriptor for
 	 * (may be a nested path, but not an indexed/mapped property)
+	 *
+	 * 要获取其描述符的属性（可以是嵌套路径，但不是 indexed/mapped 属性）
+	 *
 	 * @return the property descriptor for the specified property
 	 * @throws InvalidPropertyException if there is no such property
 	 */

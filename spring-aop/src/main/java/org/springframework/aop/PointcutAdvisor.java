@@ -21,6 +21,9 @@ package org.springframework.aop;
  * This covers nearly all advisors except introduction advisors,
  * for which method-level matching doesn't apply.
  *
+ * 由切入点驱动的所有 Advisor 的超级接口。
+ * 这几乎涵盖了除介绍advisors之外的所有advisors，方法级匹配不适用于这些advisors。
+ *
  * @author Rod Johnson
  */
 public interface PointcutAdvisor extends Advisor {

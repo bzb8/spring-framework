@@ -35,6 +35,9 @@ import org.springframework.util.ObjectUtils;
  * 注入点的简单描述符，指向method/constructor or a field。由 {@link UnsatisfiedDependencyException} 公开。
  * 也可用作工厂方法的参数，对构建定制 bean 实例的请求注入点做出反应。
  *
+ * 注入点的简单描述符，指向 method/constructor 参数或字段。由 {@link UnsatisfiedDependencyException} 公开。
+ * 也可用作工厂方法的参数，对请求注入点做出反应以构建自定义 Bean 实例。
+ *
  * @author Juergen Hoeller
  * @since 4.3
  * @see UnsatisfiedDependencyException#getInjectionPoint()
@@ -63,6 +66,9 @@ public class InjectionPoint {
 
 	/**
 	 * Create an injection point descriptor for a field.
+	 *
+	 * 为字段创建注入点描述符。
+	 *
 	 * @param field the field to wrap
 	 */
 	public InjectionPoint(Field field) {
@@ -110,6 +116,9 @@ public class InjectionPoint {
 
 	/**
 	 * Return the wrapped MethodParameter, assuming it is present.
+	 *
+	 * 返回包装的 MethodParameter（假设它存在）。
+	 *
 	 * @return the MethodParameter (never {@code null})
 	 * @throws IllegalStateException if no MethodParameter is available
 	 * @since 5.0

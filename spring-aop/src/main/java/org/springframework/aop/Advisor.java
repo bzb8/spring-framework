@@ -24,11 +24,17 @@ import org.aopalliance.aop.Advice;
  * a pointcut). <i>This interface is not for use by Spring users, but to
  * allow for commonality in support for different types of advice.</i>
  *
+ * 基本接口包含 AOP advice（在连接点处执行的操作）和确定advice适用性的过滤器（例如切入点）。
+ * 此接口不是供 Spring 用户使用的，而是为了允许支持不同类型的advice的通用性。
+ *
  * <p>Spring AOP is based around <b>around advice</b> delivered via method
  * <b>interception</b>, compliant with the AOP Alliance interception API.
  * The Advisor interface allows support for different types of advice,
  * such as <b>before</b> and <b>after</b> advice, which need not be
  * implemented using interception.
+ *
+ * Spring AOP 基于通过方法拦截提供的advice，符合 AOP 联盟拦截 API。Advisor 接口允许支持不同类型的advice，例如之前和之后的建议，
+ * 这些建议不需要使用拦截来实现。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

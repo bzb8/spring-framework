@@ -1138,8 +1138,11 @@ public abstract class ClassUtils {
 
 	/**
 	 * Determine whether the given class has a public method with the given signature.
-	 * @param clazz the clazz to analyze
-	 * @param method the method to look for
+	 *
+	 * 确定给定类是否具有具有给定签名的公共方法。
+	 *
+	 * @param clazz the clazz to analyze 要分析的 clazz
+	 * @param method the method to look for 寻找的方法
 	 * @return whether the class has a corresponding method
 	 * @since 5.2.3
 	 */
@@ -1305,6 +1308,16 @@ public abstract class ClassUtils {
 	 * <p><b>NOTE:</b> Since Spring 3.1.1, if Java security settings disallow reflective
 	 * access (e.g. calls to {@code Class#getDeclaredMethods} etc, this implementation
 	 * will fall back to returning the originally provided method.
+	 *
+	 * 给定一个方法（可能来自接口）和当前反射调用中使用的目标类，如果有，请查找相应的目标方法。
+	 * 例如，方法可以是 {@code IFoo.bar()}，目标类可以是 {@code DefaultFoo}。在这种情况下，该方法可以是 {@code DefaultFoo.bar()}。
+	 * 这样就可以找到该方法的属性。
+	 * 注意：与{@link org.springframework.aop.support.AopUtils#getMostSpecificMethod}相比，
+	 * 此方法不会自动解析桥接方法。如果需要桥接方法解析（例如，用于从原始方法定义中获取元数据），
+	 * 请调用{@link org.springframework.core.BridgeMethod#ResolverfindBridgedMethod}。
+	 * 注意：<b>从 Spring 3.1.1 开始，如果 Java 安全设置不允许反射访问（例如，调用 {@code Class#getDeclaredMethods} 等），
+	 * 则此实现将回退到返回最初提供的方法。
+	 *
 	 * @param method the method to be invoked, which may come from an interface
 	 * @param targetClass the target class for the current invocation
 	 * (may be {@code null} or may not even implement the method)
@@ -1415,6 +1428,9 @@ public abstract class ClassUtils {
 
 	/**
 	 * Determine whether the given method is overridable in the given target class.
+	 *
+	 * 确定给定的方法在给定的目标类中是否可重写。
+	 *
 	 * @param method the method to check
 	 * @param targetClass the target class to check against
 	 */

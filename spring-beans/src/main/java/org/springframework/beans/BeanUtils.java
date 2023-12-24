@@ -616,6 +616,9 @@ public abstract class BeanUtils {
 	/**
 	 * Obtain a new MethodParameter object for the write method of the
 	 * specified property.
+	 *
+	 * 为指定属性的 write 方法获取新的 MethodParameter 对象。
+	 *
 	 * @param pd the PropertyDescriptor for the property
 	 * @return a corresponding MethodParameter object
 	 */
@@ -656,8 +659,13 @@ public abstract class BeanUtils {
 	 * <p>See {@link #isSimpleValueType(Class)} for the definition of <em>simple
 	 * value type</em>.
 	 * <p>Used to determine properties to check for a "simple" dependency-check.
-	 * @param type the type to check
-	 * @return whether the given type represents a "simple" property
+	 *
+	 * 检查给定类型是否表示“简单”属性：简单值类型或简单值类型的数组。
+	 * 有关简单值类型的定义，请参阅 {@link #isSimpleValueType(Class)}。
+	 * 用于确定属性以检查“简单”依赖项检查。
+	 *
+	 * @param type the type to check 要检查的类型
+	 * @return whether the given type represents a "simple" property 给定类型是否表示“简单”属性
 	 * @see org.springframework.beans.factory.support.RootBeanDefinition#DEPENDENCY_CHECK_SIMPLE
 	 * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#checkDependencies
 	 * @see #isSimpleValueType(Class)
@@ -672,6 +680,11 @@ public abstract class BeanUtils {
 	 * primitive wrapper, an enum, a String or other CharSequence, a Number, a
 	 * Date, a Temporal, a URI, a URL, a Locale, or a Class.
 	 * <p>{@code Void} and {@code void} are not considered simple value types.
+	 *
+	 * 检查给定类型是否表示“简单”值类型：基元或基元包装器、枚举、字符串或其他 CharSequence、数字、日期、
+	 * 时间、URI、URL、区域设置或类。
+	 * {@code Void} 和 {@code void} 不被视为简单值类型。
+	 *
 	 * @param type the type to check
 	 * @return whether the given type represents a "simple" value type
 	 * @see #isSimpleProperty(Class)

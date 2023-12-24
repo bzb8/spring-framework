@@ -96,9 +96,9 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 
 	@Override
 	protected List<Advisor> findCandidateAdvisors() {
-		// Add all the Spring advisors found according to superclass rules.
+		// Add all the Spring advisors found according to superclass rules. 添加根据父类规则找到的所有 Spring advisors。
 		List<Advisor> advisors = super.findCandidateAdvisors();
-		// Build Advisors for all AspectJ aspects in the bean factory.
+		// Build Advisors for all AspectJ aspects in the bean factory. 为 Bean 工厂中的所有 AspectJ aspects构建Advisors。
 		if (this.aspectJAdvisorsBuilder != null) {
 			advisors.addAll(this.aspectJAdvisorsBuilder.buildAspectJAdvisors());
 		}
@@ -115,6 +115,10 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 		// proxied by that interface and fail at runtime as the advice method is not
 		// defined on the interface. We could potentially relax the restriction about
 		// not advising aspects in the future.
+
+		// 以前我们在构造函数中设置了 ProxyTargetClass（true），但这影响太广泛了。
+		// 相反，我们现在重写 isInfrastructureClass 以避免代理aspects。我对此并不完全满意，因为没有充分的理由不advise aspects方面，除了它会导致advise议调用通过代理，
+		// 并且如果方面实现例如有序接口，它将由该接口代理并在运行时失败，因为建议方法未在接口上定义。我们有可能放宽对未来不提供建议的限制。
 		return (super.isInfrastructureClass(beanClass) ||
 				(this.aspectJAdvisorFactory != null && this.aspectJAdvisorFactory.isAspect(beanClass)));
 	}
@@ -124,6 +128,10 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 	 * <p>If no &lt;aop:include&gt; elements were used then "includePatterns" will be
 	 * {@code null} and all beans are included. If "includePatterns" is non-null,
 	 * then one of the patterns must match.
+	 *
+	 * 检查给定的 aspect bean 是否符合自动代理的条件。
+	 * 如果没有使用 <aop:include>元素，则“includePatterns”将为 {@code null}，并且包含所有 bean。如果“includePatterns”为非 null，则其中一个模式必须匹配。
+	 *
 	 */
 	protected boolean isEligibleAspectBean(String beanName) {
 		if (this.includePatterns == null) {

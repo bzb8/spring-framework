@@ -39,6 +39,9 @@ public interface BeanExpressionResolver {
 	/**
 	 * Evaluate the given value as an expression, if applicable;
 	 * return the value as-is otherwise.
+	 *
+	 * 如果适用，将给定值作为表达式进行计算;否则按原样返回值。
+	 *
 	 * @param value the value to evaluate as an expression
 	 * @param beanExpressionContext the bean expression context to use when
 	 * evaluating the expression

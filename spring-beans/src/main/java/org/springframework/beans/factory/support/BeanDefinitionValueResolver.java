@@ -50,9 +50,13 @@ import org.springframework.util.StringUtils;
  * resolving values contained in bean definition objects
  * into the actual values applied to the target bean instance.
  *
+ * 用于 Bean 工厂实现的 Helper 类，将 Bean 定义对象中包含的值解析为应用于目标 Bean 实例的实际值。
+ *
  * <p>Operates on an {@link AbstractBeanFactory} and a plain
  * {@link org.springframework.beans.factory.config.BeanDefinition} object.
  * Used by {@link AbstractAutowireCapableBeanFactory}.
+ *
+ * 对 {@link AbstractBeanFactory} 和普通 {@link org.springframework.beans.factory.config.BeanDefinition} 对象进行操作。由 {@link AbstractAutowireCapableBeanFactory} 使用。
  *
  * @author Juergen Hoeller
  * @since 1.2
@@ -89,18 +93,24 @@ class BeanDefinitionValueResolver {
 	/**
 	 * Given a PropertyValue, return a value, resolving any references to other
 	 * beans in the factory if necessary. The value could be:
+	 *
+	 * 给定一个 PropertyValue，返回一个值，如有必要，解析对工厂中其他 Bean 的任何引用。该值可以是：
+	 *
 	 * <li>A BeanDefinition, which leads to the creation of a corresponding
 	 * new bean instance. Singleton flags and names of such "inner beans"
 	 * are always ignored: Inner beans are anonymous prototypes.
+	 *
+	 * 一个 BeanDefinition，它会导致创建相应的新 Bean 实例。这种“内部 bean”的单例标志和名称总是被忽略：内部 bean 是匿名原型。
+	 *
 	 * <li>A RuntimeBeanReference, which must be resolved.
 	 * <li>A ManagedList. This is a special collection that may contain
-	 * RuntimeBeanReferences or Collections that will need to be resolved.
+	 * RuntimeBeanReferences or Collections that will need to be resolved. 一个 ManagedList。这是一个特殊的集合，可能包含需要解析的 RuntimeBeanReferences 或 Collections。
 	 * <li>A ManagedSet. May also contain RuntimeBeanReferences or
 	 * Collections that will need to be resolved.
-	 * <li>A ManagedMap. In this case the value may be a RuntimeBeanReference
+	 * <li>A ManagedMap. In this case the value may be a RuntimeBeanReference 一个普通对象或 {@code null}，在这种情况下，它将被单独保留。
 	 * or Collection that will need to be resolved.
 	 * <li>An ordinary object or {@code null}, in which case it's left alone.
-	 * @param argName the name of the argument that the value is defined for
+	 * @param argName the name of the argument that the value is defined for 为其定义值的参数的名称
 	 * @param value the value object to resolve
 	 * @return the resolved object
 	 */
@@ -108,6 +118,7 @@ class BeanDefinitionValueResolver {
 	public Object resolveValueIfNecessary(Object argName, @Nullable Object value) {
 		// We must check each value to see whether it requires a runtime reference
 		// to another bean to be resolved.
+		// 我们必须检查每个值，看看它是否需要对另一个 Bean 的运行时引用才能解析。
 		if (value instanceof RuntimeBeanReference) {
 			RuntimeBeanReference ref = (RuntimeBeanReference) value;
 			return resolveReference(argName, ref);
@@ -123,6 +134,7 @@ class BeanDefinitionValueResolver {
 		}
 		else if (value instanceof BeanDefinitionHolder) {
 			// Resolve BeanDefinitionHolder: contains BeanDefinition with name and aliases.
+			// 解析 BeanDefinitionHolder：包含带有名称和别名的 BeanDefinition。
 			BeanDefinitionHolder bdHolder = (BeanDefinitionHolder) value;
 			return resolveInnerBean(argName, bdHolder.getBeanName(), bdHolder.getBeanDefinition());
 		}
@@ -272,6 +284,9 @@ class BeanDefinitionValueResolver {
 
 	/**
 	 * Evaluate the given String value as an expression, if necessary.
+	 *
+	 * 如有必要，将给定的 String 值作为表达式进行计算。
+	 *
 	 * @param value the original value (may be an expression)
 	 * @return the resolved value if necessary, or the original String value
 	 */
@@ -297,6 +312,8 @@ class BeanDefinitionValueResolver {
 
 	/**
 	 * Resolve a reference to another bean in the factory.
+	 *
+	 * 解析对工厂中另一个 Bean 的引用。
 	 */
 	@Nullable
 	private Object resolveReference(Object argName, RuntimeBeanReference ref) {
@@ -344,8 +361,8 @@ class BeanDefinitionValueResolver {
 	}
 
 	/**
-	 * Resolve an inner bean definition.
-	 * @param argName the name of the argument that the inner bean is defined for
+	 * Resolve an inner bean definition. 解析内部 Bean 定义。
+	 * @param argName the name of the argument that the inner bean is defined for 为其定义内部 Bean 的参数的名称
 	 * @param innerBeanName the name of the inner bean
 	 * @param innerBd the bean definition for the inner bean
 	 * @return the resolved inner bean instance
@@ -357,12 +374,14 @@ class BeanDefinitionValueResolver {
 			mbd = this.beanFactory.getMergedBeanDefinition(innerBeanName, innerBd, this.beanDefinition);
 			// Check given bean name whether it is unique. If not already unique,
 			// add counter - increasing the counter until the name is unique.
+			// 检查给定的 bean 名称是否唯一。如果还不是唯一的，请添加计数器 - 增加计数器，直到名称唯一为止。
 			String actualInnerBeanName = innerBeanName;
 			if (mbd.isSingleton()) {
 				actualInnerBeanName = adaptInnerBeanName(innerBeanName);
 			}
 			this.beanFactory.registerContainedBean(actualInnerBeanName, this.beanName);
 			// Guarantee initialization of beans that the inner bean depends on.
+			// 保证内部 Bean 所依赖的 Bean 的初始化。
 			String[] dependsOn = mbd.getDependsOn();
 			if (dependsOn != null) {
 				for (String dependsOnBean : dependsOn) {
@@ -371,6 +390,7 @@ class BeanDefinitionValueResolver {
 				}
 			}
 			// Actually create the inner bean instance now...
+			// 现在实际创建内部 Bean 实例...
 			Object innerBean = this.beanFactory.createBean(actualInnerBeanName, mbd, null);
 			if (innerBean instanceof FactoryBean) {
 				boolean synthetic = mbd.isSynthetic();
@@ -394,8 +414,11 @@ class BeanDefinitionValueResolver {
 	/**
 	 * Checks the given bean name whether it is unique. If not already unique,
 	 * a counter is added, increasing the counter until the name is unique.
+	 *
+	 * 检查给定的 Bean 名称是否唯一。如果还不是唯一的，则添加一个计数器，增加计数器，直到名称唯一为止。
+	 *
 	 * @param innerBeanName the original name for the inner bean
-	 * @return the adapted name for the inner bean
+	 * @return the adapted name for the inner bean Bean的改编名称
 	 */
 	private String adaptInnerBeanName(String innerBeanName) {
 		String actualInnerBeanName = innerBeanName;

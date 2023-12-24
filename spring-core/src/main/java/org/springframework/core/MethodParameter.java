@@ -45,9 +45,14 @@ import org.springframework.util.ObjectUtils;
  * or {@link Constructor} plus a parameter index and a nested type index for a declared generic
  * type. Useful as a specification object to pass along.
  *
+ * 帮助程序类，用于封装方法参数的规范，即 {@link Method} 或 {@link Constructor}，以及参数索引和声明泛型类型的嵌套类型索引。用作传递的规范对象很有用。
+ *
  * <p>As of 4.2, there is a {@link org.springframework.core.annotation.SynthesizingMethodParameter}
  * subclass available which synthesizes annotations with attribute aliases. That subclass is used
  * for web and message endpoint processing, in particular.
+ *
+ * 从 4.2 开始，有一个 {@link org.springframework.core.annotation.SynthesizingMethodParameter} 子类可用，它使用属性别名合成注解。
+ * 该子类专门用于 Web 和消息端点处理。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -101,10 +106,12 @@ public class MethodParameter {
 
 	/**
 	 * Create a new {@code MethodParameter} for the given method, with nesting level 1.
-	 * @param method the Method to specify a parameter for
+	 * @param method the Method to specify a parameter for 指定参数的方法
 	 * @param parameterIndex the index of the parameter: -1 for the method
 	 * return type; 0 for the first method parameter; 1 for the second method
 	 * parameter, etc.
+	 *
+	 * 参数的索引：-1 表示方法返回类型;0 表示第一个方法参数;1 表示第二个方法参数，依此类推。
 	 */
 	public MethodParameter(Method method, int parameterIndex) {
 		this(method, parameterIndex, 1);
@@ -436,6 +443,9 @@ public class MethodParameter {
 	/**
 	 * Return a variant of this {@code MethodParameter} which refers to the
 	 * given containing class.
+	 *
+	 * 返回此 {@code MethodParameter} 的变体，该变量引用给定的包含类。
+	 *
 	 * @param containingClass a specific containing class (potentially a
 	 * subclass of the declaring class, e.g. substituting a type variable)
 	 * @since 5.2

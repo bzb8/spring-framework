@@ -82,6 +82,10 @@ abstract class AutowireUtils {
 	/**
 	 * Determine whether the given bean property is excluded from dependency checks.
 	 * <p>This implementation excludes properties defined by CGLIB.
+	 *
+	 * 确定是否从依赖关系检查中排除给定的 Bean 属性。
+	 * 此实现排除了 CGLIB 定义的属性。
+	 *
 	 * @param pd the PropertyDescriptor of the bean property
 	 * @return whether the bean property is excluded
 	 */
@@ -96,6 +100,7 @@ abstract class AutowireUtils {
 		}
 		// It was declared by CGLIB, but we might still want to autowire it
 		// if it was actually declared by the superclass.
+		// 它是由 CGLIB 声明的，但如果它实际上是由超类声明的，我们可能仍然希望自动注入它。
 		Class<?> superclass = wm.getDeclaringClass().getSuperclass();
 		return !ClassUtils.hasMethod(superclass, wm);
 	}
@@ -103,6 +108,9 @@ abstract class AutowireUtils {
 	/**
 	 * Return whether the setter method of the given bean property is defined
 	 * in any of the given interfaces.
+	 *
+	 * 返回给定 Bean 属性的 setter 方法是否在任何给定接口中定义。
+	 *
 	 * @param pd the PropertyDescriptor of the bean property
 	 * @param interfaces the Set of interfaces (Class objects)
 	 * @return whether the setter method is defined by an interface
@@ -123,6 +131,9 @@ abstract class AutowireUtils {
 	/**
 	 * Resolve the given autowiring value against the given required type,
 	 * e.g. an {@link ObjectFactory} value to its actual object result.
+	 *
+	 * 根据给定的所需类型解析给定的自动注入值，例如将 {@link ObjectFactory} 值解析为其实际对象结果。
+	 *
 	 * @param autowiringValue the value to resolve
 	 * @param requiredType the type to assign the result to
 	 * @return the resolved value

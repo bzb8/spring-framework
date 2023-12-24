@@ -36,6 +36,8 @@ import org.springframework.util.StringUtils;
  * Allows simple manipulation of properties, and provides constructors
  * to support deep copy and construction from a Map.
  *
+ * {@link PropertyValues} 接口的默认实现。允许对属性进行简单操作，并提供构造函数以支持从 Map 进行深度复制和构造。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -55,6 +57,10 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Creates a new empty MutablePropertyValues object.
 	 * <p>Property values can be added with the {@code add} method.
+	 *
+	 * 创建一个新的空 MutablePropertyValues 对象。
+	 * 可以使用 {@code add} 方法添加属性值。
+	 *
 	 * @see #add(String, Object)
 	 */
 	public MutablePropertyValues() {
@@ -165,10 +171,14 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Add a PropertyValue object, replacing any existing one for the
 	 * corresponding property or getting merged with it (if applicable).
+	 *
+	 * 添加一个 PropertyValue 对象，替换相应属性的任何现有对象或与其合并（如果适用）。
+	 *
 	 * @param pv the PropertyValue object to add
 	 * @return this in order to allow for adding multiple property values in a chain
 	 */
 	public MutablePropertyValues addPropertyValue(PropertyValue pv) {
+		// 查找和pv同名的属性并合并
 		for (int i = 0; i < this.propertyValueList.size(); i++) {
 			PropertyValue currentPv = this.propertyValueList.get(i);
 			if (currentPv.getName().equals(pv.getName())) {
@@ -177,6 +187,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 				return this;
 			}
 		}
+		// 否则新增，并添加到propertyValueList中
 		this.propertyValueList.add(pv);
 		return this;
 	}
@@ -197,6 +208,9 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Add a PropertyValue object, replacing any existing one for the
 	 * corresponding property or getting merged with it (if applicable).
+	 *
+	 * 添加一个 PropertyValue 对象，替换相应属性的任何现有对象或与其合并（如果适用）。
+	 *
 	 * @param propertyName name of the property
 	 * @param propertyValue value of the property
 	 * @return this in order to allow for adding multiple property values in a chain
@@ -217,6 +231,9 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Merges the value of the supplied 'new' {@link PropertyValue} with that of
 	 * the current {@link PropertyValue} if merging is supported and enabled.
+	 *
+	 * 如果支持并启用合并，则将提供的“new”{@link PropertyValue} 的值与当前 {@link PropertyValue} 的值合并。
+	 *
 	 * @see Mergeable
 	 */
 	private PropertyValue mergeIfRequired(PropertyValue newPv, PropertyValue currentPv) {
@@ -341,6 +358,9 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 
 	/**
 	 * Clear the "processed" registration of the given property, if any.
+	 *
+	 * 清除给定属性的“已处理”注册（如果有）。
+	 *
 	 * @since 3.2.13
 	 */
 	public void clearProcessedProperty(String propertyName) {
@@ -360,6 +380,8 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Return whether this holder contains converted values only ({@code true}),
 	 * or whether the values still need to be converted ({@code false}).
+	 *
+	 * 返回此容器是仅包含转换后的值 （{@code true}），还是仍需要转换值 （{@code false}）。
 	 */
 	public boolean isConverted() {
 		return this.converted;

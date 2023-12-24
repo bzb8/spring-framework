@@ -24,6 +24,8 @@ import org.springframework.lang.Nullable;
  * Abstract superclass for expression pointcuts,
  * offering location and expression properties.
  *
+ * 表达式切入点的抽象超类，提供位置和表达式属性。
+ *
  * @author Rod Johnson
  * @author Rob Harrop
  * @since 2.0
@@ -42,6 +44,7 @@ public abstract class AbstractExpressionPointcut implements ExpressionPointcut, 
 
 	/**
 	 * Set the location for debugging.
+	 * 类的名字
 	 */
 	public void setLocation(@Nullable String location) {
 		this.location = location;
@@ -78,6 +81,10 @@ public abstract class AbstractExpressionPointcut implements ExpressionPointcut, 
 	 * Called when a new pointcut expression is set.
 	 * The expression should be parsed at this point if possible.
 	 * <p>This implementation is empty.
+	 *
+	 * 在设置新的切入点表达式时调用。如果可能，此时应分析表达式。
+	 * 此实现为空。
+	 *
 	 * @param expression the expression to set
 	 * @throws IllegalArgumentException if the expression is invalid
 	 * @see #setExpression

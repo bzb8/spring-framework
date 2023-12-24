@@ -21,6 +21,8 @@ import java.io.Serializable;
 /**
  * Canonical Pointcut instance that always matches.
  *
+ * 始终匹配的规范 Pointcut 实例。
+ *
  * @author Rod Johnson
  */
 @SuppressWarnings("serial")

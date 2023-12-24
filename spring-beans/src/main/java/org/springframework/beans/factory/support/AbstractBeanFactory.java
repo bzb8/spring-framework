@@ -152,6 +152,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	private final Map<Class<?>, Class<? extends PropertyEditor>> customEditors = new HashMap<>(4);
 
 	/** A custom TypeConverter to use, overriding the default PropertyEditor mechanism. */
+	// 要使用的自定义 TypeConverter，重写默认的 PropertyEditor 机制。
 	@Nullable
 	private TypeConverter typeConverter;
 
@@ -420,7 +421,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	/**
 	 * 将bean转换为指定的类型
-	 * @param name
+	 * @param name beanName
 	 * @param bean
 	 * @param requiredType
 	 * @return
@@ -933,7 +934,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Return the custom TypeConverter to use, if any. 返回要使用的自定义 TypeConverter（如果有）。
+	 * Return the custom TypeConverter to use, if any.
+	 * 返回要使用的自定义 TypeConverter（如果有）。
 	 * @return the custom TypeConverter, or {@code null} if none specified
 	 */
 	@Nullable
@@ -2004,6 +2006,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (mbd != null) {
 				mbd.isFactoryBean = true;
 			}
+			// 是FactoryBean的话，直接返回
 			return beanInstance;
 		}
 
@@ -2042,6 +2045,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * Determine whether the given bean name is already in use within this factory,
 	 * i.e. whether there is a local bean or alias registered under this name or
 	 * an inner bean created with this name.
+	 *
+	 * 确定给定的 Bean 名称是否已在此工厂中使用，即是否有在此名称下注册的本地 Bean 或别名，或者是否使用此名称创建的内部 Bean。
+	 *
 	 * @param beanName the name to check
 	 */
 	public boolean isBeanNameInUse(String beanName) {

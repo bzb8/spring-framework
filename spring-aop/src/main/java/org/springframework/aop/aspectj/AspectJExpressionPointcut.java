@@ -67,11 +67,17 @@ import org.springframework.util.StringUtils;
  * Spring {@link org.springframework.aop.Pointcut} implementation
  * that uses the AspectJ weaver to evaluate a pointcut expression.
  *
+ * Spring {@link org.springframework.aop.Pointcut} 实现，它使用 AspectJ weaver 来计算切入点表达式。
+ *
  * <p>The pointcut expression value is an AspectJ expression. This can
  * reference other pointcuts and use composition and other operations.
  *
+ * 切入点表达式值是 AspectJ 表达式。这可以引用其他切入点，并使用合成和其他操作。
+ *
  * <p>Naturally, as this is to be processed by Spring AOP's proxy-based model,
  * only method execution pointcuts are supported.
+ *
+ * 当然，由于这是由 Spring AOP 基于代理的模型处理的，因此仅支持方法执行切点。
  *
  * @author Rob Harrop
  * @author Adrian Colyer
@@ -147,6 +153,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	/**
 	 * Set the declaration scope for the pointcut.
+	 * 设置切入点的声明范围。
 	 */
 	public void setPointcutDeclarationScope(Class<?> pointcutDeclarationScope) {
 		this.pointcutDeclarationScope = pointcutDeclarationScope;

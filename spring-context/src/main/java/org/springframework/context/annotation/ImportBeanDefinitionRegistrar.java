@@ -26,13 +26,20 @@ import org.springframework.core.type.AnnotationMetadata;
  * processing @{@link Configuration} classes. Useful when operating at the bean definition
  * level (as opposed to {@code @Bean} method/instance level) is desired or necessary.
  *
+ * 由在处理 @{@link Configuration} 类时注册其他 Bean 定义的类型实现的接口。当需要或需要在 Bean 定义级别（而不是 {@code @Bean} 方法实例级别）进行操作时很有用。
+ *
  * <p>Along with {@code @Configuration} and {@link ImportSelector}, classes of this type
  * may be provided to the @{@link Import} annotation (or may also be returned from an
  * {@code ImportSelector}).
  *
+ * 与 {@code @Configuration} 和 {@link ImportSelector} 一起，此类型的类可以提供给 @{@link Import} 注解（也可以从 {@code ImportSelector} 返回）。
+ *
  * <p>An {@link ImportBeanDefinitionRegistrar} may implement any of the following
  * {@link org.springframework.beans.factory.Aware Aware} interfaces, and their respective
  * methods will be called prior to {@link #registerBeanDefinitions}:
+ *
+ * {@link ImportBeanDefinitionRegistrar}可以实现以下任何{@link org.springframework.beans.factory.Aware Aware}接口，并且它们各自的方法将在{@link #registerBeanDefinitions}之前调用：
+ *
  * <ul>
  * <li>{@link org.springframework.context.EnvironmentAware EnvironmentAware}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactoryAware BeanFactoryAware}
@@ -42,6 +49,9 @@ import org.springframework.core.type.AnnotationMetadata;
  *
  * <p>Alternatively, the class may provide a single constructor with one or more of
  * the following supported parameter types:
+ *
+ * 或者，该类可以为单个构造函数提供以下一个或多个受支持的参数类型：
+ *
  * <ul>
  * <li>{@link org.springframework.core.env.Environment Environment}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactory BeanFactory}</li>
@@ -50,6 +60,8 @@ import org.springframework.core.type.AnnotationMetadata;
  * </ul>
  *
  * <p>See implementations and associated unit tests for usage examples.
+ *
+ * 有关使用示例，请参阅实现和关联的单元测试。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -93,6 +105,11 @@ public interface ImportBeanDefinitionRegistrar {
 	 * registered here, due to lifecycle constraints related to {@code @Configuration}
 	 * class processing.
 	 * <p>The default implementation is empty.
+	 *
+	 * 根据需要根据导入 {@code @Configuration} 类的给定注解元数据注册 Bean 定义。
+	 * 请注意，由于与 {@code @Configuration} 类处理相关的生命周期约束，可能未在此处注册 {@link BeanDefinitionRegistryPostProcessor} 类型。
+	 * 默认实现为空。
+	 *
 	 * @param importingClassMetadata annotation metadata of the importing class
 	 * @param registry current bean definition registry
 	 */

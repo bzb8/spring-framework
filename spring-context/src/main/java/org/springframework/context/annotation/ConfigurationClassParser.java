@@ -602,6 +602,7 @@ class ConfigurationClassParser {
 					collectImports(annotation, imports, visited);
 				}
 			}
+			// 获取@Import注解上的value属性
 			imports.addAll(sourceClass.getAnnotationAttributes(Import.class.getName(), "value"));
 		}
 	}
@@ -633,6 +634,7 @@ class ConfigurationClassParser {
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						// 候选类是一个 ImportSelector -> 委托给它来确定导入
 						Class<?> candidateClass = candidate.loadClass();
+						// 实例化ImportSelector对象，并调用Aware接口的方法
 						ImportSelector selector = ParserStrategyUtils.instantiateClass(candidateClass, ImportSelector.class,
 								this.environment, this.resourceLoader, this.registry);
 						Predicate<String> selectorFilter = selector.getExclusionFilter();
@@ -654,6 +656,7 @@ class ConfigurationClassParser {
 						// delegate to it to register additional bean definitions
 						// 候选类是一个 ImportBeanDefinitionRegistrar -> 委托给它来注册其他 bean 定义
 						Class<?> candidateClass = candidate.loadClass();
+						// 实例化ImportBeanDefinitionRegistrar，并调用相应Aware接口的方法
 						ImportBeanDefinitionRegistrar registrar =
 								ParserStrategyUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class,
 										this.environment, this.resourceLoader, this.registry);
@@ -714,6 +717,8 @@ class ConfigurationClassParser {
 
 	/**
 	 * Factory method to obtain a {@link SourceClass} from a {@link Class}.
+	 *
+	 * 用于从 {@link Class} 获取 {@link SourceClass} 的工厂方法。
 	 */
 	SourceClass asSourceClass(@Nullable Class<?> classType, Predicate<String> filter) throws IOException {
 		if (classType == null || filter.test(classType.getName())) {
@@ -827,8 +832,8 @@ class ConfigurationClassParser {
 		 * 处理指定的 {@link DeferredImportSelector}。如果正在收集延迟导入选择器，则会将此实例注册到列表中。
 		 * 如果正在处理它们，则 {@link DeferredImportSelector} 也会根据其 {@link DeferredImportSelector.Group} 立即进行处理。
 		 *
-		 * @param configClass the source configuration class
-		 * @param importSelector the selector to handle
+		 * @param configClass the source configuration class 源配置类
+		 * @param importSelector the selector to handle 要处理的选择器
 		 */
 		public void handle(ConfigurationClass configClass, DeferredImportSelector importSelector) {
 			DeferredImportSelectorHolder holder = new DeferredImportSelectorHolder(configClass, importSelector);
@@ -1122,6 +1127,10 @@ class ConfigurationClassParser {
 			return result;
 		}
 
+		/**
+		 * 获取不以java开头的所有注解
+		 * @return
+		 */
 		public Set<SourceClass> getAnnotations() {
 			Set<SourceClass> result = new LinkedHashSet<>();
 			if (this.source instanceof Class) {
@@ -1135,6 +1144,7 @@ class ConfigurationClassParser {
 						catch (Throwable ex) {
 							// An annotation not present on the classpath is being ignored
 							// by the JVM's class loading -> ignore here as well.
+							// 类路径上不存在的注解被 JVM 的类加载忽略 -> 此处也忽略。
 						}
 					}
 				}
@@ -1157,6 +1167,7 @@ class ConfigurationClassParser {
 
 		/**
 		 * 获取注解上的注解属性
+		 *
 		 * @param annType
 		 * @param attribute
 		 * @return

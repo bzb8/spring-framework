@@ -46,7 +46,7 @@ import org.springframework.util.ObjectUtils;
  * Wraps a constructor parameter, a method parameter or a field,
  * allowing unified access to their metadata.
  *
- * 即将注入的特定依赖项的描述符。包装构造函数参数、方法参数或字段，允许统一访问它们的元数据。
+ * 将要注入的特定依赖项的描述符。包装构造函数参数、方法参数或字段，允许统一访问其元数据。
  *
  * @author Juergen Hoeller
  * @since 2.5
@@ -130,6 +130,9 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * @param required whether the dependency is required
 	 * @param eager whether this dependency is 'eager' in the sense of
 	 * eagerly resolving potential target beans for type matching
+	 *
+	 * 这种依赖关系是否“急切”，即急切地解析潜在的目标 Bean 以进行类型匹配
+	 *
 	 */
 	public DependencyDescriptor(Field field, boolean required, boolean eager) {
 		super(field);
@@ -249,6 +252,10 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * method before going into the regular type matching algorithm across all beans.
 	 * Subclasses may override this method to improve resolution performance based on
 	 * pre-cached information while still receiving {@link InjectionPoint} exposure etc.
+	 *
+	 * 针对给定工厂解析此依赖项的快捷方式，例如考虑一些预先解析的信息。解析算法将首先尝试通过此方法解析快捷方式，然后再进入所有 Bean 的常规类型匹配算法。
+	 * 子类可以覆盖此方法，以提高基于预缓存信息的分辨率性能，同时仍接收 {@link InjectionPoint} 曝光等。
+	 *
 	 * @param beanFactory the associated factory
 	 * @return the shortcut result if any, or {@code null} if none
 	 * @throws BeansException if the shortcut could not be obtained
@@ -292,10 +299,13 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 
 	/**
 	 * Optionally set the concrete class that contains this dependency.
+	 *
+	 * （可选）设置包含此依赖项的具体类。
+	 *
 	 * This may differ from the class that declares the parameter/field in that
 	 * it may be a subclass thereof, potentially substituting type variables.
 	 *
-	 * 可选设置包含此依赖项的具体类。这可能与声明参数字段的类不同，因为它可能是其子类，可能替换类型变量。
+	 * 这可能与声明 parameter/field 的类不同，因为它可能是其子类，可能替换类型变量。
 	 *
 	 * @since 4.0
 	 */
@@ -367,6 +377,9 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * <p>This method does not actually try to retrieve the parameter name at
 	 * this point; it just allows discovery to happen when the application calls
 	 * {@link #getDependencyName()} (if ever).
+	 *
+	 * 初始化基础方法参数的参数名称发现（如果有）。
+	 * 此时，此方法实际上不会尝试检索参数名称;它只是允许在应用程序调用 {@link #getDependencyName（）}（如果有的话）时进行发现。
 	 */
 	public void initParameterNameDiscovery(@Nullable ParameterNameDiscoverer parameterNameDiscoverer) {
 		if (this.methodParameter != null) {
@@ -385,7 +398,10 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 
 	/**
 	 * Determine the declared (non-generic) type of the wrapped parameter/field.
-	 * @return the declared type (never {@code null})
+	 *
+	 * 确定包装参数字段的声明（非泛型）类型。
+	 *
+	 * @return the declared type (never {@code null}) 声明的类型（从不 {@code null}）
 	 */
 	public Class<?> getDependencyType() {
 		if (this.field != null) {

@@ -178,6 +178,10 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	 * <p>Note that this is different from registering a custom editor in that the editor
 	 * semantically still is a default editor. A ConversionService will override such a
 	 * default editor, whereas custom editors usually override the ConversionService.
+	 *
+	 *
+	 * 使用给定的属性编辑器覆盖指定类型的默认编辑器。
+	 * 请注意，这与注册自定义编辑器不同，因为编辑器在语义上仍然是默认编辑器。ConversionService 将覆盖此类默认编辑器，而自定义编辑器通常会覆盖 ConversionService。
 	 * @param requiredType the type of the property
 	 * @param propertyEditor the editor to register
 	 * @see #registerCustomEditor(Class, PropertyEditor)

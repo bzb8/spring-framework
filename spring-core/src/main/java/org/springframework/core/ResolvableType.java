@@ -1218,6 +1218,10 @@ public class ResolvableType implements Serializable {
 	 * implementation and the given nesting level.
 	 * <p>Use this variant when the class that declares the field includes generic
 	 * parameter variables that are satisfied by the implementation class.
+	 *
+	 * 为具有给定实现和给定嵌套级别的指定 {@link Field} 返回 {@link ResolvableType}。
+	 * 当声明字段的类包含实现类满足的泛型参数变量时，请使用此变体。
+	 *
 	 * @param field the source field
 	 * @param nestingLevel the nesting level (1 for the outer level; 2 for a nested
 	 * generic type; etc)

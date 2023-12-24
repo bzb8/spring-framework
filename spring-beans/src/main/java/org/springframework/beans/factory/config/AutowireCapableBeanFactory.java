@@ -108,6 +108,9 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates determining an appropriate autowire strategy
 	 * through introspection of the bean class.
+	 *
+	 * 指示通过对 Bean 类的内省来确定适当的自动注入策略的常量。
+	 *
 	 * @see #createBean
 	 * @see #autowire
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
@@ -121,6 +124,9 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * bean instance: to be appended to the fully-qualified bean class name,
 	 * e.g. "com.mypackage.MyClass.ORIGINAL", in order to enforce the given instance
 	 * to be returned, i.e. no proxies etc.
+	 *
+	 * 初始化现有 Bean 实例时“原始实例”约定的后缀：附加到完全限定的 Bean 类名，例如“com.mypackage.MyClass.ORIGINAL”，以强制返回给定的实例，即没有代理等。
+	 *
 	 * @since 5.1
 	 * @see #initializeBean(Object, String)
 	 * @see #applyBeanPostProcessorsBeforeInitialization(Object, String)
@@ -280,9 +286,15 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * such as {@code setBeanName} and {@code setBeanFactory},
 	 * also applying all bean post processors (including ones which
 	 * might wrap the given raw bean).
+	 *
+	 * 初始化给定的原始 Bean，应用工厂回调，例如 {@code setBeanName} 和 {@code setBeanFactory}，同时应用所有 Bean 后处理器（包括可能包装给定原始 Bean 的处理器）。
+	 *
 	 * <p>Note that no bean definition of the given name has to exist
 	 * in the bean factory. The passed-in bean name will simply be used
 	 * for callbacks but not checked against the registered bean definitions.
+	 *
+	 * 请注意，Bean 工厂中不必存在给定名称的 Bean 定义。传入的 Bean 名称将仅用于回调，但不会根据已注册的 Bean 定义进行检查。
+	 *
 	 * @param existingBean the existing bean instance
 	 * @param beanName the name of the bean, to be passed to it if necessary
 	 * (only passed to {@link BeanPostProcessor BeanPostProcessors};
@@ -348,6 +360,10 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * including its bean name.
 	 * <p>This is effectively a variant of {@link #getBean(Class)} which preserves the
 	 * bean name of the matching instance.
+	 *
+	 * 解析唯一匹配给定对象类型（如果有）的 Bean 实例，包括其 Bean 名称。
+	 * 这实际上是 {@link #getBean(Class)} 的变体，它保留了匹配实例的 Bean 名称。
+	 *
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @return the bean name plus bean instance
 	 * @throws NoSuchBeanDefinitionException if no matching bean was found
@@ -390,10 +406,13 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
 	 * Resolve the specified dependency against the beans defined in this factory.
+	 *
+	 * 解析针对此工厂中定义的 Bean 的指定依赖关系。
+	 *
 	 * @param descriptor the descriptor for the dependency (field/method/constructor)
-	 * @param requestingBeanName the name of the bean which declares the given dependency
+	 * @param requestingBeanName the name of the bean which declares the given dependency 声明给定依赖关系的 Bean 的名称
 	 * @param autowiredBeanNames a Set that all names of autowired beans (used for
-	 * resolving the given dependency) are supposed to be added to
+	 * resolving the given dependency) are supposed to be added to 应将自动注入的 bean（用于解析给定依赖项）的所有名称添加到的集合
 	 * @param typeConverter the TypeConverter to use for populating arrays and collections
 	 * @return the resolved object, or {@code null} if none found
 	 * @throws NoSuchBeanDefinitionException if no matching bean was found

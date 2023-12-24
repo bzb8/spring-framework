@@ -87,6 +87,9 @@ class ConfigurationClassBeanDefinitionReader {
 	 * Boolean flag controlled by a {@code spring.xml.ignore} system property that instructs Spring to
 	 * ignore XML, i.e. to not initialize the XML-related infrastructure.
 	 * <p>The default is "false".
+	 *
+	 * 布尔标志由 {@code spring.xml.ignore} 系统属性控制，指示 Spring 忽略 XML，即不初始化与 XML 相关的基础设施。
+	 * 默认值为“false”。
 	 */
 	private static final boolean shouldIgnoreXml = SpringProperties.getFlag("spring.xml.ignore");
 
@@ -382,6 +385,7 @@ class ConfigurationClassBeanDefinitionReader {
 				}
 				else {
 					// Primarily ".xml" files but for any other extension as well
+					// 主要是“.xml”文件，但也适用于任何其他扩展名
 					readerClass = XmlBeanDefinitionReader.class;
 				}
 			}
@@ -390,8 +394,10 @@ class ConfigurationClassBeanDefinitionReader {
 			if (reader == null) {
 				try {
 					// Instantiate the specified BeanDefinitionReader
+					// 实例化指定的 BeanDefinitionReader
 					reader = readerClass.getConstructor(BeanDefinitionRegistry.class).newInstance(this.registry);
 					// Delegate the current ResourceLoader to it if possible
+					// 如果可能，将当前 ResourceLoader 委托给它
 					if (reader instanceof AbstractBeanDefinitionReader) {
 						AbstractBeanDefinitionReader abdr = ((AbstractBeanDefinitionReader) reader);
 						abdr.setResourceLoader(this.resourceLoader);
@@ -406,6 +412,7 @@ class ConfigurationClassBeanDefinitionReader {
 			}
 
 			// TODO SPR-6310: qualify relative path locations as done in AbstractContextLoader.modifyLocations
+			// SPR-6310：按照 AbstractContextLoader.modifyLocations 中的规定限定相对路径位置
 			reader.loadBeanDefinitions(resource);
 		});
 	}

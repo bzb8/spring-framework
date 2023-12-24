@@ -36,6 +36,8 @@ import org.springframework.util.ReflectionUtils;
  * Internal class for managing injection metadata.
  * Not intended for direct use in applications.
  *
+ * 用于管理注入元数据的内部类。不打算在应用中直接使用。
+ *
  * <p>Used by {@link AutowiredAnnotationBeanPostProcessor},
  * {@link org.springframework.context.annotation.CommonAnnotationBeanPostProcessor} and
  * {@link org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor}.
@@ -94,6 +96,9 @@ public class InjectionMetadata {
 
 	/**
 	 * Determine whether this metadata instance needs to be refreshed.
+	 *
+	 * 确定是否需要刷新此元数据实例。
+	 *
 	 * @param clazz the current target class
 	 * @return {@code true} indicating a refresh, {@code false} otherwise
 	 * @since 5.2.4
@@ -134,6 +139,9 @@ public class InjectionMetadata {
 
 	/**
 	 * Clear property skipping for the contained elements.
+	 *
+	 * 清除包含元素的属性跳过。
+	 *
 	 * @since 3.2.13
 	 */
 	public void clear(@Nullable PropertyValues pvs) {
@@ -162,9 +170,12 @@ public class InjectionMetadata {
 
 	/**
 	 * Check whether the given injection metadata needs to be refreshed.
-	 * @param metadata the existing metadata instance
+	 *
+	 * 检查是否需要刷新给定的注入元数据。
+	 *
+	 * @param metadata the existing metadata instance 现有元数据实例
 	 * @param clazz the current target class
-	 * @return {@code true} indicating a refresh, {@code false} otherwise
+	 * @return {@code true} indicating a refresh, {@code false} otherwise {@code true} 表示刷新，{@code false} 否则
 	 * @see #needsRefresh(Class)
 	 */
 	public static boolean needsRefresh(@Nullable InjectionMetadata metadata, Class<?> clazz) {
@@ -174,9 +185,12 @@ public class InjectionMetadata {
 
 	/**
 	 * A single injected element.
+	 *
+	 * 单个注入元素。
 	 */
 	public abstract static class InjectedElement {
 
+		// Field or Method
 		protected final Member member;
 
 		protected final boolean isField;

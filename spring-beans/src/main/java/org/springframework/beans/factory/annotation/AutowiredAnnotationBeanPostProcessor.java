@@ -189,6 +189,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 * standard {@link Autowired @Autowired} and {@link Value @Value} annotations.
 	 * <p>Also supports JSR-330's {@link javax.inject.Inject @Inject} annotation,
 	 * if available.
+	 *
+	 * 为 Spring 的标准 {@link Autowired @Autowired} 和 {@link Value @Value} 注解创建一个新的 {@code AutowiredAnnotationBeanPostProcessor}。
+	 * 还支持 JSR-330 的 {@link javax.inject.Inject @Inject} 注解（如果可用）。
 	 */
 	@SuppressWarnings("unchecked")
 	public AutowiredAnnotationBeanPostProcessor() {
@@ -274,7 +277,12 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		this.metadataReaderFactory = new SimpleMetadataReaderFactory(this.beanFactory.getBeanClassLoader());
 	}
 
-
+	/**
+	 * 在Bean实例化后，填充属性之前执行
+	 * @param beanDefinition the merged bean definition for the bean
+	 * @param beanType the actual type of the managed bean instance
+	 * @param beanName the name of the bean
+	 */
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
@@ -472,10 +480,19 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		}
 	}
 
+	/**
+	 *
+	 * @param beanName
+	 * @param clazz bean的类型
+	 * @param pvs 为null
+	 * @return
+	 */
 	private InjectionMetadata findAutowiringMetadata(String beanName, Class<?> clazz, @Nullable PropertyValues pvs) {
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
+		// 回退到类名作为缓存键，以便与自定义调用方向后兼容。
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
 		// Quick check on the concurrent map first, with minimal locking.
+		// 首先快速检查并发Map，锁定最少。
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 			synchronized (this.injectionMetadataCache) {
@@ -492,6 +509,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		return metadata;
 	}
 
+	/**
+	 *
+	 * @param clazz bean的类型
+	 * @return
+	 */
 	private InjectionMetadata buildAutowiringMetadata(Class<?> clazz) {
 		if (!AnnotationUtils.isCandidateClass(clazz, this.autowiredAnnotationTypes)) {
 			return InjectionMetadata.EMPTY;
@@ -684,6 +706,8 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Resolve the specified cached method argument or field value.
+	 *
+	 * 解析指定的缓存方法参数或字段值。
 	 */
 	@Nullable
 	private Object resolveCachedArgument(@Nullable String beanName, @Nullable Object cachedArgument) {
@@ -748,6 +772,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			TypeConverter typeConverter = beanFactory.getTypeConverter();
 			Object value;
 			try {
+				// DefaultListableBeanFactory
 				value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
 			}
 			catch (BeansException ex) {

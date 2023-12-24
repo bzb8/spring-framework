@@ -50,6 +50,8 @@ public abstract class BeanFactoryUtils {
 	/**
 	 * Separator for generated bean names. If a class name or parent name is not
 	 * unique, "#1", "#2" etc will be appended, until the name becomes unique.
+	 *
+	 * 生成的 Bean 名称的分隔符。如果类名或父名不唯一，则将附加“1”、“2”等，直到名称变得唯一。
 	 */
 	public static final String GENERATED_BEAN_NAME_SEPARATOR = "#";
 
@@ -256,6 +258,11 @@ public abstract class BeanFactoryUtils {
 	 * will be matched against the type. If "allowEagerInit" is not set,
 	 * only raw FactoryBeans will be checked (which doesn't require initialization
 	 * of each FactoryBean).
+	 *
+	 * 获取给定类型的所有 Bean 名称，包括祖先工厂中定义的 Bean 名称。在被覆盖的 Bean 定义的情况下将返回唯一名称。
+	 * 如果设置了“allowEagerInit”标志，则考虑 FactoryBeans 创建的对象，这意味着 FactoryBeans 将被初始化。如果 FactoryBean 创建的对象不匹配，则原始 FactoryBean 本身将与类型匹配。
+	 * 如果未设置“allowEagerInit”，则仅检查原始 FactoryBeans（不需要初始化每个 FactoryBean）。
+	 *
 	 * @param lbf the bean factory
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)
@@ -264,6 +271,10 @@ public abstract class BeanFactoryUtils {
 	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
 	 * eagerly initialized to determine their type: So be aware that passing in "true"
 	 * for this flag will initialize FactoryBeans and "factory-bean" references.
+	 *
+	 * 是否初始化由FactoryBeans（或具有“factory-bean”引用的工厂方法）创建的 lazy-init 单例和对象以进行类型检查。请注意，需要紧急初始化 FactoryBeans 以确定其类型：
+	 *  因此请注意，为此标志传入“true”将初始化 FactoryBeans 和 “factory-bean” 引用。
+	 *
 	 * @param type the type that beans must match
 	 * @return the array of matching bean names, or an empty array if none
 	 * @see ListableBeanFactory#getBeanNamesForType(Class, boolean, boolean)

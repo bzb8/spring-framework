@@ -22,6 +22,8 @@ import org.springframework.core.Ordered;
  * Interface to be implemented by types that can supply the information
  * needed to sort advice/advisors by AspectJ's precedence rules.
  *
+ * 接口由类型实现，这些类型可以提供根据 AspectJ 的优先级规则对 advice/advisors 进行排序所需的信息。
+ *
  * @author Adrian Colyer
  * @since 2.0
  * @see org.springframework.aop.aspectj.autoproxy.AspectJPrecedenceComparator

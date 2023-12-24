@@ -174,4 +174,8 @@ public interface ConfigurableListableBeanFactory
 	 */
 	void preInstantiateSingletons() throws BeansException;
 
+	@Override
+	default Object createBean(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException {
+		return null;
+	}
 }

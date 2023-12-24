@@ -28,6 +28,8 @@ import org.springframework.util.StringUtils;
 /**
  * Spring AOP {@link ClassFilter} implementation using AspectJ type matching.
  *
+ * Spring AOP {@link ClassFilter} 使用 AspectJ 类型匹配实现。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -54,6 +56,9 @@ public class TypePatternClassFilter implements ClassFilter {
 	/**
 	 * Create a fully configured {@link TypePatternClassFilter} using the
 	 * given type pattern.
+	 *
+	 * 使用给定的类型模式创建完全配置的 {@link TypePatternClassFilter}。
+	 *
 	 * @param typePattern the type pattern that AspectJ weaver should parse
 	 */
 	public TypePatternClassFilter(String typePattern) {

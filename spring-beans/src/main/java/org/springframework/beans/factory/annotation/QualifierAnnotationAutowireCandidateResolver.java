@@ -365,6 +365,8 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 
 	/**
 	 * Determine a suggested value from any of the given candidate annotations.
+	 *
+	 * 查找@Value注解的value属性值
 	 */
 	@Nullable
 	protected Object findValue(Annotation[] annotationsToSearch) {

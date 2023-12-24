@@ -35,8 +35,12 @@ import org.springframework.aop.support.ComposablePointcut;
  * Metadata for an AspectJ aspect class, with an additional Spring AOP pointcut
  * for the per clause.
  *
+ * AspectJ aspect 类的元数据，以及用于 per 子句的附加 Spring AOP 切入点。
+ *
  * <p>Uses AspectJ 5 AJType reflection API, enabling us to work with different
  * AspectJ instantiation models such as "singleton", "pertarget" and "perthis".
+ *
+ * 使用 AspectJ 5 AJType 反射 API，使我们能够使用不同的 AspectJ 实例化模型，例如“单例”、“pertarget”和“perthis”。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -56,6 +60,9 @@ public class AspectMetadata implements Serializable {
 	/**
 	 * The aspect class, stored separately for re-resolution of the
 	 * corresponding AjType on deserialization.
+	 *
+	 * aspect 类，单独存储，用于在反序列化时重新解析相应的 AjType。
+	 *
 	 */
 	private final Class<?> aspectClass;
 
@@ -69,12 +76,17 @@ public class AspectMetadata implements Serializable {
 	 * Spring AOP pointcut corresponding to the per clause of the
 	 * aspect. Will be the {@code Pointcut.TRUE} canonical instance in the
 	 * case of a singleton, otherwise an AspectJExpressionPointcut.
+	 *
+	 * Spring AOP 切入点对应于 aspect 的 per 子句。对于单例，将是 {@code Pointcut.TRUE} 规范实例，否则为 AspectJExpressionPointcut。
 	 */
 	private final Pointcut perClausePointcut;
 
 
 	/**
 	 * Create a new AspectMetadata instance for the given aspect class.
+	 *
+	 * 为给定的 aspect 类创建新的 AspectMetadata 实例。
+	 *
 	 * @param aspectClass the aspect class
 	 * @param aspectName the name of the aspect
 	 */
@@ -85,6 +97,7 @@ public class AspectMetadata implements Serializable {
 		AjType<?> ajType = null;
 		while (currClass != Object.class) {
 			AjType<?> ajTypeToCheck = AjTypeSystem.getAjType(currClass);
+			// 是否有@Aspect注解
 			if (ajTypeToCheck.isAspect()) {
 				ajType = ajTypeToCheck;
 				break;
@@ -102,6 +115,7 @@ public class AspectMetadata implements Serializable {
 
 		switch (this.ajType.getPerClause().getKind()) {
 			case SINGLETON:
+				// 进入这里
 				this.perClausePointcut = Pointcut.TRUE;
 				return;
 			case PERTARGET:
@@ -124,6 +138,8 @@ public class AspectMetadata implements Serializable {
 
 	/**
 	 * Extract contents from String of form {@code pertarget(contents)}.
+	 *
+	 * 从 {@code pertarget(contents)} 形式的字符串中提取内容。
 	 */
 	private String findPerClause(Class<?> aspectClass) {
 		String str = aspectClass.getAnnotation(Aspect.class).value();

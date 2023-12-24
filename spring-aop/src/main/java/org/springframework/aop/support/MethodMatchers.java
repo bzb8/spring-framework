@@ -28,9 +28,13 @@ import org.springframework.util.Assert;
 /**
  * Static utility methods for composing {@link MethodMatcher MethodMatchers}.
  *
+ * 用于编写 {@link MethodMatcher MethodMatchers} 的静态实用程序方法。
+ *
  * <p>A MethodMatcher may be evaluated statically (based on method and target
  * class) or need further evaluation dynamically (based on arguments at the
  * time of method invocation).
+ *
+ * MethodMatcher 可以静态计算（基于方法和目标类），也可以需要动态地进一步评估（基于方法调用时的参数）。
  *
  * @author Rod Johnson
  * @author Rob Harrop

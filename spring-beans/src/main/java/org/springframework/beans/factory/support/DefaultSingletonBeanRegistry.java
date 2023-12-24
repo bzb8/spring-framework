@@ -262,7 +262,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
-				// 创建前的回调，默认仅做检查
+				// 创建前的回调，标记当前Bean在创建总
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
@@ -294,11 +294,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					if (recordSuppressedExceptions) {
 						this.suppressedExceptions = null;
 					}
-					// // 创建后的回调，默认仅做检查
+					// // 创建后的回调，标记当前Bean不在创建中
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
-					// 缓存而已
+					// 缓存单例
 					addSingleton(beanName, singletonObject);
 				}
 			}
@@ -383,6 +383,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Return whether the specified singleton bean is currently in creation
 	 * (within the entire factory).
+	 *
 	 * 返回指定的单例 bean 当前是否正在创建（在整个工厂内）。
 	 * @param beanName the name of the bean
 	 */

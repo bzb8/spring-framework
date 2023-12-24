@@ -322,6 +322,7 @@ public abstract class ReflectionUtils {
 	 * @see #doWithMethods
 	 */
 	public static void doWithLocalMethods(Class<?> clazz, MethodCallback mc) {
+		// 获取本类声明的方法和接口上的默认方法
 		Method[] methods = getDeclaredMethods(clazz, false);
 		for (Method method : methods) {
 			try {
@@ -511,6 +512,11 @@ public abstract class ReflectionUtils {
 		return (result.length == 0 || !defensive) ? result : result.clone();
 	}
 
+	/**
+	 * 查找接口上的默认方法，非抽象的
+	 * @param clazz
+	 * @return
+	 */
 	@Nullable
 	private static List<Method> findConcreteMethodsOnInterfaces(Class<?> clazz) {
 		List<Method> result = null;

@@ -34,6 +34,8 @@ import org.springframework.util.Assert;
  * Helper for retrieving standard Spring Advisors from a BeanFactory,
  * for use with auto-proxying.
  *
+ * 用于从 BeanFactory 检索标准 Spring Advisor 的帮助程序，用于自动代理。
+ *
  * @author Juergen Hoeller
  * @since 2.0.2
  * @see AbstractAdvisorAutoProxyCreator
@@ -62,14 +64,22 @@ public class BeanFactoryAdvisorRetrievalHelper {
 	 * Find all eligible Advisor beans in the current bean factory,
 	 * ignoring FactoryBeans and excluding beans that are currently in creation.
 	 * @return the list of {@link org.springframework.aop.Advisor} beans
+	 *
+	 * 在当前 Bean 工厂中查找所有符合条件的 Advisor Bean，忽略 FactoryBeans 并排除当前正在创建的 Bean。
+	 *
+	 * 一般为new ArrayList<>()
+	 *
 	 * @see #isEligibleBean
 	 */
 	public List<Advisor> findAdvisorBeans() {
 		// Determine list of advisor bean names, if not cached already.
+		// 确定advisor Bean 名称的列表（如果尚未缓存）。
 		String[] advisorNames = this.cachedAdvisorBeanNames;
 		if (advisorNames == null) {
 			// Do not initialize FactoryBeans here: We need to leave all regular beans
 			// uninitialized to let the auto-proxy creator apply to them!
+			// 不要在这里初始化 FactoryBeans：我们需要让所有常规 Bean 都未初始化，以便让自动代理创建者应用于它们！
+			// 获取所有Advisor类型的BeanNames
 			advisorNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 					this.beanFactory, Advisor.class, true, false);
 			this.cachedAdvisorBeanNames = advisorNames;
@@ -116,6 +126,10 @@ public class BeanFactoryAdvisorRetrievalHelper {
 	/**
 	 * Determine whether the aspect bean with the given name is eligible.
 	 * <p>The default implementation always returns {@code true}.
+	 *
+	 * 确定具有给定名称的 aspect bean 是否符合条件。
+	 * 默认实现始终返回 {@code true}。
+	 *
 	 * @param beanName the name of the aspect bean
 	 * @return whether the bean is eligible
 	 */

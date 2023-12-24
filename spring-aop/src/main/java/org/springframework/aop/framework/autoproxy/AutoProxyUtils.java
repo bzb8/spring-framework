@@ -120,6 +120,9 @@ public abstract class AutoProxyUtils {
 	 * Determine whether the given bean name indicates an "original instance"
 	 * according to {@link AutowireCapableBeanFactory#ORIGINAL_INSTANCE_SUFFIX},
 	 * skipping any proxy attempts for it.
+	 *
+	 * 根据 {@link AutowireCapableBeanFactory#ORIGINAL_INSTANCE_SUFFIX} 确定给定的 Bean 名称是否表示“原始实例”，以跳过对它的任何代理尝试。
+	 *
 	 * @param beanName the name of the bean
 	 * @param beanClass the corresponding bean class
 	 * @since 5.1

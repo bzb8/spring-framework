@@ -28,6 +28,8 @@ import org.springframework.util.Assert;
  * AspectJPointcutAdvisor that adapts an {@link AbstractAspectJAdvice}
  * to the {@link org.springframework.aop.PointcutAdvisor} interface.
  *
+ * AspectJPointcutAdvisor，将{@link AbstractAspectJAdvice}改编为{@link org.springframework.aop.PointcutAdvisor}接口。
+ *
  * @author Adrian Colyer
  * @author Juergen Hoeller
  * @since 2.0

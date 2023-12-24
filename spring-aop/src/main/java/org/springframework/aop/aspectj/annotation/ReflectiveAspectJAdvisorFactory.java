@@ -60,6 +60,8 @@ import org.springframework.util.comparator.InstanceComparator;
  * classes honoring AspectJ's annotation syntax, using reflection to invoke the
  * corresponding advice methods.
  *
+ * 工厂，可以从遵循 AspectJ 注解语法的类中创建给定 AspectJ 类的 Spring AOP Advisors，使用反射来调用相应的advice方法。
+ *
  * @author Rod Johnson
  * @author Adrian Colyer
  * @author Juergen Hoeller

@@ -153,11 +153,17 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine whether the given class is a candidate for carrying one of the specified
 	 * annotations (at type, method or field level).
+	 *
+	 * 确定给定类是否是携带指定注解之一的候选类（在类型、方法或字段级别）。
+	 *
 	 * @param clazz the class to introspect
-	 * @param annotationTypes the searchable annotation types
+	 * @param annotationTypes the searchable annotation types 可搜索的注解类型
 	 * @return {@code false} if the class is known to have no such annotations at any level;
 	 * {@code true} otherwise. Callers will usually perform full method/field introspection
 	 * if {@code true} is being returned here.
+	 *
+	 * {@code false} 如果已知该类在任何级别上都没有此类注解;{@code true} 否则。如果此处返回 {@code true}，调用者通常会执行完整的方法字段自省。
+	 *
 	 * @since 5.2
 	 * @see #isCandidateClass(Class, Class)
 	 * @see #isCandidateClass(Class, String)
@@ -174,11 +180,17 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine whether the given class is a candidate for carrying the specified annotation
 	 * (at type, method or field level).
+	 *
+	 * 确定给定类是否是携带指定注释的候选类（在类型、方法或字段级别）。
+	 *
 	 * @param clazz the class to introspect
 	 * @param annotationType the searchable annotation type
 	 * @return {@code false} if the class is known to have no such annotations at any level;
 	 * {@code true} otherwise. Callers will usually perform full method/field introspection
 	 * if {@code true} is being returned here.
+	 *
+	 * {@code false} 如果已知该类在任何级别上都没有此类注释;{@code true} 否则。如果此处返回 {@code true}，调用者通常会执行完整的方法/字段自省。
+	 *
 	 * @since 5.2
 	 * @see #isCandidateClass(Class, String)
 	 */
@@ -189,11 +201,18 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine whether the given class is a candidate for carrying the specified annotation
 	 * (at type, method or field level).
+	 *
+	 * 确定给定类是否是携带指定注释的候选类（在类型、方法或字段级别）。
+	 *
 	 * @param clazz the class to introspect
 	 * @param annotationName the fully-qualified name of the searchable annotation type
 	 * @return {@code false} if the class is known to have no such annotations at any level;
 	 * {@code true} otherwise. Callers will usually perform full method/field introspection
 	 * if {@code true} is being returned here.
+	 *
+	 * 如果已知该类在任何级别上都没有此类注释;{@code true} 否则。如果此处返回 {@code true}，调用者通常会执行完整的方法字段自省。
+	 * 除了class是以java开头的或是Order直接，就返回false，否则返回true
+	 *
 	 * @since 5.2
 	 * @see #isCandidateClass(Class, Class)
 	 */
@@ -214,6 +233,10 @@ public abstract class AnnotationUtils {
 	 * <p>Note that this method supports only a single level of meta-annotations.
 	 * For support for arbitrary levels of meta-annotations, use one of the
 	 * {@code find*()} methods instead.
+	 *
+	 * 从提供的注解中获取 {@code annotationType} 的单个 {@link Annotation}：给定的注解本身或其直接元注解。
+	 * 请注意，此方法仅支持单级元注释。要支持任意级别的元注释，请改用 {@code find（）} 方法之一。
+	 *
 	 * @param annotation the Annotation to check
 	 * @param annotationType the annotation type to look for, both locally and as a meta-annotation
 	 * @return the first matching annotation, or {@code null} if not found

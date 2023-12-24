@@ -69,11 +69,15 @@ public @interface ImportResource {
 	String[] value() default {};
 
 	/**
-	 * Resource locations from which to import.
+	 * Resource locations from which to import. 要从中导入的资源位置。
 	 * <p>Supports resource-loading prefixes such as {@code classpath:},
 	 * {@code file:}, etc.
 	 * <p>Consult the Javadoc for {@link #reader} for details on how resources
 	 * will be processed.
+	 *
+	 * 支持资源加载前缀，如 {@code classpath：}、{@code file：} 等。
+	 * 有关如何处理资源的详细信息，请查阅 Javadoc for {@link #reader}。
+	 *
 	 * @since 4.2
 	 * @see #value
 	 * @see #reader
@@ -89,6 +93,11 @@ public @interface ImportResource {
 	 * {@link org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader GroovyBeanDefinitionReader};
 	 * whereas, all other resources will be processed with an
 	 * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader XmlBeanDefinitionReader}.
+	 *
+	 * {@link BeanDefinitionReader} 实现，用于处理通过 {@link #value} 属性指定的资源。
+	 * 默认情况下，读取器将适应指定的资源路径：{@code “.groovy”} 文件将使用 {@link org.springframework.beans.factory.groovy.GroovyBeanDefinitionReader GroovyBeanDefinitionReader} 进行处理;
+	 * 而所有其他资源将使用 {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader XmlBeanDefinitionReader} 进行处理。
+	 *
 	 * @see #value
 	 */
 	Class<? extends BeanDefinitionReader> reader() default BeanDefinitionReader.class;

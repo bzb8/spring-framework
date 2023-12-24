@@ -28,7 +28,10 @@ import org.springframework.lang.Nullable;
  * delegates in succession. Those added first in the {@code addDiscoverer} method
  * have the highest priority. If one returns {@code null}, the next will be tried.
  *
+ * {@link ParameterNameDiscoverer} 实现，该实现连续尝试多个发现者委托。在 {@code addDiscoverer} 方法中首先添加的那些具有最高优先级。如果一个返回 {@code null}，则将尝试下一个。
+ *
  * <p>The default behavior is to return {@code null} if no discoverer matches.
+ * 默认行为是，如果没有发现者匹配，则返回 {@code null}。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
