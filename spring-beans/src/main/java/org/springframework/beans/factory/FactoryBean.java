@@ -70,6 +70,10 @@ public interface FactoryBean<T> {
 	 * {@link org.springframework.beans.factory.config.BeanDefinition} so that
 	 * factory beans can signal their object type when it can't be deduced from
 	 * the factory bean class.
+	 *
+	 * 可以在{@link org.springframework.beans.factory.config.BeanDefinition}上为{@link org.springframework.core.AttributeAccessor#setAttribute set}的属性的名称
+	 * ，以便工厂bean可以在无法从工厂bean类中推断出其对象类型时发出信号。
+	 *
 	 * @since 5.2
 	 */
 	String OBJECT_TYPE_ATTRIBUTE = "factoryBeanObjectType";

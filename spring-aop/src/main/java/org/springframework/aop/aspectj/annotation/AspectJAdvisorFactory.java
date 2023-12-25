@@ -71,8 +71,11 @@ public interface AspectJAdvisorFactory {
 	/**
 	 * Build Spring AOP Advisors for all annotated At-AspectJ methods
 	 * on the specified aspect instance.
+	 *
+	 * 在指定的 aspect 实例上为所有带注解的 At-AspectJ 方法构建 Spring AOP Advisors。
+	 *
 	 * @param aspectInstanceFactory the aspect instance factory
-	 * (not the aspect instance itself in order to avoid eager instantiation)
+	 * (not the aspect instance itself in order to avoid eager instantiation) Aspect实例工厂（不是Aspect实例本身，以避免预先实例化）
 	 * @return a list of advisors for this class
 	 */
 	List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory);
@@ -93,14 +96,17 @@ public interface AspectJAdvisorFactory {
 
 	/**
 	 * Build a Spring AOP Advice for the given AspectJ advice method.
+	 *
+	 * 为给定的 AspectJ advice方法构建 Spring AOP Advice。
+	 *
 	 * @param candidateAdviceMethod the candidate advice method
-	 * @param expressionPointcut the AspectJ expression pointcut
+	 * @param expressionPointcut the AspectJ expression pointcut AspectJ 表达式切入点
 	 * @param aspectInstanceFactory the aspect instance factory
-	 * @param declarationOrder the declaration order within the aspect
+	 * @param declarationOrder the declaration order within the aspect aspect内的声明顺序
 	 * @param aspectName the name of the aspect
 	 * @return {@code null} if the method is not an AspectJ advice method
 	 * or if it is a pointcut that will be used by other advice but will not
-	 * create a Spring advice in its own right
+	 * create a Spring advice in its own right {@code null} 如果该方法不是 AspectJ advice方法，或者它是将被其他advice使用的切入点，但不会自行创建 Spring advice
 	 * @see org.springframework.aop.aspectj.AspectJAroundAdvice
 	 * @see org.springframework.aop.aspectj.AspectJMethodBeforeAdvice
 	 * @see org.springframework.aop.aspectj.AspectJAfterAdvice

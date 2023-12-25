@@ -22,6 +22,8 @@ import java.util.Comparator;
  * Convenient entry point with generically typed factory methods
  * for common Spring {@link Comparator} variants.
  *
+ * 方便的入口点，具有通用类型的工厂方法，适用于常见的 Spring {@link Comparator} 变体。
+ *
  * @author Juergen Hoeller
  * @since 5.0
  */

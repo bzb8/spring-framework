@@ -359,7 +359,7 @@ public abstract class ReflectionUtils {
 	 *
 	 * @param clazz the class to introspect
 	 * @param mc the callback to invoke for each method
-	 * @param mf the filter that determines the methods to apply the callback to
+	 * @param mf the filter that determines the methods to apply the callback to 确定要应用回调的方法的筛选器
 	 * @throws IllegalStateException if introspection fails
 	 */
 	public static void doWithMethods(Class<?> clazz, MethodCallback mc, @Nullable MethodFilter mf) {
@@ -478,6 +478,8 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Get all declared methods on the leaf class and all superclasses.
+	 * 获取本类和所有超类上的所有声明方法。
+	 * 接口上有默认方法
 	 *
 	 * @param clazz
 	 * @param defensive

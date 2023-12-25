@@ -22,9 +22,15 @@ import org.springframework.util.Assert;
 /**
  * A converter converts a source object of type {@code S} to a target of type {@code T}.
  *
+ * 转换器将 {@code S} 类型的源对象转换为 {@code T} 类型的目标。
+ *
  * <p>Implementations of this interface are thread-safe and can be shared.
  *
+ * 此接口的实现是线程安全的，可以共享。
+ *
  * <p>Implementations may additionally implement {@link ConditionalConverter}.
+ *
+ * 实现还可以实现 {@link ConditionalConverter}。
  *
  * @author Keith Donald
  * @author Josh Cummings
@@ -36,9 +42,9 @@ import org.springframework.util.Assert;
 public interface Converter<S, T> {
 
 	/**
-	 * Convert the source object of type {@code S} to target type {@code T}.
-	 * @param source the source object to convert, which must be an instance of {@code S} (never {@code null})
-	 * @return the converted object, which must be an instance of {@code T} (potentially {@code null})
+	 * Convert the source object of type {@code S} to target type {@code T}. 将类型为 {@code S} 的源对象转换为目标类型 {@code T}。
+	 * @param source the source object to convert, which must be an instance of {@code S} (never {@code null}) 要转换的源对象，必须是 {@code S} 的实例（从不 {@code null}）
+	 * @return the converted object, which must be an instance of {@code T} (potentially {@code null}) 转换后的对象，必须是 {@code T} 的实例（可能为 {@code null}）
 	 * @throws IllegalArgumentException if the source cannot be converted to the desired target type
 	 */
 	@Nullable

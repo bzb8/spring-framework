@@ -27,8 +27,12 @@ import org.springframework.util.comparator.Comparators;
 /**
  * A {@link Comparator} that converts values before they are compared.
  *
+ * 一个 {@link Comparator}，用于在比较值之前对其进行转换。
+ *
  * <p>The specified {@link Converter} will be used to convert each value
  * before it is passed to the underlying {@code Comparator}.
+ *
+ * 指定的 {@link Converter} 将用于在将每个值传递给底层 {@code Comparator} 之前对其进行转换。
  *
  * @author Phillip Webb
  * @since 3.2
@@ -52,7 +56,7 @@ public class ConvertingComparator<S, T> implements Comparator<S> {
 
 	/**
 	 * Create a new {@link ConvertingComparator} instance.
-	 * @param comparator the underlying comparator used to compare the converted values
+	 * @param comparator the underlying comparator used to compare the converted values 用于比较转换值的基础比较器
 	 * @param converter the converter
 	 */
 	public ConvertingComparator(Comparator<T> comparator, Converter<S, T> converter) {

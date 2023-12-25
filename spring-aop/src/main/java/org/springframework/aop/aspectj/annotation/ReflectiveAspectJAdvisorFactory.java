@@ -85,14 +85,19 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		// @AfterThrowing methods due to the fact that AspectJAfterAdvice.invoke(MethodInvocation)
 		// invokes proceed() in a `try` block and only invokes the @After advice method
 		// in a corresponding `finally` block.
+		// 注意：虽然@After在@AfterReturning和@AfterThrowing之前排序，
+		// 但由于 AspectJAfterAdvice.invoke（MethodInvocation） 在 'try' 块中调用 proceed（），并且只在相应的 'finally' 块中调用 @After 建议方法，
+		// 因此实际上会在 @AfterReturning 和 @AfterThrowing 方法之后调用 @After 建议方法。
 		Comparator<Method> adviceKindComparator = new ConvertingComparator<>(
 				new InstanceComparator<>(
 						Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class),
 				(Converter<Method, Annotation>) method -> {
+					// 查找方法上的注解
 					AspectJAnnotation<?> ann = AbstractAspectJAdvisorFactory.findAspectJAnnotationOnMethod(method);
 					return (ann != null ? ann.getAnnotation() : null);
 				});
 		Comparator<Method> methodNameComparator = new ConvertingComparator<>(Method::getName);
+		// 先根据方法上的Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class注解排序，相同则根据方法的名称排序
 		adviceMethodComparator = adviceKindComparator.thenComparing(methodNameComparator);
 	}
 
@@ -130,6 +135,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 		// We need to wrap the MetadataAwareAspectInstanceFactory with a decorator
 		// so that it will only instantiate once.
+		// 我们需要用装饰器包装 MetadataAwareAspectInstanceFactory，以便它只会实例化一次。
 		MetadataAwareAspectInstanceFactory lazySingletonAspectInstanceFactory =
 				new LazySingletonAspectInstanceFactoryDecorator(aspectInstanceFactory);
 
@@ -143,6 +149,11 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			// discovered via reflection in order to support reliable advice ordering across JVM launches.
 			// Specifically, a value of 0 aligns with the default value used in
 			// AspectJPrecedenceComparator.getAspectDeclarationOrder(Advisor).
+
+			// 在 Spring Framework 5.2.7 之前，advisors.size() 作为 getAdvisor(...) 的 declarationOrderInAspect 提供，以表示声明的方法列表中的“当前位置”。
+			// 但是，从 Java 7 开始，“当前位置”是无效的，因为 JDK 不再按照它们在源代码中声明的顺序返回已声明的方法。
+			// 因此，我们现在将通过反射发现的所有advice方法的 declarationOrderInAspect 硬编码为 0，以支持跨 JVM 启动的可靠建议排序。
+			// 具体而言，值 0 与 AspectJPrecedenceComparator.getAspectDeclarationOrder（Advisor） 中使用的默认值一致。
 			Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, 0, aspectName);
 			if (advisor != null) {
 				advisors.add(advisor);
@@ -150,6 +161,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		}
 
 		// If it's a per target aspect, emit the dummy instantiating aspect.
+		// 如果是每个目标方面，则发出虚拟实例化方面。
 		if (!advisors.isEmpty() && lazySingletonAspectInstanceFactory.getAspectMetadata().isLazilyInstantiated()) {
 			Advisor instantiationAdvisor = new SyntheticInstantiationAdvisor(lazySingletonAspectInstanceFactory);
 			advisors.add(0, instantiationAdvisor);
@@ -168,6 +180,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 	private List<Method> getAdvisorMethods(Class<?> aspectClass) {
 		List<Method> methods = new ArrayList<>();
+		// 递归解析aspectClass类和父类或接口上的所有非@Pointcut的方法并加入methods
 		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter);
 		if (methods.size() > 1) {
 			methods.sort(adviceMethodComparator);
@@ -250,6 +263,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 		// If we get here, we know we have an AspectJ method.
 		// Check that it's an AspectJ-annotated class
+		// 如果我们到达这里，我们知道我们有一个 AspectJ 方法。检查它是否是 AspectJ 注解的类
 		if (!isAspect(candidateAspectClass)) {
 			throw new AopConfigException("Advice must be declared inside an aspect type: " +
 					"Offending method '" + candidateAdviceMethod + "' in class [" +

@@ -120,6 +120,8 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	/**
 	 * This will be non-null if the creator of this advice object knows the argument names
 	 * and sets them explicitly.
+	 *
+	 * 如果此advice对象的创建者知道参数名称并显式设置它们，则此值为非 null。
 	 */
 	@Nullable
 	private String[] argumentNames;
@@ -139,6 +141,8 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	/**
 	 * Index for thisJoinPoint argument (currently only
 	 * supported at index 0 if present at all).
+	 *
+	 * thisJoinPoint 参数的索引（当前仅在索引 0 处受支持（如果存在）。
 	 */
 	private int joinPointArgumentIndex = -1;
 
@@ -274,6 +278,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 		if (this.argumentNames != null) {
 			if (this.aspectJAdviceMethod.getParameterCount() == this.argumentNames.length + 1) {
 				// May need to add implicit join point arg name...
+				// 可能需要添加隐式 join point 名称...
 				Class<?> firstArgType = this.aspectJAdviceMethod.getParameterTypes()[0];
 				if (firstArgType == JoinPoint.class ||
 						firstArgType == ProceedingJoinPoint.class ||
@@ -294,9 +299,12 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	/**
 	 * We need to hold the returning name at this level for argument binding calculations,
 	 * this method allows the afterReturning advice subclass to set the name.
+	 *
+	 * 我们需要在这个级别保存返回名称以进行参数绑定计算，此方法允许 afterReturning advice子类设置名称。
 	 */
 	protected void setReturningNameNoCheck(String name) {
 		// name could be a variable or a type...
+		// name 可以是变量或类型...
 		if (isVariableName(name)) {
 			this.returningName = name;
 		}
@@ -369,6 +377,12 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	 * value. We need to calculate which advice parameter needs to be bound
 	 * to which argument name. There are multiple strategies for determining
 	 * this binding, which are arranged in a ChainOfResponsibility.
+	 *
+	 * 作为设置的一部分，我们尽可能多地做工作，以便可以尽可能快地绑定后续advice调用的参数。
+	 * 如果第一个参数的类型为 JoinPoint 或 ProceedingJoinPoint，则我们在该位置传递一个 JoinPoint（ProceedingJoinPoint 用于advice）。
+	 * 如果第一个参数的类型为 {@code JoinPoint.StaticPart}，
+	 * 那么我们在该位置传递 {@code JoinPoint.StaticPart}。
+	 * 其余参数必须由给定连接点处的切入点计算约束。我们将返回从参数名称到值的映射。我们需要计算哪个 advice 参数需要绑定到哪个参数名称。有多种策略可用于确定此绑定，这些策略排列在 ChainOfResponsibility 中。
 	 */
 	public final void calculateArgumentBindings() {
 		// The simple case... nothing to bind.
@@ -385,6 +399,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 
 		if (numUnboundArgs > 0) {
 			// need to bind arguments by name as returned from the pointcut match
+			// 需要按从切入点匹配返回的名称绑定参数
 			bindArgumentsByName(numUnboundArgs);
 		}
 
@@ -481,6 +496,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 
 		// Check that returning and throwing were in the argument names list if
 		// specified, and find the discovered argument types.
+		// 检查返回和抛出是否在参数名称列表中（如果指定），并找到发现的参数类型。
 		if (this.returningName != null) {
 			if (!this.argumentBindings.containsKey(this.returningName)) {
 				throw new IllegalStateException("Returning argument name '" + this.returningName +
@@ -511,6 +527,8 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	 * All parameters from argumentIndexOffset onwards are candidates for
 	 * pointcut parameters - but returning and throwing vars are handled differently
 	 * and must be removed from the list if present.
+	 *
+	 * 从 argumentIndexOffset 开始的所有参数都是切入点参数的候选参数 - 但返回和抛出变量的处理方式不同，如果存在，则必须从列表中删除。
 	 */
 	private void configurePointcutParameters(String[] argumentNames, int argumentIndexOffset) {
 		int numParametersToRemove = argumentIndexOffset;

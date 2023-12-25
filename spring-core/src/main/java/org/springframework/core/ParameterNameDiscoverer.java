@@ -44,6 +44,10 @@ public interface ParameterNameDiscoverer {
 	 * <p>Individual entries in the array may be {@code null} if parameter names are only
 	 * available for some parameters of the given method but not for others. However,
 	 * it is recommended to use stub parameter names instead wherever feasible.
+	 *
+	 * 返回方法的参数名称，如果无法确定，则返回 {@code null}。
+	 * 如果参数名称仅可用于给定方法的某些参数，而不适用于其他参数，则数组中的单个条目可能为 {@code null}。但是，建议在可行的情况下改用存根参数名称。
+	 *
 	 * @param method the method to find parameter names for
 	 * @return an array of parameter names if the names can be resolved,
 	 * or {@code null} if they cannot

@@ -23,6 +23,8 @@ import org.springframework.lang.Nullable;
  * Subinterface of {@link org.springframework.aop.aspectj.AspectInstanceFactory}
  * that returns {@link AspectMetadata} associated with AspectJ-annotated classes.
  *
+ * {@link org.springframework.aop.aspectj.AspectInstanceFactory} 的子接口，返回与 AspectJ 注解类关联的 {@link AspectMetadata}。
+ *
  * @author Rod Johnson
  * @since 2.0
  * @see AspectMetadata

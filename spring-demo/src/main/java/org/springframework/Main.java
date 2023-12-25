@@ -35,5 +35,7 @@ public class Main {
 
 		//AopService aopService = annotationConfigApplicationContext.getBean(AopService.class);
 		//aopService.testAop();
+
+
 	}
 }

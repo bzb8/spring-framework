@@ -24,9 +24,13 @@ import org.springframework.beans.factory.BeanFactory;
  * {@link org.springframework.aop.aspectj.AspectInstanceFactory} backed by a
  * {@link BeanFactory}-provided prototype, enforcing prototype semantics.
  *
+ * {@link org.springframework.aop.aspectj.AspectInstanceFactory}由{@link BeanFactory}提供的原型支持，强制执行原型语义。
+ *
  * <p>Note that this may instantiate multiple times, which probably won't give the
  * semantics you expect. Use a {@link LazySingletonAspectInstanceFactoryDecorator}
  * to wrap this to ensure only one new aspect comes back.
+ *
+ * 请注意，这可能会实例化多次，这可能不会提供您期望的语义。使用 {@link LazySingletonAspectInstanceFactoryDecorator} 来包装它，以确保只返回一个新aspect。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

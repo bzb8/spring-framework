@@ -109,6 +109,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	@Override
 	public void validate(Class<?> aspectClass) throws AopConfigException {
 		// If the parent has the annotation and isn't abstract it's an error
+		// 如果父类具有注解并且不是抽象的，则为错误
 		Class<?> superclass = aspectClass.getSuperclass();
 		if (superclass.getAnnotation(Aspect.class) != null &&
 				!Modifier.isAbstract(superclass.getModifiers())) {
@@ -133,6 +134,9 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	/**
 	 * Find and return the first AspectJ annotation on the given method
 	 * (there <i>should</i> only be one anyway...).
+	 *
+	 * 在给定方法上查找并返回第一个 AspectJ 注解（无论如何应该只有一个......
+	 * @Pointcut, @Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class
 	 */
 	@SuppressWarnings("unchecked")
 	@Nullable
@@ -192,6 +196,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 
 		private final AspectJAnnotationType annotationType;
 
+		// 注解上的"pointcut", "value"属性值
 		private final String pointcutExpression;
 
 		private final String argumentNames;
@@ -256,9 +261,16 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	/**
 	 * ParameterNameDiscoverer implementation that analyzes the arg names
 	 * specified at the AspectJ annotation level.
+	 *
+	 * ParameterNameDiscoverer 实现，用于分析在 AspectJ 注解级别指定的参数名称。
 	 */
 	private static class AspectJAnnotationParameterNameDiscoverer implements ParameterNameDiscoverer {
 
+		/**
+		 * 解析注解中argNames属性的值，以逗号分割的字符串
+		 * @param method the method to find parameter names for
+		 * @return
+		 */
 		@Override
 		@Nullable
 		public String[] getParameterNames(Method method) {

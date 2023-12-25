@@ -23,6 +23,8 @@ import java.util.Comparator;
  * Mainly for internal use in other Comparators, when supposed
  * to work on Comparables.
  *
+ * 使 Comparables 适应 Comparator 接口的比较器。主要用于其他比较器的内部使用，当应该在可比物上工作时。
+ *
  * @author Keith Donald
  * @since 1.2.2
  * @param <T> the type of comparable objects that may be compared by this comparator

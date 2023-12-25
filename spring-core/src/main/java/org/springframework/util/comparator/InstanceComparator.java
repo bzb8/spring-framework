@@ -26,10 +26,15 @@ import org.springframework.util.Assert;
  * on the types of class that they inherit &mdash; for example, this comparator can be used
  * to sort a list of {@code Number}s such that {@code Long}s occur before {@code Integer}s.
  *
+ * 根据任意类顺序比较对象。允许根据对象继承的类类型对对象进行排序，例如，此比较器可用于对 {@code Number} 列表进行排序，以便 {@code Long} 出现在 {@code Integer} 之前。
+ *
  * <p>Only the specified {@code instanceOrder} classes are considered during comparison.
  * If two objects are both instances of the ordered type this comparator will return a
  * value of {@code 0}. Consider combining with {@link Comparator#thenComparing(Comparator)}
  * if additional sorting is required.
+ *
+ * 在比较过程中，仅考虑指定的 {@code instanceOrder} 类。
+ * 如果两个对象都是有序类型的实例，则此比较器将返回值 {@code 0}。如果需要其他排序，请考虑与 {@link Comparator#thenComparing(Comparator)} 结合使用。
  *
  * @author Phillip Webb
  * @since 3.2
@@ -45,6 +50,8 @@ public class InstanceComparator<T> implements Comparator<T> {
 	 * Create a new {@link InstanceComparator} instance.
 	 * @param instanceOrder the ordered list of classes that should be used when comparing
 	 * objects. Classes earlier in the list will be given a higher priority.
+	 *
+	 * 比较对象时应使用的类的有序列表。列表中前面的类将被赋予更高的优先级。
 	 */
 	public InstanceComparator(Class<?>... instanceOrder) {
 		Assert.notNull(instanceOrder, "'instanceOrder' array must not be null");

@@ -395,6 +395,14 @@ public interface BeanFactory {
 	 * of a previously uninitialized {@code FactoryBean} (see {@link #getType(String, boolean)}).
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 *
+	 * 确定具有给定名称的 Bean 的类型。
+	 * 更具体地说，确定 {@link #getBean} 将为给定名称返回的对象类型。
+	 * 对于 {@link FactoryBean}，返回 FactoryBean 创建的对象类型，如 {@link FactoryBean#getObjectType()} 所公开的。
+	 * 这可能会导致初始化以前未初始化的 {@code FactoryBean}（参见 {@link #getType(String, boolean)}）。
+	 * 将别名转换回相应的规范 Bean 名称。
+	 * 将询问父工厂是否在此工厂实例中找不到 bean。
+	 *
 	 * @param name the name of the bean to query
 	 * @return the type of the bean, or {@code null} if not determinable
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
