@@ -106,12 +106,15 @@ public class MethodParameter {
 
 	/**
 	 * Create a new {@code MethodParameter} for the given method, with nesting level 1.
+	 *
+	 * 为给定方法创建一个新的 {@code MethodParameter}，嵌套级别为 1。
+	 *
 	 * @param method the Method to specify a parameter for 指定参数的方法
 	 * @param parameterIndex the index of the parameter: -1 for the method
 	 * return type; 0 for the first method parameter; 1 for the second method
 	 * parameter, etc.
 	 *
-	 * 参数的索引：-1 表示方法返回类型;0 表示第一个方法参数;1 表示第二个方法参数，依此类推。
+	 * 参数索引：-1为方法返回类型； 0 表示第一个方法参数； 1为第二个方法参数，等等。
 	 */
 	public MethodParameter(Method method, int parameterIndex) {
 		this(method, parameterIndex, 1);
@@ -119,13 +122,15 @@ public class MethodParameter {
 
 	/**
 	 * Create a new {@code MethodParameter} for the given method.
-	 * @param method the Method to specify a parameter for
+	 * @param method the Method to specify a parameter for 指定参数的方法
 	 * @param parameterIndex the index of the parameter: -1 for the method
 	 * return type; 0 for the first method parameter; 1 for the second method
 	 * parameter, etc.
 	 * @param nestingLevel the nesting level of the target type
 	 * (typically 1; e.g. in case of a List of Lists, 1 would indicate the
 	 * nested List, whereas 2 would indicate the element of the nested List)
+	 *
+	 * 目标类型的嵌套级别（通常为 1；例如，List<List<T>>的情况下，1 表示嵌套列表，而 2 表示嵌套列表的元素）
 	 */
 	public MethodParameter(Method method, int parameterIndex, int nestingLevel) {
 		Assert.notNull(method, "Method must not be null");
@@ -638,6 +643,8 @@ public class MethodParameter {
 
 	/**
 	 * Return the annotations associated with the specific method/constructor parameter.
+	 *
+	 * 返回与特定方法/构造函数参数关联的注释。
 	 */
 	public Annotation[] getParameterAnnotations() {
 		Annotation[] paramAnns = this.parameterAnnotations;
@@ -649,6 +656,7 @@ public class MethodParameter {
 					annotationArray.length == this.executable.getParameterCount() - 1) {
 				// Bug in javac in JDK <9: annotation array excludes enclosing instance parameter
 				// for inner classes, so access it with the actual parameter index lowered by 1
+				// JDK <9中javac中的错误：注解数组不包括内部类的封闭实例参数，因此使用实际参数索引降低1来访问它
 				index = this.parameterIndex - 1;
 			}
 			paramAnns = (index >= 0 && index < annotationArray.length ?

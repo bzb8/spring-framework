@@ -63,6 +63,7 @@ import org.springframework.util.StringUtils;
  *
  * <pre class="code">
  * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
+ * private HashMap<Integer, List<Integer,String>> myMap;
  *
  * public void example() {
  *     ResolvableType t = ResolvableType.forField(getClass().getDeclaredField("myMap"));

@@ -294,6 +294,7 @@ public class InjectionMetadata {
 				if (this.pd != null) {
 					if (pvs.contains(this.pd.getName())) {
 						// Explicit value provided as part of the bean definition.
+						// 作为 bean 定义的一部分提供的显式值。
 						this.skip = true;
 						return true;
 					}

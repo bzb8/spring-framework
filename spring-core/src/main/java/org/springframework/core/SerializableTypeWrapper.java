@@ -147,6 +147,9 @@ final class SerializableTypeWrapper {
 
 	/**
 	 * A {@link Serializable} interface providing access to a {@link Type}.
+	 *
+	 * 提供对{@link Type}的访问的{@link Serializable}接口。
+	 *
 	 */
 	@SuppressWarnings("serial")
 	interface TypeProvider extends Serializable {
