@@ -39,6 +39,8 @@ import org.springframework.lang.Nullable;
  * given an {@link Advised} object. Always rebuilds each advice chain;
  * caching can be provided by subclasses.
  *
+ * 给定一个 {@link Advised} 对象，一种简单但明确的方法来制定方法的advice链。始终重建每个advice链；缓存可以由子类提供。
+ *
  * @author Juergen Hoeller
  * @author Rod Johnson
  * @author Adrian Colyer
@@ -53,6 +55,9 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 
 		// This is somewhat tricky... We have to process introductions first,
 		// but we need to preserve order in the ultimate list.
+
+		// 这有点棘手......我们必须首先处理introductions，但我们需要保留最终列表中的顺序。
+
 		AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();
 		Advisor[] advisors = config.getAdvisors();
 		List<Object> interceptorList = new ArrayList<>(advisors.length);

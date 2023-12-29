@@ -382,8 +382,11 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the given class is visible in the given ClassLoader.
-	 * @param clazz the class to check (typically an interface)
-	 * @param classLoader the ClassLoader to check against
+	 *
+	 * 检查给定的类在给定的类加载器中是否可见。
+	 *
+	 * @param clazz the class to check (typically an interface) 要检查的类（通常是接口）
+	 * @param classLoader the ClassLoader to check against 要检查的类加载器
 	 * (may be {@code null} in which case this method will always return {@code true})
 	 */
 	public static boolean isVisible(Class<?> clazz, @Nullable ClassLoader classLoader) {
@@ -397,9 +400,11 @@ public abstract class ClassUtils {
 		}
 		catch (SecurityException ex) {
 			// Fall through to loadable check below
+			// 进入下面的可加载检查
 		}
 
 		// Visible if same Class can be loaded from given ClassLoader
+		// 如果可以从给定的类加载器加载相同的类，则可见
 		return isLoadable(clazz, classLoader);
 	}
 
@@ -451,6 +456,9 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the given class is loadable in the given ClassLoader.
+	 *
+	 * 检查给定的类是否可以在给定的 ClassLoader 中加载。
+	 *
 	 * @param clazz the class to check (typically an interface)
 	 * @param classLoader the ClassLoader to check against
 	 * @since 5.0.6
@@ -757,6 +765,10 @@ public abstract class ClassUtils {
 	 * Return all interfaces that the given class implements as a Set,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
+	 *
+	 * 返回给定类实现的所有接口，包括由超类实现的接口。
+	 * 如果类本身是一个接口，它将作为唯一接口返回。
+	 *
 	 * @param clazz the class to analyze for interfaces
 	 * @return all interfaces that the given object implements as a Set
 	 */
@@ -768,9 +780,16 @@ public abstract class ClassUtils {
 	 * Return all interfaces that the given class implements as a Set,
 	 * including ones implemented by superclasses.
 	 * <p>If the class itself is an interface, it gets returned as sole interface.
+	 *
+	 * 返回给定类作为 Set 实现的所有接口，包括由超类实现的接口。
+	 * 如果类本身是一个接口，它将作为唯一接口返回。
+	 *
 	 * @param clazz the class to analyze for interfaces
 	 * @param classLoader the ClassLoader that the interfaces need to be visible in
 	 * (may be {@code null} when accepting all declared interfaces)
+	 *
+	 *  接口需要在其中可见的类加载器（当接受所有声明的接口时可能为 {@code null}）
+	 *
 	 * @return all interfaces that the given object implements as a Set
 	 */
 	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, @Nullable ClassLoader classLoader) {
@@ -934,6 +953,7 @@ public abstract class ClassUtils {
 	 * class, but the original class in case of a CGLIB-generated subclass.
 	 *
 	 * 返回给定类的用户定义类：通常只是给定的类，但如果是 CGLIB 生成的子类，则返回原始类。
+	 * 原始类，CGLIB的父类
 	 *
 	 * @param clazz the class to check
 	 * @return the user-defined class
@@ -1215,6 +1235,11 @@ public abstract class ClassUtils {
 	 * <p>In case of any signature specified, only returns the method if there is a
 	 * unique candidate, i.e. a single public method with the specified name.
 	 * <p>Essentially translates {@code NoSuchMethodException} to {@code null}.
+	 *
+	 * 确定给定类是否具有具有给定签名的公共方法，如果可用则返回它（否则返回 {@code null}）。
+	 * 如果指定了任何签名，则仅在存在唯一候选者（即具有指定名称的单个公共方法）时才返回该方法。
+	 * 本质上将 {@code NoSuchMethodException} 翻译为 {@code null}。
+	 *
 	 * @param clazz the clazz to analyze
 	 * @param methodName the name of the method
 	 * @param paramTypes the parameter types of the method

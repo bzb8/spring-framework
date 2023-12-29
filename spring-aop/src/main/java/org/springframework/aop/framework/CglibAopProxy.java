@@ -111,6 +111,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 	protected Class<?>[] constructorArgTypes;
 
 	/** Dispatcher used for methods on Advised. */
+	// 调度程序用于Advised的方法。
 	private final transient AdvisedDispatcher advisedDispatcher;
 
 	private transient Map<Method, Integer> fixedInterceptorMap = Collections.emptyMap();
@@ -123,6 +124,8 @@ class CglibAopProxy implements AopProxy, Serializable {
 	 * @param config the AOP configuration as AdvisedSupport object
 	 * @throws AopConfigException if the config is invalid. We try to throw an informative
 	 * exception in this case, rather than let a mysterious failure happen later.
+	 *
+	 * 如果配置无效。在这种情况下，我们尝试抛出一个信息性异常，而不是让以后发生神秘的故障。
 	 */
 	public CglibAopProxy(AdvisedSupport config) throws AopConfigException {
 		Assert.notNull(config, "AdvisedSupport must not be null");
@@ -560,6 +563,8 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 	/**
 	 * Dispatcher for any methods declared on the Advised class.
+	 *
+	 * Advised 类上声明的任何方法的调度程序。
 	 */
 	private static class AdvisedDispatcher implements Dispatcher, Serializable {
 

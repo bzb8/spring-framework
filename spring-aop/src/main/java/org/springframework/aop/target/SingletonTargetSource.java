@@ -28,7 +28,8 @@ import org.springframework.util.ObjectUtils;
  * interface, as used by the Spring AOP framework. There is usually no need to
  * create objects of this class in application code.
  *
- * 保存给定对象的{@link org.springframework.aop.TargetSource}接口的实现。这是 Spring AOP 框架使用的 TargetSource 接口的默认实现。通常不需要在应用程序代码中创建此类的对象。
+ * 保存给定对象的{@link org.springframework.aop.TargetSource}接口的实现。这是 Spring AOP 框架使用的 TargetSource 接口的默认实现。
+ * 通常不需要在应用程序代码中创建此类的对象。
  *
  * <p>This class is serializable. However, the actual serializability of a
  * SingletonTargetSource will depend on whether the target is serializable.

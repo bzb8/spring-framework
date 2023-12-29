@@ -24,6 +24,8 @@ import javax.annotation.Nonnull;
  * Description of an invocation to a constructor, given to an
  * interceptor upon constructor-call.
  *
+ * 对构造函数调用的描述，在构造函数调用时提供给拦截器。
+ *
  * <p>A constructor invocation is a joinpoint and can be intercepted
  * by a constructor interceptor.
  *

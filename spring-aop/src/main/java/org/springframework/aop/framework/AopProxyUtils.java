@@ -54,6 +54,7 @@ import org.springframework.util.ReflectionUtils;
 public abstract class AopProxyUtils {
 
 	// JDK 17 Class.isSealed() method available?
+	// JDK 17 Class.isSealed() 方法可用吗？
 	@Nullable
 	private static final Method isSealedMethod = ClassUtils.getMethodIfAvailable(Class.class, "isSealed");
 
@@ -88,6 +89,9 @@ public abstract class AopProxyUtils {
 	 * Determine the ultimate target class of the given bean instance, traversing
 	 * not only a top-level proxy but any number of nested proxies as well &mdash;
 	 * as long as possible without side effects, that is, just for singleton targets.
+	 *
+	 * 确定给定 bean 实例的最终目标类，不仅遍历顶级代理，还遍历任意数量的嵌套代理 — 尽可能长且没有副作用，即仅针对单例目标。
+	 *
 	 * @param candidate the instance to check (might be an AOP proxy)
 	 * @return the ultimate target class (or the plain class of the given
 	 * object as fallback; never {@code null})
@@ -127,8 +131,13 @@ public abstract class AopProxyUtils {
 	 * <p>This will always add the {@link Advised} interface unless the AdvisedSupport's
 	 * {@link AdvisedSupport#setOpaque "opaque"} flag is on. Always adds the
 	 * {@link org.springframework.aop.SpringProxy} marker interface.
+	 *
+	 * 确定给定 AOP 配置的完整接口集。
+	 * 这将始终添加 {@link Advised} 接口，除非 AdvisedSupport 的 {@link AdvisedSupport#setOpaque "opaque"} 标志已打开。
+	 * 始终添加 {@link org.springframework.aop.SpringProxy} 标记接口。
+	 *
 	 * @param advised the proxy config
-	 * @param decoratingProxy whether to expose the {@link DecoratingProxy} interface
+	 * @param decoratingProxy whether to expose the {@link DecoratingProxy} interface 是否公开 {@link DecoratingProxy} 接口
 	 * @return the complete set of interfaces to proxy
 	 * @since 4.3
 	 * @see SpringProxy
@@ -139,6 +148,7 @@ public abstract class AopProxyUtils {
 		Class<?>[] specifiedInterfaces = advised.getProxiedInterfaces();
 		if (specifiedInterfaces.length == 0) {
 			// No user-specified interfaces: check whether target class is an interface.
+			// 没有用户指定的接口：检查目标类是否是接口。
 			Class<?> targetClass = advised.getTargetClass();
 			if (targetClass != null) {
 				if (targetClass.isInterface()) {
@@ -153,6 +163,7 @@ public abstract class AopProxyUtils {
 		List<Class<?>> proxiedInterfaces = new ArrayList<>(specifiedInterfaces.length + 3);
 		for (Class<?> ifc : specifiedInterfaces) {
 			// Only non-sealed interfaces are actually eligible for JDK proxying (on JDK 17)
+			// 只有非密封接口实际上才有资格进行 JDK 代理（在 JDK 17 上）
 			if (isSealedMethod == null || Boolean.FALSE.equals(ReflectionUtils.invokeMethod(isSealedMethod, ifc))) {
 				proxiedInterfaces.add(ifc);
 			}
@@ -198,6 +209,8 @@ public abstract class AopProxyUtils {
 	 * Check equality of the proxies behind the given AdvisedSupport objects.
 	 * Not the same as equality of the AdvisedSupport objects:
 	 * rather, equality of interfaces, advisors and target sources.
+	 *
+	 * 检查给定 AdvisedSupport 对象背后的代理是否相等。与 AdvisedSupport 对象的平等不同：相反，接口、advisors和目标源的平等。
 	 */
 	public static boolean equalsInProxy(AdvisedSupport a, AdvisedSupport b) {
 		return (a == b ||

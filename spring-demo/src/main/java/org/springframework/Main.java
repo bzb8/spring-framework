@@ -1,13 +1,14 @@
 package org.springframework;
 
 import org.springframework.aop.Louzai;
+import org.springframework.aop.Person;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.entity.Person;
 import org.springframework.entity.Student;
 import org.springframework.entity.User;
 import org.springframework.service.AService;
 import org.springframework.service.AopService;
 import org.springframework.service.BzbService;
+import org.springframework.service.DService;
 
 public class Main {
 	public static void main(String[] args) {
@@ -32,6 +33,9 @@ public class Main {
 
 		Louzai louzai = annotationConfigApplicationContext.getBean(Louzai.class);
 		louzai.everyDay();
+
+		DService dService = annotationConfigApplicationContext.getBean(DService.class);
+
 
 		//AopService aopService = annotationConfigApplicationContext.getBean(AopService.class);
 		//aopService.testAop();

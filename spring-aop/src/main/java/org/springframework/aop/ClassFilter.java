@@ -43,6 +43,9 @@ public interface ClassFilter {
 
 	/**
 	 * Should the pointcut apply to the given interface or target class?
+	 *
+	 * 切入点是否应该应用于给定的接口或目标类？
+	 *
 	 * @param clazz the candidate target class
 	 * @return whether the advice should apply to the given target class
 	 */
@@ -51,6 +54,8 @@ public interface ClassFilter {
 
 	/**
 	 * Canonical instance of a ClassFilter that matches all classes.
+	 *
+	 * 匹配所有类的 ClassFilter 的规范实例。
 	 */
 	ClassFilter TRUE = TrueClassFilter.INSTANCE;
 

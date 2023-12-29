@@ -95,6 +95,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 					aspectNames = new ArrayList<>();
 					String[] beanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 							this.beanFactory, Object.class, true, false);
+					// BeanFactory中所有的BeanName
 					for (String beanName : beanNames) {
 						if (!isEligibleBean(beanName)) {
 							continue;
@@ -102,12 +103,11 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 						// We must be careful not to instantiate beans eagerly as in this case they
 						// would be cached by the Spring container but would not have been weaved.
 						// 我们必须注意不要急切地实例化 bean，因为在这种情况下，它们会被 Spring 容器缓存，但不会被编织。
-
 						Class<?> beanType = this.beanFactory.getType(beanName, false);
 						if (beanType == null) {
 							continue;
 						}
-						// 是否含有@Aspect注解，并且不适用ajc编辑器编译
+						// 是否含有@Aspect注解，并且不是用ajc编辑器编译
 						if (this.advisorFactory.isAspect(beanType)) {
 							aspectNames.add(beanName);
 							AspectMetadata amd = new AspectMetadata(beanType, beanName);

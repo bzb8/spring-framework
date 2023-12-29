@@ -119,7 +119,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * Convenience constant for subclasses: Return value for "do not proxy".
 	 * @see #getAdvicesAndAdvisorsForBean
 	 *
-	 * 子类的便利常量：“do not proxy”的返回值。@see getAdvicesAndAdvisorsForBean
+	 * 子类的便利常量：“do not proxy”的返回值。
 	 */
 	@Nullable
 	protected static final Object[] DO_NOT_PROXY = null;
@@ -162,8 +162,15 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	private final Map<Object, Object> earlyProxyReferences = new ConcurrentHashMap<>(16);
 
+	/**
+	 * 代理的类型
+	 */
 	private final Map<Object, Class<?>> proxyTypes = new ConcurrentHashMap<>(16);
 
+	/**
+	 * 存储切面bean或应该被代理的bean，value=false.
+	 * 代理的value=true
+	 */
 	private final Map<Object, Boolean> advisedBeans = new ConcurrentHashMap<>(256);
 
 
@@ -311,6 +318,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	/**
 	 * Create a proxy with the configured interceptors if the bean is
 	 * identified as one to proxy by the subclass.
+	 *
+	 * 如果该 bean 被子类识别为要代理的 bean，则使用配置的拦截器创建一个代理。
+	 *
 	 * @see #getAdvicesAndAdvisorsForBean
 	 */
 	@Override
@@ -353,9 +363,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	/**
 	 * Wrap the given bean if necessary, i.e. if it is eligible for being proxied.
+	 *
+	 * 如有必要，即如果它有资格被代理，请包装给定的 bean。
+	 *
 	 * @param bean the raw bean instance
 	 * @param beanName the name of the bean
-	 * @param cacheKey the cache key for metadata access
+	 * @param cacheKey the cache key for metadata access 用于元数据访问的缓存键
 	 * @return a proxy wrapping the bean, or the raw bean instance as-is
 	 */
 	protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
@@ -371,6 +384,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		// Create proxy if we have advice.
+		// 如果我们有advice，请创建代理。
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		if (specificInterceptors != DO_NOT_PROXY) {
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
@@ -631,9 +645,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * Return whether the given bean is to be proxied, what additional
 	 * advices (e.g. AOP Alliance interceptors) and advisors to apply.
 	 *
-	 * 返回是否要代理给定的 bean，应用哪些附加advices（例如 AOP 联盟拦截器）和advisors。
+	 * 返回是否要代理给定的 bean，应用附加的advices（例如 AOP 联盟拦截器）和advisors。
 	 *
-	 * @param beanClass the class of the bean to advise
+	 * @param beanClass the class of the bean to advise 要advice的 bean 的类
 	 * @param beanName the name of the bean
 	 * @param customTargetSource the TargetSource returned by the
 	 * {@link #getCustomTargetSource} method: may be ignored.

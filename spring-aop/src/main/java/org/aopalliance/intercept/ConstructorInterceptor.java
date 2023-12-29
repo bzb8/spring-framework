@@ -21,11 +21,16 @@ import javax.annotation.Nonnull;
 /**
  * Intercepts the construction of a new object.
  *
+ * 拦截新对象的构造函数。
+ *
  * <p>The user should implement the {@link
  * #construct(ConstructorInvocation)} method to modify the original
  * behavior. E.g. the following class implements a singleton
  * interceptor (allows only one unique instance for the intercepted
  * class):
+ *
+ * 用户应该实现 {@link #construct(ConstructorInvocation)} 方法来修改原始行为。
+ * 例如。下面的类实现了一个单例拦截器（只允许被拦截的类有一个唯一的实例）：
  *
  * <pre class=code>
  * class DebuggingInterceptor implements ConstructorInterceptor {

@@ -45,6 +45,8 @@ public class PrioritizedParameterNameDiscoverer implements ParameterNameDiscover
 	/**
 	 * Add a further {@link ParameterNameDiscoverer} delegate to the list of
 	 * discoverers that this {@code PrioritizedParameterNameDiscoverer} checks.
+	 *
+	 * 将另一个 {@link ParameterNameDiscoverer} 委托添加到此 {@code PrioritizedParameterNameDiscoverer} 检查的发现者列表中。
 	 */
 	public void addDiscoverer(ParameterNameDiscoverer pnd) {
 		this.parameterNameDiscoverers.add(pnd);

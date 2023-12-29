@@ -122,6 +122,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	 * and sets them explicitly.
 	 *
 	 * 如果此advice对象的创建者知道参数名称并显式设置它们，则此值为非 null。
+	 * 注解中的argsName参数
 	 */
 	@Nullable
 	private String[] argumentNames;
@@ -264,6 +265,11 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 		String[] tokens = StringUtils.commaDelimitedListToStringArray(argNames);
 		setArgumentNamesFromStringArray(tokens);
 	}
+
+	/**
+	 * 移除args参数中的空格，并判断是否需要添加THIS_JOIN_POINT参数
+	 * @param args
+	 */
 
 	public void setArgumentNamesFromStringArray(String... args) {
 		this.argumentNames = new String[args.length];
@@ -448,6 +454,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 			this.argumentNames = createParameterNameDiscoverer().getParameterNames(this.aspectJAdviceMethod);
 		}
 		if (this.argumentNames != null) {
+			// 我们已经能够确定参数名称。
 			// We have been able to determine the arg names.
 			bindExplicitArguments(numArgumentsExpectingToBind);
 		}
@@ -462,6 +469,9 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 	 * Create a ParameterNameDiscoverer to be used for argument binding.
 	 * <p>The default implementation creates a {@link DefaultParameterNameDiscoverer}
 	 * and adds a specifically configured {@link AspectJAdviceParameterNameDiscoverer}.
+	 *
+	 * 创建用于参数绑定的 ParameterNameDiscoverer。
+	 * 默认实现会创建一个 {@link DefaultParameterNameDiscoverer} 并添加一个专门配置的 {@link AspectJAdviceParameterNameDiscoverer}。
 	 */
 	protected ParameterNameDiscoverer createParameterNameDiscoverer() {
 		// We need to discover them, or if that fails, guess,
@@ -472,6 +482,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 		adviceParameterNameDiscoverer.setReturningName(this.returningName);
 		adviceParameterNameDiscoverer.setThrowingName(this.throwingName);
 		// Last in chain, so if we're called and we fail, that's bad...
+		// 在链条中排在最后，所以如果我们被叫到并且我们失败了，那就糟糕了......
 		adviceParameterNameDiscoverer.setRaiseExceptions(true);
 		discoverer.addDiscoverer(adviceParameterNameDiscoverer);
 		return discoverer;

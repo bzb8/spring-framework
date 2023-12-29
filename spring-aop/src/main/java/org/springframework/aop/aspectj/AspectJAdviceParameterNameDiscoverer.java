@@ -189,6 +189,9 @@ public class AspectJAdviceParameterNameDiscoverer implements ParameterNameDiscov
 	/**
 	 * Indicate whether {@link IllegalArgumentException} and {@link AmbiguousBindingException}
 	 * must be thrown as appropriate in the case of failing to deduce advice parameter names.
+	 *
+	 * 指示在无法推断advice参数名称的情况下是否必须适当抛出 {@link IllegalArgumentException} 和 {@link AmbiguousBindingException}。
+	 *
 	 * @param raiseExceptions {@code true} if exceptions are to be thrown
 	 */
 	public void setRaiseExceptions(boolean raiseExceptions) {
@@ -217,6 +220,10 @@ public class AspectJAdviceParameterNameDiscoverer implements ParameterNameDiscov
 	 * Deduce the parameter names for an advice method.
 	 * <p>See the {@link AspectJAdviceParameterNameDiscoverer class-level javadoc}
 	 * for this class for details on the algorithm used.
+	 *
+	 * 推导advice方法的参数名称。
+	 * 有关所用算法的详细信息，请参阅此类的 {@link AspectJAdviceParameterNameDiscoverer 类级 javadoc}。
+	 *
 	 * @param method the target {@link Method}
 	 * @return the parameter names
 	 */

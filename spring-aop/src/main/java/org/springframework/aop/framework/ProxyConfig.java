@@ -40,6 +40,9 @@ public class ProxyConfig implements Serializable {
 
 	boolean opaque = false;
 
+	/**
+	 * 暴露代理到AopContext中
+	 */
 	boolean exposeProxy = false;
 
 	private boolean frozen = false;
@@ -93,6 +96,9 @@ public class ProxyConfig implements Serializable {
 	 * from being cast to {@link Advised} to query proxy status.
 	 * <p>Default is "false", meaning that any AOP proxy can be cast to
 	 * {@link Advised}.
+	 *
+	 * 设置是否应阻止将此配置创建的代理强制转换为 {@link Advised} 以查询代理状态。
+	 * 默认值为“false”，这意味着任何 AOP 代理都可以转换为 {@link Advised}。
 	 */
 	public void setOpaque(boolean opaque) {
 		this.opaque = opaque;
@@ -101,6 +107,8 @@ public class ProxyConfig implements Serializable {
 	/**
 	 * Return whether proxies created by this configuration should be
 	 * prevented from being cast to {@link Advised}.
+	 *
+	 * 返回是否应阻止将此配置创建的代理强制转换为 {@link Advised}。
 	 */
 	public boolean isOpaque() {
 		return this.opaque;

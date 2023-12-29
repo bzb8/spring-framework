@@ -20,7 +20,7 @@ package org.springframework.core;
  * Interface to be implemented by decorating proxies, in particular Spring AOP
  * proxies but potentially also custom proxies with decorator semantics.
  *
- * 通过装饰代理来实现的接口，特别是 Spring AOP 代理，但也可能是具有装饰器语义的自定义代理。
+ * 装饰代理来实现的接口，特别是 Spring AOP 代理，但也可能是具有装饰器语义的自定义代理。
  *
  * <p>Note that this interface should just be implemented if the decorated class
  * is not within the hierarchy of the proxy class to begin with. In particular,

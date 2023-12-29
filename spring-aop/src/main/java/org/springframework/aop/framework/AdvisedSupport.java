@@ -86,6 +86,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * Interfaces to be implemented by the proxy. Held in List to keep the order
 	 * of registration, to create JDK proxy with specified order of interfaces.
+	 *
+	 * 由代理实现的接口。保存在List中，保持注册顺序，以指定接口顺序创建JDK代理。
 	 */
 	private List<Class<?>> interfaces = new ArrayList<>();
 
@@ -459,6 +461,9 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * Determine a list of {@link org.aopalliance.intercept.MethodInterceptor} objects
 	 * for the given method, based on this configuration.
+	 *
+	 * 根据此配置确定给定方法的 {@link org.aopalliance.intercept.MethodInterceptor} 对象列表。
+	 *
 	 * @param method the proxied method
 	 * @param targetClass the target class
 	 * @return a List of MethodInterceptors (may also include InterceptorAndDynamicMethodMatchers)
@@ -564,6 +569,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * Simple wrapper class around a Method. Used as the key when
 	 * caching methods, for efficient equals and hashCode comparisons.
+	 *
+	 * 围绕方法的简单包装类。用作缓存方法时的键，以进行有效的 equals 和 hashCode 比较。
 	 */
 	private static final class MethodCacheKey implements Comparable<MethodCacheKey> {
 

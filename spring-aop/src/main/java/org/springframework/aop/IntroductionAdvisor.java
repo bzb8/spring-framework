@@ -36,6 +36,10 @@ public interface IntroductionAdvisor extends Advisor, IntroductionInfo {
 	 * should apply to.
 	 * <p>This represents the class part of a pointcut. Note that method
 	 * matching doesn't make sense to introductions.
+	 *
+	 * 返回过滤器，确定此introduction应适用于哪些目标类。
+	 * 这表示切入点的类部分。请注意，方法匹配对于introduction没有意义。
+	 *
 	 * @return the class filter
 	 */
 	ClassFilter getClassFilter();

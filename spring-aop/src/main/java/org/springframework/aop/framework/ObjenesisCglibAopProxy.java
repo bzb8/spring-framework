@@ -45,6 +45,9 @@ class ObjenesisCglibAopProxy extends CglibAopProxy {
 
 	/**
 	 * Create a new ObjenesisCglibAopProxy for the given AOP configuration.
+	 *
+	 * 为给定的 AOP 配置创建一个新的 ObjenesisCglibAopProxy。
+	 *
 	 * @param config the AOP configuration as AdvisedSupport object
 	 */
 	public ObjenesisCglibAopProxy(AdvisedSupport config) {

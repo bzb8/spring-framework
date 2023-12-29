@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
  * when matching methods. If there are no introductions on the target class,
  * a method matcher may be able to optimize matching more effectively for example.
  *
- * 一种特殊类型的 {@link MethodMatcher}，在匹配方法时会考虑引入。例如，如果没有关于目标类的介绍，则方法匹配器可能能够更有效地优化匹配。
+ * 一种特殊类型的 {@link MethodMatcher}，在匹配方法时会考虑introductions。例如，如果没有关于目标类的introductions，则方法匹配器可能能够更有效地优化匹配。
  *
  * @author Adrian Colyer
  * @since 2.0

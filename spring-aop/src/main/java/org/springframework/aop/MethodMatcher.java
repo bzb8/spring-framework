@@ -71,6 +71,10 @@ public interface MethodMatcher {
 	 * method returns {@code false}, no runtime check (i.e. no
 	 * {@link #matches(java.lang.reflect.Method, Class, Object[])} call)
 	 * will be made.
+	 *
+	 * 执行静态检查给定方法是否匹配。
+	 * 如果返回 {@code false} 或 {@link #isRuntime()} 方法返回 {@code false}，则不进行运行时检查（即没有 {@link #matches(java.lang.reflect.Method, Class, Object[]) 调用} 。
+	 *
 	 * @param method the candidate method
 	 * @param targetClass the target class
 	 * @return whether this method matches statically
@@ -83,6 +87,11 @@ public interface MethodMatcher {
 	 * runtime even if the 2-arg matches method returns {@code true}?
 	 * <p>Can be invoked when an AOP proxy is created, and need not be invoked
 	 * again before each method invocation,
+	 *
+	 * 这个 MethodMatcher 是动态的吗？也就是说，必须在运行时对 {@link #matches(java.lang.reflect.Method, Class, Object[])} 方法进行最终调用，
+	 * 即使 2-arg matches 方法返回 true？
+	 * 可以在创建AOP代理时调用，不需要在每次方法调用前再次调用，
+	 *
 	 * @return whether a runtime match via the 3-arg
 	 * {@link #matches(java.lang.reflect.Method, Class, Object[])} method
 	 * is required if static matching passed
@@ -97,6 +106,11 @@ public interface MethodMatcher {
 	 * {@link #isRuntime()} method returns {@code true}. Invoked
 	 * immediately before potential running of the advice, after any
 	 * advice earlier in the advice chain has run.
+	 *
+	 * 检查此方法是否存在运行时（动态）匹配，该方法必须静态匹配。
+	 * 仅当 2-arg matches 方法为给定方法和目标类返回 {@code true}，并且 {@link #isRuntime()} 方法返回 {@code true} 时，才会调用此方法。
+	 * 在建议链中较早的任何advice运行之后，在可能运行advice之前立即调用。
+	 *
 	 * @param method the candidate method
 	 * @param targetClass the target class
 	 * @param args arguments to the method

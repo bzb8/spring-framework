@@ -232,7 +232,7 @@ public abstract class AopUtils {
 	 * Can the given pointcut apply at all on the given class?
 	 * <p>This is an important test as it can be used to optimize
 	 * out a pointcut for a class.
-	 * @param pc the static or dynamic pointcut to check
+	 * @param pc the static or dynamic pointcut to check 要检查的静态或动态切入点
 	 * @param targetClass the class to test
 	 * @param hasIntroductions whether the advisor chain
 	 * for this bean includes any introductions
@@ -247,6 +247,7 @@ public abstract class AopUtils {
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
 		if (methodMatcher == MethodMatcher.TRUE) {
 			// No need to iterate the methods if we're matching any method anyway...
+			// 如果我们匹配任何方法，则无需迭代方法......
 			return true;
 		}
 
@@ -256,6 +257,7 @@ public abstract class AopUtils {
 		}
 
 		Set<Class<?>> classes = new LinkedHashSet<>();
+		// 非jdk代理
 		if (!Proxy.isProxyClass(targetClass)) {
 			classes.add(ClassUtils.getUserClass(targetClass));
 		}
@@ -279,9 +281,12 @@ public abstract class AopUtils {
 	 * Can the given advisor apply at all on the given class?
 	 * This is an important test as it can be used to optimize
 	 * out an advisor for a class.
+	 *
+	 * 给定的advisor可以应用于给定的class吗？这是一个重要的测试，因为它可以用来优化class的advisor。
+	 *
 	 * @param advisor the advisor to check
 	 * @param targetClass class we're testing
-	 * @return whether the pointcut can apply on any method
+	 * @return whether the pointcut can apply on any method 切入点是否可以应用于任何方法
 	 */
 	public static boolean canApply(Advisor advisor, Class<?> targetClass) {
 		return canApply(advisor, targetClass, false);
@@ -291,10 +296,14 @@ public abstract class AopUtils {
 	 * Can the given advisor apply at all on the given class?
 	 * <p>This is an important test as it can be used to optimize out an advisor for a class.
 	 * This version also takes into account introductions (for IntroductionAwareMethodMatchers).
+	 *
+	 * 给定的advisor可以应用于给定的class吗？
+	 * 这是一个重要的测试，因为它可用于优化class的advisor。此版本还考虑了introductions（对于IntroductionAwareMethodMatchers）。
+	 *
 	 * @param advisor the advisor to check
 	 * @param targetClass class we're testing
 	 * @param hasIntroductions whether the advisor chain for this bean includes
-	 * any introductions
+	 * any introductions 该 bean 的advisor链是否包含任何introductions
 	 * @return whether the pointcut can apply on any method
 	 */
 	public static boolean canApply(Advisor advisor, Class<?> targetClass, boolean hasIntroductions) {
@@ -307,6 +316,7 @@ public abstract class AopUtils {
 		}
 		else {
 			// It doesn't have a pointcut so we assume it applies.
+			// 它没有切入点，因此我们假设它适用。
 			return true;
 		}
 	}
@@ -314,6 +324,9 @@ public abstract class AopUtils {
 	/**
 	 * Determine the sublist of the {@code candidateAdvisors} list
 	 * that is applicable to the given class.
+	 *
+	 * 确定适用于给定类的 {@code CandidateAdvisors} 列表的子列表。
+	 *
 	 * @param candidateAdvisors the Advisors to evaluate
 	 * @param clazz the target class
 	 * @return sublist of Advisors that can apply to an object of the given class
@@ -344,6 +357,9 @@ public abstract class AopUtils {
 
 	/**
 	 * Invoke the given target via reflection, as part of an AOP method invocation.
+	 *
+	 * 作为 AOP 方法调用的一部分，通过反射调用给定目标。
+	 *
 	 * @param target the target object
 	 * @param method the method to invoke
 	 * @param args the arguments for the method

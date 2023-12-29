@@ -35,9 +35,15 @@ import org.springframework.lang.Nullable;
 @SuppressWarnings("serial")
 public abstract class AbstractExpressionPointcut implements ExpressionPointcut, Serializable {
 
+	/**
+	 * 类的名字
+	 */
 	@Nullable
 	private String location;
 
+	/**
+	 * @Aspect 注解value属性值
+	 */
 	@Nullable
 	private String expression;
 
