@@ -145,7 +145,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 			Object object = doGetObjectFromFactoryBean(factory, beanName);
 			if (shouldPostProcess) {
 				try {
-					// 调用Post
+					// 调用后处理器
 					object = postProcessObjectFromFactoryBean(object, beanName);
 				}
 				catch (Throwable ex) {
@@ -211,7 +211,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 	 * <p>The default implementation simply returns the given object as-is.
 	 * Subclasses may override this, for example, to apply post-processors.
 	 *
-	 * 对从 FactoryBean 获取的给定对象进行后处理。生成的对象将公开以供 bean 引用。默认实现只是按原样返回给定对象。子类可以覆盖它，例如，应用后处理器。
+	 * 对从 FactoryBean 获取的给定对象进行后处理。生成的对象将公开为 bean 引用。默认实现只是按原样返回给定对象。子类可以覆盖它，例如，应用后处理器。
 	 *
 	 * @param object the object obtained from the FactoryBean.
 	 * @param beanName the name of the bean

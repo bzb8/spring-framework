@@ -129,6 +129,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
 	/** ClassLoader to temporarily resolve bean class names with, if necessary. */
+	// ClassLoader 来临时解析 bean 类名（如有必要）。
 	@Nullable
 	private ClassLoader tempClassLoader;
 
@@ -260,7 +261,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(
 			String name, @Nullable Class<T> requiredType, @Nullable Object[] args, boolean typeCheckOnly)
 			throws BeansException {
-
+		// 去除beanName的&前缀
 		String beanName = transformedBeanName(name);
 		Object beanInstance;
 
@@ -1533,6 +1534,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 
 				// Set default singleton scope, if not configured before.
+				// 设置默认单一实例作用域（如果之前未配置）。
 				if (!StringUtils.hasLength(mbd.getScope())) {
 					mbd.setScope(SCOPE_SINGLETON);
 				}
@@ -1672,6 +1674,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		}
 	}
 
+	/**
+	 * 根据BeanDefination的beanClassName解析beanClass
+	 * @param mbd
+	 * @param typesToMatch
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
 	@Nullable
 	private Class<?> doResolveBeanClass(RootBeanDefinition mbd, Class<?>... typesToMatch)
 			throws ClassNotFoundException {
@@ -1699,6 +1708,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 		String className = mbd.getBeanClassName();
 		if (className != null) {
+			// 解析className中的表达式
 			Object evaluated = evaluateBeanDefinitionString(className, mbd);
 			if (!className.equals(evaluated)) {
 				// A dynamically resolved expression, supported as of 4.2...
@@ -1717,6 +1727,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (freshResolve) {
 				// When resolving against a temporary class loader, exit early in order
 				// to avoid storing the resolved Class in the bean definition.
+				// 当针对临时类装入器进行解析时，请提前退出以避免将解析的类存储在 Bean 定义中。
 				if (dynamicLoader != null) {
 					try {
 						return dynamicLoader.loadClass(className);
@@ -1732,6 +1743,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		}
 
 		// Resolve regularly, caching the result in the BeanDefinition...
+		// 解析，将结果缓存在 BeanDefinition...
 		return mbd.resolveBeanClass(beanClassLoader);
 	}
 
@@ -1988,7 +2000,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 *
 	 * 获取给定 bean 实例的对象，可以是 bean 实例本身，也可以是它创建的对象（如果是 FactoryBean, 以&开头的FactoryBean则返回FactoryBean本身，否则返回它的getObject()返回的对象）。
 	 *
-	 * @param beanInstance the shared bean instance
+	 * @param beanInstance the shared bean instance -- getSingleton(beanName)获取的对象
 	 * @param name the name that may include factory dereference prefix 可能包含工厂解引用前缀的名称
 	 * @param beanName the canonical bean name 规范的 bean 名称
 	 * @param mbd the merged bean definition 合并的bean定义
@@ -1999,6 +2011,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		// 如果 bean 不是工厂，不要让调用代码尝试解引用工厂。
+
+		// beanName以&开头的话，如果是FactoryBean，直接就返回了
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
 				return beanInstance;
@@ -2018,6 +2032,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
 		// 现在我们有了 bean 实例，它可以是普通 bean 也可以是 FactoryBean。如果它是一个 FactoryBean，我们用它来创建一个 bean 实例，除非调用者实际上想要引用工厂。
+
+		// 普通bean直接返回
 		if (!(beanInstance instanceof FactoryBean)) {
 			return beanInstance;
 		}
@@ -2027,7 +2043,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			mbd.isFactoryBean = true;
 		}
 		else {
-			// 从缓存中获取
+			// 从FactoryBean（factoryBeanObjectCache）缓存中获取
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {

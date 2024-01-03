@@ -113,6 +113,9 @@ public abstract class ClassUtils {
 	/**
 	 * Map with common Java language class name as key and corresponding Class as value.
 	 * Primarily for efficient deserialization of remote invocations.
+	 *
+	 * 使用通用 Java 语言类名作为键，对应的类作为值进行映射。
+	 * 主要用于远程调用的高效反序列化。
 	 */
 	private static final Map<String, Class<?>> commonClassCache = new HashMap<>(64);
 
@@ -262,6 +265,7 @@ public abstract class ClassUtils {
 
 		Assert.notNull(name, "Name must not be null");
 
+		// 检查长度
 		Class<?> clazz = resolvePrimitiveClassName(name);
 		if (clazz == null) {
 			clazz = commonClassCache.get(name);
@@ -274,7 +278,7 @@ public abstract class ClassUtils {
 		if (name.endsWith(ARRAY_SUFFIX)) {
 			String elementClassName = name.substring(0, name.length() - ARRAY_SUFFIX.length());
 			Class<?> elementClass = forName(elementClassName, classLoader);
-			// 创建数组，并返回实例
+			// 创建数组，并数组对象
 			return Array.newInstance(elementClass, 0).getClass();
 		}
 

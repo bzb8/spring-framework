@@ -5,7 +5,7 @@ import org.springframework.entity.Person;
 
 public class BzbService {
 
-	@Autowired
+	@Autowired(required = false)
 	private Person person;
 
 	public void test() {

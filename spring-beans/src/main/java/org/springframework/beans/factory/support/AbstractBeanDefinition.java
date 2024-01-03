@@ -159,7 +159,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 */
 	public static final String INFER_METHOD = "(inferred)";
 
-	// Class or String
+	// Class or String(class name)
 	@Nullable
 	private volatile Object beanClass;
 
@@ -191,6 +191,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	private boolean lenientConstructorResolution = true;
 
+	// @Bean创建的BeanDefinition的 factoryBeanName 是它的配置类
 	@Nullable
 	private String factoryBeanName;
 

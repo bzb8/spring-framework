@@ -11,7 +11,9 @@ import org.springframework.service.BzbService;
 @Configuration
 @ComponentScan(basePackages = {"org.springframework.service", "org.springframework.aop", "org.springframework.config"})
 @PropertySource(value = {"classpath:test.properties"})
-@Import({Student.class, MyImportSelector.class, MyImportBeanDefinitionRegistrar.class, MyDefereredImportSelector.class})
+@Import({Student.class
+		//MyImportSelector.class, MyImportBeanDefinitionRegistrar.class, MyDefereredImportSelector.class
+})
 public class AppConfig {
 
 	@Bean

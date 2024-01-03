@@ -264,6 +264,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/**
 	 * Create a new RootBeanDefinition as deep copy of the given
 	 * bean definition.
+	 *
+	 * 创建一个新的 RootBeanDefinition 作为给定 Bean 定义的深层副本。
+	 *
 	 * @param original the original bean definition to copy from
 	 */
 	public RootBeanDefinition(RootBeanDefinition original) {
@@ -434,6 +437,8 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Check whether the given candidate qualifies as a factory method.
+	 *
+	 * 检查给定的候选者是否符合工厂方法的条件。
 	 */
 	public boolean isFactoryMethod(Method candidate) {
 		return candidate.getName().equals(getFactoryMethodName());
@@ -453,6 +458,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Return the resolved factory method as a Java Method object, if available.
+	 *
+	 * 将解析的工厂方法作为 Java Method 对象（如果可用）返回。
+	 *
 	 * @return the factory method, or {@code null} if not found or not resolved yet
 	 */
 	@Nullable

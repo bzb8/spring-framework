@@ -371,6 +371,8 @@ class ConstructorResolver {
 	 * Retrieve all candidate methods for the given class, considering
 	 * the {@link RootBeanDefinition#isNonPublicAccessAllowed()} flag.
 	 * Called as the starting point for factory method determination.
+	 *
+	 * 检索给定类的所有候选方法，考虑 {@link RootBeanDefinition#isNonPublicAccessAllowed()} 标志。称为工厂方法确定的起点。
 	 */
 	private Method[] getCandidateMethods(Class<?> factoryClass, RootBeanDefinition mbd) {
 		if (System.getSecurityManager() != null) {
@@ -380,6 +382,7 @@ class ConstructorResolver {
 		}
 		else {
 			return (mbd.isNonPublicAccessAllowed() ?
+					// 获取本类或父类的所有方法，包括非public方法
 					ReflectionUtils.getAllDeclaredMethods(factoryClass) : factoryClass.getMethods());
 		}
 	}
@@ -402,6 +405,9 @@ class ConstructorResolver {
 	 * @param mbd the merged bean definition for the bean
 	 * @param explicitArgs argument values passed in programmatically via the getBean
 	 * method, or {@code null} if none (-> use constructor argument values from bean definition)
+	 *
+	 * 通过 getBean 方法以编程方式传入的参数值，如果没有，则为 {@code null}（-> 使用 Bean 定义中的构造函数参数值）
+	 *
 	 * @return a BeanWrapper for the new instance
 	 */
 	public BeanWrapper instantiateUsingFactoryMethod(
@@ -415,15 +421,18 @@ class ConstructorResolver {
 		boolean isStatic;
 
 		String factoryBeanName = mbd.getFactoryBeanName();
+		// 解析factoryClass和isStatic
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"factory-bean reference points back to the same bean definition");
 			}
+			// 创建factoryBeanName bean
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
+			// bean 依赖factoryBean
 			this.beanFactory.registerDependentBean(factoryBeanName, beanName);
 			factoryClass = factoryBean.getClass();
 			isStatic = false;
@@ -443,6 +452,7 @@ class ConstructorResolver {
 
 		Method factoryMethodToUse = null;
 		ArgumentsHolder argsHolderToUse = null;
+		// 入参参数列表
 		Object[] argsToUse = null;
 
 		if (explicitArgs != null) {
@@ -454,6 +464,7 @@ class ConstructorResolver {
 				factoryMethodToUse = (Method) mbd.resolvedConstructorOrFactoryMethod;
 				if (factoryMethodToUse != null && mbd.constructorArgumentsResolved) {
 					// Found a cached factory method...
+					// 找到缓存的工厂方法...
 					argsToUse = mbd.resolvedConstructorArguments;
 					if (argsToUse == null) {
 						argsToResolve = mbd.preparedConstructorArguments;
@@ -832,6 +843,8 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the prepared arguments stored in the given bean definition.
+	 *
+	 * 解析存储在给定 Bean 定义中的准备好的参数。
 	 */
 	private Object[] resolvePreparedArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
 			Executable executable, Object[] argsToResolve) {
@@ -840,6 +853,7 @@ class ConstructorResolver {
 		TypeConverter converter = (customConverter != null ? customConverter : bw);
 		BeanDefinitionValueResolver valueResolver =
 				new BeanDefinitionValueResolver(this.beanFactory, beanName, mbd, converter);
+		// 方法参数class数组
 		Class<?>[] paramTypes = executable.getParameterTypes();
 
 		Object[] resolvedArgs = new Object[argsToResolve.length];
@@ -916,6 +930,8 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the specified argument which is supposed to be autowired.
+	 *
+	 * 解析应该自动注入的指定参数。
 	 */
 	@Nullable
 	Object resolveAutowiredArgument(DependencyDescriptor descriptor, Class<?> paramType, String beanName,
@@ -992,6 +1008,8 @@ class ConstructorResolver {
 
 	/**
 	 * Private inner class for holding argument combinations.
+	 *
+	 * 用于保存参数组合的私有内部类。
 	 */
 	private static class ArgumentsHolder {
 
@@ -1081,6 +1099,8 @@ class ConstructorResolver {
 	 * DependencyDescriptor marker for constructor arguments,
 	 * for differentiating between a provided DependencyDescriptor instance
 	 * and an internally built DependencyDescriptor for autowiring purposes.
+	 *
+	 * 构造函数参数的 DependencyDescriptor 标记，用于区分提供的 DependencyDescriptor 实例和内部构建的 DependencyDescriptor 以进行自动注入。
 	 */
 	@SuppressWarnings("serial")
 	private static class ConstructorDependencyDescriptor extends DependencyDescriptor {

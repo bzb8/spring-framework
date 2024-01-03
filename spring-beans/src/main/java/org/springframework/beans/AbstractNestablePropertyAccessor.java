@@ -49,12 +49,17 @@ import org.springframework.util.StringUtils;
  * A basic {@link ConfigurablePropertyAccessor} that provides the necessary
  * infrastructure for all typical use cases.
  *
+ * 一个基本的 {@link ConfigurablePropertyAccessor}，为所有典型用例提供必要的基础结构。
+ *
  * <p>This accessor will convert collection and array values to the corresponding
  * target collections or arrays, if necessary. Custom property editors that deal
  * with collections or arrays can either be written via PropertyEditor's
  * {@code setValue}, or against a comma-delimited String via {@code setAsText},
  * as String arrays are converted in such a format if the array itself is not
  * assignable.
+ *
+ * 如有必要，此访问器会将集合和数组值转换为相应的目标集合或数组。处理集合或数组的自定义属性编辑器可以通过 PropertyEditor 的 {@code setValue} 编写，
+ * 也可以通过 {@code setAsText} 针对逗号分隔的 String 进行编写，因为如果数组本身不可赋值，则 String 数组会以这种格式进行转换。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -78,6 +83,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	private int autoGrowCollectionLimit = Integer.MAX_VALUE;
 
+	// bean instance
 	@Nullable
 	Object wrappedObject;
 

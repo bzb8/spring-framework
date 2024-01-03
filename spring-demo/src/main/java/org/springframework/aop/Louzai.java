@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 
 @Data
 @Service
-public class Louzai {
+public class Louzai implements ILouzai {
 
+	@Override
     public void everyDay() {
         System.out.println("睡觉");
     }

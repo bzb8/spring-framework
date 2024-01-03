@@ -32,11 +32,17 @@ import org.springframework.lang.Nullable;
  * as a thread-local object. We occasionally need to do this; for example, when a pointcut
  * (e.g. an AspectJ expression pointcut) needs to know the full invocation context.
  *
+ * 将当前 {@link org.aopalliance.intercept.MethodInvocation} 公开为线程本地对象的拦截器。我们偶尔需要这样做;例如，当切入点（例如 AspectJ 表达式切入点）需要知道完整的调用上下文时。
+ *
  * <p>Don't use this interceptor unless this is really necessary. Target objects should
  * not normally know about Spring AOP, as this creates a dependency on Spring API.
  * Target objects should be plain POJOs as far as possible.
  *
+ * 除非确实有必要，否则不要使用此拦截器。目标对象通常不应该知道 Spring AOP，因为这会创建对 Spring API 的依赖。目标对象应尽可能是普通的 POJO
+ *
  * <p>If used, this interceptor will normally be the first in the interceptor chain.
+ *
+ * 如果使用，此拦截器通常是拦截器链中的第一个。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -84,6 +90,9 @@ public final class ExposeInvocationInterceptor implements MethodInterceptor, Pri
 
 	/**
 	 * Ensures that only the canonical instance can be created.
+	 *
+	 * 确保只能创建规范实例。
+	 *
 	 */
 	private ExposeInvocationInterceptor() {
 	}

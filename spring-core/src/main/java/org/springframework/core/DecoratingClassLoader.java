@@ -76,6 +76,10 @@ public abstract class DecoratingClassLoader extends ClassLoader {
 	 * Add a class name to exclude from decoration (e.g. overriding).
 	 * <p>Any class name registered here will be handled by the parent
 	 * ClassLoader in the usual fashion.
+	 *
+	 * 添加一个类名以从修饰中排除（例如覆盖）。
+	 * 此处注册的任何类名都将由父类加载器以通常的方式处理。
+	 *
 	 * @param className the class name to exclude
 	 */
 	public void excludeClass(String className) {

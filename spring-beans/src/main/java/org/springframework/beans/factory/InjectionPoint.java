@@ -32,11 +32,8 @@ import org.springframework.util.ObjectUtils;
  * Also available as an argument for factory methods, reacting to the
  * requesting injection point for building a customized bean instance.
  *
- * 注入点的简单描述符，指向method/constructor or a field。由 {@link UnsatisfiedDependencyException} 公开。
+ * 注入点的简单描述符，指向method/constructor parameter or a field。由 {@link UnsatisfiedDependencyException} 公开。
  * 也可用作工厂方法的参数，对构建定制 bean 实例的请求注入点做出反应。
- *
- * 注入点的简单描述符，指向 method/constructor 参数或字段。由 {@link UnsatisfiedDependencyException} 公开。
- * 也可用作工厂方法的参数，对请求注入点做出反应以构建自定义 Bean 实例。
  *
  * @author Juergen Hoeller
  * @since 4.3
