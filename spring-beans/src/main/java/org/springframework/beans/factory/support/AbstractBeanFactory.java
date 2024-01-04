@@ -313,7 +313,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 
-			// 如果是为了使用使用，则标记bean正在创建中
+			// 如果是为了使用使用，则标记bean正在创建中 alreadyCreated缓存
 			if (!typeCheckOnly) {
 				markBeanAsCreated(beanName);
 			}
@@ -1245,8 +1245,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * Callback before prototype creation.
+	 * Callback before prototype creation. 原型创建前的回调。
 	 * <p>The default implementation register the prototype as currently in creation.
+	 *
+	 * 默认实现将原型注册为当前正在创建的原型。
+	 *
 	 * @param beanName the name of the prototype about to be created
 	 * @see #isPrototypeCurrentlyInCreation
 	 */

@@ -62,6 +62,7 @@ class TypeConverterDelegate {
 
 	private final PropertyEditorRegistrySupport propertyEditorRegistry;
 
+	// bean instance
 	@Nullable
 	private final Object targetObject;
 

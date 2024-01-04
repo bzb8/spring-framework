@@ -425,7 +425,7 @@ class ConstructorResolver {
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
-						"factory-bean reference points back to the same bean definition");
+						"factory-bean reference points back to the same bean definition"); // 工厂 bean 引用指向相同的 bean 定义
 			}
 			// 创建factoryBeanName bean
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
