@@ -76,6 +76,8 @@ import org.springframework.util.StringUtils;
  * }
  * </pre>
  *
+ * 解析泛型的工具类。ResolvableType 是对 Class，Field，Method 获取 Type 的抽象。
+ *
  * @author Phillip Webb
  * @author Juergen Hoeller
  * @author Stephane Nicoll
