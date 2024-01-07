@@ -331,6 +331,10 @@ public abstract class ObjectUtils {
 	 * both are {@code null} or {@code false} if only one is {@code null}.
 	 * <p>Compares arrays with {@code Arrays.equals}, performing an equality
 	 * check based on the array elements rather than the array reference.
+	 *
+	 * 确定给定对象是否相等，如果两者都为 {@code null}，则返回 {@code true}，如果只有一个对象为 {@code null}，则返回 {@code false}。
+	 * 将数组与 {@code Arrays.equals} 进行比较，根据数组元素而不是数组引用执行相等性检查。
+	 *
 	 * @param o1 first Object to compare
 	 * @param o2 second Object to compare
 	 * @return whether the given objects are equal

@@ -40,19 +40,28 @@ import org.springframework.lang.Nullable;
  * A {@link ConcurrentHashMap} that uses {@link ReferenceType#SOFT soft} or
  * {@linkplain ReferenceType#WEAK weak} references for both {@code keys} and {@code values}.
  *
+ * 对 {@code keys} 和 {@code values} 使用 {@link ReferenceType#SOFT soft} 或 {@linkplain ReferenceType#WEAK weak} 引用的 {@link ConcurrentHashMap}。
+ *
  * <p>This class can be used as an alternative to
  * {@code Collections.synchronizedMap(new WeakHashMap<K, Reference<V>>())} in order to
  * support better performance when accessed concurrently. This implementation follows the
  * same design constraints as {@link ConcurrentHashMap} with the exception that
  * {@code null} values and {@code null} keys are supported.
  *
+ * 此类可用作 {@code Collections.synchronizedMap(new WeakHashMap<K, Reference<V>>())} 的替代方法，以便在并发访问时支持更好的性能。
+ * 此实现遵循与 {@link ConcurrentHashMap} 相同的设计约束，但支持 {@code null} 值和 {@code null} 键。
+ *
  * <p><b>NOTE:</b> The use of references means that there is no guarantee that items
  * placed into the map will be subsequently available. The garbage collector may discard
  * references at any time, so it may appear that an unknown thread is silently removing
  * entries.
  *
+ * 注意：使用引用意味着不能保证放置在map中的项目随后可用。垃圾回收器可能随时丢弃引用，因此可能看起来是一个未知线程正在以静默方式删除条目。
+ *
  * <p>If not explicitly specified, this implementation will use
  * {@linkplain SoftReference soft entry references}.
+ *
+ * 如果未显式指定，则此实现将使用 {@linkplain SoftReference 软条目引用}。
  *
  * @author Phillip Webb
  * @author Juergen Hoeller
@@ -376,6 +385,8 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 	 * Under normal circumstances garbage collected entries are automatically purged as
 	 * items are added or removed from the Map. This method can be used to force a purge,
 	 * and is useful when the Map is read frequently but updated less often.
+	 *
+	 * 删除任何已回收且不再引用的条目。在正常情况下，垃圾回收条目会在map中添加或移除项目时自动清除。此方法可用于强制清除，当频繁读取 Map 但更新频率较低时非常有用。
 	 */
 	public void purgeUnreferencedEntries() {
 		for (Segment segment : this.segments) {

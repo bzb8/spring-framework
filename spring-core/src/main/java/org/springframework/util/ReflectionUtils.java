@@ -260,8 +260,12 @@ public abstract class ReflectionUtils {
 	 * Invoke the specified {@link Method} against the supplied target object with no arguments.
 	 * The target object can be {@code null} when invoking a static {@link Method}.
 	 * <p>Thrown exceptions are handled via a call to {@link #handleReflectionException}.
+	 *
+	 * 对提供的目标对象调用指定的 {@link Method}，不带任何参数。调用静态 {@link Method} 时，目标对象可以是 {@code null}。
+	 * 引发的异常通过调用 {@link #handleReflectionException} 进行处理。
+	 *
 	 * @param method the method to invoke
-	 * @param target the target object to invoke the method on
+	 * @param target the target object to invoke the method on 要调用方法的目标对象
 	 * @return the invocation result, if any
 	 * @see #invokeMethod(java.lang.reflect.Method, Object, Object[])
 	 */
@@ -275,10 +279,15 @@ public abstract class ReflectionUtils {
 	 * supplied arguments. The target object can be {@code null} when invoking a
 	 * static {@link Method}.
 	 * <p>Thrown exceptions are handled via a call to {@link #handleReflectionException}.
+	 *
+	 *
+	 * 使用提供的参数对提供的目标对象调用指定的 {@link Method}。调用静态 {@link Method} 时，目标对象可以是 {@code null}。
+	 * 引发的异常通过调用 {@link #handleReflectionException} 进行处理。
+	 *
 	 * @param method the method to invoke
 	 * @param target the target object to invoke the method on
 	 * @param args the invocation arguments (may be {@code null})
-	 * @return the invocation result, if any
+	 * @return the invocation result, if any 调用结果（如果有）
 	 */
 	@Nullable
 	public static Object invokeMethod(Method method, @Nullable Object target, @Nullable Object... args) {

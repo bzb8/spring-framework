@@ -50,6 +50,7 @@ import org.springframework.util.StringUtils;
  *
  * 封装 Java {@link java.lang.reflect.Type}，提供对 {@link #getSuperType() 超类型}、{@link #getInterfaces() 接口}和 {@link #getGeneric(int...) 泛型参数}
  * 的访问以及最终将 {@link #resolve() 解析} 为 {@link java.lang.Class} 的能力。
+ * 可以看作是封装Java Type的元信息类
  *
  * <p>A {@code ResolvableType} may be obtained from a {@linkplain #forField(Field) field},
  * a {@linkplain #forMethodParameter(Method, int) method parameter},
@@ -97,51 +98,69 @@ public class ResolvableType implements Serializable {
 	/**
 	 * {@code ResolvableType} returned when no value is available. {@code NONE} is used
 	 * in preference to {@code null} so that multiple method calls can be safely chained.
+	 *
+	 * 如果没有可用的值，就返回 {@code ResolvableType} 。{@code NONE} 优先于 {@code null}，以便可以安全地链接多个方法调用。
 	 */
 	public static final ResolvableType NONE = new ResolvableType(EmptyType.INSTANCE, null, null, 0);
 
+	/**
+	 * 空类型数组
+	 */
 	private static final ResolvableType[] EMPTY_TYPES_ARRAY = new ResolvableType[0];
 
+	/**
+	 * ResolvableType对象映射缓存
+	 */
 	private static final ConcurrentReferenceHashMap<ResolvableType, ResolvableType> cache =
 			new ConcurrentReferenceHashMap<>(256);
 
 
 	/**
 	 * The underlying Java type being managed.
-	 * 正在管理的基础 Java 类型。
+	 * 正在管理的底层 Java 类型。
 	 */
 	private final Type type;
 
 	/**
 	 * Optional provider for the type.
 	 */
+	// 底层类型的提供者，静态工厂方法中如果未提供类型，则根据该类型提供者获取类型
 	@Nullable
 	private final TypeProvider typeProvider;
 
 	/**
 	 * The {@code VariableResolver} to use or {@code null} if no resolver is available.
 	 */
+	// 用于将 TypeVariable 解析为 ResolvableType 的解析器
 	@Nullable
 	private final VariableResolver variableResolver;
 
 	/**
 	 * The component type for an array or {@code null} if the type should be deduced.
 	 */
+	// 如果底层类型为泛型数组，则保存数组的元素类型
 	@Nullable
 	private final ResolvableType componentType;
 
+	// 缓存的哈希码
 	@Nullable
 	private final Integer hash;
 
+	/**
+	 * 将{@link #type}解析成Class对象
+	 */
 	@Nullable
 	private Class<?> resolved;
 
+	// 父类型
 	@Nullable
 	private volatile ResolvableType superType;
 
+	// 当前类型实现的接口
 	@Nullable
 	private volatile ResolvableType[] interfaces;
 
+	// 当前类型的泛型参数
 	@Nullable
 	private volatile ResolvableType[] generics;
 
@@ -152,6 +171,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@link ResolvableType} for cache key purposes,
 	 * with no upfront resolution.
+	 *
+	 * 私有构造函数，用于创建新的{@link ResolvableType}以用于缓存key目的，无需预先解析
 	 */
 	private ResolvableType(
 			Type type, @Nullable TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
@@ -168,6 +189,8 @@ public class ResolvableType implements Serializable {
 	 * Private constructor used to create a new {@link ResolvableType} for cache value purposes,
 	 * with upfront resolution and a pre-calculated hash.
 	 * @since 4.2
+	 *
+	 * 私有构造函数，用于创建新的 {@link ResolvableType} 以用于缓存值，具有前期解析和预先计算的哈希值。
 	 */
 	private ResolvableType(Type type, @Nullable TypeProvider typeProvider,
 			@Nullable VariableResolver variableResolver, @Nullable Integer hash) {
@@ -177,12 +200,14 @@ public class ResolvableType implements Serializable {
 		this.variableResolver = variableResolver;
 		this.componentType = null;
 		this.hash = hash;
+		// 将type解析成Class赋值给resolved
 		this.resolved = resolveClass();
 	}
 
 	/**
 	 * Private constructor used to create a new {@link ResolvableType} for uncached purposes,
 	 * with upfront resolution but lazily calculated hash.
+	 * 私有构造函数，用于创建一个新的{@link ResolvableType}用于未缓存目标，，具有前期解析方案，但延迟计算哈希。
 	 */
 	private ResolvableType(Type type, @Nullable TypeProvider typeProvider,
 			@Nullable VariableResolver variableResolver, @Nullable ResolvableType componentType) {
@@ -192,6 +217,7 @@ public class ResolvableType implements Serializable {
 		this.variableResolver = variableResolver;
 		this.componentType = componentType;
 		this.hash = null;
+		// 将type解析成Class赋值给resolved
 		this.resolved = resolveClass();
 	}
 
@@ -216,24 +242,31 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return the underling Java {@link Type} being managed.
+	 *
+	 * 返回正在管理的底层 Java {@link Type}。
 	 */
 	public Type getType() {
+		// 解包给定类型，有效地返回原始的不可序列化类型。
 		return SerializableTypeWrapper.unwrap(this.type);
 	}
 
 	/**
 	 * Return the underlying Java {@link Class} being managed, if available;
 	 * otherwise {@code null}.
+	 * 返回正在管理的底层 Java {@link Class}（如果可用）;否则 {@code null}。
 	 */
 	@Nullable
 	public Class<?> getRawClass() {
+		// 如果已解析类型等于受管理的基础Java{@link Type}
 		if (this.type == this.resolved) {
+			// 返回已解析类型
 			return this.resolved;
 		}
 		Type rawType = this.type;
 		if (rawType instanceof ParameterizedType) {
 			rawType = ((ParameterizedType) rawType).getRawType();
 		}
+		// 如果rawType是Class的子类或本身，就将rawType强转为Class对象并返回，否则返回null
 		return (rawType instanceof Class ? (Class<?>) rawType : null);
 	}
 
@@ -242,6 +275,9 @@ public class ResolvableType implements Serializable {
 	 * {@link MethodParameter} or {@link Type} depending on how the {@link ResolvableType}
 	 * was constructed. This method is primarily to provide access to additional type
 	 * information or meta-data that alternative JVM languages may provide.
+	 *
+	 * 返回可解析类型的基础源。将返回 {@link Field}、{@link MethodParameter} 或 {@link Type}，
+	 * 具体取决于 {@link ResolvableType} 的构造方式。此方法主要用于提供对其他 JVM 语言可能提供的其他类型信息或元数据的访问。
 	 */
 	public Object getSource() {
 		Object source = (this.typeProvider != null ? this.typeProvider.getSource() : null);
@@ -251,6 +287,10 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return this type as a resolved {@code Class}, falling back to
 	 * {@link java.lang.Object} if no specific class can be resolved.
+	 *
+	 * 返回此类型作为已解析的{@code Class},如果没有特定的类可以解析，则返回
+	 * {@link java.lang.Object}
+	 *
 	 * @return the resolved {@link Class} or the {@code Object} fallback
 	 * @since 5.1
 	 * @see #getRawClass()
@@ -273,6 +313,9 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Determine whether this {@code ResolvableType} is assignable from the
 	 * specified other type.
+	 *
+	 * 确定是否可以从指定的其他类型分配此{@code ResolvableType}
+	 *
 	 * @param other the type to be checked against (as a {@code Class})
 	 * @since 4.2
 	 * @see #isAssignableFrom(ResolvableType)
@@ -284,102 +327,167 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Determine whether this {@code ResolvableType} is assignable from the
 	 * specified other type.
+	 *
+	 * 确定是否可以从指定的其他类型分配此{@code ResolvableType}
+	 *
 	 * <p>Attempts to follow the same rules as the Java compiler, considering
 	 * whether both the {@link #resolve() resolved} {@code Class} is
 	 * {@link Class#isAssignableFrom(Class) assignable from} the given type
 	 * as well as whether all {@link #getGenerics() generics} are assignable.
-	 * @param other the type to be checked against (as a {@code ResolvableType})
+	 *
+	 * 尝试遵循与Java编译器相同的规则，并考虑是否{@code link #resovle() resolved}
+	 * {@code Class}也是{@link Class#isAssignableFrom(Class) assignable from}
+	 * 分配给给定类型是否所有{@link #getGenerics() generics} 是可分配的。
+	 *
+	 * @param other the type to be checked against (as a {@code ResolvableType}) --要检查的类型{作为{@code ResolvableType})
 	 * @return {@code true} if the specified other type can be assigned to this
 	 * {@code ResolvableType}; {@code false} otherwise
+	 *
+	 *  --如果指定另一个类型可以分配给此{@code ResovlableType} 就返回{@code true},
+	 * 	否则返回{@code false}
 	 */
 	public boolean isAssignableFrom(ResolvableType other) {
 		return isAssignableFrom(other, null);
 	}
 
+	/**
+	 * <p>确定是否可以从指定的其他类型分配此{@code ResolvableType}</p>
+	 * <p>
+	 *     尝试遵循与Java编译器相同的规则，并考虑是否{@code link #resovle() resolved}
+	 *     {@code Class}也是{@link Class#isAssignableFrom(Class) assignable from}
+	 *     分配给给定类型是否所有{@link #getGenerics() generics} 是可分配的。
+	 * </p>
+	 * @param other 另一个ResolvableType
+	 * @param matchedBefore 匹配之前的映射,表示已经判断可分配
+	 */
 	private boolean isAssignableFrom(ResolvableType other, @Nullable Map<Type, Type> matchedBefore) {
+		// 如果other为null，抛出异常
 		Assert.notNull(other, "ResolvableType must not be null");
 
 		// If we cannot resolve types, we are not assignable
+		// 如果无法解析类型，则无法分配
+		// 如果本对象为NONE，或者另一个ResolvableType对象为NONE
 		if (this == NONE || other == NONE) {
+			// 返回false，表示不能分配
 			return false;
 		}
 
 		// Deal with array by delegating to the component type
+		// 通过委托给组件类型来处理数组
 		if (isArray()) {
 			return (other.isArray() && getComponentType().isAssignableFrom(other.getComponentType()));
 		}
 
+		// 如果mathcedBefore不为null 且 从metchedBefore获取本类对象的type属性值对应的ResolvableType对象
+		// 等于other的type属性时
 		if (matchedBefore != null && matchedBefore.get(this.type) == other.type) {
+			// 返回true，表示可分配
 			return true;
 		}
 
 		// Deal with wildcard bounds
+		// 处理 通配符范围
+		// 获取本类对象的ResolvableType.WildcardBounds实例
 		WildcardBounds ourBounds = WildcardBounds.get(this);
 		WildcardBounds typeBounds = WildcardBounds.get(other);
 
 		// In the form X is assignable to <? extends Number>
+		//  X的形式可分配给 <? extends Number>
 		if (typeBounds != null) {
+			// (如果ourBounds不为null且ourBounds与typeBound的界限相同) 且 （ourBound是可分配
+			// typeBounds的界限，返回true,表示本类对象可分配给other；否则返回false，表示本类对象不可分配给other
 			return (ourBounds != null && ourBounds.isSameKind(typeBounds) &&
 					ourBounds.isAssignableFrom(typeBounds.getBounds()));
 		}
 
 		// In the form <? extends Number> is assignable to X...
+		//  <? extends Number>的形式可分配给X
+		// 如果ourBounds不为null
 		if (ourBounds != null) {
 			return ourBounds.isAssignableFrom(other);
 		}
 
 		// Main assignability check about to follow
-		boolean exactMatch = (matchedBefore != null);  // We're checking nested generic variables now...
+		// 主要可分配性检查如下
+		// 如果mathedBefore不为null，完成匹配标记设置为true；否则为false
+		boolean exactMatch = (matchedBefore != null);  // We're checking nested generic variables now... -- 现在正在检查嵌套的泛型变量..
+		// 初始化检查泛型标记为true
 		boolean checkGenerics = true;
+		// 初始化本类对象的已解析类为null
 		Class<?> ourResolved = null;
+		// 如果本类对象被管理的底层类型是TypeVariable的子类或本类
 		if (this.type instanceof TypeVariable) {
 			TypeVariable<?> variable = (TypeVariable<?>) this.type;
 			// Try default variable resolution
+			// 尝试默认遍历解析
+			// 如果变量解析器不为null
 			if (this.variableResolver != null) {
+				// 使用变量解析器解析variable得到ResolvableType对象
 				ResolvableType resolved = this.variableResolver.resolveVariable(variable);
+				// 如果resolved对象不为null
 				if (resolved != null) {
+					// 获取resolved的type属性值解析为Class对象并设置到ourResolved
 					ourResolved = resolved.resolve();
 				}
 			}
 			if (ourResolved == null) {
-				// Try variable resolution against target type
+				// Try variable resolution against target type -- 尝试针对目标类型进行变量解析
 				if (other.variableResolver != null) {
+					// 通过other的遍历解析器解析variable得到ResolvableType对象
 					ResolvableType resolved = other.variableResolver.resolveVariable(variable);
 					if (resolved != null) {
+						// 获取resolved的type属性值解析为Class对象并设置到ourResolved
 						ourResolved = resolved.resolve();
+						// 设置检查泛型标记为false
 						checkGenerics = false;
 					}
 				}
 			}
 			if (ourResolved == null) {
 				// Unresolved type variable, potentially nested -> never insist on exact match
+				// 未解析的类型变量，可能嵌套 -> 从不坚持完全匹配
+				// 设置完成匹配标记为false
 				exactMatch = false;
 			}
 		}
 		if (ourResolved == null) {
+			// 将本类对象的type属性值解析为Class,如果无法解析该类型，则返回Object.Class
 			ourResolved = resolve(Object.class);
 		}
+		// 获取other的type属性值作为解析的Class,如果没有特定的类可以解析，则返回 Object
 		Class<?> otherResolved = other.toClass();
 
-		// We need an exact type match for generics
-		// List<CharSequence> is not assignable from List<String>
+		// We need an exact type match for generics -- 我们需要泛型的精确类型匹配
+		// List<CharSequence> is not assignable from List<String> -- List<CharSequence>不能分配给List<String>
+		// 如果需要完全匹配，就判断ourResolved等于otherResolved对象 ；否则判断是否可以将otherResolved分配给ourResolved，
+		// 假设可以通过反射进行设置。将原始包装类视为可分配给相应的原始类型。
 		if (exactMatch ? !ourResolved.equals(otherResolved) : !ClassUtils.isAssignable(ourResolved, otherResolved)) {
 			return false;
 		}
 
+		// 如果需要检查泛型
 		if (checkGenerics) {
-			// Recursively check each generic
+			// Recursively check each generic -- 递归检查每个泛型
+			// 获取表现本类对象的泛型参数的ResolvableTypes数组。
 			ResolvableType[] ourGenerics = getGenerics();
+			// 将other作为ourResoulved的ResolvableType对象，获取其表示泛型参数的ResolvableType数组
 			ResolvableType[] typeGenerics = other.as(ourResolved).getGenerics();
+			// 如果ourGenerics的长度不等于typeGenerics的长度
 			if (ourGenerics.length != typeGenerics.length) {
 				return false;
 			}
 			if (matchedBefore == null) {
+				//IdentityHashMap:它添加保存重复的键名，并不会覆盖原有的对，其判断值是否
+				// 相等是比较对象的地址而不是hashCode和equal方法
+				//初始化一个最大size为1的IdentityHashMap对象
 				matchedBefore = new IdentityHashMap<>(1);
 			}
+			// 将本类对象的type属性和other的type属性添加到matchedBefore集合中
 			matchedBefore.put(this.type, other.type);
 			for (int i = 0; i < ourGenerics.length; i++) {
+				// 如果第i个ourGenerics元素不能分配给第i个typeGenerics元素
 				if (!ourGenerics[i].isAssignableFrom(typeGenerics[i], matchedBefore)) {
+					// 返回false，表示ourResolved不可分配给otherResolved
 					return false;
 				}
 			}
@@ -390,6 +498,9 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return {@code true} if this type resolves to a Class that represents an array.
+	 *
+	 * 如果此类型解析为表示数组的Class,则返回{@code true}
+	 *
 	 * @see #getComponentType()
 	 */
 	public boolean isArray() {
@@ -397,25 +508,38 @@ public class ResolvableType implements Serializable {
 			return false;
 		}
 		return ((this.type instanceof Class && ((Class<?>) this.type).isArray()) ||
+				// GenericArrayType是Type的子接口，用于表示“泛型数组”，描述的是形如：A<T>[]或T[]的类型。
+				// 其实也就是描述ParameterizedType类型以及TypeVariable类型的数组，即形如：classA<T>[][]、T[]等。
 				this.type instanceof GenericArrayType || resolveType().isArray());
 	}
 
 	/**
 	 * Return the ResolvableType representing the component type of the array or
 	 * {@link #NONE} if this type does not represent an array.
+	 *
+	 * 返回表示数组的组件类型的ResolvableType;如果此类型不能表示数组，就返回{@link #NONE}
+	 *
 	 * @see #isArray()
 	 */
 	public ResolvableType getComponentType() {
+		// 如果本对象是NONE
 		if (this == NONE) {
+			// 直接返回NONE，因为NONE表示没有可用的值，相当与null
 			return NONE;
 		}
 		if (this.componentType != null) {
 			return this.componentType;
 		}
+		// 如果type是Class的子类或者本身
 		if (this.type instanceof Class) {
+			// 将type强转为Class对象来获取组件类型
 			Class<?> componentType = ((Class<?>) this.type).getComponentType();
+			// 返回由variableResolver支持的componentType的ResolvableType对象
 			return forType(componentType, this.variableResolver);
 		}
+		// 如果type是GenericArrayType的子类或本类
+		// GenericArrayType是Type的子接口，用于表示“泛型数组”，描述的是形如：A<T>[]或T[]的类型。
+		// 其实也就是描述ParameterizedType类型以及TypeVariable类型的数组，即形如：classA<T>[][]、T[]等。
 		if (this.type instanceof GenericArrayType) {
 			return forType(((GenericArrayType) this.type).getGenericComponentType(), this.variableResolver);
 		}
@@ -706,16 +830,21 @@ public class ResolvableType implements Serializable {
 	 * @see #resolveGenerics()
 	 */
 	public ResolvableType getGeneric(@Nullable int... indexes) {
+		// 获取所有的泛型参数
 		ResolvableType[] generics = getGenerics();
 		if (indexes == null || indexes.length == 0) {
 			return (generics.length == 0 ? NONE : generics[0]);
 		}
 		ResolvableType generic = this;
 		for (int index : indexes) {
+			// 通过循环索引，支持嵌套的泛型参数
 			generics = generic.getGenerics();
 			if (index < 0 || index >= generics.length) {
 				return NONE;
 			}
+			// 如实例表示的类型为 Map<String,List<Integer>>，参数为 [1,0]
+			// 第一次获取到的 generics 为 [String,List<Integer>],取索引位置 1 的 List<Integer>
+			// 第二次获取到的 generics [Integer],取索引位置 0 的 Integer
 			generic = generics[index];
 		}
 		return generic;
@@ -738,6 +867,7 @@ public class ResolvableType implements Serializable {
 		if (this == NONE) {
 			return EMPTY_TYPES_ARRAY;
 		}
+		//优先使用之前解析的值
 		ResolvableType[] generics = this.generics;
 		if (generics == null) {
 			if (this.type instanceof Class) {
@@ -816,9 +946,18 @@ public class ResolvableType implements Serializable {
 	 * if the type cannot be resolved. This method will consider bounds of
 	 * {@link TypeVariable TypeVariables} and {@link WildcardType WildcardTypes} if
 	 * direct resolution fails; however, bounds of {@code Object.class} will be ignored.
+	 *
+	 * 将此类型解析为{@link java.lang.Class},如果无法解析，则返回{@code null}.如果
+	 * 直接解析失败，则此方法将考虑{@link TypeVariable TypeVariables}和{@link WildcardType
+	 * WildcardTypes}的边界；但是，{@code Object.class}的边界将被忽略
+	 *
 	 * <p>If this method returns a non-null {@code Class} and {@link #hasGenerics()}
 	 * returns {@code false}, the given type effectively wraps a plain {@code Class},
 	 * allowing for plain {@code Class} processing if desirable.
+	 *
+	 * 如果此方法返回非空的{@code Class},并且{@link #hasGenerics()} 返回{@code false}，
+	 * 则给定类型有效地包装一个{@code class} ，如果需要允许使用普通的{@code Class}
+	 *
 	 * @return the resolved {@link Class}, or {@code null} if not resolvable
 	 * @see #resolve(Class)
 	 * @see #resolveGeneric(int...)
@@ -834,6 +973,11 @@ public class ResolvableType implements Serializable {
 	 * {@code fallback} if the type cannot be resolved. This method will consider bounds
 	 * of {@link TypeVariable TypeVariables} and {@link WildcardType WildcardTypes} if
 	 * direct resolution fails; however, bounds of {@code Object.class} will be ignored.
+	 *
+	 * 将此类型解析为{@link java.lang.Class}，如果无法解析该类型，则返回指定的{@code fallback}。
+	 * 如果直接解析失败，则此方法考虑{@Code TypeVariable TypeVariables}和{@link WildcardType WildcardTypes}的bounds，
+	 * 但是{@code Object.class}的bounds将被忽略
+	 *
 	 * @param fallback the fallback class to use if resolution fails
 	 * @return the resolved {@link Class} or the {@code fallback}
 	 * @see #resolve()
@@ -841,18 +985,28 @@ public class ResolvableType implements Serializable {
 	 * @see #resolveGenerics()
 	 */
 	public Class<?> resolve(Class<?> fallback) {
+		// 如果resolved不为null，就返回resolved，否则返回fallback
 		return (this.resolved != null ? this.resolved : fallback);
 	}
 
+	/**
+	 * 解析类
+	 */
 	@Nullable
 	private Class<?> resolveClass() {
 		if (this.type == EmptyType.INSTANCE) {
+			// type为空类型对象, 返回null
 			return null;
 		}
 		if (this.type instanceof Class) {
+			// 如果type是Class的子类或本身, 直接返回
 			return (Class<?>) this.type;
 		}
+		// 如果type是GenericArrayType的子类或本类
+		// GenericArrayType是Type的子接口，用于表示“泛型数组”，描述的是形如：A<T>[]或T[]的类型。
+		// 	其实也就是描述ParameterizedType类型以及TypeVariable类型的数组，即形如：classA<T>[][]、T[]等。
 		if (this.type instanceof GenericArrayType) {
+			// 获取type的表示数组的组件类型的ResolvableType;如果此类型不能表示数组，就返回NONE
 			Class<?> resolvedComponent = getComponentType().resolve();
 			return (resolvedComponent != null ? Array.newInstance(resolvedComponent, 0).getClass() : null);
 		}
@@ -861,23 +1015,36 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Resolve this type by a single level, returning the resolved value or {@link #NONE}.
+	 *
+	 * 按单个级别解析此类型，返回解析的值或{@link #NONE}
+	 *
 	 * <p>Note: The returned {@link ResolvableType} should only be used as an intermediary
 	 * as it cannot be serialized.
+	 *
+	 * 注意：返回的 {@link ResolvableType} 只能用作中介，因为它不能序列化。
 	 */
 	ResolvableType resolveType() {
 		if (this.type instanceof ParameterizedType) {
+			// ParameterizeType.getRawType():返回最外层<>前面那个类型，即Map<K ,V>的Map。
+			// 返回由给定variableResolver支持的指定type.getRawType()的ResolvableType对象
 			return forType(((ParameterizedType) this.type).getRawType(), this.variableResolver);
 		}
+		// WildcardType：通配符表达式，泛型表达式，也可以说是，限定性的泛型，形如：? extends classA、? super classB
+		// 如果type是WildcardType的子类或本身
 		if (this.type instanceof WildcardType) {
+			// WildcardType.getUppperBounds： 获得泛型表达式上界（上限），即父类
 			Type resolved = resolveBounds(((WildcardType) this.type).getUpperBounds());
 			if (resolved == null) {
+				// WildcardType.getLowerBounds： 获得泛型表达式下界（下限），即子类
 				resolved = resolveBounds(((WildcardType) this.type).getLowerBounds());
 			}
 			return forType(resolved, this.variableResolver);
 		}
+		// 如果type是TypeVariable的子类或本身
 		if (this.type instanceof TypeVariable) {
 			TypeVariable<?> variable = (TypeVariable<?>) this.type;
 			// Try default variable resolution
+			// 尝试默认变量解析
 			if (this.variableResolver != null) {
 				ResolvableType resolved = this.variableResolver.resolveVariable(variable);
 				if (resolved != null) {
@@ -890,17 +1057,32 @@ public class ResolvableType implements Serializable {
 		return NONE;
 	}
 
+
+	/**
+	 * 解析typeVariable的上边界类型
+	 * @param bounds typeVariable的边界
+	 * @return 返回给定bounds的第一个元素类型，如果没有找到，返回null
+	 */
 	@Nullable
-	private Type resolveBounds(Type[] bounds) {
+	private Type resolveBounds(Type[] bounds)
+	{
+		// 如果bounds长度为0或者第一个bounds的第一个元素类型为Object
 		if (bounds.length == 0 || bounds[0] == Object.class) {
 			return null;
 		}
 		return bounds[0];
 	}
 
+	/**
+	 * 将{@code variable}解析包装成ResolvableType对象
+	 * @param variable 类型变量对象
+	 * @return 表示{@code variable}的ResolvableType对象，如果无法解析返回null
+	 */
 	@Nullable
 	private ResolvableType resolveVariable(TypeVariable<?> variable) {
 		if (this.type instanceof TypeVariable) {
+			// 通过单级解析本类对象的type，得到ResolvableType对象，再将variable解析包装成
+			// ResolvableType对象
 			return resolveType().resolveVariable(variable);
 		}
 		if (this.type instanceof ParameterizedType) {
@@ -968,9 +1150,15 @@ public class ResolvableType implements Serializable {
 		return (this.hash != null ? this.hash : calculateHashCode());
 	}
 
+	/**
+	 * 计算本类的哈希值
+	 */
 	private int calculateHashCode() {
+		// 获取被管理的基础类型
 		int hashCode = ObjectUtils.nullSafeHashCode(this.type);
+		// 如果当前类型的可选提供者不为null
 		if (this.typeProvider != null) {
+			//叠加计算哈希值
 			hashCode = 31 * hashCode + ObjectUtils.nullSafeHashCode(this.typeProvider.getType());
 		}
 		if (this.variableResolver != null) {
@@ -1167,12 +1355,13 @@ public class ResolvableType implements Serializable {
 	 */
 	public static ResolvableType forField(Field field) {
 		Assert.notNull(field, "Field must not be null");
-		return forType(null, new FieldTypeProvider(field), null);
+ 		return forType(null, new FieldTypeProvider(field), null);
 	}
 
 	/**
 	 * Return a {@link ResolvableType} for the specified {@link Field} with a given
 	 * implementation.
+	 *
 	 * <p>Use this variant when the class that declares the field includes generic
 	 * parameter variables that are satisfied by the implementation class.
 	 * @param field the source field
@@ -1442,6 +1631,9 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return a {@link ResolvableType} for the specified {@link Type} backed by a given
 	 * {@link VariableResolver}.
+	 *
+	 * 返回由给定{@link VariableResolver}支持的指定{@link Type}的{@link ResolvableType}
+	 *
 	 * @param type the source type or {@code null}
 	 * @param variableResolver the variable resolver or {@code null}
 	 * @return a {@link ResolvableType} for the specified {@link Type} and {@link VariableResolver}
@@ -1453,37 +1645,52 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return a {@link ResolvableType} for the specified {@link Type} backed by a given
 	 * {@link VariableResolver}.
-	 * @param type the source type or {@code null}
-	 * @param typeProvider the type provider or {@code null}
-	 * @param variableResolver the variable resolver or {@code null}
+	 *
+	 * 返回由给定{@link VariableResolver}支持的指定{@link Type}的{@link ResolvableType}
+	 *
+	 * @param type the source type or {@code null} -- 源类型
+	 * @param typeProvider the type provider or {@code null} -- 类型提供者
+	 * @param variableResolver the variable resolver or {@code null} -- 类型变量解析器，可以将类型变量解析为 ResolvableType
 	 * @return a {@link ResolvableType} for the specified {@link Type} and {@link VariableResolver}
+	 * -- 指定的{@link Type}和{@link VariableResolver} 的{@link ResolvableType}
 	 */
 	static ResolvableType forType(
 			@Nullable Type type, @Nullable TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
 
+		// 如果type为null 且 typeProvider不为null
 		if (type == null && typeProvider != null) {
+			// 获取由typeProvider支持的序列化Type(代理对象)
 			type = SerializableTypeWrapper.forTypeProvider(typeProvider);
 		}
 		if (type == null) {
+			// 返回NONE，表示没有可用的值
 			return NONE;
 		}
 
 		// For simple Class references, build the wrapper right away -
 		// no expensive resolution necessary, so not worth caching...
+		// 对于简单的class引用，请立即构建包装器 - 不需要昂贵的解析，，因此不值得缓存......
 		if (type instanceof Class) {
+			// 创建一个新的ResolvableType用于未缓存目标,其具有前期解析方案，但是以懒汉式形式计算哈希值
 			return new ResolvableType(type, typeProvider, variableResolver, (ResolvableType) null);
 		}
 
 		// Purge empty entries on access since we don't have a clean-up thread or the like.
+		// 由于我们没有清理线程等，因此清除访问时的空entries
 		cache.purgeUnreferencedEntries();
 
+		// 其他类型实例化后进行缓存
+
 		// Check the cache - we may have a ResolvableType which has been resolved before...
+		// 检查缓存-我们可能有一个ResolvableType，它已经在...之前解析了
 		ResolvableType resultType = new ResolvableType(type, typeProvider, variableResolver);
 		ResolvableType cachedType = cache.get(resultType);
 		if (cachedType == null) {
+			// 重新创建一个ResolvableType对象作为cacheType
 			cachedType = new ResolvableType(type, typeProvider, variableResolver, resultType.hash);
 			cache.put(cachedType, cachedType);
 		}
+		// 设置resultType的已解析类为cachedType的已解析类
 		resultType.resolved = cachedType.resolved;
 		return resultType;
 	}
@@ -1500,18 +1707,22 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Strategy interface used to resolve {@link TypeVariable TypeVariables}.
+	 * 解析{@link TypeVariable}的策略接口
 	 */
 	interface VariableResolver extends Serializable {
 
 		/**
 		 * Return the source of the resolver (used for hashCode and equals).
+		 * 返回解析的源对象（用于hashCode 和 equals）
 		 */
 		Object getSource();
 
 		/**
 		 * Resolve the specified variable.
+		 * 解析指定的变量
 		 * @param variable the variable to resolve
 		 * @return the resolved variable, or {@code null} if not found
+		 * 解析后的变量，如果没有找到返回{@code null}
 		 */
 		@Nullable
 		ResolvableType resolveVariable(TypeVariable<?> variable);
@@ -1639,16 +1850,28 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Internal helper to handle bounds from {@link WildcardType WildcardTypes}.
+	 * <p>内部辅助程序，用于处理{@link WildcardType WildcardTypes}的范围</p>
+	 * <p>WildcardType：通配符表达式，泛型表达式，也可以说是，限定性的泛型，形如：? extends classA、? super classB</p>
+	 *
 	 */
 	private static class WildcardBounds {
 
+		/**
+		 * 界限枚举对象
+		 */
 		private final Kind kind;
 
+		/**
+		 * 范围中的ResolvableType对象
+		 */
 		private final ResolvableType[] bounds;
 
 		/**
 		 * Internal constructor to create a new {@link WildcardBounds} instance.
-		 * @param kind the kind of bounds
+		 *
+		 * 内部构造函数，用于创建新的{@link WildcardBounds}实例
+		 *
+		 * @param kind the kind of bounds 范围的界限
 		 * @param bounds the bounds
 		 * @see #get(ResolvableType)
 		 */
@@ -1666,8 +1889,9 @@ public class ResolvableType implements Serializable {
 
 		/**
 		 * Return {@code true} if this bounds is assignable to all the specified types.
-		 * @param types the types to test against
-		 * @return {@code true} if this bounds is assignable to all types
+		 * 如果此范围可分配给所有指定的类型，则返回{@code true}
+		 * @param types the types to test against -- 要测试的ResovlableType对象
+		 * @return {@code true} if this bounds is assignable to all types -- 如果此界限可分配给所有类型，则返回true
 		 */
 		public boolean isAssignableFrom(ResolvableType... types) {
 			for (ResolvableType bound : this.bounds) {
@@ -1680,12 +1904,19 @@ public class ResolvableType implements Serializable {
 			return true;
 		}
 
+		/**
+		 * 给定的类是否可分配
+		 * @param source 源ResolvableType对象 -- ? extend T 或 ? super T 后面的T
+		 * @param from 要比较ResolvableType对象 -- 前面的?
+		 */
 		private boolean isAssignable(ResolvableType source, ResolvableType from) {
+			// 如果本类对象的界限枚举对象是上界限，判断source是否是from的父类或本身，并返回结果；否则判断from是否是source的父类或本身
 			return (this.kind == Kind.UPPER ? source.isAssignableFrom(from) : from.isAssignableFrom(source));
 		}
 
 		/**
 		 * Return the underlying bounds.
+		 * 返回底层的界限
 		 */
 		public ResolvableType[] getBounds() {
 			return this.bounds;
@@ -1694,19 +1925,26 @@ public class ResolvableType implements Serializable {
 		/**
 		 * Get a {@link WildcardBounds} instance for the specified type, returning
 		 * {@code null} if the specified type cannot be resolved to a {@link WildcardType}.
-		 * @param type the source type
+		 *
+		 * 获取指定类型的{@link WildcardBounds}实例，如果给定类型不能解析成{@link WildcardType}返回null
+		 *
+		 * @param type the source type -- 源类型
 		 * @return a {@link WildcardBounds} instance or {@code null}
 		 */
 		@Nullable
 		public static WildcardBounds get(ResolvableType type) {
+			// 将传入的type作为要解析成Wildcard的ResovlableType对象
 			ResolvableType resolveToWildcard = type;
+			// 如果resolveToWildcard的受管理的基础JavaType不是WildcardType的子类
 			while (!(resolveToWildcard.getType() instanceof WildcardType)) {
 				if (resolveToWildcard == NONE) {
 					return null;
 				}
+				// 通过单级解析重新解析resolvedToWildcard对象
 				resolveToWildcard = resolveToWildcard.resolveType();
 			}
 			WildcardType wildcardType = (WildcardType) resolveToWildcard.type;
+			// 如果wildcardType存在下边界，设置范围类型为下边界，否则为上边界
 			Kind boundsType = (wildcardType.getLowerBounds().length > 0 ? Kind.LOWER : Kind.UPPER);
 			Type[] bounds = (boundsType == Kind.UPPER ? wildcardType.getUpperBounds() : wildcardType.getLowerBounds());
 			ResolvableType[] resolvableBounds = new ResolvableType[bounds.length];
@@ -1718,6 +1956,7 @@ public class ResolvableType implements Serializable {
 
 		/**
 		 * The various kinds of bounds.
+		 * 各种界限
 		 */
 		enum Kind {UPPER, LOWER}
 	}
@@ -1725,6 +1964,7 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Internal {@link Type} used to represent an empty value.
+	 * 内部 {@link Type} 用于表示空值。
 	 */
 	@SuppressWarnings("serial")
 	static class EmptyType implements Type, Serializable {

@@ -268,7 +268,7 @@ public class MethodParameter {
 	 *
 	 * 返回包装的构造函数，如果有
 	 *
-	 * <p>Note: Either Method or Constructor is available.
+	 * <p>Note: Either Metho or Constructor is available.
 	 * @return the Constructor, or {@code null} if none
 	 */
 	@Nullable
