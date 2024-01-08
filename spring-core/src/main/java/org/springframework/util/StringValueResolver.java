@@ -35,10 +35,16 @@ public interface StringValueResolver {
 
 	/**
 	 * Resolve the given String value, for example parsing placeholders.
+	 *
+	 * 解析给定的字符串值，例如解析占位符。
+	 *
 	 * @param strVal the original String value (never {@code null})
 	 * @return the resolved String value (may be {@code null} when resolved to a null
 	 * value), possibly the original String value itself (in case of no placeholders
 	 * to resolve or when ignoring unresolvable placeholders)
+	 *
+	 * 解析的字符串值（当解析为 null 值时，可能是 {@code null}），可能是原始字符串值本身（如果没有要解析的占位符或忽略无法解析的占位符）
+	 *
 	 * @throws IllegalArgumentException in case of an unresolvable String value
 	 */
 	@Nullable

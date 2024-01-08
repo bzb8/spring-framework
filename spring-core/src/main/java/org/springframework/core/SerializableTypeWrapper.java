@@ -41,11 +41,16 @@ import org.springframework.util.ReflectionUtils;
  * 内部实用程序类，可用于获取 {@link java.lang.reflect.Type java.lang.reflect.Types} 的包装 {@link Serializable} 变体。
  *
  *
+ * 可用于获取包装的 {@link java.lang.reflect.Type java.lang.reflect.Types} 变体的内部实用程序类。
+ *
  * <p>{@link #forField(Field) Fields} or {@link #forMethodParameter(MethodParameter)
  * MethodParameters} can be used as the root source for a serializable type.
  * Alternatively, a regular {@link Class} can also be used as source.
  *
  * {@link #forField(Field) Fields} 或 {@link #forMethodParameter(MethodParameter) MethodParameters} 可用作可序列化类型的根源。或者，也可以使用常规的 {@link Class} 作为源。
+ *
+ * {@link #forField(Field) Fields} 或 {@link #forMethodParameter(MethodParameter) MethodParameters} 可以用作可序列化类型的根源。
+ * 或者，也可以使用常规的{@link Class}作为源。
  *
  * <p>The returned type will either be a {@link Class} or a serializable proxy of
  * {@link GenericArrayType}, {@link ParameterizedType}, {@link TypeVariable} or
@@ -55,6 +60,9 @@ import org.springframework.util.ReflectionUtils;
  *
  * 返回的类型将是 {@link Class} 或 {@link GenericArrayType}、{@link ParameterizedType}、{@link TypeVariable} 或 {@link WildcardType} 的可序列化代理。
  * 除了 {@link Class}（这是最终的）之外，对返回进一步 {@link Type Types} 的方法（例如 {@link GenericArrayType#getGenericComponentType()}）的调用将被自动包装。
+ *
+ * 返回的类型可以是 {@link Class} 或 {@link GenericArrayType}、{@link ParameterizedType}、{@link TypeVariable} 或 {@link WildcardType} 的可序列化代理。
+ * 除了 {@link Class}（这是最终的）之外，对返回更多 {@link Type Types} 的方法（例如 {@link GenericArrayType#getGenericComponentType()}）的调用将被自动包装。
  *
  * @author Phillip Webb
  * @author Juergen Hoeller

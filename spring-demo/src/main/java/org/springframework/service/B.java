@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class B {
-	@Autowired
-	private A a;
+//	@Autowired
+//	private A a;
 
 //	public B(A a) {
 //		this.a = a;

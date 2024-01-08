@@ -79,8 +79,14 @@ public class TypeDescriptor implements Serializable {
 
 	/**
 	 * Create a new type descriptor from a {@link MethodParameter}.
+	 *
+	 * 从 {@link MethodParameter} 创建一个新的类型描述符。
+	 *
 	 * <p>Use this constructor when a source or target conversion point is a
 	 * constructor parameter, method parameter, or method return value.
+	 *
+	 * 当源或目标转换点是构造函数参数、方法参数或方法返回值时，请使用此构造函数。
+	 *
 	 * @param methodParameter the method parameter
 	 */
 	public TypeDescriptor(MethodParameter methodParameter) {

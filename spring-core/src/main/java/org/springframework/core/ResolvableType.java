@@ -63,7 +63,7 @@ import org.springframework.util.StringUtils;
  * 此类上的大多数方法本身都会返回一个 {@code ResolvableType}，以便轻松导航。例如
  *
  * <pre class="code">
- * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
+ * private HashMap<Integer, List<String>> myMap;
  * private HashMap<Integer, List<Integer,String>> myMap;
  *
  * public void example() {
@@ -207,7 +207,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@link ResolvableType} for uncached purposes,
 	 * with upfront resolution but lazily calculated hash.
-	 * 私有构造函数，用于创建一个新的{@link ResolvableType}用于未缓存目标，，具有前期解析方案，但延迟计算哈希。
+	 *
+	 * 私有构造函数用于创建一个新的 {@link ResolvableType} 以用于未缓存的目的，具有预先解析但延迟计算的哈希值。
 	 */
 	private ResolvableType(Type type, @Nullable TypeProvider typeProvider,
 			@Nullable VariableResolver variableResolver, @Nullable ResolvableType componentType) {
@@ -253,7 +254,8 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return the underlying Java {@link Class} being managed, if available;
 	 * otherwise {@code null}.
-	 * 返回正在管理的底层 Java {@link Class}（如果可用）;否则 {@code null}。
+	 *
+	 * 返回正在管理的底层 Java {@link Class}（如果可用）；否则{@code null}。
 	 */
 	@Nullable
 	public Class<?> getRawClass() {
@@ -870,6 +872,7 @@ public class ResolvableType implements Serializable {
 		//优先使用之前解析的值
 		ResolvableType[] generics = this.generics;
 		if (generics == null) {
+			// 处理Class
 			if (this.type instanceof Class) {
 				Type[] typeParams = ((Class<?>) this.type).getTypeParameters();
 				generics = new ResolvableType[typeParams.length];
@@ -878,6 +881,7 @@ public class ResolvableType implements Serializable {
 				}
 			}
 			else if (this.type instanceof ParameterizedType) {
+				//处理参数化类型
 				Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
 				generics = new ResolvableType[actualTypeArguments.length];
 				for (int i = 0; i < actualTypeArguments.length; i++) {
@@ -885,6 +889,7 @@ public class ResolvableType implements Serializable {
 				}
 			}
 			else {
+				//其他情况，如通配符类型、类型变量，先进行解析，然后获取解析后类型的泛型参数
 				generics = resolveType().getGenerics();
 			}
 			this.generics = generics;
@@ -1042,6 +1047,7 @@ public class ResolvableType implements Serializable {
 		}
 		// 如果type是TypeVariable的子类或本身
 		if (this.type instanceof TypeVariable) {
+			//如果管理的类型器是类型变量，返回变量解析器解析的结果或类型变量的边界类
 			TypeVariable<?> variable = (TypeVariable<?>) this.type;
 			// Try default variable resolution
 			// 尝试默认变量解析

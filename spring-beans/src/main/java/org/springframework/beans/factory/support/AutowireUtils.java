@@ -134,6 +134,8 @@ abstract class AutowireUtils {
 	 *
 	 * 根据给定的所需类型解析给定的自动注入值，例如将 {@link ObjectFactory} 值解析为其实际对象结果。
 	 *
+	 * 如果是ObjectFactory的话，调用它的getObject()方法
+	 *
 	 * @param autowiringValue the value to resolve
 	 * @param requiredType the type to assign the result to
 	 * @return the resolved value

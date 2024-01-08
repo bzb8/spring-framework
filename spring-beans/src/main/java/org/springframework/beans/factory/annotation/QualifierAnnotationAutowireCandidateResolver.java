@@ -209,6 +209,8 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 
 	/**
 	 * Checks whether the given annotation type is a recognized qualifier type.
+	 *
+	 * 判断指定的注解类型是否Qualifier
 	 */
 	protected boolean isQualifier(Class<? extends Annotation> annotationType) {
 		for (Class<? extends Annotation> qualifierType : this.qualifierTypes) {

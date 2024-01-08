@@ -882,6 +882,9 @@ public abstract class ClassUtils {
 	/**
 	 * Determine if the supplied class is an <em>inner class</em>,
 	 * i.e. a non-static member of an enclosing class.
+	 *
+	 * 非静态的内部类
+	 *
 	 * @return {@code true} if the supplied class is an inner class
 	 * @since 5.0.5
 	 * @see Class#isMemberClass()

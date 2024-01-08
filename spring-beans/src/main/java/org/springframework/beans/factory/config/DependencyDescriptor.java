@@ -202,6 +202,8 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	/**
 	 * Return whether this dependency is 'eager' in the sense of
 	 * eagerly resolving potential target beans for type matching.
+	 *
+	 * 返回此依赖关系是否是“急切”的，即急切地解析潜在目标 bean 以进行类型匹配。
 	 */
 	public boolean isEager() {
 		return this.eager;

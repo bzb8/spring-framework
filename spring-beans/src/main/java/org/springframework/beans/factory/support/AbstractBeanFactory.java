@@ -451,6 +451,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		return (T) bean;
 	}
 
+	/**
+	 * 保存单例bean或bean定义
+	 * @param name the name of the bean to query
+	 * @return
+	 */
 	@Override
 	public boolean containsBean(String name) {
 		String beanName = transformedBeanName(name);

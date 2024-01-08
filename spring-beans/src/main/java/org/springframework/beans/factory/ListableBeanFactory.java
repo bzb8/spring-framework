@@ -258,7 +258,7 @@ public interface ListableBeanFactory extends BeanFactory {
 	 *
 	 * 此方法返回的Bean名称应尽可能始终按照后端配置中定义的顺序返回Bean名称。
 	 *
-	 * @param type the class or interface to match, or {@code null} for all bean names
+	 * @param type the class or interface to match, or {@code null} for all bean names 要匹配的类或接口，或所有 bean 名称的 {@code null}
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
 	 * or just singletons (also applies to FactoryBeans)
 	 *

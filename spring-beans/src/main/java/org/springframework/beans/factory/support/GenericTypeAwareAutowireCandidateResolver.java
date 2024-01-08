@@ -76,6 +76,8 @@ public class GenericTypeAwareAutowireCandidateResolver extends SimpleAutowireCan
 	/**
 	 * Match the given dependency type with its generic type information against the given
 	 * candidate bean definition.
+	 *
+	 * 将给定的依赖类型与其通用类型信息与给定的候选 bean 定义进行匹配。
 	 */
 	protected boolean checkGenericTypeMatch(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
 		ResolvableType dependencyType = descriptor.getResolvableType();
@@ -162,6 +164,7 @@ public class GenericTypeAwareAutowireCandidateResolver extends SimpleAutowireCan
 	protected ResolvableType getReturnTypeForFactoryMethod(RootBeanDefinition rbd, DependencyDescriptor descriptor) {
 		// Should typically be set for any kind of factory method, since the BeanFactory
 		// pre-resolves them before reaching out to the AutowireCandidateResolver...
+		// 通常应该为任何类型的工厂方法设置，因为 BeanFactory 在联系 AutowireCandidateResolver 之前会预先解析它们...
 		ResolvableType returnType = rbd.factoryMethodReturnType;
 		if (returnType == null) {
 			Method factoryMethod = rbd.getResolvedFactoryMethod();

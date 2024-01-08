@@ -366,7 +366,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	/**
 	 * Return the autowire candidate resolver for this BeanFactory (never {@code null}).
+	 *
 	 * 返回此 BeanFactory 的自动装配候选解析器（绝不是 {@code null}）。
+	 * ContextAnnotationAutowireCandidateResolver
 	 */
 	public AutowireCandidateResolver getAutowireCandidateResolver() {
 		return this.autowireCandidateResolver;
@@ -859,6 +861,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 	}
 
+	/**
+	 *
+	 * @param beanName the name of the bean to check 属性的beanName
+	 * @param descriptor the descriptor of the dependency to resolve 属性描述符
+	 * @return
+	 * @throws NoSuchBeanDefinitionException
+	 */
+
 	@Override
 	public boolean isAutowireCandidate(String beanName, DependencyDescriptor descriptor)
 			throws NoSuchBeanDefinitionException {
@@ -869,6 +879,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Determine whether the specified bean definition qualifies as an autowire candidate,
 	 * to be injected into other beans which declare a dependency of matching type.
+	 *
+	 * 确定指定的 bean 定义是否有资格作为自动装配候选者，以注入到声明匹配类型的依赖项的其他 bean 中。
 	 *
 	 * @param beanName   the name of the bean definition to check
 	 * @param descriptor the descriptor of the dependency to resolve
@@ -901,7 +913,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Determine whether the specified bean definition qualifies as an autowire candidate,
 	 * to be injected into other beans which declare a dependency of matching type.
-	 * <p>
+	 *
 	 * 确定指定的 Bean 定义是否有资格作为 autowire 候选项，以注入到声明匹配类型的依赖关系的其他 Bean 中。
 	 *
 	 * @param beanName   the name of the bean definition to check
@@ -1391,6 +1403,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			// BService
 			Class<?> type = descriptor.getDependencyType();
+			// 解析@Value注解的value属性，并转换为相应的类型，返回
 			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
 			if (value != null) {
 				if (value instanceof String) {
@@ -1598,17 +1611,18 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Find bean instances that match the required type.
 	 * Called during autowiring for the specified bean.
-	 * <p>
+	 *
 	 * 查找与所需类型匹配的 Bean 实例。在指定 Bean 的自动注入期间调用。
 	 *
 	 * @param beanName     the name of the bean that is about to be wired
 	 * @param requiredType the actual type of bean to look for
 	 *                     (may be an array component type or collection element type)
-	 *                     <p>
-	 *                     要查找的实际 Bean 类型（可能是 Array 组件类型或 Collection 元素类型）
+	 *
+	 * 要查找的实际 Bean 类型（可能是 Array 组件类型或 Collection 元素类型）
+	 *
 	 * @param descriptor   the descriptor of the dependency to resolve 要解析的依赖项的描述符
 	 * @return a Map of candidate names and candidate instances that match
-	 * the required type (never {@code null})
+	 * the required type (never {@code null}) 与所需类型匹配的候选名称和候选实例的映射（绝不是 {@code null}）
 	 * @throws BeansException in case of errors
 	 * @see #autowireByType
 	 * @see #autowireConstructor
@@ -1616,15 +1630,18 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	protected Map<String, Object> findAutowireCandidates(
 			@Nullable String beanName, Class<?> requiredType, DependencyDescriptor descriptor) {
 
+		// 获取指定类型的BeanNames作为候选Bean
 		String[] candidateNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 				this, requiredType, true, descriptor.isEager());
 		Map<String, Object> result = CollectionUtils.newLinkedHashMap(candidateNames.length);
+		// 从 resolvableDependencies 中解析对应requiredType类型的 Autowire 并放入result中
 		for (Map.Entry<Class<?>, Object> classObjectEntry : this.resolvableDependencies.entrySet()) {
 			Class<?> autowiringType = classObjectEntry.getKey();
 			if (autowiringType.isAssignableFrom(requiredType)) {
 				Object autowiringValue = classObjectEntry.getValue();
 				autowiringValue = AutowireUtils.resolveAutowiringValue(autowiringValue, requiredType);
 				if (requiredType.isInstance(autowiringValue)) {
+					// 对象的标识，对象值
 					result.put(ObjectUtils.identityToString(autowiringValue), autowiringValue);
 					break;
 				}
@@ -1843,7 +1860,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * Determine whether the given beanName/candidateName pair indicates a self reference,
 	 * i.e. whether the candidate points back to the original bean or to a factory method
 	 * on the original bean.
-	 * <p>
+	 *
 	 * 确定给定的 beanName/candidateName 对是否表示自引用，即候选项是指向原始 Bean 还是指向原始 Bean 上的工厂方法。
 	 */
 	private boolean isSelfReference(@Nullable String beanName, @Nullable String candidateName) {

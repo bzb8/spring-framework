@@ -628,7 +628,9 @@ public abstract class ObjectUtils {
 
 	/**
 	 * Return a String representation of an object's overall identity.
+	 *
 	 * 返回对象整体标识的 String 表示形式。
+	 *
 	 * @param obj the object (may be {@code null})
 	 * @return the object's identity as String representation,
 	 * or an empty String if the object was {@code null}
