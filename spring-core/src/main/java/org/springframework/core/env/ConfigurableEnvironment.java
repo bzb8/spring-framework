@@ -132,8 +132,9 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * certain user-defined property sources have search precedence over default property
 	 * sources such as the set of system properties or the set of system environment
 	 * variables.
-	 *
-	 * 以可变形式返回此 {@code Environment} 的 {@link PropertySources}，允许操作在针对此 {@code Environment} 对象解析属性时应搜索的 {@link PropertySource} 对象集。各种 {@link MutablePropertySources} 方法（如 {@link MutablePropertySourcesaddFirst addFirst}、{@link MutablePropertySourcesaddLast addLast}、{@link MutablePropertySourcesaddBefore addBefore} 和 {@link MutablePropertySourcesaddAfter addAfter} 允许对属性源排序进行精细控制。例如，这在确保某些用户定义的属性源优先于默认属性源（如系统属性集或系统环境变量集）时非常有用。
+	 * 以可变形式返回此环境的PropertySources，允许对应该在解析属性时搜索的PropertySource对象集合进行操作。
+	 * 可变的PropertySources方法，如addFirst、addLast、addBefore和addAfter，允许对属性源的顺序进行细粒度控制。
+	 * 这在确保某些用户定义的属性源具有搜索优先级高于默认属性源（如系统属性集或系统环境变量集）时非常有用。
 	 *
 	 * @see AbstractEnvironment#customizePropertySources
 	 */
@@ -172,17 +173,28 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	/**
 	 * Append the given parent environment's active profiles, default profiles and
 	 * property sources to this (child) environment's respective collections of each.
+	 * 将给定父环境的活动配置文件、默认配置文件和属性源追加到此（子）环境的相应集合中。
+	 *
 	 * <p>For any identically-named {@code PropertySource} instance existing in both
 	 * parent and child, the child instance is to be preserved and the parent instance
 	 * discarded. This has the effect of allowing overriding of property sources by the
 	 * child as well as avoiding redundant searches through common property source types,
 	 * e.g. system environment and system properties.
+	 *
+	 * 对于在父环境和子环境中都存在的具有相同名称的PropertySource实例，将保留子实例并丢弃父实例。
+	 * 这样可以实现子环境对属性源的覆盖，并避免对常见属性源类型（例如系统环境和系统属性）进行冗余搜索的效果。
+	 *
 	 * <p>Active and default profile names are also filtered for duplicates, to avoid
 	 * confusion and redundant storage.
+	 * 活动配置文件和默认配置文件的名称也会进行重复过滤，以避免混淆和冗余存储。
+	 *
 	 * <p>The parent environment remains unmodified in any case. Note that any changes to
 	 * the parent environment occurring after the call to {@code merge} will not be
 	 * reflected in the child. Therefore, care should be taken to configure parent
 	 * property sources and profile information prior to calling {@code merge}.
+	 * 无论如何，父环境都不会被修改。请注意，在调用merge之后对父环境进行的任何更改都不会反映在子环境中。
+	 * 因此，在调用merge之前，应先配置父属性源和配置文件信息。
+	 *
 	 * @param parent the environment to merge with
 	 * @since 3.1.2
 	 * @see org.springframework.context.support.AbstractApplicationContext#setParent

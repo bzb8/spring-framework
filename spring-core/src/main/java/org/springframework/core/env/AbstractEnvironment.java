@@ -93,6 +93,8 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * Name of reserved default profile name: {@value}. If no default profile names are
 	 * explicitly and no active profile names are explicitly set, this profile will
 	 * automatically be activated by default.
+	 * 预留的默认配置文件名称为{@value}。如果没有明确指定默认配置文件名称，并且没有明确设置活动配置文件名称，则默认情况下将自动激活此配置文件。
+	 *
 	 * @see #getReservedDefaultProfiles
 	 * @see ConfigurableEnvironment#setDefaultProfiles
 	 * @see ConfigurableEnvironment#setActiveProfiles
@@ -513,17 +515,22 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 
 	@Override
 	public void merge(ConfigurableEnvironment parent) {
+		// 合并父子级的PropertySource
 		for (PropertySource<?> ps : parent.getPropertySources()) {
 			if (!this.propertySources.contains(ps.getName())) {
 				this.propertySources.addLast(ps);
 			}
 		}
+
+		// 合并父子级的activeProfiles
 		String[] parentActiveProfiles = parent.getActiveProfiles();
 		if (!ObjectUtils.isEmpty(parentActiveProfiles)) {
 			synchronized (this.activeProfiles) {
 				Collections.addAll(this.activeProfiles, parentActiveProfiles);
 			}
 		}
+
+		// 合并父子级的defaultProfiles
 		String[] parentDefaultProfiles = parent.getDefaultProfiles();
 		if (!ObjectUtils.isEmpty(parentDefaultProfiles)) {
 			synchronized (this.defaultProfiles) {

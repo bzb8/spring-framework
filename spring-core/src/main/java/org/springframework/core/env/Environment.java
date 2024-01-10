@@ -99,6 +99,10 @@ public interface Environment extends PropertyResolver {
 	 * {@link ConfigurableEnvironment#setActiveProfiles(String...)}.
 	 * <p>If no profiles have explicitly been specified as active, then any
 	 * {@linkplain #getDefaultProfiles() default profiles} will automatically be activated.
+	 * 返回此环境中显式激活的配置文件集合。配置文件用于创建bean定义的逻辑分组，以便根据部署环境进行有条件的注册。
+	 * 可以通过将"spring.profiles.active"设置为系统属性或调用ConfigurableEnvironment#setActiveProfiles(String...)方法来激活配置文件。
+	 * 如果没有明确指定要激活的配置文件，则任何默认配置文件都将自动激活。
+	 *
 	 * @see #getDefaultProfiles
 	 * @see ConfigurableEnvironment#setActiveProfiles
 	 * @see AbstractEnvironment#ACTIVE_PROFILES_PROPERTY_NAME

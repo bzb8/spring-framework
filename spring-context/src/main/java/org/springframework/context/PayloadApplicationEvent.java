@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
 
 /**
  * An {@link ApplicationEvent} that carries an arbitrary payload.
+ * 携带任意有效负载的 {@link ApplicationEvent}。
  *
  * @author Stephane Nicoll
  * @author Juergen Hoeller
@@ -40,8 +41,8 @@ public class PayloadApplicationEvent<T> extends ApplicationEvent implements Reso
 
 	/**
 	 * Create a new PayloadApplicationEvent.
-	 * @param source the object on which the event initially occurred (never {@code null})
-	 * @param payload the payload object (never {@code null})
+	 * @param source the object on which the event initially occurred (never {@code null}) -- 事件最初发生的对象（从不 null）
+	 * @param payload the payload object (never {@code null})`
 	 */
 	public PayloadApplicationEvent(Object source, T payload) {
 		super(source);

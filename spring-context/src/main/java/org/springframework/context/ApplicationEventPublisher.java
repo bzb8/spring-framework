@@ -61,6 +61,12 @@ public interface ApplicationEventPublisher {
 	 * or even immediate execution at all. Event listeners are encouraged
 	 * to be as efficient as possible, individually using asynchronous
 	 * execution for longer-running and potentially blocking operations.
+	 *
+	 * 将事件通知向此应用程序注册的所有 匹配 侦听器。
+	 * 如果指定的 event 不是 ApplicationEvent，则将其包装在 PayloadApplicationEvent.
+	 * 这样的事件发布步骤实际上是向多播器的移交，并不意味着同步/异步执行，甚至根本不意味着立即执行。
+	 * 鼓励事件侦听器尽可能高效，单独使用异步执行进行长时间运行和可能阻塞的操作
+	 *
 	 * @param event the event to publish
 	 * @since 4.2
 	 * @see #publishEvent(ApplicationEvent)
