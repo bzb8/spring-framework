@@ -55,7 +55,7 @@ public interface SingletonBeanRegistry {
 	 * <p>When running within a full BeanFactory: <b>Register a bean definition
 	 * instead of an existing instance if your bean is supposed to receive
 	 * initialization and/or destruction callbacks.</b>
-	 * 在完整的 BeanFactory 中运行时：<b>如果您的 Bean 应该接收初始化和/或销毁回调，则注册一个 Bean 定义而不是现有实例。
+	 * 在完整的 BeanFactory 中运行时：如果您的 Bean 应该接收初始化和/或销毁回调，则注册一个 Bean 定义而不是现有实例。
 	 *
 	 * <p>Typically invoked during registry configuration, but can also be used
 	 * for runtime registration of singletons. As a consequence, a registry

@@ -35,6 +35,9 @@ import org.springframework.util.ReflectionUtils;
  * a cached byte array for every {@code loadClass} call in order to
  * pick up recently loaded types in the parent ClassLoader.
  *
+ * 这段代码描述了一个特殊的ClassLoader的变体，用于在AbstractApplicationContext中进行临时类型匹配。
+ * 它通过在每次loadClass调用时重新定义缓存的字节数组中的类来获取父ClassLoader中最近加载的类型。
+ *
  * @author Juergen Hoeller
  * @since 2.5
  * @see AbstractApplicationContext
