@@ -16,8 +16,16 @@ public class GenericClazz<T extends String> {
     }
 
 	private static void test2() throws NoSuchFieldException {
-		ResolvableType param = ResolvableType.forField(GenericClazz.class.getDeclaredField("a"));
+		ResolvableType param = ResolvableType.forField(GenericClazz.class.getDeclaredField("param"));
+		ResolvableType[] generics = param.getGenerics();
+		for (ResolvableType generic : generics) {
+			System.out.println(generic);
+		}
 
+		Class<?>[] classes = param.resolveGenerics();
+		for (Class<?> aClass : classes) {
+			System.out.println(aClass);
+		}
 	}
 
 	private static void printParmaBySpring() throws NoSuchFieldException {
