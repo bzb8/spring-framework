@@ -35,7 +35,8 @@ import org.springframework.util.ObjectUtils;
  * interface. This catches beans that can't reliably be detected by {@code getBeanNamesForType}
  * and related operations which only work against top-level beans.
  *
- * {@code BeanPostProcessor}，用于检测实现 {@code ApplicationListener} 接口的 bean。这将捕获 {@code getBeanNamesForType} 无法可靠检测到的 bean 以及仅适用于顶级 Bean 的相关操作。
+ * {@code BeanPostProcessor}，用于检测实现 {@code ApplicationListener} 接口的 bean。
+ * 这将捕获 {@code getBeanNamesForType} 无法可靠检测到的 bean 以及仅适用于顶级 Bean 的相关操作。
  *
  * <p>With standard Java serialization, this post-processor won't get serialized as part of
  * {@code DisposableBeanAdapter} to begin with. However, with alternative serialization

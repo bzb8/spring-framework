@@ -671,10 +671,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// Tell the subclass to refresh the internal bean factory.
 			// 告诉子类刷新内部bean工厂
 			// 注册BeanDefinition
-			// DefaultListableBeanFactory
 			// 对此上下文的基础bean工厂进行实际刷新，关闭前一个bean工厂（如果有），
 			// 并为上下文生命周期的下一个阶段初始化一个新的bean工厂, 并使用XmlBeanDefinitionReader
 			// 将bean定义加载给bean工厂中
+			// DefaultListableBeanFactory
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
@@ -835,13 +835,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+		// 调用子类实现方法执行实际的配置加载
 		refreshBeanFactory();
+		// 返回子类提供的Bean工厂
 		return getBeanFactory();
 	}
 
 	/**
 	 * Configure the factory's standard context characteristics,
 	 * such as the context's ClassLoader and post-processors.
+	 * 配置工厂的标准上下文特征，例如上下文的ClassLoader和后处理器。
+	 *
 	 * @param beanFactory the BeanFactory to configure
 	 * <p>
 	 * 对bean工厂做准备工作：
@@ -861,22 +865,39 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * 8. 注册environment,systemProperties,systemEnvironment单例对象到该工厂
 	 * </p>
 	 */
-
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// Tell the internal bean factory to use the context's class loader etc.
+		// 告诉内部bean工厂使用上下文的类加载器等
+		// 设置beanFactory的bean的类加载器，通常是当前线程的上下文类加载器
 		beanFactory.setBeanClassLoader(getClassLoader());
 		if (!shouldIgnoreSpel) {
-			// 设置spring el表达式解析器
+			// 为bean定义值中的表达式指定解析策略，这里设置的是标准的Spring EL表达式解析器
+			// StandardBeanExpressionResolver:用于解析SpEL表达式的解析器
 			beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		}
+		// 添加属性编辑器到bean工厂,ResourceEditorRegistrar：属性编辑器的注册器，里面默认提供了一下简单通用常用类型的属性编辑器
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks. 使用上下文回调配置 bean 工厂。
+		// 使用上下文回调配置Bean工厂
+		// 为bean工厂添加ApplicationContextAwareProcessor
+		// ApplicationContextAwareProcessor:一个Spring内部工具，它实现了接口BeanPostProcessor,用于向实现了如下某种Aware接口
+		// 的bean设置ApplicationContext中相应的属性:EnvironmentAware,EmbeddedValueResolverAware,ResourceLoaderAware
+		// ApplicationEventPublisherAware,MessageSourceAware,ApplicationContextAware,
+		// 如果bean实现了以上接口中的某几个，那么这些接口方法调用的先后顺序就是上面接口排列的先后顺序。
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+		// 下面的ignoreDependencyInterface是用来设置bean工厂中需要忽略的接口
+		// 可以通过实现EnvironmentAware接口来获取到当前的环境信息Environment。
+		// 如果将EnvironmentAware接口添加到ignoreDependencyInterface中，则在使用的地方通过@Autowired将会无法正常注入
+		// 而是需要通过setEnvironment方法进行注入，下面的其他接口都类似.
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
+		// 可以通过实现EmbeddedValueResolverAware接口来获取String类型值的解析器
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
+		// 资源加载器，例如使用：@Autowired ResourceLoaderAware aware; 将不会被注入
 		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
+		// 事件发布器
 		beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware.class);
+		// 消息资源
 		beanFactory.ignoreDependencyInterface(MessageSourceAware.class);
 		beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);
 		beanFactory.ignoreDependencyInterface(ApplicationStartupAware.class);
@@ -891,7 +912,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
 
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
-		// 注册早期后处理器以检测内部 bean 作为 ApplicationListener。
+		// 注册早期的后处理器以将内部bean检测为ApplicationListeners
+		// ApplicationListenerDetector:该BeanPostProcessor检测那些实现了接口ApplicationListener的bean，在它们创建时初始化之后，
+		// 将它们添加到应用上下文的事件多播器上；并在这些ApplicationListener bean销毁之前，
+		// 将它们从应用上下文的事件多播器上移除。
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.
