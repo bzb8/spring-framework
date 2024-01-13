@@ -27,10 +27,12 @@ public class Main {
 		//AService aService = annotationConfigApplicationContext.getBean(AService.class);
 		//aService.testA();
 
-		ILouzai louzai = annotationConfigApplicationContext.getBean(ILouzai.class);
-		louzai.everyDay();
+		//ILouzai louzai = annotationConfigApplicationContext.getBean(ILouzai.class);
+		//louzai.everyDay();
+		//
+		//DService dService = annotationConfigApplicationContext.getBean(DService.class);
 
-		DService dService = annotationConfigApplicationContext.getBean(DService.class);
+		Object myFactoryBean = annotationConfigApplicationContext.getBean("myFactoryBean");
 
 
 		//AopService aopService = annotationConfigApplicationContext.getBean(AopService.class);

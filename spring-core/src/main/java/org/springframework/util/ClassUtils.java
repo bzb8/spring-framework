@@ -1291,9 +1291,11 @@ public abstract class ClassUtils {
 			}
 		}
 		Class<?>[] ifcs = clazz.getInterfaces();
+		// 接口中的方法
 		for (Class<?> ifc : ifcs) {
 			count += getMethodCountForName(ifc, methodName);
 		}
+		// 父类中的方法
 		if (clazz.getSuperclass() != null) {
 			count += getMethodCountForName(clazz.getSuperclass(), methodName);
 		}

@@ -101,16 +101,21 @@ public interface BeanPostProcessor {
 	 * in contrast to all other {@code BeanPostProcessor} callbacks.
 	 * <p>The default implementation returns the given {@code bean} as-is.
 	 *
-	 * 在任何 Bean 初始化回调（如 InitializingBean 的 {@code afterPropertiesSet} 或自定义 init-method）之后，将此 {@code BeanPostProcessor} 应用于给定的新 Bean 实例。
-	 * Bean 将已填充属性值。返回的 Bean 实例可能是原始实例的包装器。如果是 FactoryBean，将为 FactoryBean <p>实例和 FactoryBean 创建的对象（从 Spring 2.0 开始）调用此回调。
-	 * 后处理器可以通过相应的 {@code bean instanceof FactoryBean} 检查来决定是应用于 FactoryBean 还是创建的对象，或者同时应用于两者。
-	 * <p>与所有其他 {@code BeanPostProcessor} 回调相比，此回调也将在 {@link InstantiationAwareBeanPostProcessorpostProcessBeforeInstantiation} 方法触发短路后调用。
-	 * <p>缺省实现按原样返回给定的 {@code bean}。
+	 * 将此BeanPostProcessor应用于给定的新bean实例，
+	 * 在任何bean初始化回调之后（例如InitializingBean的afterPropertiesSet或自定义init-method）。bean将已经填充了属性值。
+	 * 返回的bean实例可以是原始bean的包装器。
+	 * 对于FactoryBean，在Spring 2.0之后，此回调将为FactoryBean实例和FactoryBean创建的对象调用。
+	 * 后置处理器可以通过相应的bean instanceof FactoryBean检查来决定是应用于FactoryBean还是创建的对象或两者都应用。
+	 * 与所有其他BeanPostProcessor回调不同，
+	 * 此回调还将在由InstantiationAwareBeanPostProcessor.postProcessBeforeInstantiation方法触发的短路之后调用。
+	 * 默认实现按原样返回给定的bean。
 	 *
 	 * @param bean the new bean instance
 	 * @param beanName the name of the bean
 	 * @return the bean instance to use, either the original or a wrapped one;
 	 * if {@code null}, no subsequent BeanPostProcessors will be invoked
+	 * 要使用的bean实例，可以是原始实例或包装实例；如果为null，则不会调用后续的BeanPostProcessors。
+	 *
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
 	 * @see org.springframework.beans.factory.FactoryBean

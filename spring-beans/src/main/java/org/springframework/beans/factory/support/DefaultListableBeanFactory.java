@@ -1008,10 +1008,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// 触发所有非惰性单例 bean 的初始化...
 		for (String beanName : beanNames) {
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
-			// 非抽象类，单例的，非懒加载的BeanDefinition
+			// 如果bd对应的Bean实例满足：(不是抽象类 && 是单例 && 不是懒加载)
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				// 判断是否FactoryBean, 一般情况下只是创建FactoryBean对象，除非isEagerInit = true，则会调用它的getObject()方法
 				if (isFactoryBean(beanName)) {
+					// 通过beanName获取FactoryBean的实例，factoryBean的名称是："&" + beanName
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					if (bean instanceof FactoryBean) {
 						FactoryBean<?> factory = (FactoryBean<?>) bean;
@@ -1030,13 +1031,19 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						}
 					}
 				} else {
+					// 如果BeanName对应的Bean实例不是FactoryBean，则通过BeanName去获取Bean实例.
 					getBean(beanName);
 				}
 			}
 		}
 
 		// Trigger post-initialization callback for all applicable beans...
-		// 触发所有适用 bean 的初始化后回调...
+		// 触发适用的所有bean的后初始化回调函数。
+		/**
+		 * 上一步for循环中已经创建完了所有的单实例Bean，这个for循环中，会拿出所有的单实例Bean，
+		 *   然后遍历，判断单实例bean是否实现了SmartInitializingSingleton接口，如果实现了该接口，
+		 *   则调用单实例Bean的afterSingletonsInstantiated方法
+		 */
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
 			if (singletonInstance instanceof SmartInitializingSingleton) {
@@ -1049,6 +1056,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						return null;
 					}, getAccessControlContext());
 				} else {
+					/**
+					 * 如果实现了SmartInitializingSingleton接口，则会调用afterSingletonInstantiated方法
+					 *   例如@EventListener注解的实现原理，就是利用EventListenerMethodProcessor后置处理器完成的，
+					 *   而在EventListenerMethodProcessor中就是实现了SmartInitializingSingleton接口
+					 */
 					smartSingleton.afterSingletonsInstantiated();
 				}
 				smartInitialize.end();

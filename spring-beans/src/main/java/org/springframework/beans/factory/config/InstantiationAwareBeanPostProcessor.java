@@ -66,17 +66,18 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * to predict the type of the bean object that they are going to return here.
 	 * <p>The default implementation returns {@code null}.
 	 *
-	 * 在实例化目标 bean 之前应用此 BeanPostProcessor。返回的 bean 对象可以是代替目标 bean 的代理，从而有效地抑制目标 bean 的默认实例化。
-	 * 如果该方法返回一个非空对象，bean的创建过程将被短路。唯一应用的进一步处理是来自配置的 {@link BeanPostProcessor BeanPostProcessors} 的
-	 * {@link #postProcessAfterInitialization} 回调。 此回调将应用于 bean 定义及其 bean 类，以及工厂方法定义，在这种情况下，返回的 bean 类型将在此处传递。
-	 * 后处理器可以实现扩展的 {@link SmartInstantiationAwareBeanPostProcessor} 接口，以便预测它们将在此处返回的 bean 对象的类型。 认实现返回 {@code null}。
+	 * 在目标bean实例化之前应用此BeanPostProcessor。
+	 * 返回的bean对象可以是代理对象，用于替代目标bean，从而有效地阻止目标bean的默认实例化。
+	 * 如果此方法返回一个非空对象，那么bean的创建过程将被中断。只会应用来自配置的BeanPostProcessors的postProcessAfterInitialization回调。
+	 * 此回调将应用于具有其bean类的bean定义，以及工厂方法定义，其中返回的bean类型将在此处传递。
+	 * 后置处理器可以实现扩展的SmartInstantiationAwareBeanPostProcessor接口，以便预测它们将在此处返回的bean对象的类型。
+	 * 默认实现返回null。
 	 *
 	 * @param beanClass the class of the bean to be instantiated
 	 * @param beanName the name of the bean
 	 * @return the bean object to expose instead of a default instance of the target bean,
 	 * or {@code null} to proceed with default instantiation
-	 *
-	 * 要公开的 bean 对象，而不是目标 bean 的默认实例，或 {@code null} 继续默认实例化
+	 * 要暴露的bean对象，而不是目标bean的默认实例，或者返回null以继续使用默认实例化。
 	 *
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessAfterInstantiation
@@ -96,17 +97,17 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * <p>The default implementation returns {@code true}.
 	 *
 	 * 在通过构造函数或工厂方法实例化 bean 之后，但在 Spring 属性填充（来自显式属性或自动装配）发生之前执行操作。
-	 * 这是在 Spring 自动装配启动之前对给定 bean 实例执行自定义字段注入的理想回调。 默认实现返回 {@code true}。
+	 * 这是在Spring自动装配启动之前，在给定的bean实例上执行自定义字段注入的理想回调方法。
+	 * 默认实现返回true。
 	 *
-	 * @param bean the bean instance created, with properties not having been set yet 已创建的 Bean 实例，其属性尚未设置
+	 * @param bean the bean instance created, with properties not having been set yet -- 已创建的 Bean 实例，其属性尚未设置
 	 * @param beanName the name of the bean
 	 * @return {@code true} if properties should be set on the bean; {@code false}
 	 * if property population should be skipped. Normal implementations should return {@code true}.
 	 * Returning {@code false} will also prevent any subsequent InstantiationAwareBeanPostProcessor
 	 * instances being invoked on this bean instance.
-	 *
-	 * 是否应该在 bean 上设置属性； {@code false} 是否应跳过属性注入。正常的实现应该返回 {@code true}。
-	 * 返回 {@code false} 还将阻止在此 bean 实例上调用任何后续的 InstantiationAwareBeanPostProcessor 实例。
+	 * 如果应该在bean上设置属性，则返回 `true` ；如果应该跳过属性设置，则返回 `false` 。正常情况下，实现应该返回 `true` 。
+	 * 返回 `false` 也将阻止在此bean实例上调用任何后续的InstantiationAwareBeanPostProcessor实例。
 	 *
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessBeforeInstantiation

@@ -95,6 +95,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	volatile ResolvableType factoryMethodReturnType;
 
 	/** Package-visible field for caching a unique factory method candidate for introspection. */
+	// Package-visible 字段，用于缓存用于自检的唯一工厂方法候选。
 	@Nullable
 	volatile Method factoryMethodToIntrospect;
 
@@ -133,7 +134,8 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	boolean postProcessed = false;
 
 	/** Package-visible field that indicates a before-instantiation post-processor having kicked in. */
-	// 包可见字段，指示实例化前的后处理器已启动。
+	// 包可见字段，指示实例化前的后处理器已启动
+	// 生成代理的时候会使用。表示是否已经生成代理
 	@Nullable
 	volatile Boolean beforeInstantiationResolved;
 

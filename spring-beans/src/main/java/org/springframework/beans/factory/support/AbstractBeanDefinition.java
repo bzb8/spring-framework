@@ -166,6 +166,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	@Nullable
 	private String scope = SCOPE_DEFAULT;
 
+	/**
+	 * 类是否为抽象类
+	 */
 	private boolean abstractFlag = false;
 
 	@Nullable
