@@ -164,15 +164,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * The name of the currently created bean, for implicit dependency registration
 	 * on getBean etc invocations triggered from a user-specified Supplier callback.
-	 * <p>
-	 * 当前创建的 Bean 的名称，用于对从用户指定的 Supplier 回调触发的 getBean 等调用进行隐式依赖注册。
+	 * 当前创建的bean的名称，用于在用户指定的供应商回调触发的getBean等调用中进行隐式依赖注册。
 	 */
 	private final NamedThreadLocal<String> currentlyCreatedBean = new NamedThreadLocal<>("Currently created bean");
 
 	/**
 	 * Cache of unfinished FactoryBean instances: FactoryBean name to BeanWrapper.
+	 * 用来缓存未创建完成的工厂bean实例。key: bean的名称  value：包装之后的工厂bean实例
 	 */
-	// 未完成的 FactoryBean 实例缓存：FactoryBean 名称 -> BeanWrapper。
 	private final ConcurrentMap<String, BeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
 
 	/**
@@ -321,9 +320,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * BeanFactoryAware or ApplicationContext through ApplicationContextAware.
 	 * <p>By default, only the BeanFactoryAware interface is ignored.
 	 * For further types to ignore, invoke this method for each type.
-	 * <p>
+	 *
 	 * 忽略给定的自动装配依赖接口。
-	 * 应用程序上下文通常使用它来注册以其他方式解析的依赖项，例如通过 BeanFactoryAware 的 BeanFactory 或通过 ApplicationContextAware 的 ApplicationContext。
+	 * 应用程序上下文通常使用它来注册以其他方式解析的依赖项，例如通过 BeanFactoryAware 的 BeanFactory 或
+	 * 通过 ApplicationContextAware 的 ApplicationContext。
 	 * 默认情况下，仅忽略 BeanFactoryAware 接口。对于要忽略的其他类型，请为每种类型调用此方法。
 	 *
 	 * @see org.springframework.beans.factory.BeanFactoryAware
@@ -637,10 +637,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// 实例化 Bean。
 		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
+			// 删除之前工厂bean缓存中的工厂bean对象，重新进行实例化.
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		// 实例化
 		if (instanceWrapper == null) {
+			// 使用策略方法创建实例，包括：工厂方法，构造函数注入，简单初始化.
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -1242,12 +1244,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Create a new instance for the specified bean, using an appropriate instantiation strategy:
 	 * factory method, constructor autowiring, or simple instantiation.
-	 * <p>
-	 * 使用适当的实例化策略为指定的 Bean 创建一个新实例：工厂方法、构造函数自动注入或简单实例化。
+	 * 在创建指定的bean实例时，使用适当的实例化策略：
+	 * 工厂方法（factory method）
+	 * 构造函数自动装配（constructor autowiring）
+	 * 简单实例化（simple instantiation）
 	 *
 	 * @param beanName the name of the bean
 	 * @param mbd      the bean definition for the bean
 	 * @param args     explicit arguments to use for constructor or factory method invocation
+	 *                 -- 用于构造函数或工厂方法调用的显式参数
 	 * @return a BeanWrapper for the new instance
 	 * @see #obtainFromSupplier
 	 * @see #instantiateUsingFactoryMethod
@@ -1259,16 +1264,27 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// 确保此时 bean 类实际上已解析。
 		Class<?> beanClass = resolveBeanClass(mbd, beanName);
 
+		// 如果Bean不是public，而且是不允许共有权限访问，直接抛出异常.
 		if (beanClass != null && !Modifier.isPublic(beanClass.getModifiers()) && !mbd.isNonPublicAccessAllowed()) {
 			throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
 		}
 
+		/**
+		 * 通过指定的回调方法去创建bean实例，Spring5.0版本之后新增的方法。
+		 *  可以通过实现BeanFactoryPostProcessor接口来进行扩展，设置自定义的Supplier，通过自定义supplier实例化对象
+		 *  可参考：【示例代码：可参考：com.wb.spring.supplier.SupplierBeanFactoryPostProcessor】
+		 */
 		Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
 		if (instanceSupplier != null) {
 			return obtainFromSupplier(instanceSupplier, beanName);
 		}
 
+		/**
+		 * 如果当前bean指定了对应的工厂方法，则通过工厂方法去创建bean实例
+		 *   底层会获取工厂方法【静态工厂方法|实例化方法】--> 然后解析方法入参 --> 然后执行反射调用创建实例 --> 封装为包装对象返回.
+		 */
+		// 通过工厂方法创建实例，可参考：【示例代码：com.wb.spring.factorymethod.InstanceFactoryMethod，com.wb.spring.factorymethod.StaticFactoryMethod】
 		if (mbd.getFactoryMethodName() != null) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
@@ -1315,6 +1331,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	/**
 	 * Obtain a bean instance from the given supplier.
+	 * 从给定的供应商（supplier）获取一个bean实例。
 	 *
 	 * @param instanceSupplier the configured supplier
 	 * @param beanName         the corresponding bean name
@@ -1328,6 +1345,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		String outerBean = this.currentlyCreatedBean.get();
 		this.currentlyCreatedBean.set(beanName);
 		try {
+			// 通过回调方法去创建bean对象
 			instance = instanceSupplier.get();
 		} finally {
 			if (outerBean != null) {
@@ -1340,6 +1358,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (instance == null) {
 			instance = new NullBean();
 		}
+		/** 将instance赋值给wrappedObject属性中，使用的时候直接通过BeanWrapper接口的getWrappedInstance获取到wrappedObject */
 		BeanWrapper bw = new BeanWrapperImpl(instance);
 		initBeanWrapper(bw);
 		return bw;
@@ -1425,15 +1444,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * Instantiate the bean using a named factory method. The method may be static, if the
 	 * mbd parameter specifies a class, rather than a factoryBean, or an instance variable
 	 * on a factory object itself configured using Dependency Injection.
-	 *
-	 * 使用命名工厂方法实例化 Bean。如果 mbd 参数指定了一个类，而不是一个 factoryBean，或者一个使用依赖关系注入配置的工厂对象本身的实例变量，则该方法可能是静态的。
+	 * 使用命名工厂方法实例化bean。如果mbd参数指定的是类而不是factoryBean，或者是通过依赖注入配置的工厂对象本身的实例变量，则该方法可以是静态的。
 	 *
 	 * @param beanName     the name of the bean
 	 * @param mbd          the bean definition for the bean
 	 * @param explicitArgs argument values passed in programmatically via the getBean method,
 	 *                     or {@code null} if none (implying the use of constructor argument values from bean definition)
-	 *                     <p>
-	 *                     通过 getBean 方法以编程方式传入的参数值，如果没有，则为 {@code null}（暗示使用 Bean 定义中的构造函数参数值）
+	 *                     -- 通过getBean方法以编程方式传递的参数值，如果没有则为null（表示使用bean定义中的构造函数参数值）
 	 * @return a BeanWrapper for the new instance
 	 * @see #getBean(String, Object[])
 	 */

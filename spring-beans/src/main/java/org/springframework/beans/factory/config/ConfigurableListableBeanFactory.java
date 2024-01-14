@@ -76,8 +76,8 @@ public interface ConfigurableListableBeanFactory
 	 * to be autowirable but are not defined as beans in the factory:
 	 * e.g. a dependency of type ApplicationContext resolved to the
 	 * ApplicationContext instance that the bean is living in.
-	 * 这是为了工厂/上下文引用而设计的，这些引用应该是可以自动装配的，但在工厂中没有定义为bean：
-	 * 例如，一个依赖类型为ApplicationContext，解析为bean所在的ApplicationContext实例。
+	 * 这适用于工厂/上下文引用，它们应该是可以自动装配的，但在工厂中没有定义为bean，
+	 * 例如，依赖类型为ApplicationContext的依赖项，解析为bean所在的ApplicationContext实例。
 	 *
 	 * <p>Note: There are no such default types registered in a plain BeanFactory,
 	 * not even for the BeanFactory interface itself.
@@ -87,8 +87,8 @@ public interface ConfigurableListableBeanFactory
 	 * be a base interface such as BeanFactory, with extensions of it resolved
 	 * as well if declared as an autowiring dependency (e.g. ListableBeanFactory),
 	 * as long as the given value actually implements the extended interface.
-	 * 要注册的依赖类型。这通常是一个基本接口，比如BeanFactory，如果声明为自动装配依赖项，
-	 * 则会解析其扩展类型（例如ListableBeanFactory），只要给定的值实际上实现了扩展接口
+	 * 要注册的依赖类型。通常，这将是一个基本接口，例如BeanFactory，如果声明为自动装配依赖项（例如ListableBeanFactory），
+	 * 则会解析其扩展类型，只要给定的值实际上实现了扩展接口。
 	 *
 	 * @param autowiredValue the corresponding autowired value. This may also be an
 	 * implementation of the {@link org.springframework.beans.factory.ObjectFactory}

@@ -396,10 +396,11 @@ class ConstructorResolver {
 	 * to match with the parameters. We don't have the types attached to constructor args,
 	 * so trial and error is the only way to go here. The explicitArgs array may contain
 	 * argument values passed in programmatically via the corresponding getBean method.
-	 *
-	 * 使用命名工厂方法实例化 Bean。如果 bean 定义参数指定了一个类，而不是“factory-bean”，或者使用依赖关系注入配置了工厂对象本身的实例变量，则该方法可能是静态的。
-	 * 实现需要使用 RootBeanDefinition 中指定的名称循环访问静态方法或实例方法（该方法可能重载），并尝试与参数匹配。我们没有附加到构造函数参数的类型，因此试错是唯一的方法。
-	 * explicitArgs 数组可以包含通过相应的 getBean 方法以编程方式传入的参数值。
+	 * --
+	 * 使用命名的工厂方法实例化bean。如果bean定义参数指定的是类而不是"factory-bean"，
+	 * 或者是通过依赖注入配置的工厂对象本身的实例变量，则该方法可以是静态的。
+	 * 实现需要迭代具有RootBeanDefinition中指定的名称的静态或实例方法（方法可能是重载的），并尝试与参数匹配。
+	 * 我们没有将类型附加到构造函数参数，所以这里只能通过试错的方式进行。explicitArgs数组可以包含通过相应的getBean方法以编程方式传递的参数值。
 	 *
 	 * @param beanName the name of the bean
 	 * @param mbd the merged bean definition for the bean
@@ -416,10 +417,14 @@ class ConstructorResolver {
 		BeanWrapperImpl bw = new BeanWrapperImpl();
 		this.beanFactory.initBeanWrapper(bw);
 
+		// 工厂对象
 		Object factoryBean;
+		// 工厂类
 		Class<?> factoryClass;
+		// 是否为静态工厂方法
 		boolean isStatic;
 
+		// 获取工厂bean名称，如果工厂bean名称不为空，表示以实例工厂的方式创建实例对象
 		String factoryBeanName = mbd.getFactoryBeanName();
 		// 解析factoryClass和isStatic
 		if (factoryBeanName != null) {
@@ -429,6 +434,7 @@ class ConstructorResolver {
 			}
 			// 创建factoryBeanName bean
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
+			// 已经创建了bean，则抛出异常
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
 			}
@@ -845,6 +851,7 @@ class ConstructorResolver {
 	 * Resolve the prepared arguments stored in the given bean definition.
 	 *
 	 * 解析存储在给定 Bean 定义中的准备好的参数。
+	 * @param argsToResolve 缓存准备解析的构造函数的参数。表示还没有进行依赖注入的形参
 	 */
 	private Object[] resolvePreparedArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
 			Executable executable, Object[] argsToResolve) {

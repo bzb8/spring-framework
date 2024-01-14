@@ -121,9 +121,12 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Create a new accessor for the given object.
-	 * @param object the object wrapped by this accessor
+	 * 为给定对象创建新的访问器。
+	 *
+	 * @param object the object wrapped by this accessor -- 此访问器包装的对象
 	 */
 	protected AbstractNestablePropertyAccessor(Object object) {
+		// this.defaultEditorsActive = true;
 		registerDefaultEditors();
 		setWrappedInstance(object);
 	}
@@ -183,7 +186,6 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	/**
 	 * Switch the target object, replacing the cached introspection results only
 	 * if the class of the new object is different to that of the replaced object.
-	 *
 	 * 切换目标对象，仅当新对象的类与被替换对象的类不同时，才替换缓存的自省结果。
 	 *
 	 * @param object the new target object
@@ -199,13 +201,15 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	 * 切换目标对象，仅当新对象的类与替换对象的类不同时才替换缓存的内省结果。
 	 *
 	 * @param object the new target object
-	 * @param nestedPath the nested path of the object 对象的嵌套路径
-	 * @param rootObject the root object at the top of the path 路径顶部的根对象
+	 * @param nestedPath the nested path of the object -- 对象的嵌套路径
+	 * @param rootObject the root object at the top of the path -- 路径顶部的根对象
 	 */
 	public void setWrappedInstance(Object object, @Nullable String nestedPath, @Nullable Object rootObject) {
 		this.wrappedObject = ObjectUtils.unwrapOptional(object);
 		Assert.notNull(this.wrappedObject, "Target object must not be null");
+		// ""
 		this.nestedPath = (nestedPath != null ? nestedPath : "");
+		// wrappedObject
 		this.rootObject = (!this.nestedPath.isEmpty() ? rootObject : this.wrappedObject);
 		this.nestedPropertyAccessors = null;
 		this.typeConverterDelegate = new TypeConverterDelegate(this, this.wrappedObject);

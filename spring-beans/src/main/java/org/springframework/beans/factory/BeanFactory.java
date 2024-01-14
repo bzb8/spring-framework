@@ -236,9 +236,16 @@ public interface BeanFactory {
 	 * but may also be translated into a conventional by-name lookup based on the name
 	 * of the given type. For more extensive retrieval operations across sets of beans,
 	 * use {@link ListableBeanFactory} and/or {@link BeanFactoryUtils}.
-	 * @param requiredType type the bean must match; can be an interface or superclass
+	 * 返回指定 Bean 的实例，该实例可以是共享的，也可以是独立的。
+	 * 允许指定显式构造函数参数/工厂方法参数，覆盖 Bean 定义中指定的默认参数（如果有）。
+	 * 此方法进入 ListableBeanFactory 按类型查找区域，但也可以转换为基于给定类型名称的常规按名称查找。
+	 * 要跨 Bean 集执行更广泛的检索操作，请使用 ListableBeanFactory and/or BeanFactoryUtils.
+	 *
+	 * @param requiredType type the bean must match; can be an interface or superclass -- Bean的类型必须匹配;可以是接口或超类
 	 * @param args arguments to use when creating a bean instance using explicit arguments
 	 * (only applied when creating a new instance as opposed to retrieving an existing one)
+	 * -- 使用显式参数创建 Bean 实例时要使用的参数（仅在创建新实例时应用，而不是检索现有实例时应用）
+	 *
 	 * @return an instance of the bean
 	 * @throws NoSuchBeanDefinitionException if there is no such bean definition
 	 * @throws BeanDefinitionStoreException if arguments have been given but
@@ -426,6 +433,11 @@ public interface BeanFactory {
 	 * uninitialized {@code FactoryBean} if no early type information is available.
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 * 确定具有给定名称的 Bean 的类型。更具体地说，确定将为给定名称返回的对象 getBean 类型。
+	 * FactoryBean对于 ，返回 FactoryBean 创建的对象类型，如 FactoryBean.getObjectType()所示。根据标志的不同allowFactoryBeanInit，如果没有可用的早期类型信息，这可能会导致初始化以前未初始化FactoryBean的类型。
+	 * 将别名转换回相应的规范 Bean 名称。
+	 * 将询问父工厂是否在此工厂实例中找不到 bean。
+	 *
 	 * @param name the name of the bean to query
 	 * @param allowFactoryBeanInit whether a {@code FactoryBean} may get initialized
 	 * just for the purpose of determining its object type

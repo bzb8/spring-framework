@@ -1413,14 +1413,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * and populate bean instances.
 	 * <p>The default implementation delegates to {@link #registerCustomEditors}.
 	 * Can be overridden in subclasses.
-	 * <p>
-	 * 使用在此工厂注册的自定义编辑器初始化给定的 BeanWrapper。为将创建和填充 Bean 实例的 BeanWrappers 调用。
-	 * 默认实现委托给 {@link #registerCustomEditors}。可以在子类中被覆盖。
+	 * 使用此工厂注册的自定义编辑器初始化给定的BeanWrapper。用于将创建和填充bean实例的BeanWrapper调用。
+	 * 默认实现委托给{@link #registerCustomEditors}。可以在子类中进行重写。
 	 *
 	 * @param bw the BeanWrapper to initialize
 	 */
 	protected void initBeanWrapper(BeanWrapper bw) {
+		// 设置默认的类型转换器：用来将某些特定类型的值转换为某一种期望的类型，比如：将字符串的日期类型转换为Date类型的转换器
 		bw.setConversionService(getConversionService());
+		// 注册定制化的属性编辑器
 		registerCustomEditors(bw);
 	}
 
@@ -1430,9 +1431,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * <p>To be called for BeanWrappers that will create and populate bean
 	 * instances, and for SimpleTypeConverter used for constructor argument
 	 * and factory method type conversion.
-	 * <p>
-	 * 使用已在此 BeanFactory 中注册的自定义编辑器初始化给定的 PropertyEditorRegistry。
-	 * 对于将创建和填充 Bean 实例的 BeanWrapper，以及用于构造函数参数和工厂方法类型转换的 SimpleTypeConverter，调用该函数。
+	 * 使用已在此BeanFactory中注册的自定义编辑器初始化给定的PropertyEditorRegistry。
+	 * 要为将创建和填充bean实例的BeanWrappers以及用于构造函数参数和工厂方法类型转换的SimpleTypeConverter调用。
 	 *
 	 * @param registry the PropertyEditorRegistry to initialize
 	 */

@@ -30,6 +30,7 @@ package org.springframework.beans.factory.support;
 class ImplicitlyAppearedSingletonException extends IllegalStateException {
 
 	public ImplicitlyAppearedSingletonException() {
+		// 通过其bean定义指向的工厂bean的创建，隐式出现了即将创建的单例实例。
 		super("About-to-be-created singleton instance implicitly appeared through the " +
 				"creation of the factory bean that its bean definition points to");
 	}

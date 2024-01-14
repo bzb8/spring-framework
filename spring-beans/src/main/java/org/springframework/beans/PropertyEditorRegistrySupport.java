@@ -152,7 +152,6 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Activate the default editors for this registry instance,
 	 * allowing for lazily registering default editors when needed.
-	 *
 	 * 激活此注册表实例的默认编辑器，允许在需要时延迟注册默认编辑器。
 	 */
 	protected void registerDefaultEditors() {

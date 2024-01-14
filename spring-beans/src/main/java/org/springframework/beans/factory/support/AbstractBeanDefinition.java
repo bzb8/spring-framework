@@ -816,8 +816,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return a callback for creating an instance of the bean, if any.
-	 *
-	 * 返回用于创建 Bean 实例的回调（如果有）。
+	 * 如果有的话，返回一个用于创建bean实例的回调函数。
 	 *
 	 * @since 5.0
 	 */
