@@ -327,6 +327,8 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the factory method in the specified bean definition, if possible.
+	 * 如果可能，请在指定的 Bean 定义中解析工厂方法。
+	 *
 	 * {@link RootBeanDefinition#getResolvedFactoryMethod()} can be checked for the result.
 	 * @param mbd the bean definition to check
 	 */
@@ -406,7 +408,6 @@ class ConstructorResolver {
 	 * @param mbd the merged bean definition for the bean
 	 * @param explicitArgs argument values passed in programmatically via the getBean
 	 * method, or {@code null} if none (-> use constructor argument values from bean definition)
-	 *
 	 * 通过 getBean 方法以编程方式传入的参数值，如果没有，则为 {@code null}（-> 使用 Bean 定义中的构造函数参数值）
 	 *
 	 * @return a BeanWrapper for the new instance
@@ -849,23 +850,29 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the prepared arguments stored in the given bean definition.
-	 *
 	 * 解析存储在给定 Bean 定义中的准备好的参数。
+	 *
+	 * @param executable 构造函数或工厂方法
 	 * @param argsToResolve 缓存准备解析的构造函数的参数。表示还没有进行依赖注入的形参
 	 */
 	private Object[] resolvePreparedArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
 			Executable executable, Object[] argsToResolve) {
 
 		TypeConverter customConverter = this.beanFactory.getCustomTypeConverter();
+		// 使用自定义的TypeConverter，自定义的TypeConverter = null的话使用bw
 		TypeConverter converter = (customConverter != null ? customConverter : bw);
+		// 用来解析bean定义包含的值的
 		BeanDefinitionValueResolver valueResolver =
 				new BeanDefinitionValueResolver(this.beanFactory, beanName, mbd, converter);
 		// 方法参数class数组
 		Class<?>[] paramTypes = executable.getParameterTypes();
 
+		// 已经解析好的参数
 		Object[] resolvedArgs = new Object[argsToResolve.length];
 		for (int argIndex = 0; argIndex < argsToResolve.length; argIndex++) {
+			// 待解析的参数值
 			Object argValue = argsToResolve[argIndex];
+			// 参数类型
 			Class<?> paramType = paramTypes[argIndex];
 			boolean convertNecessary = false;
 			if (argValue instanceof ConstructorDependencyDescriptor) {
@@ -937,13 +944,17 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the specified argument which is supposed to be autowired.
-	 *
 	 * 解析应该自动注入的指定参数。
+	 *
+	 * @param descriptor 参数依赖描述符
+	 * @param paramType 参数类型
+	 * @param beanName
 	 */
 	@Nullable
 	Object resolveAutowiredArgument(DependencyDescriptor descriptor, Class<?> paramType, String beanName,
 			@Nullable Set<String> autowiredBeanNames, TypeConverter typeConverter, boolean fallback) {
 
+		// 如果参数类型 = InjectionPoint，直接从NamedThreadLocal获取
 		if (InjectionPoint.class.isAssignableFrom(paramType)) {
 			InjectionPoint injectionPoint = currentInjectionPoint.get();
 			if (injectionPoint == null) {
@@ -1107,7 +1118,8 @@ class ConstructorResolver {
 	 * for differentiating between a provided DependencyDescriptor instance
 	 * and an internally built DependencyDescriptor for autowiring purposes.
 	 *
-	 * 构造函数参数的 DependencyDescriptor 标记，用于区分提供的 DependencyDescriptor 实例和内部构建的 DependencyDescriptor 以进行自动注入。
+	 * 构造函数参数的 DependencyDescriptor 标记，用于区分提供的 DependencyDescriptor 实例和
+	 * 内部构建的 DependencyDescriptor 以进行自动注入。
 	 */
 	@SuppressWarnings("serial")
 	private static class ConstructorDependencyDescriptor extends DependencyDescriptor {

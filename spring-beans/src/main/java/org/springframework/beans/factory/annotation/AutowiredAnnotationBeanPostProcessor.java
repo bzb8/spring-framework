@@ -923,6 +923,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * DependencyDescriptor variant with a pre-resolved target bean name.
+	 * 具有预解析目标 Bean 名称的 DependencyDescriptor 变体。
 	 */
 	@SuppressWarnings("serial")
 	private static class ShortcutDependencyDescriptor extends DependencyDescriptor {

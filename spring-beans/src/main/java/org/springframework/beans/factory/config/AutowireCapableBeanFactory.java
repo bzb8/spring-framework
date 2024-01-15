@@ -409,18 +409,17 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
 	 * Resolve the specified dependency against the beans defined in this factory.
+	 * 将指定的依赖项解析为此工厂中定义的 bean。
 	 *
-	 * 解析针对此工厂中定义的 Bean 的指定依赖关系。
-	 *
-	 * @param descriptor the descriptor for the dependency (field/method/constructor)
-	 * @param requestingBeanName the name of the bean which declares the given dependency 声明给定依赖关系的 Bean 的名称
+	 * @param descriptor the descriptor for the dependency (field/method/constructor) -- 依赖项（字段/方法/构造函数）的描述符
+	 * @param requestingBeanName the name of the bean which declares the given dependency -- 声明给定依赖关系的 Bean 的名称
 	 * @param autowiredBeanNames a Set that all names of autowired beans (used for
-	 * resolving the given dependency) are supposed to be added to 应将自动注入的 bean（用于解析给定依赖项）的所有名称添加到的集合
-	 * @param typeConverter the TypeConverter to use for populating arrays and collections
-	 * @return the resolved object, or {@code null} if none found
-	 * @throws NoSuchBeanDefinitionException if no matching bean was found
-	 * @throws NoUniqueBeanDefinitionException if more than one matching bean was found
-	 * @throws BeansException if dependency resolution failed for any other reason
+	 * resolving the given dependency) are supposed to be added to -- 应将自动注入的 bean（用于解析给定依赖项）的所有名称添加到的集合
+	 * @param typeConverter the TypeConverter to use for populating arrays and collections -- 用于填充数组和集合的 TypeConverter
+	 * @return the resolved object, or {@code null} if none found -- 已解析的对象，如果未找到则为 {@code null}
+	 * @throws NoSuchBeanDefinitionException if no matching bean was found -- 如果未找到匹配的 bean
+	 * @throws NoUniqueBeanDefinitionException if more than one matching bean was found -- 如果找到多个匹配的 bean
+	 * @throws BeansException if dependency resolution failed for any other reason -- 如果由于其他原因导致依赖项解析失败
 	 * @since 2.5
 	 * @see DependencyDescriptor
 	 */

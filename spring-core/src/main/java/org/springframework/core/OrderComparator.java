@@ -243,6 +243,7 @@ public class OrderComparator implements Comparator<Object> {
 		 * will fall back to checking the original object.
 		 *
 		 * 返回指定对象的order源，即应检查order值作为给定对象的替代品的对象。也可以是order源对象的数组。如果返回的对象未指示任何顺序，则比较器将回退到检查原始对象。
+		 * 提供order值的对象
 		 *
 		 * @param obj the object to find an order source for 要查找其order源的对象
 		 * @return the order source for that object, or {@code null} if none found

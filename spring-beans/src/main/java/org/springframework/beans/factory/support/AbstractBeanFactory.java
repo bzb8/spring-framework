@@ -148,6 +148,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	/**
 	 * Resolution strategy for expressions in bean definition values.
+	 * Bean 定义值中表达式的解析策略。
 	 */
 	@Nullable
 	private BeanExpressionResolver beanExpressionResolver;
@@ -1023,6 +1024,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			return null;
 		}
 		String result = value;
+		// 迭代解析
 		for (StringValueResolver resolver : this.embeddedValueResolvers) {
 			result = resolver.resolveStringValue(result);
 			if (result == null) {

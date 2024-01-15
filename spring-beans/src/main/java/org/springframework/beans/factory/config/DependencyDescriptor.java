@@ -254,9 +254,9 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * method before going into the regular type matching algorithm across all beans.
 	 * Subclasses may override this method to improve resolution performance based on
 	 * pre-cached information while still receiving {@link InjectionPoint} exposure etc.
-	 *
-	 * 针对给定工厂解析此依赖项的快捷方式，例如考虑一些预先解析的信息。解析算法将首先尝试通过此方法解析快捷方式，然后再进入所有 Bean 的常规类型匹配算法。
-	 * 子类可以覆盖此方法，以提高基于预缓存信息的分辨率性能，同时仍接收 {@link InjectionPoint} 曝光等。
+	 * 针对给定工厂解析此依赖项的快捷方式，例如考虑一些预先解析的信息。
+	 * 解析算法将首先尝试通过此方法解析快捷方式，然后再进入所有 Bean 的常规类型匹配算法。
+	 * 子类可以覆盖此方法，以提高基于预缓存信息的解析性能，同时仍接收 {@link InjectionPoint} 曝光等。
 	 *
 	 * @param beanFactory the associated factory
 	 * @return the shortcut result if any, or {@code null} if none
@@ -400,9 +400,8 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 
 	/**
 	 * Determine the declared (non-generic) type of the wrapped parameter/field.
-	 *
 	 * 确定包装参数字段的声明（非泛型）类型。
-	 *
+	 * 方法参数，或返回值的（非泛型）类型
 	 * @return the declared type (never {@code null}) 声明的类型（从不 {@code null}）
 	 */
 	public Class<?> getDependencyType() {
