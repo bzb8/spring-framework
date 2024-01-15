@@ -145,9 +145,8 @@ public interface ConfigurableListableBeanFactory
 	 * <p>Typically triggered after changes to the original bean definitions,
 	 * e.g. after applying a {@link BeanFactoryPostProcessor}. Note that metadata
 	 * for beans which have already been created at this point will be kept around.
-	 *
-	 * 清除合并的 Bean 定义高速缓存，除去尚不符合完整元数据高速缓存条件的 Bean 条目。
-	 * 通常在更改原始 Bean 定义后触发，例如在应用 {@link BeanFactoryPostProcessor} 之后。请注意，此时已创建的 Bean 的元数据将被保留。
+	 * 清除合并的bean定义缓存，删除那些尚未被视为适合完全元数据缓存的bean的条目。
+	 * 通常在对原始bean定义进行更改后触发，例如在应用BeanFactoryPostProcessor之后。请注意，在此时已经创建的bean的元数据将被保留。
 	 *
 	 * @since 4.2
 	 * @see #getBeanDefinition
@@ -182,9 +181,10 @@ public interface ConfigurableListableBeanFactory
 	 * Call {@link #destroySingletons()} for full cleanup in this case.
 	 * @see #destroySingletons()
 	 *
-	 * 确保所有非惰性初始化单例都被实例化，同时考虑{@link org.springframework.beans.factory.FactoryBean FactoryBeans}。
-	 * 如果需要，通常在工厂设置结束时调用。如果无法创建单例 bean 之一，则抛出 BeansException。
-	 * 注意：这可能在出厂时已经初始化了一些 bean！在这种情况下，调用 {@link #destroySingletons()} 进行完全清理。 @参见 destroySingletons()
+	 * 确保所有非懒加载的单例都被实例化，同时考虑FactoryBeans。通常在工厂设置结束时调用，如果需要的话。
+	 * 如果其中一个单例bean无法创建，则抛出BeansException异常。
+	 * 注意：这可能已经使工厂中的某些bean初始化了！在这种情况下，调用destroySingletons()进行完全清理。
+	 * 参见：destroySingletons()
 	 */
 	void preInstantiateSingletons() throws BeansException;
 

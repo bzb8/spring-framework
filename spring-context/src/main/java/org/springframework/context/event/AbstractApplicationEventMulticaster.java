@@ -112,7 +112,7 @@ public abstract class AbstractApplicationEventMulticaster
 		synchronized (this.defaultRetriever) {
 			// Explicitly remove target for a proxy, if registered already,
 			// in order to avoid double invocations of the same listener.
-			// 显式删除代理的目标（如果已注册），以避免重复调用同一侦听器。
+			// 如果代理已经注册了目标对象，就明确地移除目标对象，以避免对同一监听器的重复调用。
 			Object singletonTarget = AopProxyUtils.getSingletonTarget(listener);
 			if (singletonTarget instanceof ApplicationListener) {
 				this.defaultRetriever.applicationListeners.remove(singletonTarget);
@@ -459,8 +459,8 @@ public abstract class AbstractApplicationEventMulticaster
 	 * Helper class that encapsulates a specific set of target listeners,
 	 * allowing for efficient retrieval of pre-filtered listeners.
 	 * <p>An instance of this helper gets cached per event type and source type.
-	 *
-	 * 帮助程序类，该类封装了一组特定的目标侦听器，从而允许有效地检索预筛选的侦听器。此帮助程序的实例将按事件类型和源类型进行缓存。
+	 * 这是一个帮助类，封装了一组特定的目标监听器，可以高效地检索预过滤的监听器。
+	 * 每个事件类型和源类型都会缓存一个此帮助类的实例。
 	 *
 	 */
 	private class CachedListenerRetriever {
@@ -506,7 +506,7 @@ public abstract class AbstractApplicationEventMulticaster
 	/**
 	 * Helper class that encapsulates a general set of target listeners.
 	 *
-	 * 封装一组通用目标侦听器的帮助程序类。
+	 * 封装一组通用目标监听器的帮助程序类。
 	 */
 	private class DefaultListenerRetriever {
 
@@ -522,6 +522,7 @@ public abstract class AbstractApplicationEventMulticaster
 				BeanFactory beanFactory = getBeanFactory();
 				for (String listenerBeanName : this.applicationListenerBeans) {
 					try {
+						// 初始化listener列表
 						ApplicationListener<?> listener =
 								beanFactory.getBean(listenerBeanName, ApplicationListener.class);
 						if (!allListeners.contains(listener)) {

@@ -1184,6 +1184,19 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return (this.configurationFrozen || super.isBeanEligibleForMetadataCaching(beanName));
 	}
 
+	/**
+	 * 在之后的内容你可能会频繁的见到“MergedBeanDefinition”这个词，因此这边先稍微讲解一下，有助于你更好的理解。
+	 * MergedBeanDefinition：这个词其实不是一个官方词，但是很接近，该词主要是用来表示“合并的bean定义”，因为每次都写“合并的bean定义”有点太绕口，
+	 * 因此我在之后的注释或解析中或统一使用MergedBeanDefinition来表示“合并的bean定义”。
+	 * 之所以称之为“合并的”，是因为存在“子定义”和“父定义”的情况。对于一个bean定义来说，可能存在以下几种情况：
+	 * (1)该BeanDefinition存在“父定义”：首先使用“父定义”的参数构建一个RootBeanDefinition，然后再使用该BeanDefinition的参数来进行覆盖。
+	 * (2)该BeanDefinition不存在“父定义”，并且该BeanDefinition的类型是RootBeanDefinition：直接返回该RootBeanDefinition的一个克隆。
+	 * (3)该BeanDefinition不存在“父定义”，但是该BeanDefinition的类型不是RootBeanDefinition：使用该BeanDefinition的参数构建一个RootBeanDefinition。
+	 * 之所以区分出2和3，是因为通常BeanDefinition在之前加载到BeanFactory中的时候，通常是被封装成GenericBeanDefinition或ScannedGenericBeanDefinition，
+	 * 但是从这边之后bean的后续流程处理都是针对RootBeanDefinition，因此在这边会统一将BeanDefinition转换成RootBeanDefinition。
+	 * 在我们日常使用的过程中，通常会是上面的第3种情况。如果我们使用XML配置来注册bean，则该bean定义会被封装成：GenericBeanDefinition；
+	 * 如果我们使用注解的方式来注册bean，也就是<context:component-scan/>+@Compoment，则该bean定义会被封装成ScannedGenericBeanDefinition。
+	 */
 	@Override
 	public void preInstantiateSingletons() throws BeansException {
 		if (logger.isTraceEnabled()) {
@@ -1192,12 +1205,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		// Iterate over a copy to allow for init methods which in turn register new bean definitions.
 		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
-		// 迭代副本以允许 init 方法依次注册新的 bean 定义。虽然这可能不是常规工厂引导程序的一部分，但它确实可以正常工作。
+		// 创建BeanDefinitionNames的副本BeanNames用于后续的遍历，以允许init等方法注册新的bean定义.
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
 		// Trigger initialization of all non-lazy singleton beans...
-		// 触发所有非惰性单例 bean 的初始化...
+		// 遍历所有的beanNames，触发所有非懒加载单例bean的初始化，即：创建所有的单实例Bean
 		for (String beanName : beanNames) {
+			// 获取beanName对应的MergedBeanDefinition.
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			// 如果bd对应的Bean实例满足：(不是抽象类 && 是单例 && 不是懒加载)
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
@@ -1431,6 +1445,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Override
 	public void registerSingleton(String beanName, Object singletonObject) throws IllegalStateException {
 		super.registerSingleton(beanName, singletonObject);
+		// 加入manualSingletonNames中
 		updateManualSingletonNames(set -> set.add(beanName), set -> !this.beanDefinitionMap.containsKey(beanName));
 		clearByTypeCache();
 	}

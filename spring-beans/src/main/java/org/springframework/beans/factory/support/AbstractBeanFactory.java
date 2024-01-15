@@ -1473,11 +1473,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Return a merged RootBeanDefinition, traversing the parent bean definition
 	 * if the specified bean corresponds to a child bean definition.
-	 * <p>
-	 * 返回合并的 RootBeanDefinition，如果指定的 bean 对应于子 bean 定义，则遍历父 bean 定义。
+	 * 返回一个合并的RootBeanDefinition，如果指定的bean对应于一个子bean定义，则遍历父bean定义。
 	 *
-	 * @param beanName the name of the bean to retrieve the merged definition for 要检索其合并定义的 Bean 的名称
-	 * @return a (potentially merged) RootBeanDefinition for the given bean 给定 Bean 的（可能合并的）RootBeanDefinition
+	 * @param beanName the name of the bean to retrieve the merged definition for --要检索其合并定义的 Bean 的名称
+	 * @return a (potentially merged) RootBeanDefinition for the given bean -- 给定 Bean 的（可能合并的）RootBeanDefinition
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
 	 * @throws BeanDefinitionStoreException  in case of an invalid bean definition
 	 */
@@ -1488,18 +1487,21 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (mbd != null && !mbd.stale) {
 			return mbd;
 		}
+		// 如果不再缓存中
+		//  先调用getBeanDefinition()方法根据beanName获取对应的BeanDefinition，从beanDefinitionMap缓存中获取，获取不到直接抛异常.
+		//  然后调用getMergedBeanDefinition(beanName, getBeanDefinition(beanName))方法根据beanName和对应的beanDefinition获取mergedBeanDefinition.
 		return getMergedBeanDefinition(beanName, getBeanDefinition(beanName));
 	}
 
 	/**
 	 * Return a RootBeanDefinition for the given top-level bean, by merging with
 	 * the parent if the given bean's definition is a child bean definition.
-	 * <p>
-	 * 如果给定 bean 的定义是子 bean 定义，则通过与父 bean 合并，返回给定顶级 bean 的 RootBeanDefinition。
+	 *
+	 * 根据给定的顶级bean返回一个RootBeanDefinition，如果给定bean的定义是一个子bean定义，则与父bean合并。
 	 *
 	 * @param beanName the name of the bean definition
-	 * @param bd       the original bean definition (Root/ChildBeanDefinition)
-	 * @return a (potentially merged) RootBeanDefinition for the given bean
+	 * @param bd the original bean definition (Root/ChildBeanDefinition) -- 原始 bean 定义 (RootChild/BeanDefinition)
+	 * @return a (potentially merged) RootBeanDefinition for the given bean -- 给定 bean 的（可能合并的）RootBeanDefinition
 	 * @throws BeanDefinitionStoreException in case of an invalid bean definition
 	 */
 	protected RootBeanDefinition getMergedBeanDefinition(String beanName, BeanDefinition bd)
@@ -1528,18 +1530,20 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			throws BeanDefinitionStoreException {
 
 		synchronized (this.mergedBeanDefinitions) {
+			// 用于存放返回结果.
 			RootBeanDefinition mbd = null;
 			RootBeanDefinition previous = null;
 
 			// Check with full lock now in order to enforce the same merged instance.
 			// 现在检查完全锁定以强制执行相同的合并实例。
 			if (containingBd == null) {
-				// 检查beanName对应的MergedBeanDefinition是否存在于缓存中.
+				// 从mergedBeanDefinitions中获取
 				mbd = this.mergedBeanDefinitions.get(beanName);
 			}
 
-			// 如果beanName对应的BeanDefinition不在缓存中时或是陈旧的状态
+			// 如果beanName对应的BeanDefinition不在缓存中时
 			if (mbd == null || mbd.stale) {
+				// 之前陈旧的beanDefinition
 				previous = mbd;
 				if (bd.getParentName() == null) {
 					// 如果bd的parentName为空，表示bd没有父定义，不需要与父定义进行合并操作.即：bd的MergedBeanDefinition就是bd自己
@@ -1548,7 +1552,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					if (bd instanceof RootBeanDefinition) {
 						// 如果bd的类型为RootBeanDefinition，则bd的MergedBeanDefinition就是bd自己，直接克隆一个副本
 						mbd = ((RootBeanDefinition) bd).cloneBeanDefinition();
-					} else {
+					}
+					else {
 						// 否则使用bd构建一个RootBeanDefinition.
 						// 一般情况下，BeanDefinition在被加载之后是GenericBeanDefinition(xml) 或者 ScannedGenericBeanDefinition(注解)
 						mbd = new RootBeanDefinition(bd);
@@ -2214,10 +2219,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * just amounts to a local hash lookup: The operation is therefore part of the
 	 * public interface there. The same implementation can serve for both this
 	 * template method and the public interface method in that case.
-	 * <p>
-	 * 返回给定 Bean 名称的 Bean 定义。
-	 * 子类通常应该实现缓存，因为每次需要 Bean 定义元数据时，此类都会调用此方法。根据具体 Bean 工厂实现的性质，此操作可能代价高昂（例如，由于外部注册表中的目录查找）。
-	 * 但是，对于可列出的 Bean 工厂，这通常只相当于本地哈希查找：因此，该操作是公共接口的一部分。在这种情况下，相同的实现可以同时用于此模板方法和公共接口方法。
+	 *
+	 * 返回给定bean名称的bean定义。
+	 * 子类通常应该实现缓存，因为每次需要bean定义元数据时，这个方法都会被这个类调用。
+	 * 根据具体的Bean工厂实现的性质，此操作可能会很昂贵（例如，由于在外部注册表中进行目录查找）。
+	 * 但是，对于可列出的Bean工厂，这通常只是一个本地哈希查找：因此，该操作是公共接口的一部分。
+	 * 在这种情况下，相同的实现可以同时用于此模板方法和公共接口方法。
 	 *
 	 * @param beanName the name of the bean to find a definition for
 	 * @return the BeanDefinition for this prototype name (never {@code null})
