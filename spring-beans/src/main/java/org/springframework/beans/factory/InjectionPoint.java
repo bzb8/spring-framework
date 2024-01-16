@@ -113,7 +113,6 @@ public class InjectionPoint {
 
 	/**
 	 * Return the wrapped MethodParameter, assuming it is present.
-	 *
 	 * 返回包装的 MethodParameter（假设它存在）。
 	 *
 	 * @return the MethodParameter (never {@code null})
@@ -127,11 +126,13 @@ public class InjectionPoint {
 
 	/**
 	 * Obtain the annotations associated with the wrapped field or method/constructor parameter.
+	 * 获取与包装字段或方法/构造函数参数关联的注释。
 	 */
 	public Annotation[] getAnnotations() {
 		if (this.field != null) {
 			Annotation[] fieldAnnotations = this.fieldAnnotations;
 			if (fieldAnnotations == null) {
+				// 获取字段上注解
 				fieldAnnotations = this.field.getAnnotations();
 				this.fieldAnnotations = fieldAnnotations;
 			}

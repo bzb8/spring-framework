@@ -168,6 +168,9 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * any variant of a parameter-level {@code Nullable} annotation (such as from
 	 * JSR-305 or the FindBugs set of annotations), or a language-level nullable
 	 * type declaration in Kotlin.
+	 * 返回此依赖项是否为必需项。
+	 * 可选语义是从 Java 8 的 Optional、参数级 Nullable 注解或 Kotlin 中的语言级可空类型声明派生出来的。
+	 * 这意味着该依赖对于描述的功能是必需的。
 	 */
 	public boolean isRequired() {
 		if (!this.required) {
