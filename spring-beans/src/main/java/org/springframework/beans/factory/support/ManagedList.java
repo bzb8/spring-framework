@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 /**
  * Tag collection class used to hold managed List elements, which may
  * include runtime bean references (to be resolved into bean objects).
+ * -- 用于保存托管 List 元素的标记集合类，其中可能包括运行时 Bean 引用（要解析为 Bean 对象）。
  *
  * @author Rod Johnson
  * @author Rob Harrop
@@ -93,6 +94,7 @@ public class ManagedList<E> extends ArrayList<E> implements Mergeable, BeanMetad
 
 	/**
 	 * Return the default element type name (class name) to be used for this list.
+	 * 返回要用于此列表的默认元素类型名称（类名）。
 	 */
 	@Nullable
 	public String getElementTypeName() {

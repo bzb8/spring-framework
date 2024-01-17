@@ -30,6 +30,10 @@ import org.springframework.util.ObjectUtils;
  * <p>This holder will just store the String value and the target type.
  * The actual conversion will be performed by the bean factory.
  *
+ * 带类型的String值的持有者。可以添加到bean定义中，以明确指定String值的目标类型，例如集合元素。
+ * <p>此持有者只会存储String值和目标类型。
+ * 实际的转换将由bean工厂执行。
+ *
  * @author Juergen Hoeller
  * @since 1.2
  * @see BeanDefinition#getPropertyValues
@@ -144,6 +148,7 @@ public class TypedStringValue implements BeanMetadataElement {
 
 	/**
 	 * Return whether this typed String value carries a target type .
+	 * 返回此类型化的 String 值是否带有目标类型。
 	 */
 	public boolean hasTargetType() {
 		return (this.targetType instanceof Class);
@@ -201,6 +206,7 @@ public class TypedStringValue implements BeanMetadataElement {
 	/**
 	 * Mark this value as dynamic, i.e. as containing an expression
 	 * and hence not being subject to caching.
+	 * 将此值标记为动态值，即包含表达式，因此不受缓存的约束。
 	 */
 	public void setDynamic() {
 		this.dynamic = true;

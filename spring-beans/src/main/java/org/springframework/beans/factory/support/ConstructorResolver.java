@@ -373,8 +373,7 @@ class ConstructorResolver {
 	 * Retrieve all candidate methods for the given class, considering
 	 * the {@link RootBeanDefinition#isNonPublicAccessAllowed()} flag.
 	 * Called as the starting point for factory method determination.
-	 *
-	 * 检索给定类的所有候选方法，考虑 {@link RootBeanDefinition#isNonPublicAccessAllowed()} 标志。称为工厂方法确定的起点。
+	 * 检索给定类的所有候选方法，考虑到{@link RootBeanDefinition#isNonPublicAccessAllowed()}标志。作为确定工厂方法的起点调用。
 	 */
 	private Method[] getCandidateMethods(Class<?> factoryClass, RootBeanDefinition mbd) {
 		if (System.getSecurityManager() != null) {
@@ -459,7 +458,7 @@ class ConstructorResolver {
 
 		Method factoryMethodToUse = null;
 		ArgumentsHolder argsHolderToUse = null;
-		// 入参参数列表
+		// 已经解析（依赖注入过的）的参数列表
 		Object[] argsToUse = null;
 
 		if (explicitArgs != null) {
@@ -500,23 +499,29 @@ class ConstructorResolver {
 			}
 			if (candidates == null) {
 				candidates = new ArrayList<>();
+				// 获取factoryClass中的所有方法，可能包含私有、还包含父级的
 				Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);
 				for (Method candidate : rawCandidates) {
+					// isStatic相同并且方法名称相同
 					if (Modifier.isStatic(candidate.getModifiers()) == isStatic && mbd.isFactoryMethod(candidate)) {
 						candidates.add(candidate);
 					}
 				}
 			}
 
+			// 候选工厂方法只有1个，并且explicitArgs == null， 并且没有constructorArgumentValues
 			if (candidates.size() == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Method uniqueCandidate = candidates.get(0);
+				// 方法参数数量 == 0
 				if (uniqueCandidate.getParameterCount() == 0) {
+					// 缓存
 					mbd.factoryMethodToIntrospect = uniqueCandidate;
 					synchronized (mbd.constructorArgumentLock) {
 						mbd.resolvedConstructorOrFactoryMethod = uniqueCandidate;
 						mbd.constructorArgumentsResolved = true;
 						mbd.resolvedConstructorArguments = EMPTY_ARGS;
 					}
+					// 使用反射调用工厂方法，直接返回
 					bw.setBeanInstance(instantiate(beanName, mbd, factoryBean, uniqueCandidate, EMPTY_ARGS));
 					return bw;
 				}
@@ -699,6 +704,8 @@ class ConstructorResolver {
 	 * Resolve the constructor arguments for this bean into the resolvedValues object.
 	 * This may involve looking up other beans.
 	 * <p>This method is also used for handling invocations of static factory methods.
+	 * 将此bean的构造函数参数解析为resolvedValues对象。这可能涉及查找其他bean。
+	 * <p>此方法也用于处理静态工厂方法的调用。
 	 */
 	private int resolveConstructorArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
 			ConstructorArgumentValues cargs, ConstructorArgumentValues resolvedValues) {
@@ -1026,17 +1033,25 @@ class ConstructorResolver {
 
 	/**
 	 * Private inner class for holding argument combinations.
-	 *
 	 * 用于保存参数组合的私有内部类。
 	 */
 	private static class ArgumentsHolder {
-
+		/**
+		 * 原始参数值数组
+		 */
 		public final Object[] rawArguments;
 
+		/**
+		 * 经过转换后参数值数组
+		 */
 		public final Object[] arguments;
-
+		/**
+		 * 准备好的参数值数组，保存着 由解析的自动装配参数替换的标记和源参数值
+		 */
 		public final Object[] preparedArguments;
-
+		/**
+		 * 需要解析的标记，默认为false
+		 */
 		public boolean resolveNecessary = false;
 
 		public ArgumentsHolder(int size) {

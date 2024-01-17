@@ -93,34 +93,40 @@ class BeanDefinitionValueResolver {
 	/**
 	 * Given a PropertyValue, return a value, resolving any references to other
 	 * beans in the factory if necessary. The value could be:
-	 *
-	 * 给定一个 PropertyValue，返回一个值，如有必要，解析对工厂中其他 Bean 的任何引用。该值可以是：
+	 * -- 给定一个PropertyValue，返回一个值，如果需要，解析对工厂中其他bean的引用。该值可以是：
 	 *
 	 * <li>A BeanDefinition, which leads to the creation of a corresponding
 	 * new bean instance. Singleton flags and names of such "inner beans"
 	 * are always ignored: Inner beans are anonymous prototypes.
+	 * -- BeanDefinition，它导致创建相应的新bean实例。这些"内部bean"的单例标志和名称总是被忽略的：内部bean是匿名原型。
 	 *
-	 * 一个 BeanDefinition，它会导致创建相应的新 Bean 实例。这种“内部 bean”的单例标志和名称总是被忽略：内部 bean 是匿名原型。
-	 *
-	 * <li>A RuntimeBeanReference, which must be resolved.
+	 * <li>A RuntimeBeanReference, which must be resolved. -- RuntimeBeanReference，需要解析。
 	 * <li>A ManagedList. This is a special collection that may contain
-	 * RuntimeBeanReferences or Collections that will need to be resolved. 一个 ManagedList。这是一个特殊的集合，可能包含需要解析的 RuntimeBeanReferences 或 Collections。
+	 * RuntimeBeanReferences or Collections that will need to be resolved.
+	 * -- ManagedList。这是一个特殊的集合，可能包含需要解析的RuntimeBeanReferences或集合。
+	 *
 	 * <li>A ManagedSet. May also contain RuntimeBeanReferences or
 	 * Collections that will need to be resolved.
-	 * <li>A ManagedMap. In this case the value may be a RuntimeBeanReference 一个普通对象或 {@code null}，在这种情况下，它将被单独保留。
+	 * -- ManagedSet。也可能包含需要解析的RuntimeBeanReferences或集合。
+	 *
+	 * <li>A ManagedMap. In this case the value may be a RuntimeBeanReference
 	 * or Collection that will need to be resolved.
+	 * -- 在这种情况下，值可能是需要解析的RuntimeBeanReference或集合。
+	 *
 	 * <li>An ordinary object or {@code null}, in which case it's left alone.
-	 * @param argName the name of the argument that the value is defined for 为其定义值的参数的名称
-	 * @param value the value object to resolve
-	 * @return the resolved object
+	 * -- 普通对象或null，这种情况下保持不变。
+	 * @param argName the name of the argument that the value is defined for -- 定义该值的参数的名称
+	 * @param value the value object to resolve -- 要解析的值对象
+	 * @return the resolved object -- 返回解析后的对象
 	 */
 	@Nullable
 	public Object resolveValueIfNecessary(Object argName, @Nullable Object value) {
 		// We must check each value to see whether it requires a runtime reference
 		// to another bean to be resolved.
-		// 我们必须检查每个值，看看它是否需要对另一个 Bean 的运行时引用才能解析。
+		// 我们必须检查每个值，看看它是否需要解析另一个bean的运行时引用。
 		if (value instanceof RuntimeBeanReference) {
 			RuntimeBeanReference ref = (RuntimeBeanReference) value;
+			// 根据类型或 beanName 创建bean
 			return resolveReference(argName, ref);
 		}
 		else if (value instanceof RuntimeBeanNameReference) {
@@ -130,6 +136,7 @@ class BeanDefinitionValueResolver {
 				throw new BeanDefinitionStoreException(
 						"Invalid bean name '" + refName + "' in bean reference for " + argName);
 			}
+			// 返回经过bean表达式解析器解析后的 beanName
 			return refName;
 		}
 		else if (value instanceof BeanDefinitionHolder) {
@@ -140,6 +147,7 @@ class BeanDefinitionValueResolver {
 		}
 		else if (value instanceof BeanDefinition) {
 			// Resolve plain BeanDefinition, without contained name: use dummy name.
+			// 解析不包含名称的纯 BeanDefinition：使用虚拟名称。
 			BeanDefinition bd = (BeanDefinition) value;
 			String innerBeanName = "(inner bean)" + BeanFactoryUtils.GENERATED_BEAN_NAME_SEPARATOR +
 					ObjectUtils.getIdentityHexString(bd);
@@ -158,9 +166,12 @@ class BeanDefinitionValueResolver {
 		}
 		else if (value instanceof ManagedArray) {
 			// May need to resolve contained runtime references.
+			// 可能需要解析包含的运行时引用。
 			ManagedArray array = (ManagedArray) value;
+			// 是否有元素类型
 			Class<?> elementType = array.resolvedElementType;
 			if (elementType == null) {
+				// 是否有元素类型名称
 				String elementTypeName = array.getElementTypeName();
 				if (StringUtils.hasText(elementTypeName)) {
 					try {
@@ -312,14 +323,15 @@ class BeanDefinitionValueResolver {
 
 	/**
 	 * Resolve a reference to another bean in the factory.
-	 *
-	 * 解析对工厂中另一个 Bean 的引用。
+	 * 解析工厂中另一个 Bean 的引用。
 	 */
 	@Nullable
 	private Object resolveReference(Object argName, RuntimeBeanReference ref) {
 		try {
 			Object bean;
+			// 获取 bean 的类型
 			Class<?> beanType = ref.getBeanType();
+			// 引用指向父工厂的 bean
 			if (ref.isToParent()) {
 				BeanFactory parent = this.beanFactory.getParentBeanFactory();
 				if (parent == null) {
@@ -328,9 +340,11 @@ class BeanDefinitionValueResolver {
 							"Cannot resolve reference to bean " + ref +
 									" in parent factory: no parent factory available");
 				}
+				// beanType不为空，则根据getBean(Class<T> requiredType) 返回bean实例
 				if (beanType != null) {
 					bean = parent.getBean(beanType);
 				}
+				// 否则，根据Object getBean(String name) 返回bean实例
 				else {
 					bean = parent.getBean(String.valueOf(doEvaluate(ref.getBeanName())));
 				}
@@ -361,8 +375,10 @@ class BeanDefinitionValueResolver {
 	}
 
 	/**
-	 * Resolve an inner bean definition. 解析内部 Bean 定义。
-	 * @param argName the name of the argument that the inner bean is defined for 为其定义内部 Bean 的参数的名称
+	 * Resolve an inner bean definition.
+	 * 解析内部 Bean 定义。
+	 *
+	 * @param argName the name of the argument that the inner bean is defined for -- 为其定义内部 Bean 的参数的名称
 	 * @param innerBeanName the name of the inner bean
 	 * @param innerBd the bean definition for the inner bean
 	 * @return the resolved inner bean instance
@@ -414,11 +430,10 @@ class BeanDefinitionValueResolver {
 	/**
 	 * Checks the given bean name whether it is unique. If not already unique,
 	 * a counter is added, increasing the counter until the name is unique.
-	 *
 	 * 检查给定的 Bean 名称是否唯一。如果还不是唯一的，则添加一个计数器，增加计数器，直到名称唯一为止。
 	 *
 	 * @param innerBeanName the original name for the inner bean
-	 * @return the adapted name for the inner bean Bean的改编名称
+	 * @return the adapted name for the inner bean -- Bean的改编名称
 	 */
 	private String adaptInnerBeanName(String innerBeanName) {
 		String actualInnerBeanName = innerBeanName;
@@ -433,6 +448,7 @@ class BeanDefinitionValueResolver {
 
 	/**
 	 * For each element in the managed array, resolve reference if necessary.
+	 * 对于托管数组中的每个元素，如有必要，解析引用。
 	 */
 	private Object resolveManagedArray(Object argName, List<?> ml, Class<?> elementType) {
 		Object resolved = Array.newInstance(elementType, ml.size());
@@ -482,6 +498,7 @@ class BeanDefinitionValueResolver {
 
 	/**
 	 * Holder class used for delayed toString building.
+	 * 用于延迟构建toString的Holder类。
 	 */
 	private static class KeyedArgName {
 

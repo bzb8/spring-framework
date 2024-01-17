@@ -94,6 +94,8 @@ public class RuntimeBeanReference implements BeanReference {
 	/**
 	 * Return the requested bean name, or the fully-qualified type name
 	 * in case of by-type resolution.
+	 * -- 返回请求的 Bean 名称，或者在按类型解析的情况下返回完全限定的类型名称
+	 *
 	 * @see #getBeanType()
 	 */
 	@Override
@@ -104,6 +106,7 @@ public class RuntimeBeanReference implements BeanReference {
 	/**
 	 * Return the requested bean type if resolution by type is demanded.
 	 * @since 5.2
+	 * 如果需要按类型解析，则返回请求的 Bean 类型。
 	 */
 	@Nullable
 	public Class<?> getBeanType() {
@@ -112,7 +115,6 @@ public class RuntimeBeanReference implements BeanReference {
 
 	/**
 	 * Return whether this is an explicit reference to a bean in the parent factory.
-	 *
 	 * 返回这是否是对父工厂中 Bean 的显式引用。
 	 */
 	public boolean isToParent() {

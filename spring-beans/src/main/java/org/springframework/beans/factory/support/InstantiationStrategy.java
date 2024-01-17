@@ -70,7 +70,6 @@ public interface InstantiationStrategy {
 	/**
 	 * Return an instance of the bean with the given name in this factory,
 	 * creating it via the given factory method.
-	 *
 	 * 在此工厂中返回具有给定名称的 Bean 实例，通过给定的工厂方法创建它。
 	 *
 	 * @param bd the bean definition

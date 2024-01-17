@@ -462,8 +462,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * e.g. between an inner bean and its containing outer bean.
 	 * <p>Also registers the containing bean as dependent on the contained bean
 	 * in terms of destruction order.
-	 * @param containedBeanName the name of the contained (inner) bean
-	 * @param containingBeanName the name of the containing (outer) bean
+	 * -- 注册两个bean之间的包含关系，例如，在内部bean和其包含的外部bean之间。
+	 * 还将包含bean注册为依赖于被包含bean的bean，在销毁顺序方面。
+	 *
+	 * @param containedBeanName the name of the contained (inner) bean -- 被包含的（内部）bean的名称
+	 * @param containingBeanName the name of the containing (outer) bean -- 包含的（外部）bean的名称
 	 * @see #registerDependentBean
 	 */
 	public void registerContainedBean(String containedBeanName, String containingBeanName) {

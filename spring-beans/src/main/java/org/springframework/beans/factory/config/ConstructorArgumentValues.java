@@ -38,6 +38,7 @@ import org.springframework.util.ObjectUtils;
  *
  * <p>Supports values for a specific index in the constructor argument list
  * as well as for generic argument matches by type.
+ * 支持构造函数参数列表中特定索引的值，以及按类型匹配的通用参数。
  *
  * @author Juergen Hoeller
  * @since 09.11.2003
@@ -179,6 +180,9 @@ public class ConstructorArgumentValues {
 	 * Return the map of indexed argument values.
 	 * @return unmodifiable Map with Integer index as key and ValueHolder as value
 	 * @see ValueHolder
+	 * --
+	 * 返回索引参数值的映射。
+	 * 返回Integer索引作为键和ValueHolder作为值的不可修改Map
 	 */
 	public Map<Integer, ValueHolder> getIndexedArgumentValues() {
 		return Collections.unmodifiableMap(this.indexedArgumentValues);
@@ -438,6 +442,7 @@ public class ConstructorArgumentValues {
 	/**
 	 * Holder for a constructor argument value, with an optional type
 	 * attribute indicating the target type of the actual constructor argument.
+	 * 构造函数参数值的持有者，带有可选的类型属性，指示实际构造函数参数的目标类型。
 	 */
 	public static class ValueHolder implements BeanMetadataElement {
 
