@@ -31,6 +31,9 @@ import org.springframework.lang.Nullable;
  * <p>As of 5.1, this interface extends {@link Iterable} and provides {@link Stream}
  * support. It can be therefore be used in {@code for} loops, provides {@link #forEach}
  * iteration and allows for collection-style {@link #stream} access.
+ * 一个专门为注入点设计的{@link ObjectFactory}变体，允许进行编程的可选性和宽松的非唯一处理。
+ * 从5.1版本开始，该接口扩展了{@link Iterable}并提供了{@link Stream}支持。
+ * 因此，它可以在{@code for}循环中使用，提供{@link #forEach}迭代，并允许使用{@link #stream}进行集合样式的访问。
  *
  * @author Juergen Hoeller
  * @since 4.3
@@ -45,7 +48,10 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	 * managed by this factory.
 	 * <p>Allows for specifying explicit construction arguments, along the
 	 * lines of {@link BeanFactory#getBean(String, Object...)}.
-	 * @param args arguments to use when creating a corresponding instance
+	 * 返回此工厂管理的对象的实例（可能是共享的或独立的）。
+	 * 允许按照BeanFactory.getBean(String, Object...)的方式指定显式构造参数。
+	 *
+	 * @param args arguments to use when creating a corresponding instance -- 创建相应实例时使用的参数
 	 * @return an instance of the bean
 	 * @throws BeansException in case of creation errors
 	 * @see #getObject()
@@ -55,7 +61,7 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * Return an instance (possibly shared or independent) of the object
 	 * managed by this factory.
-	 * @return an instance of the bean, or {@code null} if not available
+	 * @return an instance of the bean, or {@code null} if not available -- bean 的实例，如果不可用则为null
 	 * @throws BeansException in case of creation errors
 	 * @see #getObject()
 	 */
@@ -97,8 +103,12 @@ public interface ObjectProvider<T> extends ObjectFactory<T>, Iterable<T> {
 	/**
 	 * Return an instance (possibly shared or independent) of the object
 	 * managed by this factory.
+	 * 返回此工厂管理的对象的实例（可能是共享的或独立的）
+	 *
 	 * @return an instance of the bean, or {@code null} if not available or
 	 * not unique (i.e. multiple candidates found with none marked as primary)
+	 * 返回一个bean 的实例，如果不可用或不唯一，则为 {@code null} （即找到多个候选，但没有一个被标记为主要）
+	 *
 	 * @throws BeansException in case of creation errors
 	 * @see #getObject()
 	 */

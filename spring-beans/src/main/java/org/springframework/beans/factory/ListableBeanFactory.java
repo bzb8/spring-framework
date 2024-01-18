@@ -178,14 +178,27 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * by other means than bean definitions.
 	 * <p>Bean names returned by this method should always return bean names <i>in the
 	 * order of definition</i> in the backend configuration, as far as possible.
-	 * @param type the generically typed class or interface to match
+	 * --
+	 * 返回与给定类型匹配的bean的名称（包括子类），根据bean定义或FactoryBeans的 `getObjectType` 值进行判断。
+	 * 请注意，此方法仅检查顶级bean，不检查可能与指定类型匹配的嵌套bean。
+	 * 如果设置了 `allowEagerInit` 标志，此方法将考虑由FactoryBeans创建的对象，这意味着FactoryBeans将被初始化。
+	 * 如果由FactoryBean创建的对象与指定类型不匹配，则原始的FactoryBean本身将与该类型进行匹配。如果未设置 `allowEagerInit` ，
+	 * 则仅检查原始的FactoryBeans，无需初始化每个FactoryBean。
+	 * 此方法不考虑此工厂可能参与的任何层次结构。如果要包括祖先工厂中的bean，可以使用 `BeanFactoryUtils.beanNamesForTypeIncludingAncestors()` 。
+	 * 请注意，此方法不会忽略通过其他方式注册的单例bean，而不是通过bean定义。
+	 * 返回的bean名称应尽可能按照后端配置的定义顺序返回。
+	 *
+	 * @param type the generically typed class or interface to match -- 要匹配的泛型类型类或接口
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
+	 * or just singletons (also applies to FactoryBeans) -- 是否也包含原型或作用域 bean 还是仅包含单例（也适用于 FactoryBeans）
 	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
-	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
-	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
-	 * eagerly initialized to determine their type: So be aware that passing in "true"
-	 * for this flag will initialize FactoryBeans and "factory-bean" references.
+	 * <i>objects created by factorybeans</i> (or by factory methods with a
+	 * "factory-bean" reference) for the type check. note that factorybeans need to be
+	 * eagerly initialized to determine their type: so be aware that passing in "true"
+	 * for this flag will initialize factorybeans and "factory-bean" references.
+	 * 是否初始化 延迟初始化单例和由FactoryBean创建的对象（或由具有factory-bean引用的工厂方法创建的对象）进行类型检查。
+	 * 请注意，FactoryBean需要被急切地初始化才能确定其类型：因此请注意，将"true"传递给此标志将初始化FactoryBean和"factory-bean"引用。
+	 *
 	 * @return the names of beans (or objects created by FactoryBeans) matching
 	 * the given object type (including subclasses), or an empty array if none
 	 * @since 5.2
@@ -345,6 +358,21 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * @throws BeansException if a bean could not be created
 	 * @see FactoryBean#getObjectType
 	 * @see BeanFactoryUtils#beansOfTypeIncludingAncestors(ListableBeanFactory, Class, boolean, boolean)
+	 * --
+	 * 返回与给定对象类型匹配的bean实例（包括子类），根据bean定义或FactoryBeans的{@code getObjectType}值进行判断。
+	 * 请注意，此方法仅检查顶级bean，不检查可能与指定类型匹配的嵌套bean。
+	 * 如果设置了"allowEagerInit"标志，此方法将考虑由FactoryBeans创建的对象，这意味着FactoryBeans将被初始化。如果由FactoryBean创建的对象与指定类型不匹配，则原始的FactoryBean本身将与该类型进行匹配。如果未设置"allowEagerInit"，则仅检查原始的FactoryBeans，无需初始化每个FactoryBean。
+	 * 此方法不考虑此工厂可能参与的任何层次结构。如果要包括祖先工厂中的bean，可以使用 `BeanFactoryUtils.beansOfTypeIncludingAncestors()` 。
+	 * 请注意，此方法不会忽略通过其他方式注册的单例bean，而不是通过bean定义。
+	 * 此方法返回的Map应该尽可能按照后端配置的定义顺序返回bean名称和相应的bean实例。
+	 *
+	 * @param type 要匹配的类或接口，或{@code null}表示所有具体bean
+	 * @param includeNonSingletons 是否包括原型或作用域bean，或仅包括单例（也适用于FactoryBeans）
+	 * @param allowEagerInit 是否初始化<i>延迟初始化单例</i>和<i>由FactoryBean创建的对象</i>（或由具有<i>factory-bean</i>引用的工厂方法创建的对象）进行类型检查。请注意，FactoryBean需要被<i>急切地初始化</i>才能确定其类型：因此请注意，将"true"传递给此标志将初始化FactoryBean和"factory-bean"引用。
+	 * @return 包含匹配bean的Map，其中包含bean名称作为键和相应的bean实例作为值
+	 * @throws BeansException 如果无法创建bean
+	 * @see FactoryBean#getObjectType
+	 * @see BeanFactoryUtils#beansOfTypeIncludingAncestors(ListableBeanFactory, Class, boolean, boolean)
 	 */
 	<T> Map<String, T> getBeansOfType(@Nullable Class<T> type, boolean includeNonSingletons, boolean allowEagerInit)
 			throws BeansException;
@@ -399,12 +427,20 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * Find an {@link Annotation} of {@code annotationType} on the specified bean,
 	 * traversing its interfaces and superclasses if no annotation can be found on
 	 * the given class itself, as well as checking the bean's factory method (if any).
-	 * @param beanName the name of the bean to look for annotations on
+	 * --
+	 * 在指定的bean上查找{@code annotationType}的{@link Annotation}，如果在给定的类本身上找不到注解，则遍历其接口和超类，
+	 * 以及检查bean的工厂方法（如果有）。
+	 *
+	 * @param beanName the name of the bean to look for annotations on -- 要查找注解的bean的名称
 	 * @param annotationType the type of annotation to look for
 	 * (at class, interface or factory method level of the specified bean)
+	 *                       要查找的注解类型 （在指定bean的类、接口或工厂方法级别）
 	 * @param allowFactoryBeanInit whether a {@code FactoryBean} may get initialized
 	 * just for the purpose of determining its object type
+	 *                             是否可以初始化{@code FactoryBean} 仅用于确定其对象类型
 	 * @return the annotation of the given type if found, or {@code null} otherwise
+	 * 如果找到给定类型的注解，则返回该注解，否则返回{@code null}
+	 *
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
 	 * @since 5.3.14
 	 * @see #getBeanNamesForAnnotation

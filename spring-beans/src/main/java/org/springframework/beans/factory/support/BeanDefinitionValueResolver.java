@@ -104,14 +104,15 @@ class BeanDefinitionValueResolver {
 	 *
 	 * <li>A RuntimeBeanReference, which must be resolved.
 	 * <li>A ManagedList. This is a special collection that may contain
-	 * RuntimeBeanReferences or Collections that will need to be resolved. 一个 ManagedList。这是一个特殊的集合，可能包含需要解析的 RuntimeBeanReferences 或 Collections。
+	 * RuntimeBeanReferences or Collections that will need to be resolved. 一个 ManagedList。
+	 * 这是一个特殊的集合，可能包含需要解析的 RuntimeBeanReferences 或 Collections。
 	 * <li>A ManagedSet. May also contain RuntimeBeanReferences or
 	 * Collections that will need to be resolved.
 	 * <li>A ManagedMap. In this case the value may be a RuntimeBeanReference 一个普通对象或 {@code null}，在这种情况下，它将被单独保留。
 	 * or Collection that will need to be resolved.
 	 * <li>An ordinary object or {@code null}, in which case it's left alone.
-	 * @param argName the name of the argument that the value is defined for 为其定义值的参数的名称
-	 * @param value the value object to resolve
+	 * @param argName the name of the argument that the value is defined for -- 为其定义值的参数的名称
+	 * @param value the value object to resolve -- 要解析的值对象
 	 * @return the resolved object
 	 */
 	@Nullable
