@@ -180,7 +180,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	 * annotation or meta-annotation of the specified type, or
 	 * {@link MergedAnnotation#missing()} if none is present.
 	 *
-	 * 获取 {@linkplain MergedAnnotationSelectors#nearest() nearest} 匹配的指定类型的注解或元注解，如果不存在，则获取 {@link MergedAnnotation#missing()}。
+	 * 获取 {@linkplain MergedAnnotationSelectors#nearest() nearest} 匹配的指定类型的注解或元注解，
+	 * 如果不存在，则获取 {@link MergedAnnotation#missing()}。
 	 *
 	 * @param annotationType the annotation type to get 要获取的注解类型
 	 * @return a {@link MergedAnnotation} instance

@@ -191,15 +191,23 @@ public abstract class BeanFactoryUtils {
 	 * will be matched against the type. If "allowEagerInit" is not set,
 	 * only raw FactoryBeans will be checked (which doesn't require initialization
 	 * of each FactoryBean).
+	 * 获取给定类型的所有bean名称，包括在祖先工厂中定义的bean。如果存在重写的bean定义，将返回唯一的名称。
+	 * 如果设置了"allowEagerInit"标志，将考虑由FactoryBean创建的对象，这意味着FactoryBean将被初始化。
+	 * 如果由FactoryBean创建的对象不匹配，将使用原始FactoryBean与该类型进行匹配。如果未设置"allowEagerInit"，
+	 * 只会检查原始FactoryBean（不需要初始化每个FactoryBean）。
+	 *
 	 * @param lbf the bean factory
-	 * @param type the type that beans must match (as a {@code ResolvableType})
+	 * @param type the type that beans must match (as a {@code ResolvableType}) -- type bean必须匹配的类型（作为{@code ResolvableType}）
 	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
+	 * or just singletons (also applies to FactoryBeans) -- 是否包括原型或作用域bean，或仅包括单例bean（也适用于FactoryBean）
 	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
 	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
 	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
 	 * eagerly initialized to determine their type: So be aware that passing in "true"
 	 * for this flag will initialize FactoryBeans and "factory-bean" references.
+	 * 是否初始化延迟初始化单例和由FactoryBean创建的对象（或由"factory-bean"引用的工厂方法）进行类型检查。
+	 * 请注意，为了确定FactoryBean的类型，需要急切地初始化FactoryBean和"factory-bean"引用。
+	 *
 	 * @return the array of matching bean names, or an empty array if none
 	 * @since 5.2
 	 * @see ListableBeanFactory#getBeanNamesForType(ResolvableType, boolean, boolean)
@@ -209,6 +217,7 @@ public abstract class BeanFactoryUtils {
 
 		Assert.notNull(lbf, "ListableBeanFactory must not be null");
 		String[] result = lbf.getBeanNamesForType(type, includeNonSingletons, allowEagerInit);
+		// 递归获取父类的符合指定类型的BeanNames，并合并
 		if (lbf instanceof HierarchicalBeanFactory) {
 			HierarchicalBeanFactory hbf = (HierarchicalBeanFactory) lbf;
 			if (hbf.getParentBeanFactory() instanceof ListableBeanFactory) {
@@ -538,6 +547,7 @@ public abstract class BeanFactoryUtils {
 
 	/**
 	 * Merge the given bean names result with the given parent result.
+	 * 将给定的 bean 名称结果与给定的父结果合并。
 	 * @param result the local bean name result
 	 * @param parentResult the parent bean name result (possibly empty)
 	 * @param hbf the local bean factory

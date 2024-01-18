@@ -890,9 +890,11 @@ class ConstructorResolver {
 				}
 				catch (BeansException ex) {
 					// Unexpected target bean mismatch for cached argument -> re-resolve
+					// 缓存参数的目标 bean 意外不匹配 -> 重新解析
 					Set<String> autowiredBeanNames = null;
 					if (descriptor.hasShortcut()) {
 						// Reset shortcut and try to re-resolve it in this thread...
+						// 重置快捷方式并尝试在此线程中重新解决它。
 						descriptor.setShortcut(null);
 						autowiredBeanNames = new LinkedHashSet<>(2);
 					}

@@ -508,9 +508,6 @@ public interface MergedAnnotation<A extends Annotation> {
 	/**
 	 * Create a type-safe synthesized version of this merged annotation that can
 	 * be used directly in code.
-	 *
-	 * 创建此合并注解的类型安全合成版本，该版本可直接在代码中使用。
-	 *
 	 * <p>The result is synthesized using a JDK {@link java.lang.reflect.Proxy Proxy}
 	 * and as a result may incur a computational cost when first invoked.
 	 * <p>If this merged annotation was created {@linkplain #of(AnnotatedElement, Class, Map)
@@ -520,27 +517,15 @@ public interface MergedAnnotation<A extends Annotation> {
 	 * an annotation instance, that annotation will be returned unmodified if it is
 	 * not <em>synthesizable</em>. An annotation is considered synthesizable if
 	 * it has not already been synthesized and one of the following is true.
-	 *
-	 * 结果是使用 JDK {@link java.lang.reflect.Proxy Proxy} 合成的，因此在首次调用时可能会产生计算成本。如果此合并的注解是从注解属性或默认属性值的映射中创建的
-	 * {@linkplain #of(AnnotatedElement, Class, Map)，则这些属性将始终合成到注解实例中。<p>如果此合并的注解是 {@linkplain #from(Annotation) from} 一个注解实例创建的，则如果该注解不可合成，
-	 * 则该注解将原封不动地返回。如果注释尚未被合成，并且满足以下条件之一，则认为该注释是可合成的。
-	 *
 	 * <ul>
 	 * <li>The annotation declares attributes annotated with {@link AliasFor @AliasFor}. 注解声明使用 {@link AliasFor @AliasFor} 注解的属性。</li>
 	 * <li>The annotation is a composed annotation that relies on convention-based
 	 * annotation attribute overrides in meta-annotations.</li>
-	 *
-	 * 注解是一种组合注解，它依赖于元注解中基于约定的注解属性覆盖。
-	 *
 	 * <li>The annotation declares attributes that are annotations or arrays of
 	 * annotations that are themselves synthesizable.</li>
-	 * 注解声明属性是注解或注解数组，这些注解本身是可合成的。
 	 * </ul>
 	 * @return a synthesized version of the annotation or the original annotation
 	 * unmodified
-	 *
-	 * 注释的合成版本或未经修改的原始注解
-	 *
 	 * @throws NoSuchElementException on a missing annotation
 	 */
 	A synthesize() throws NoSuchElementException;

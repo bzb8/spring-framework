@@ -589,6 +589,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		if (namedBean != null) {
 			return namedBean.getBeanInstance();
 		}
+		// 找不到则访问父类
 		BeanFactory parent = getParentBeanFactory();
 		if (parent instanceof DefaultListableBeanFactory) {
 			return ((DefaultListableBeanFactory) parent).resolveBean(requiredType, args, nonUniqueAsNull);
@@ -915,6 +916,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return getBeansOfType(type, true, true);
 	}
 
+	/**
+	 * beanName -> BeanInstance
+	 * @param type the class or interface to match, or {@code null} for all concrete beans
+	 * @param includeNonSingletons whether to include prototype or scoped beans too
+	 * or just singletons (also applies to FactoryBeans)
+	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
+	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
+	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
+	 * eagerly initialized to determine their type: So be aware that passing in "true"
+	 * for this flag will initialize FactoryBeans and "factory-bean" references.
+	 * @return
+	 * @param <T>
+	 * @throws BeansException
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> Map<String, T> getBeansOfType(
@@ -1000,18 +1015,24 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	private <A extends Annotation> MergedAnnotation<A> findMergedAnnotationOnBean(
 			String beanName, Class<A> annotationType, boolean allowFactoryBeanInit) {
-
+		// 获取Bean的类型
 		Class<?> beanType = getType(beanName, allowFactoryBeanInit);
+		// Bean类型不为空
 		if (beanType != null) {
+			// 从Class中获取指定类型的注解
 			MergedAnnotation<A> annotation =
 					MergedAnnotations.from(beanType, SearchStrategy.TYPE_HIERARCHY).get(annotationType);
 			if (annotation.isPresent()) {
 				return annotation;
 			}
 		}
+
+		// bean类型为空
+		// 包含bean定义
 		if (containsBeanDefinition(beanName)) {
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			// Check raw bean class, e.g. in case of a proxy.
+			// 检查原始bean类别，例如如果有代理
 			if (bd.hasBeanClass()) {
 				Class<?> beanClass = bd.getBeanClass();
 				if (beanClass != beanType) {
@@ -1023,6 +1044,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				}
 			}
 			// Check annotations declared on factory method, if any.
+			// 检查工厂方法上声明的注解（如果有）。
 			Method factoryMethod = bd.getResolvedFactoryMethod();
 			if (factoryMethod != null) {
 				MergedAnnotation<A> annotation =
@@ -1713,7 +1735,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * @param descriptor the descriptor for the dependency (field/method/constructor)
 	 *                   -- 依赖项的描述符(字段/方法/构造函数)
 	 * @param requestingBeanName the name of the bean which declares the given dependency
-	 *                           -- 声明给定依赖项的bean名,即需要Field/MethodParamter所对应的bean对象来构建的Bean对象的Bean名
+	 *                           -- 声明给定依赖项的bean名,即需要Field/MethodParameter所对应的bean对象来构建的Bean对象的Bean名
 	 * @param autowiredBeanNames a Set that all names of autowired beans (used for
 	 * resolving the given dependency) are supposed to be added to
 	 *     一个集合，所有自动装配的bean名(用于解决给定依赖关系)都应添加.即自动注入匹配成功的候选Bean名集合。
@@ -1732,17 +1754,38 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		descriptor.initParameterNameDiscovery(getParameterNameDiscoverer());
 		// 如果descriptor的依赖类型为Optional类
 		if (Optional.class == descriptor.getDependencyType()) {
+			// 创建Optional类型的符合descriptor要求的候选Bean对象
 			return createOptionalDependency(descriptor, requestingBeanName);
-		} else if (ObjectFactory.class == descriptor.getDependencyType() ||
+		}
+		//ObjectFactory则只是一个普通的对象工厂接口。在Spring中主要两处用了它:
+		// 1. org.springframework.beans.factory.config.Scope.get(String, ObjectFactory).这个方法的目的
+		// 就是从对于的域中获取到指定名称的对象。为什么要传入一个objectFactory呢？主要是为了方便我们扩展自定义的域，
+		// 而不是仅仅使用request，session等域。
+		// 2. {@link org.springframework.beans.factory.config.ConfigurableListableBeanFactory#registerResolvableDependency(Class, Object)}
+		//  autowiredValue这个参数可能就是一个ObjectFactory，主要是为了让注入点能够被延迟注入
+		//ObjectProvider:ObjectFactory的一种变体，专门为注入点设置，允许程序选择和扩展的非唯一处理。
+		// 	具体用法参考博客：https://blog.csdn.net/qq_41907991/article/details/105123387
+		//如果decriptord的依赖类型是ObjectFactory或者是ObjectProvider
+		else if (ObjectFactory.class == descriptor.getDependencyType() ||
 				ObjectProvider.class == descriptor.getDependencyType()) {
+			// DependencyObjectProvider:依赖对象提供者,用于延迟解析依赖项
+			// 新建一个DependencyObjectProvider的实例
 			return new DependencyObjectProvider(descriptor, requestingBeanName);
-		} else if (javaxInjectProviderClass == descriptor.getDependencyType()) {
+		}
+		// javaxInjectProviderClass有可能导致空指针，不过一般情况下，我们引用Spirng包的时候都有引入该类以防止空旨在
+		// 如果依赖类型是javax.inject.Provider类。
+		else if (javaxInjectProviderClass == descriptor.getDependencyType()) {
+			//Jse330Provider:javax.inject.Provider实现类.与DependencyObjectProvoid作用一样，也是用于延迟解析依赖
+			// 	项，但它是使用javax.inject.Provider作为依赖 对象，以减少与Springd耦合
+			//新建一个专门用于构建javax.inject.Provider对象的工厂来构建创建Jse330Provider对象
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		} else {
-			//
+			// 尝试获取延迟加载代理对象
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
+			// 如果result为null，即表示现在需要得到候选Bean对象
 			if (result == null) {
+				// 解析出与descriptor所包装的对象匹配的候选Bean对象
 				result = doResolveDependency(descriptor, requestingBeanName, autowiredBeanNames, typeConverter);
 			}
 			return result;
@@ -2978,6 +3021,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	/**
 	 * A dependency descriptor marker for nested elements.
+	 * 嵌套元素的依赖描述符标记
 	 */
 	private static class NestedDependencyDescriptor extends DependencyDescriptor {
 
@@ -3024,6 +3068,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	/**
 	 * Serializable ObjectFactory/ObjectProvider for lazy resolution of a dependency.
+	 * 用于延迟解析依赖项的可序列化 ObjectFactory/ObjectProvider。
 	 */
 	private class DependencyObjectProvider implements BeanObjectProvider<Object> {
 
