@@ -439,7 +439,6 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Check whether the given candidate qualifies as a factory method.
-	 *
 	 * 检查给定的候选者是否符合工厂方法的条件。
 	 */
 	public boolean isFactoryMethod(Method candidate) {
@@ -460,8 +459,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Return the resolved factory method as a Java Method object, if available.
-	 *
-	 * 将解析的工厂方法作为 Java Method 对象（如果可用）返回。
+	 * 将解析后的工厂方法作为 Java Method 对象（如果可用）返回。
 	 *
 	 * @return the factory method, or {@code null} if not found or not resolved yet
 	 */
