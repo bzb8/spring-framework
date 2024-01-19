@@ -864,6 +864,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return whether to resolve constructors in lenient mode or in strict mode.
+	 * 返回是否以宽松模式或严格模式解析构造函数。
 	 */
 	public boolean isLenientConstructorResolution() {
 		return this.lenientConstructorResolution;

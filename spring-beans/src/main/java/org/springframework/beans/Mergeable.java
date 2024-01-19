@@ -48,7 +48,7 @@ public interface Mergeable {
 	 * 将当前设置的值与所提供对象的值合并。
 	 * 提供的对象被视为父对象，被调用方的值集中的值必须覆盖所提供对象的值。
 	 *
-	 * @param parent the object to merge with 要合并的对象
+	 * @param parent the object to merge with -- 要合并的对象
 	 * @return the result of the merge operation
 	 * @throws IllegalArgumentException if the supplied parent is {@code null}
 	 * @throws IllegalStateException if merging is not enabled for this instance

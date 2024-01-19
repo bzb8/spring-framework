@@ -72,6 +72,10 @@ public class ConstructorArgumentValues {
 	 * <p>Note: Identical ValueHolder instances will only be registered once,
 	 * to allow for merging and re-merging of argument value definitions. Distinct
 	 * ValueHolder instances carrying the same content are of course allowed.
+	 * 复制所有给定的参数值到此对象中,使用单独的持有者实例来保持值与原始对象的独立性。
+	 * <p>注意:相同的ValueHolder实例只会注册一次,
+	 * 以允许合并和重新合并参数值定义。当然允许不同的
+	 * 持有相同内容的ValueHolder实例。
 	 */
 	public void addArgumentValues(@Nullable ConstructorArgumentValues other) {
 		if (other != null) {
@@ -106,8 +110,10 @@ public class ConstructorArgumentValues {
 
 	/**
 	 * Add an argument value for the given index in the constructor argument list.
-	 * @param index the index in the constructor argument list
-	 * @param newValue the argument value in the form of a ValueHolder
+	 * 在构造函数参数列表中为给定索引添加参数值。
+	 *
+	 * @param index the index in the constructor argument list -- 构造函数参数列表中的索引
+	 * @param newValue the argument value in the form of a ValueHolder -- ValueHolder 形式的参数值
 	 */
 	public void addIndexedArgumentValue(int index, ValueHolder newValue) {
 		Assert.isTrue(index >= 0, "Index must not be negative");
@@ -119,10 +125,16 @@ public class ConstructorArgumentValues {
 	 * Add an argument value for the given index in the constructor argument list,
 	 * merging the new value (typically a collection) with the current value
 	 * if demanded: see {@link org.springframework.beans.Mergeable}.
-	 * @param key the index in the constructor argument list
-	 * @param newValue the argument value in the form of a ValueHolder
+	 * --
+	 * 为构造函数参数列表中的给定索引添加一个参数值,
+	 * 合并新的值(通常是一个集合)与当前值
+	 * 如果需要:见{@link org.springframework.beans.Mergeable}。
+	 *
+	 * @param key the index in the constructor argument list -- 构造函数参数列表中的索引
+	 * @param newValue the argument value in the form of a ValueHolder -- 参数值的ValueHolder形式
 	 */
 	private void addOrMergeIndexedArgumentValue(Integer key, ValueHolder newValue) {
+		// 根据index合并
 		ValueHolder currentValue = this.indexedArgumentValues.get(key);
 		if (currentValue != null && newValue.getValue() instanceof Mergeable) {
 			Mergeable mergeable = (Mergeable) newValue.getValue();
@@ -155,12 +167,16 @@ public class ConstructorArgumentValues {
 
 	/**
 	 * Get argument value for the given index in the constructor argument list.
-	 * @param index the index in the constructor argument list
+	 * -- 获取构造函数参数列表中给定索引的参数值。
+	 *
+	 * @param index the index in the constructor argument list -- 构造函数参数列表中的索引
 	 * @param requiredType the type to match (can be {@code null} to match
-	 * untyped values only)
+	 * untyped values only) -- 要匹配的类型（可以为null以仅匹配无类型值）
 	 * @param requiredName the type to match (can be {@code null} to match
 	 * unnamed values only, or empty String to match any name)
+	 * -- 要匹配的类型（可以为null以仅匹配未命名的值，或为空 String 以匹配任何名称）
 	 * @return the ValueHolder for the argument, or {@code null} if none set
+	 * -- 参数的 ValueHolder，如果没有设置则为null
 	 */
 	@Nullable
 	public ValueHolder getIndexedArgumentValue(int index, @Nullable Class<?> requiredType, @Nullable String requiredName) {
@@ -212,12 +228,19 @@ public class ConstructorArgumentValues {
 
 	/**
 	 * Add a generic argument value to be matched by type or name (if available).
+	 * -- 添加一个通用的参数值,通过类型或名称(如果可用)进行匹配。
+	 *
 	 * <p>Note: A single generic argument value will just be used once,
 	 * rather than matched multiple times.
-	 * @param newValue the argument value in the form of a ValueHolder
+	 * -- 注意:单个通用参数值只会使用一次, 而不是多次匹配。
+	 *
+	 * @param newValue the argument value in the form of a ValueHolder -- 参数值的ValueHolder形式
 	 * <p>Note: Identical ValueHolder instances will only be registered once,
 	 * to allow for merging and re-merging of argument value definitions. Distinct
 	 * ValueHolder instances carrying the same content are of course allowed.
+	 * 注意:相同的ValueHolder实例只会注册一次,
+	 * 以允许合并和重新合并参数值定义。当然允许不同的
+	 * 持有相同内容的ValueHolder实例
 	 */
 	public void addGenericArgumentValue(ValueHolder newValue) {
 		Assert.notNull(newValue, "ValueHolder must not be null");
@@ -235,6 +258,7 @@ public class ConstructorArgumentValues {
 		if (newValue.getName() != null) {
 			for (Iterator<ValueHolder> it = this.genericArgumentValues.iterator(); it.hasNext();) {
 				ValueHolder currentValue = it.next();
+				// 根据name合并旧值
 				if (newValue.getName().equals(currentValue.getName())) {
 					if (newValue.getValue() instanceof Mergeable) {
 						Mergeable mergeable = (Mergeable) newValue.getValue();
@@ -287,17 +311,21 @@ public class ConstructorArgumentValues {
 			@Nullable Set<ValueHolder> usedValueHolders) {
 
 		for (ValueHolder valueHolder : this.genericArgumentValues) {
+			// 已经包含了，直接返回
 			if (usedValueHolders != null && usedValueHolders.contains(valueHolder)) {
 				continue;
 			}
+			// 名称不同
 			if (valueHolder.getName() != null && (requiredName == null ||
 					(!requiredName.isEmpty() && !requiredName.equals(valueHolder.getName())))) {
 				continue;
 			}
+			// 类型不同
 			if (valueHolder.getType() != null && (requiredType == null ||
 					!ClassUtils.matchesTypeName(requiredType, valueHolder.getType()))) {
 				continue;
 			}
+			// 类型不匹配
 			if (requiredType != null && valueHolder.getType() == null && valueHolder.getName() == null &&
 					!ClassUtils.isAssignableValue(requiredType, valueHolder.getValue())) {
 				continue;
@@ -345,16 +373,22 @@ public class ConstructorArgumentValues {
 	/**
 	 * Look for an argument value that either corresponds to the given index
 	 * in the constructor argument list or generically matches by type.
-	 * @param index the index in the constructor argument list
+	 * --
+	 * 查找与构造函数参数列表中给定索引相对应或按类型通用匹配的参数值。
+	 *
+	 * @param index the index in the constructor argument list -- 构造函数参数列表中的索引
 	 * @param requiredType the parameter type to match (can be {@code null}
-	 * to find an untyped argument value)
+	 * to find an untyped argument value) -- 要匹配的参数类型(可以是{@code null}以找到一个未类型化的参数值)
 	 * @param requiredName the parameter name to match (can be {@code null}
 	 * to find an unnamed argument value, or empty String to match any name)
+	 * -- 要匹配的参数名称(可以是{@code null}以找到一个无名参数值，或空字符串以匹配任何名称)
 	 * @param usedValueHolders a Set of ValueHolder objects that have already
 	 * been used in the current resolution process and should therefore not
 	 * be returned again (allowing to return the next generic argument match
 	 * in case of multiple generic argument values of the same type)
+	 * -- 一个已经在当前解析过程中使用过的ValueHolder对象的集合，因此不应该再次返回(允许在存在多个相同类型的通用参数值的情况下返回下一个通用参数匹配)
 	 * @return the ValueHolder for the argument, or {@code null} if none set
+	 * -- 参数的ValueHolder，如果没有设置则返回{@code null}
 	 */
 	@Nullable
 	public ValueHolder getArgumentValue(int index, @Nullable Class<?> requiredType,
@@ -371,6 +405,7 @@ public class ConstructorArgumentValues {
 	/**
 	 * Return the number of argument values held in this instance,
 	 * counting both indexed and generic argument values.
+	 * 返回此实例中保存的参数值的数量，同时计算索引参数值和通用参数值。
 	 */
 	public int getArgumentCount() {
 		return (this.indexedArgumentValues.size() + this.genericArgumentValues.size());
@@ -541,6 +576,9 @@ public class ConstructorArgumentValues {
 		/**
 		 * Set the configuration source {@code Object} for this metadata element.
 		 * <p>The exact type of the object will depend on the configuration mechanism used.
+		 * --
+		 * 设置此元数据元素的配置源{@code Object}。
+		 * <p>对象的确切类型将取决于使用的配置机制。
 		 */
 		public void setSource(@Nullable Object source) {
 			this.source = source;

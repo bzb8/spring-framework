@@ -51,6 +51,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.ConstructorArgumentValues.ValueHolder;
 import org.springframework.beans.factory.config.DependencyDescriptor;
@@ -595,6 +596,7 @@ class ConstructorResolver {
 					minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);
 				}
 				else {
+					// 意味着mbd没有构造函数参数值时，将minNrOfArgs设为0
 					minNrOfArgs = 0;
 				}
 			}
@@ -612,12 +614,14 @@ class ConstructorResolver {
 					// 定义一个封装解析后的参数数组的ArgumentsHolder对象
 					ArgumentsHolder argsHolder;
 
+					// 当前候选方法的参数类型列表
 					Class<?>[] paramTypes = candidate.getParameterTypes();
 					if (explicitArgs != null) {
 						// Explicit arguments given -> arguments length must match exactly.
 						// 给定的显示参数->参数长度必须完全匹配
 						// 如果paramTypes的长度与explicitArgsd额长度不相等
 						if (paramTypes.length != explicitArgs.length) {
+							// 跳过当次循环中剩下的步骤，执行下一次循环
 							continue;
 						}
 						// 实例化argsHolder，封装explicitArgs到argsHolder
@@ -627,9 +631,11 @@ class ConstructorResolver {
 						// Resolved constructor arguments: type conversion and/or autowiring necessary.
 						// 已解析的构造函数参数:类型转换 and/or 自动注入时必须的
 						try {
+							// 当前候选方法的参数名称列表
 							String[] paramNames = null;
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
 							if (pnd != null) {
+								// 通过pnd解析candidate的参数名
 								paramNames = pnd.getParameterNames(candidate);
 							}
 							// 将resolvedValues转换成一个封装着参数数组ArgumentsHolder实例，当candidate只有一个时，支持可在抛
@@ -776,15 +782,74 @@ class ConstructorResolver {
 	 * <p>This method is also used for handling invocations of static factory methods.
 	 * 将此bean的构造函数参数解析为resolvedValues对象。这可能涉及查找其他bean。
 	 * <p>此方法也用于处理静态工厂方法的调用。
+	 * --
+	 * 将此 bean 的构造函数参数解析为resolvedValues 对象。这可能涉及查找其他 bean。
+	 * 此方法还用于处理静态工厂方法的调用。
+	 */
+	/**
+	 * <p>将cargs解析后值保存到resolveValues中，并返回解析后的最小(索引参数值数+泛型参数值数)</p>
+	 * Resolve the constructor arguments for this bean into the resolvedValues object.
+	 * This may involve looking up other beans.
+	 * <p>将此Bean构造函数参数解析为resolveValues对象。这可能涉及查找其他Bean</p>
+	 * <p>This method is also used for handling invocations of static factory methods.
+	 * <p>此方法还用于处理静态工厂方法的调用</p>
+	 * <ol>
+	 *  <li>获取Bean工厂的类型转换器【变量 customConverter】</li>
+	 *  <li>定义一个TypeConverter对象，如果有customConverter，就引用customConverter;否则引用bw【变量 converter】</li>
+	 *  <li>新建一个BeanDefinitionValueResolver对象【变量 valueResolver】</li>
+	 *  <li>获取cargs的参数值数量和泛型参数值数量作为 最小(索引参数值数+泛型参数值数)【变量 minNrOfArgs】</li>
+	 *  <li>【<b>解析索引参数值</b>】遍历cargs所封装的索引参数值的Map，元素为entry(key=参数值的参数索引,value=
+	 *  ConstructorArgumentValues.ValueHolder对象):
+	 *   <ol>
+	 *    <li>获取参数值的参数索引【变量 index】</li>
+	 *    <li>如果index小于0,抛出Bean创建异常</li>
+	 *    <li>如果index大于minNrOfArgs,minNrOfArgs就为index+1</li>
+	 *    <li>获取ConstructorArgumentValues.ValueHolder对象【变量 valueHolder】</li>
+	 *    <li>如果valueHolder已经包含转换后的值,将index和valueHolder添加到resolvedValues所封装的索引参数值的Map中</li>
+	 *    <li>否则:
+	 *     <ol>
+	 *      <li>使用valueResolver解析出valueHolder实例的构造函数参数值所封装的对象【变量 resolvedValue】</li>
+	 *      <li>使用valueHolder所封装的type,name属性以及解析出来的resovledValue构造出一个ConstructorArgumentValues.ValueHolder对象</li>
+	 *      <li>将valueHolder作为resolvedValueHolder的配置源对象设置到resolvedValueHolder中</li>
+	 *      <li>将index和valueHolder添加到resolvedValues所封装的索引参数值的Map中</li>
+	 *     </ol>
+	 *    </li>
+	 *   </ol>
+	 *  </li>
+	 *  <li>【<b>解析泛型参数值</b>】遍历cargs的泛型参数值的列表,元素为ConstructorArgumentValues.ValueHolder对象【变量 valueHolder】:
+	 *   <ol>
+	 *    <li>如果valueHolder已经包含转换后的值,将index和valueHolder添加到resolvedValues的泛型参数值的列表中</li>
+	 *    <li>否则:
+	 *     <ol>
+	 *       <li>使用valueResolver解析出valueHolder实例的构造函数参数值所封装的对象</li>
+	 *       <li>将valueHolder作为resolvedValueHolder的配置源对象设置到resolvedValueHolder中</li>
+	 *       <li>将index和valueHolder添加到resolvedValues所封装的索引参数值的Map中</li>
+	 *     </ol>
+	 *    </li>
+	 *   </ol>
+	 *  </li>
+	 *  <li>将minNrOfArgs【最小(索引参数值数+泛型参数值数)】返回出去</li>
+	 * </ol>
+	 * @param beanName bean名
+	 * @param mbd beanName对于的合并后RootBeanDefinition
+	 * @param bw Bean实例的包装对象
+	 * @param cargs mbd的构造函数参数值Holder
+	 * @param resolvedValues 解析后的构造函数参数值Holder
+	 * @return 最小(索引参数值数+泛型参数值数)
 	 */
 	private int resolveConstructorArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
 			ConstructorArgumentValues cargs, ConstructorArgumentValues resolvedValues) {
 
 		TypeConverter customConverter = this.beanFactory.getCustomTypeConverter();
 		TypeConverter converter = (customConverter != null ? customConverter : bw);
+		// BeanDefinitionValueResolver:在bean工厂实现中使用Helper类，它将beanDefinition对象中包含的值解析为应用于
+		// 目标bean实例的实际值
+		// 新建一个BeanDefinitionValueResolver对象
 		BeanDefinitionValueResolver valueResolver =
 				new BeanDefinitionValueResolver(this.beanFactory, beanName, mbd, converter);
 
+        // ConstructorArgumentValues.getArgumentCount():返回此实例中保存的参数值的数量，同时计算索引参数值和泛型参数值
+		// 获取cargs的参数值数量和泛型参数值数量作为 最小(索引参数值数+泛型参数值数)
 		int minNrOfArgs = cargs.getArgumentCount();
 
 		for (Map.Entry<Integer, ConstructorArgumentValues.ValueHolder> entry : cargs.getIndexedArgumentValues().entrySet()) {
@@ -797,12 +862,15 @@ class ConstructorResolver {
 				minNrOfArgs = index + 1;
 			}
 			ConstructorArgumentValues.ValueHolder valueHolder = entry.getValue();
+			// 如果valueHolder已经包含转换后的值
 			if (valueHolder.isConverted()) {
 				resolvedValues.addIndexedArgumentValue(index, valueHolder);
 			}
 			else {
+				// 使用valueResolver解析出valueHolder实例的构造函数参数值所封装的对象
 				Object resolvedValue =
 						valueResolver.resolveValueIfNecessary("constructor argument", valueHolder.getValue());
+				// 使用valueHolder所封装的type,name属性以及解析出来的resovledValue构造出一个ConstructorArgumentValues.ValueHolder对象
 				ConstructorArgumentValues.ValueHolder resolvedValueHolder =
 						new ConstructorArgumentValues.ValueHolder(resolvedValue, valueHolder.getType(), valueHolder.getName());
 				// 将valueHolder作为resolvedValueHolder的配置源对象设置到resolvedValueHolder中
@@ -820,17 +888,101 @@ class ConstructorResolver {
 						valueResolver.resolveValueIfNecessary("constructor argument", valueHolder.getValue());
 				ConstructorArgumentValues.ValueHolder resolvedValueHolder = new ConstructorArgumentValues.ValueHolder(
 						resolvedValue, valueHolder.getType(), valueHolder.getName());
+				// 设置数校源为原来的
 				resolvedValueHolder.setSource(valueHolder);
 				resolvedValues.addGenericArgumentValue(resolvedValueHolder);
 			}
 		}
 
+        // 返回 最小(索引参数值数+泛型参数值数)
 		return minNrOfArgs;
 	}
 
 	/**
 	 * Create an array of arguments to invoke a constructor or factory method,
 	 * given the resolved constructor argument values.
+	 * <p>给定已解析的构造函数参数值，创建一个参数数组以调用构造函数或工厂方法</p>
+	 * <ol>
+	 *  <li>获取bean工厂的自定义的TypeConverter【变量 customConverter】</li>
+	 *  <li>如果customeConverter不为null,converter就引用customeConverter，否则引用bw【变量 converter】</li>
+	 *  <li>根据paramTypes的数组长度构建一个ArgumentsHolder实例,用于保存解析后的参数值【变量 args】</li>
+	 *  <li>定义一个用于存储构造函数参数值Holder，以查找下一个任意泛型参数值时，忽略该集合的元素的HashSet,初始化长度为paramTypes的数组长度
+	 *  【变量 usedValueHolders】</li>
+	 *  <li>定义一个用于存储自动注入Bean名的LinkedHashSet【变量 autowiredBeanNames】</li>
+	 *  <li>fori形式遍历paramType,索引为paramIndex:
+	 *   <ol>
+	 *    <li>获取paramTypes中第paramIndex个参数类型【变量 paramType】</li>
+	 *    <li>如果paramNames不为null，就引用第paramIndex个参数名否则引用空字符串【变量 paramName】</li>
+	 *    <li>定义一个用于存储与paramIndex对应的ConstructorArgumentValues.ValueHolder实例【变量 valueHolder】</li>
+	 *    <li>如果resolvedValues不为null:
+	 *     <ol>
+	 *      <li>在resolvedValues中查找与paramIndex对应的参数值，或者按paramType一般匹配【变量 valueHolder】</li>
+	 *      <li>如果valueHolder为null 且 (mbd不支持使用构造函数进行自动注入 或者 paramTypes数组长度与resolvedValues的
+	 *      (索引参数值+泛型参数值)数量相等)</li>
+	 *     </ol>
+	 *    </li>
+	 *    <li>如果valueHolder不为null:
+	 *     <ol>
+	 *      <li>将valueHolder添加到usedValueHolders中，以表示该valueHolder已经使用过，下次在resolvedValues中
+	 *      获取下一个valueHolder时，不要返回同一个对象</li>
+	 *      <li>从valueHolder中获取原始参数值【变量 originalValue】</li>
+	 *      <li>定义一个用于存储转换后的参数值的Object对象【变量 convertedValue】</li>
+	 *      <li>如果valueHolder已经包含转换后的值:
+	 *       <ol>
+	 *        <li>从valueHolder中获取转换后的参数值【变量 convertedValue】</li>
+	 *        <li>将convertedValue保存到args的preparedArguments数组的paramIndex对应元素中</li>
+	 *       </ol>
+	 *      </li>
+	 *      <li>否则:
+	 *       <ol>
+	 *        <li>将executable中paramIndex对应的参数封装成MethodParameter对象【变量 methodParam】</li>
+	 *        <li>使用converter将originalValue转换为paramType类型</li>
+	 *        <li>捕捉在转换类型时出现的类型不匹配异常,重新抛出不满足的依赖异常</li>
+	 *        <li>获取valueHolder的源对象，一般是ValueHolder【变量 sourceHolder】</li>
+	 *        <li>如果sourceHolder是ConstructorArgumentValues.ValueHolder实例:
+	 *         <ol>
+	 *          <li>将soureHolder转换为ConstructorArgumentValues.ValueHolder对象【变量 sourceValue】</li>
+	 *          <li>将args的resolveNecessary该为true，表示args.preparedArguments需要解析</li>
+	 *          <li>将sourceValue保存到args的preparedArguments数组的paramIndex对应元素中</li>
+	 *         </ol>
+	 *        </li>
+	 *       </ol>
+	 *      </li>
+	 *      <li>将convertedValue保存到args的arguments数组的paramIndex对应元素中</li>
+	 *      <li>将originalValue保存到args的rawArguments数组的paramIndex对应元素中</li>
+	 *     </ol>
+	 *    </li>
+	 *    <li>否则:
+	 *     <ol>
+	 *      <li>将executable中paramIndex对应的参数封装成MethodParameter对象【变量 methodParam】</li>
+	 *      <li>mbd不支持适用构造函数进行自动注入,抛出不满足依赖异常</li>
+	 *      <li>解析应该自动装配的methodParam的Bean对象,使用autowiredBeanNames保存所找到的所有候选Bean对象【变量 autowiredArgument】</li>
+	 *      <li>将autowiredArgument保存到args的rawArguments数组的paramIndex对应元素中</li>
+	 *      <li>将autowiredArgument保存到args的arguments数组的paramIndex对应元素中</li>
+	 *      <li>将autowiredArgumentMarker保存到args的arguments数组的paramIndex对应元素中</li>
+	 *      <li>将args的resolveNecessary该为true，表示args.preparedArguments需要解析</li>
+	 *      <li>捕捉解析应该自动装配的methodParam的Bean对象时出现的BeanException,重新抛出满足依赖异常，引用mbd的资源描述作为异常信息</li>
+	 *     </ol>
+	 *    </li>
+	 *    <li>遍历 autowiredBeanNames，元素为autowiredBeanName:
+	 *     <ol>
+	 *      <li>注册beanName与dependentBeanNamed的依赖关系到beanFactory中</li>
+	 *      <li>如果当前日志级别时debug,打印debug日志</li>
+	 *     </ol>
+	 *    </li>
+	 *    <li>将args(保存着解析后的参数值的ArgumentsHolder对象)返回出去</li>
+	 *   </ol>
+	 *  </li>
+	 * </ol>
+	 * @param beanName bean名
+	 * @param mbd beanName对应的合并后RootBeanDefinition
+	 * @param resolvedValues 已经解析过的构造函数参数值Holder对象
+	 * @param bw bean实例包装类
+	 * @param paramTypes 候选方法的参数类型数组
+	 * @param paramNames  候选方法的参数名数组
+	 * @param executable 候选方法
+	 * @param autowiring mbd是否支持使用构造函数进行自动注入的标记
+	 * @param fallback 是否可在抛出NoSuchBeanDefinitionException返回null，而不抛出异常
 	 */
 	private ArgumentsHolder createArgumentArray(
 			String beanName, RootBeanDefinition mbd, @Nullable ConstructorArgumentValues resolvedValues,
@@ -838,39 +990,62 @@ class ConstructorResolver {
 			boolean autowiring, boolean fallback) throws UnsatisfiedDependencyException {
 
 		TypeConverter customConverter = this.beanFactory.getCustomTypeConverter();
+		//如果customConverter不为null,converter就引用customConverter，否则引用bw
 		TypeConverter converter = (customConverter != null ? customConverter : bw);
 
+		// 根据paramTypes的数组长度构建一个ArgumentsHolder实例，用于保存解析后的参数值
 		ArgumentsHolder args = new ArgumentsHolder(paramTypes.length);
+		// 定义一个用于存储构造函数参数值Holder，以查找下一个任意泛型参数值时，忽略该集合的元素的HashSet,初始化长度为paramTypes的数组长度
 		Set<ConstructorArgumentValues.ValueHolder> usedValueHolders = new HashSet<>(paramTypes.length);
+		// 定义一个用于存储自动注入Bean名的LinkedHashSet
 		Set<String> allAutowiredBeanNames = new LinkedHashSet<>(paramTypes.length * 2);
 
 		for (int paramIndex = 0; paramIndex < paramTypes.length; paramIndex++) {
+			// 获取paramTypes中第paramIndex个参数类型
 			Class<?> paramType = paramTypes[paramIndex];
+			// 如果paramNames不为null，就引用第paramIndex个参数名否则引用空字符串
 			String paramName = (paramNames != null ? paramNames[paramIndex] : "");
 			// Try to find matching constructor argument value, either indexed or generic.
+			// 尝试找到匹配的构造函数参数值，无论是索引的还是泛型的
+			// 定义一个用于存储与paramIndex对应的ConstructorArgumentValues.ValueHolder实例
 			ConstructorArgumentValues.ValueHolder valueHolder = null;
 			if (resolvedValues != null) {
+				// 在resolvedValues中查找与paramIndex对应的参数值，或者按paramType一般匹配
 				valueHolder = resolvedValues.getArgumentValue(paramIndex, paramType, paramName, usedValueHolders);
 				// If we couldn't find a direct match and are not supposed to autowire,
 				// let's try the next generic, untyped argument value as fallback:
 				// it could match after type conversion (for example, String -> int).
+				// 如果找不到直接匹配并且不希望自动装配，请尝试使用一个通用的，无类型的参数值作为后备：
+				// 类型转换后可以匹配(例如String -> int)
+				// 如果valueHolder为null 且 (mbd不支持使用构造函数进行自动注入 或者 paramTypes数组长度与resolvedValues的
+				// (索引参数值+泛型参数值)数量相等)
 				if (valueHolder == null && (!autowiring || paramTypes.length == resolvedValues.getArgumentCount())) {
+					// 在resovledValues中查找任意，不按名称匹配参数值的下一个泛型参数值，而忽略usedValueHolders参数值
 					valueHolder = resolvedValues.getGenericArgumentValue(null, null, usedValueHolders);
 				}
 			}
+			// 如果valueHolder不为null
 			if (valueHolder != null) {
 				// We found a potential match - let's give it a try.
 				// Do not consider the same value definition multiple times!
+				// 我们找到了可能的匹配-让我们尝试一些。
+				// 不要考虑相同的值定义
+				// 将valueHolder添加到usedValueHolders中，以表示该valueHolder已经使用过，下次在resolvedValues中
+				// 获取下一个valueHolder时，不要返回同一个对象
 				usedValueHolders.add(valueHolder);
+				// 从valueHolder中获取原始参数值
 				Object originalValue = valueHolder.getValue();
+				// 定义一个用于存储转换后的参数值的Object对象
 				Object convertedValue;
 				if (valueHolder.isConverted()) {
 					convertedValue = valueHolder.getConvertedValue();
 					args.preparedArguments[paramIndex] = convertedValue;
 				}
 				else {
+					// 将executable中paramIndex对应的参数封装成MethodParameter对象
 					MethodParameter methodParam = MethodParameter.forExecutable(executable, paramIndex);
 					try {
+						// 使用converter将originalValue转换为paramType类型
 						convertedValue = converter.convertIfNecessary(originalValue, paramType, methodParam);
 					}
 					catch (TypeMismatchException ex) {
@@ -883,6 +1058,7 @@ class ConstructorResolver {
 					Object sourceHolder = valueHolder.getSource();
 					if (sourceHolder instanceof ConstructorArgumentValues.ValueHolder) {
 						Object sourceValue = ((ConstructorArgumentValues.ValueHolder) sourceHolder).getValue();
+						// 将args的resolveNecessary该为true，表示args.preparedArguments需要解析
 						args.resolveNecessary = true;
 						args.preparedArguments[paramIndex] = sourceValue;
 					}
@@ -894,6 +1070,8 @@ class ConstructorResolver {
 				MethodParameter methodParam = MethodParameter.forExecutable(executable, paramIndex);
 				// No explicit match found: we're either supposed to autowire or
 				// have to fail creating an argument array for the given constructor.
+				// 找不到明确的匹配项:我们要么自动装配，要么必须为给定的构造函数创建参数数组而失败
+				// mbd不支持适用构造函数进行自动注入
 				if (!autowiring) {
 					throw new UnsatisfiedDependencyException(
 							mbd.getResourceDescription(), beanName, new InjectionPoint(methodParam),
@@ -903,6 +1081,7 @@ class ConstructorResolver {
 				try {
 					ConstructorDependencyDescriptor desc = new ConstructorDependencyDescriptor(methodParam, true);
 					Set<String> autowiredBeanNames = new LinkedHashSet<>(2);
+					// 解析应该自动装配的methodParam的Bean对象,使用autowiredBeanNames保存所找到的所有候选Bean对象
 					Object arg = resolveAutowiredArgument(
 							desc, paramType, beanName, autowiredBeanNames, converter, fallback);
 					if (arg != null) {
@@ -921,6 +1100,7 @@ class ConstructorResolver {
 			}
 		}
 
+		// beanName 依赖 allAutowiredBeanNames
 		registerDependentBeans(executable, beanName, allAutowiredBeanNames);
 
 		return args;
@@ -1248,7 +1428,9 @@ class ConstructorResolver {
 	 */
 	@SuppressWarnings("serial")
 	private static class ConstructorDependencyDescriptor extends DependencyDescriptor {
-
+		/**
+		 * 自动注入的bean名称
+		 */
 		@Nullable
 		private volatile String shortcut;
 

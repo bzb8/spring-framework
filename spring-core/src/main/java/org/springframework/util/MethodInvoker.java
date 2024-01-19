@@ -289,6 +289,8 @@ public class MethodInvoker {
 	/**
 	 * Algorithm that judges the match between the declared parameter types of a candidate method
 	 * and a specific list of arguments that this method is supposed to be invoked with.
+	 * -- 用于判断候选方法的声明参数类型与该方法应该被调用的特定参数列表之间的匹配程度的算法。
+	 *
 	 * <p>Determines a weight that represents the class hierarchy difference between types and
 	 * arguments. A direct match, i.e. type Integer &rarr; arg of class Integer, does not increase
 	 * the result - all direct matches means weight 0. A match between type Object and arg of
@@ -302,9 +304,18 @@ public class MethodInvoker {
 	 * <p>Note: This is the algorithm used by MethodInvoker itself and also the algorithm
 	 * used for constructor and factory method selection in Spring's bean container (in case
 	 * of lenient constructor resolution which is the default for regular bean definitions).
-	 * @param paramTypes the parameter types to match
-	 * @param args the arguments to match
-	 * @return the accumulated weight for all arguments
+	 * --
+	 * 确定表示类型和参数之间类层次差异的权重。
+	 * 直接匹配，即类型 Integer -> 参数类 Integer，不会增加结果 - 所有直接匹配意味着权重为 0。
+	 * 类型 Object 和参数类 Integer 之间的匹配会增加权重 2，因为类层次结构中距离最远的匹配类型 Object 有 2 步（即 Object）。
+	 * 类型 Number 和参数类 Integer 之间的匹配将相应地增加权重 1，因为类层次结构中距离最远的匹配类型 Number 有 1 步（即 Number）。
+	 * 因此，对于 Integer 类型的 arg，构造函数 (Integer) 将优先于构造函数 (Number)，而构造函数 (Number) 又将优先于构造函数 (Object)。
+	 * 所有参数权重都会累积
+	 * 注意：这是MethodInvoker本身使用的算法，也是Spring框架bean容器中用于构造方法和工厂方法选择的算法
+	 * （在默认情况下，对于常规bean定义，采用宽松构造方法解析）。
+	 * @param paramTypes the parameter types to match -- 要匹配的参数类型
+	 * @param args the arguments to match -- 要匹配的参数
+	 * @return the accumulated weight for all arguments -- 所有参数的累积权重
 	 */
 	public static int getTypeDifferenceWeight(Class<?>[] paramTypes, Object[] args) {
 		int result = 0;
