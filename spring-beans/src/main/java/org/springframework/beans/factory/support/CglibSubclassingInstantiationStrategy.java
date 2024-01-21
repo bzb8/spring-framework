@@ -85,6 +85,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			@Nullable Constructor<?> ctor, Object... args) {
 
 		// Must generate CGLIB subclass...
+		// 必须生成 CGLIB 子类。
 		return new CglibSubclassCreator(bd, owner).instantiate(ctor, args);
 	}
 
@@ -92,7 +93,6 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 	/**
 	 * An inner class created for historical reasons to avoid external CGLIB dependency
 	 * in Spring versions earlier than 3.2.
-	 *
 	 * 出于历史原因创建的内部类，用于避免 Spring 3.2 之前版本中的外部 CGLIB 依赖。
 	 *
 	 */
@@ -113,29 +113,31 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		/**
 		 * Create a new instance of a dynamically generated subclass implementing the
 		 * required lookups.
-		 *
 		 * 创建动态生成的子类的新实例，以实现所需的查找。
 		 *
 		 * @param ctor constructor to use. If this is {@code null}, use the
 		 * no-arg constructor (no parameterization, or Setter Injection)
-		 *
+		 * --
 		 * 要使用的构造函数。如果这是 {@code null}，请使用 no-arg 构造函数（无参数化或 Setter 注入）
 		 *
 		 * @param args arguments to use for the constructor.
 		 * Ignored if the {@code ctor} parameter is {@code null}.
-		 *
+		 * --
 		 * 用于构造函数的参数。如果 {@code ctor} 参数为 {@code null}，则忽略。
 		 *
 		 * @return new instance of the dynamically generated subclass
 		 */
 		public Object instantiate(@Nullable Constructor<?> ctor, Object... args) {
+			// 创建增强的动态子类
 			Class<?> subclass = createEnhancedSubclass(this.beanDefinition);
 			Object instance;
 			if (ctor == null) {
+				// 如果 ctor == null 则使用默认构造函数实例化
 				instance = BeanUtils.instantiateClass(subclass);
 			}
 			else {
 				try {
+					// 如果 ctor != null 则使用和 ctor 相同的参数类型的构造函数实例化
 					Constructor<?> enhancedSubclassConstructor = subclass.getConstructor(ctor.getParameterTypes());
 					instance = enhancedSubclassConstructor.newInstance(args);
 				}
@@ -146,6 +148,8 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			}
 			// SPR-10785: set callbacks directly on the instance instead of in the
 			// enhanced class (via the Enhancer) in order to avoid memory leaks.
+			// SPR-10785：为了避免内存泄漏，直接在实例上而不是在增强的类（通过增强器）中设置回调。
+			// 设置回调对象
 			Factory factory = (Factory) instance;
 			factory.setCallbacks(new Callback[] {NoOp.INSTANCE,
 					new LookupOverrideMethodInterceptor(this.beanDefinition, this.owner),
@@ -156,18 +160,21 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		/**
 		 * Create an enhanced subclass of the bean class for the provided bean
 		 * definition, using CGLIB.
-		 *
 		 * 使用 CGLIB 为提供的 Bean 定义创建 Bean 类的增强子类。
 		 */
 		private Class<?> createEnhancedSubclass(RootBeanDefinition beanDefinition) {
+			// 创建Enhancer类
 			Enhancer enhancer = new Enhancer();
 			enhancer.setSuperclass(beanDefinition.getBeanClass());
 			enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
+			// 设置生成策略
 			if (this.owner instanceof ConfigurableBeanFactory) {
 				ClassLoader cl = ((ConfigurableBeanFactory) this.owner).getBeanClassLoader();
 				enhancer.setStrategy(new ClassLoaderAwareGeneratorStrategy(cl));
 			}
+			// 设置方法重载过滤器，用于获取使用哪种cglib的interceptor来增强子类
 			enhancer.setCallbackFilter(new MethodOverrideCallbackFilter(beanDefinition));
+			// 设置回调的类型
 			enhancer.setCallbackTypes(CALLBACK_TYPES);
 			return enhancer.createClass();
 		}

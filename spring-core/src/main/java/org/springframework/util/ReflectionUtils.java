@@ -227,10 +227,15 @@ public abstract class ReflectionUtils {
 	 * Attempt to find a {@link Method} on the supplied class with the supplied name
 	 * and parameter types. Searches all superclasses up to {@code Object}.
 	 * <p>Returns {@code null} if no {@link Method} can be found.
-	 * @param clazz the class to introspect
-	 * @param name the name of the method
+	 * --
+	 * 尝试在提供的类上找到带有提供的名称和参数类型的{@link Method}。搜索所有超类，直到{@code Object}。
+	 * <p>如果找不到{@link Method}，则返回{@code null}。
+	 *
+	 * @param clazz the class to introspect -- 要检查的类
+	 * @param name the name of the method -- 方法的名称
 	 * @param paramTypes the parameter types of the method
 	 * (may be {@code null} to indicate any signature)
+	 * -- 方法的参数类型（可以为{@code null}以表示任何签名）
 	 * @return the Method object, or {@code null} if none found
 	 */
 	@Nullable
@@ -324,6 +329,10 @@ public abstract class ReflectionUtils {
 	 * Perform the given callback operation on all matching methods of the given
 	 * class, as locally declared or equivalent thereof (such as default methods
 	 * on Java 8 based interfaces that the given class implements).
+	 * --
+	 * 对给定类的所有匹配方法执行给定的回调操作，如本地声明或等效方法（例如给定类实现的基于 Java 8 的接口上的默认方法）。
+	 * 包括本类和接口上的默认方法
+	 *
 	 * @param clazz the class to introspect
 	 * @param mc the callback to invoke for each method
 	 * @throws IllegalStateException if introspection fails
@@ -499,7 +508,9 @@ public abstract class ReflectionUtils {
 		Method[] result = declaredMethodsCache.get(clazz);
 		if (result == null) {
 			try {
+				// 本类声明的方法，包含私有的方法
 				Method[] declaredMethods = clazz.getDeclaredMethods();
+				// 查找接口上的默认方法
 				List<Method> defaultMethods = findConcreteMethodsOnInterfaces(clazz);
 				if (defaultMethods != null) {
 					result = new Method[declaredMethods.length + defaultMethods.size()];
@@ -760,7 +771,7 @@ public abstract class ReflectionUtils {
 	/**
 	 * This variant retrieves {@link Class#getDeclaredFields()} from a local cache
 	 * in order to avoid the JVM's SecurityManager check and defensive array copying.
-	 *
+	 * --
 	 * 此变体从本地缓存检索 {@link Class#getDeclaredFields()}，以避免 JVM 的 SecurityManager 检查和防御性数组复制。
 	 *
 	 * @param clazz the class to introspect

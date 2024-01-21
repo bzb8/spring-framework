@@ -61,13 +61,15 @@ public final class BridgeMethodResolver {
 	 * <p>It is safe to call this method passing in a non-bridge {@link Method} instance.
 	 * In such a case, the supplied {@link Method} instance is returned directly to the caller.
 	 * Callers are <strong>not</strong> required to check for bridging before calling this method.
+	 * --
+	 * 找到提供的{@link Method 桥接方法}的原始方法。
+	 * 可以安全地调用此方法，并传入非桥接{@link Method}实例。 在这种情况下，提供的{@link Method}实例将直接返回给调用者。
+	 *  调用者不需要在调用此方法之前检查桥接。
 	 *
-	 * 找到所提供的{@link Method bridge Method}的原始方法。
-	 * 在非桥 {@link Method} 实例中调用此方法是安全的。在这种情况下，提供的 {@link Method} 实例将直接返回给调用者。在调用此方法之前，调用者不需要检查桥接。
-	 *
-	 * @param bridgeMethod the method to introspect
+	 * @param bridgeMethod the method to introspect -- 要检查的方法
 	 * @return the original method (either the bridged method or the passed-in method
 	 * if no more specific one could be found)
+	 * 原始方法（桥接方法或传入的方法，如果找不到更具体的方法）
 	 */
 	public static Method findBridgedMethod(Method bridgeMethod) {
 		if (!bridgeMethod.isBridge()) {
@@ -101,7 +103,7 @@ public final class BridgeMethodResolver {
 	 * considered a valid candidate for the {@link Method} that is {@link Method#isBridge() bridged}
 	 * by the supplied {@link Method bridge Method}. This method performs inexpensive
 	 * checks and can be used quickly to filter for a set of possible matches.
-	 *
+	 * --
 	 * 如果提供的“{@code 候选方法}”可以被视为通过提供的{@link Method}进行{@link Method#isBridge() bridged}的{@link Method bridge Method}的有效候选者
 	 * ，则返回{@code true}。该方法执行廉价的检查，并且可以快速用于过滤一组可能的匹配。
 	 */
@@ -238,7 +240,7 @@ public final class BridgeMethodResolver {
 	 * the parameter and return types are the same, it is a 'visibility' bridge method
 	 * introduced in Java 6 to fix https://bugs.openjdk.org/browse/JDK-6342411.
 	 * See also https://stas-blogspot.blogspot.com/2010/03/java-bridge-methods-explained.html
-	 *
+	 * --
 	 * 比较桥接方法和它桥接的方法的签名。如果参数和返回类型相同，则为 Java 6 中引入的“可见性”桥接方法，
 	 * 用于修复 https://bugs.openjdk.orgbrowseJDK-6342411。
 	 * See also https://stas-blogspot.blogspot.com/2010/03/java-bridge-methods-explained.html

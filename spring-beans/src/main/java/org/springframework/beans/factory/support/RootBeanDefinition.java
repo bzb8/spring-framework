@@ -127,10 +127,16 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	Object[] preparedConstructorArguments;
 
-	/** Common lock for the two post-processing fields below. */
+	/**
+	 * Common lock for the two post-processing fields below.
+	 * 以下两个后处理字段的公共锁定。
+	 */
 	final Object postProcessingLock = new Object();
 
-	/** Package-visible field that indicates MergedBeanDefinitionPostProcessor having been applied. */
+	/**
+	 * Package-visible field that indicates MergedBeanDefinitionPostProcessor having been applied.
+	 * Package-visible 字段，指示已应用 MergedBeanDefinitionPostProcessor。
+	 */
 	boolean postProcessed = false;
 
 	/** Package-visible field that indicates a before-instantiation post-processor having kicked in. */
@@ -527,6 +533,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/**
 	 * Determine if the given method name indicates an externally managed
 	 * initialization method.
+	 * --
+	 * 确定给定的方法名称是否指示外部管理的初始化方法。
+	 *
 	 * <p>See {@link #registerExternallyManagedInitMethod} for details
 	 * regarding the format for the supplied {@code initMethod}.
 	 */

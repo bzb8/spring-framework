@@ -100,14 +100,22 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	protected transient Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 通过CommonAnnotationBeanPostProcessor的构造方法添加@PostConstruct注解
+	 */
 	@Nullable
 	private Class<? extends Annotation> initAnnotationType;
-
+	/**
+	 * 通过CommonAnnotationBeanPostProcessor的构造方法添加@PreDestroy注解
+	 */
 	@Nullable
 	private Class<? extends Annotation> destroyAnnotationType;
 
 	private int order = Ordered.LOWEST_PRECEDENCE;
 
+	/**
+	 * 缓存 bean 类 -> 它对应的@PostConstruct和@PreDestroy
+	 */
 	@Nullable
 	private final transient Map<Class<?>, LifecycleMetadata> lifecycleMetadataCache = new ConcurrentHashMap<>(256);
 
@@ -199,6 +207,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	private LifecycleMetadata findLifecycleMetadata(Class<?> clazz) {
 		if (this.lifecycleMetadataCache == null) {
 			// Happens after deserialization, during destruction...
+			// 在反序列化之后，在销毁期间发生......
 			return buildLifecycleMetadata(clazz);
 		}
 		// Quick check on the concurrent map first, with minimal locking.
@@ -216,6 +225,11 @@ public class InitDestroyAnnotationBeanPostProcessor
 		return metadata;
 	}
 
+	/**
+	 * 查找本类和父类、接口中的所有方法上标记了@PostConstruct(添加到列表的头部)和@PreDestroy注解的方法(添加到列表的尾部)。
+	 * @param clazz
+	 * @return
+	 */
 	private LifecycleMetadata buildLifecycleMetadata(final Class<?> clazz) {
 		if (!AnnotationUtils.isCandidateClass(clazz, Arrays.asList(this.initAnnotationType, this.destroyAnnotationType))) {
 			return this.emptyLifecycleMetadata;
@@ -230,6 +244,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
+				// 方法上是否存在@PostConstruct注解
 				if (this.initAnnotationType != null && method.isAnnotationPresent(this.initAnnotationType)) {
 					LifecycleElement element = new LifecycleElement(method);
 					currInitMethods.add(element);
@@ -271,6 +286,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	/**
 	 * Class representing information about annotated init and destroy methods.
+	 * 表示有关带注解的 init 和 destroy 方法的信息的类。
 	 */
 	private class LifecycleMetadata {
 
@@ -280,6 +296,9 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 		private final Collection<LifecycleElement> destroyMethods;
 
+		/**
+		 * 去重后的initMethods
+		 */
 		@Nullable
 		private volatile Set<LifecycleElement> checkedInitMethods;
 
@@ -296,6 +315,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 		public void checkConfigMembers(RootBeanDefinition beanDefinition) {
 			Set<LifecycleElement> checkedInitMethods = new LinkedHashSet<>(this.initMethods.size());
+			// 按照identifier去重InitMethods和DestroyMethods
 			for (LifecycleElement element : this.initMethods) {
 				String methodIdentifier = element.getIdentifier();
 				if (!beanDefinition.isExternallyManagedInitMethod(methodIdentifier)) {
@@ -368,10 +388,12 @@ public class InitDestroyAnnotationBeanPostProcessor
 		private final String identifier;
 
 		public LifecycleElement(Method method) {
+			// 不能有方法参数
 			if (method.getParameterCount() != 0) {
 				throw new IllegalStateException("Lifecycle method annotation requires a no-arg method: " + method);
 			}
 			this.method = method;
+			// 方法的名字
 			this.identifier = (Modifier.isPrivate(method.getModifiers()) ?
 					ClassUtils.getQualifiedMethodName(method) : method.getName());
 		}

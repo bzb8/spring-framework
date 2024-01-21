@@ -60,6 +60,7 @@ public class ReplaceOverride extends MethodOverride {
 
 	/**
 	 * Return the name of the bean implementing MethodReplacer.
+	 * -- 返回实现 MethodReplacer 的 Bean 的名称。
 	 */
 	public String getMethodReplacerBeanName() {
 		return this.methodReplacerBeanName;

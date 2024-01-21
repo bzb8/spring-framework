@@ -54,13 +54,15 @@ public interface InstantiationStrategy {
 	/**
 	 * Return an instance of the bean with the given name in this factory,
 	 * creating it via the given constructor.
-	 * @param bd the bean definition
+	 * -- 返回此工厂中具有给定名称的bean的实例，通过给定的构造函数创建它。
+	 *
+	 * @param bd the bean definition -- bean定义
 	 * @param beanName the name of the bean when it is created in this context.
 	 * The name can be {@code null} if we are autowiring a bean which doesn't
-	 * belong to the factory.
-	 * @param owner the owning BeanFactory
-	 * @param ctor the constructor to use
-	 * @param args the constructor arguments to apply
+	 * belong to the factory. -- bean在该上下文中创建时的名称。如果我们正在自动装配一个不属于工厂的bean，则该名称可以为{@code null}。
+	 * @param owner the owning BeanFactory -- 拥有的BeanFactory
+	 * @param ctor the constructor to use -- 要使用的构造函数
+	 * @param args the constructor arguments to apply -- 要应用的构造函数参数
 	 * @return a bean instance for this bean definition
 	 * @throws BeansException if the instantiation attempt failed
 	 */

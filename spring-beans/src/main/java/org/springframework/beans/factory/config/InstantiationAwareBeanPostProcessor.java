@@ -95,10 +95,10 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * <p>This is the ideal callback for performing custom field injection on the given bean
 	 * instance, right before Spring's autowiring kicks in.
 	 * <p>The default implementation returns {@code true}.
-	 *
-	 * 在通过构造函数或工厂方法实例化 bean 之后，但在 Spring 属性填充（来自显式属性或自动装配）发生之前执行操作。
-	 * 这是在Spring自动装配启动之前，在给定的bean实例上执行自定义字段注入的理想回调方法。
-	 * 默认实现返回true。
+	 * --
+	 * 通过构造函数或工厂方法实例化bean后，但在Spring属性填充（从显式属性或自动装配）发生之前执行操作。
+	 * 这是在Spring的自动装配启动之前在给定bean实例上执行自定义字段注入的理想回调。
+	 * <p>默认实现返回{@code true}。
 	 *
 	 * @param bean the bean instance created, with properties not having been set yet -- 已创建的 Bean 实例，其属性尚未设置
 	 * @param beanName the name of the bean
@@ -106,6 +106,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * if property population should be skipped. Normal implementations should return {@code true}.
 	 * Returning {@code false} will also prevent any subsequent InstantiationAwareBeanPostProcessor
 	 * instances being invoked on this bean instance.
+	 * --
 	 * 如果应该在bean上设置属性，则返回 `true` ；如果应该跳过属性设置，则返回 `false` 。正常情况下，实现应该返回 `true` 。
 	 * 返回 `false` 也将阻止在此bean实例上调用任何后续的InstantiationAwareBeanPostProcessor实例。
 	 *

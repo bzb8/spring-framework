@@ -96,7 +96,7 @@ public class InjectionMetadata {
 
 	/**
 	 * Determine whether this metadata instance needs to be refreshed.
-	 *
+	 * --
 	 * 确定是否需要刷新此元数据实例。
 	 *
 	 * @param clazz the current target class
@@ -139,7 +139,7 @@ public class InjectionMetadata {
 
 	/**
 	 * Clear property skipping for the contained elements.
-	 *
+	 * --
 	 * 清除包含元素的属性跳过。
 	 *
 	 * @since 3.2.13
@@ -170,7 +170,7 @@ public class InjectionMetadata {
 
 	/**
 	 * Check whether the given injection metadata needs to be refreshed.
-	 *
+	 * --
 	 * 检查是否需要刷新给定的注入元数据。
 	 *
 	 * @param metadata the existing metadata instance 现有元数据实例
@@ -185,7 +185,7 @@ public class InjectionMetadata {
 
 	/**
 	 * A single injected element.
-	 *
+	 * --
 	 * 单个注入元素。
 	 */
 	public abstract static class InjectedElement {
@@ -193,6 +193,9 @@ public class InjectionMetadata {
 		// Field or Method
 		protected final Member member;
 
+		/**
+		 * 是否表示字段
+		 */
 		protected final boolean isField;
 
 		@Nullable
