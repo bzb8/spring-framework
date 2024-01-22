@@ -183,6 +183,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	/**
 	 * Cache of filtered PropertyDescriptors: bean Class to PropertyDescriptor array.
+	 * 过滤的 PropertyDescriptor 缓存：Bean 类到 PropertyDescriptor 数组。
 	 */
 	private final ConcurrentMap<Class<?>, PropertyDescriptor[]> filteredPropertyDescriptorsCache =
 			new ConcurrentHashMap<>();
@@ -1588,6 +1589,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		boolean hasInstAwareBpps = hasInstantiationAwareBeanPostProcessors();
+		// 需要依赖检查
 		boolean needsDepCheck = (mbd.getDependencyCheck() != AbstractBeanDefinition.DEPENDENCY_CHECK_NONE);
 
 		PropertyDescriptor[] filteredPds = null;
@@ -1596,6 +1598,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				pvs = mbd.getPropertyValues();
 			}
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
+				// 依赖bean注入相应的字段或方法参数
 				PropertyValues pvsToUse = bp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
 				if (pvsToUse == null) {
 					if (filteredPds == null) {
@@ -1611,6 +1614,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		if (needsDepCheck) {
 			if (filteredPds == null) {
+				// 删除需要过滤的属性
 				filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 			}
 			checkDependencies(beanName, mbd, filteredPds, pvs);
@@ -1669,7 +1673,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * 定义“按类型自动注入”（按类型划分的 Bean 属性）行为的抽象方法。
 	 * 这与 PicoContainer 默认值类似，其中 Bean 工厂中必须正好有一个属性类型的 bean。
 	 * 这使得 Bean 工厂易于为小型命名空间配置，但对于大型应用程序来说，它不如标准的 Spring 行为。
-	 * 查找需要依赖注入的属性名，迭代处理，构建属性描述符的类型依赖描述符，按类型解析出相应的bean，保存到pvs中
+	 * 查找需要依赖注入的属性名，迭代处理，构建属性描述符的类型依赖描述符，按类型解析出相应的bean，保存到pvs中(property name -> bean)
 	 *
 	 * @param beanName the name of the bean to autowire by type
 	 * @param mbd      the merged bean definition to update through autowiring
@@ -1789,6 +1793,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected PropertyDescriptor[] filterPropertyDescriptorsForDependencyCheck(BeanWrapper bw) {
 		List<PropertyDescriptor> pds = new ArrayList<>(Arrays.asList(bw.getPropertyDescriptors()));
+		// 删除需要过滤的属性
 		pds.removeIf(this::isExcludedFromDependencyCheck);
 		return pds.toArray(new PropertyDescriptor[0]);
 	}
@@ -1822,7 +1827,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 *
 	 * @param beanName the name of the bean
 	 * @param mbd      the merged bean definition the bean was created with
-	 * @param pds      the relevant property descriptors for the target bean
+	 * @param pds      the relevant property descriptors for the target bean -- 目标 Bean 的相关属性描述符，需要过滤的属性
 	 * @param pvs      the property values to be applied to the bean
 	 * @see #isExcludedFromDependencyCheck(java.beans.PropertyDescriptor)
 	 */
@@ -1867,6 +1872,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		MutablePropertyValues mpvs = null;
+		// 原始值 pvs
 		List<PropertyValue> original;
 
 		if (pvs instanceof MutablePropertyValues) {
@@ -1897,12 +1903,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// 创建深层副本，解析值的任何引用。
 		List<PropertyValue> deepCopy = new ArrayList<>(original.size());
 		boolean resolveNecessary = false;
+		// 迭代解析pv的value值，并存入converted属性中
 		for (PropertyValue pv : original) {
 			if (pv.isConverted()) {
 				deepCopy.add(pv);
 			} else {
 				String propertyName = pv.getName();
+				// 原始的属性值
 				Object originalValue = pv.getValue();
+				// 属性值为字段注入标记接口，则创建DependencyDescriptor
 				if (originalValue == AutowiredPropertyMarker.INSTANCE) {
 					Method writeMethod = bw.getPropertyDescriptor(propertyName).getWriteMethod();
 					if (writeMethod == null) {
@@ -1910,16 +1919,21 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					}
 					originalValue = new DependencyDescriptor(new MethodParameter(writeMethod, 0), true);
 				}
+				// 解析bean之后的属性值
 				Object resolvedValue = valueResolver.resolveValueIfNecessary(pv, originalValue);
 				Object convertedValue = resolvedValue;
+				// 属性可写并且非内嵌或索引属性
 				boolean convertible = bw.isWritableProperty(propertyName) &&
 						!PropertyAccessorUtils.isNestedOrIndexedProperty(propertyName);
 				if (convertible) {
+					// 转换值
 					convertedValue = convertForProperty(resolvedValue, propertyName, bw, converter);
 				}
 				// Possibly store converted value in merged bean definition,
 				// in order to avoid re-conversion for every created bean instance.
+				// 可能将转换后的值存储在合并的 Bean 定义中，以避免对每个创建的 Bean 实例进行重新转换。
 				if (resolvedValue == originalValue) {
+					// 设置convert == true
 					if (convertible) {
 						pv.setConvertedValue(convertedValue);
 					}
@@ -1935,11 +1949,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				}
 			}
 		}
+		// 缓存，避免下面的setPropertyValues() 重复执行
 		if (mpvs != null && !resolveNecessary) {
 			mpvs.setConverted();
 		}
 
 		// Set our (possibly massaged) deep copy.
+		// 设置我们的（可能经过按摩的）深层副本。
 		try {
 			bw.setPropertyValues(new MutablePropertyValues(deepCopy));
 		} catch (BeansException ex) {

@@ -54,6 +54,9 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 
 	private boolean optional = false;
 
+	/**
+	 * 解析bean和转换之后的属性值
+	 */
 	private boolean converted = false;
 
 	@Nullable

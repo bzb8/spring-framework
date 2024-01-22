@@ -347,6 +347,10 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	 * outside the PropertyValue(s) mechanism.
 	 * <p>This will lead to {@code true} being returned from
 	 * a {@link #contains} call for the specified property.
+	 * --
+	 * 这段代码是关于注册指定的属性为“已处理”，即某个处理器在PropertyValue(s)机制之外调用相应的setter方法。
+	 * 这将导致{@link #contains}调用为指定属性返回{@code true}。
+	 *
 	 * @param propertyName the name of the property.
 	 */
 	public void registerProcessedProperty(String propertyName) {

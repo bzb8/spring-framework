@@ -369,8 +369,10 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
+		// 查找@Resource注解
 		InjectionMetadata metadata = findResourceMetadata(beanName, bean.getClass(), pvs);
 		try {
+			// 注入解析的bean
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (Throwable ex) {
@@ -543,6 +545,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	/**
 	 * Obtain the resource object for the given name and type.
+	 * -- 获取给定名称和类型的资源对象。
 	 * @param element the descriptor for the annotated field/method
 	 * @param requestingBeanName the name of the requesting bean
 	 * @return the resource object (never {@code null})
@@ -578,8 +581,11 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	/**
 	 * Obtain a resource object for the given name and type through autowiring
 	 * based on the given factory.
+	 * -- 根据给定的工厂，通过自动注入获取给定名称和类型的资源对象。
+	 *
 	 * @param factory the factory to autowire against
 	 * @param element the descriptor for the annotated field/method
+	 *                   -- 字段或方法的描述符 （ResourceElement(field, field, null)、ResourceElement(method, bridgedMethod, pd)）
 	 * @param requestingBeanName the name of the requesting bean
 	 * @return the resource object (never {@code null})
 	 * @throws NoSuchBeanDefinitionException if no corresponding target resource found
@@ -591,11 +597,13 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 		Set<String> autowiredBeanNames;
 		String name = element.name;
 
+		// 根据bean名字或bean名字类型解析工厂中的依赖bean对象
 		if (factory instanceof AutowireCapableBeanFactory) {
 			AutowireCapableBeanFactory beanFactory = (AutowireCapableBeanFactory) factory;
 			DependencyDescriptor descriptor = element.getDependencyDescriptor();
 			if (this.fallbackToDefaultTypeMatch && element.isDefaultName && !factory.containsBean(name)) {
 				autowiredBeanNames = new LinkedHashSet<>();
+				// 解析依赖的bean对象
 				resource = beanFactory.resolveDependency(descriptor, requestingBeanName, autowiredBeanNames, null);
 				if (resource == null) {
 					throw new NoSuchBeanDefinitionException(element.getLookupType(), "No resolvable resource object");
@@ -611,6 +619,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			autowiredBeanNames = Collections.singleton(name);
 		}
 
+		// 注册依赖缓存
 		if (factory instanceof ConfigurableBeanFactory) {
 			ConfigurableBeanFactory beanFactory = (ConfigurableBeanFactory) factory;
 			for (String autowiredBeanName : autowiredBeanNames) {
@@ -650,6 +659,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	protected abstract static class LookupElement extends InjectionMetadata.InjectedElement {
 
 		// resourceName 或 “”
+		// 属性名
 		protected String name = "";
 
 		/**

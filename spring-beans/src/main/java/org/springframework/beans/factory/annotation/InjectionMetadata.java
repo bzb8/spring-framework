@@ -72,6 +72,9 @@ public class InjectionMetadata {
 
 	private final Collection<InjectedElement> injectedElements;
 
+	/**
+	 * 去重之后的injectedElements
+	 */
 	@Nullable
 	private volatile Set<InjectedElement> checkedElements;
 
@@ -121,9 +124,11 @@ public class InjectionMetadata {
 
 	/**
 	 * Inject the supplied property values into the supplied target object.
+	 * -- 将提供的属性值注入到提供的目标对象中。
+	 *
 	 * @param target bean to inject
 	 * @param beanName
-	 * @param pvs
+	 * @param pvs -- 解析依赖bean之后的
 	 * @throws Throwable
 	 */
 	public void inject(Object target, @Nullable String beanName, @Nullable PropertyValues pvs) throws Throwable {
@@ -216,12 +221,14 @@ public class InjectionMetadata {
 
 		protected final Class<?> getResourceType() {
 			if (this.isField) {
+				// 字段的类型
 				return ((Field) this.member).getType();
 			}
 			else if (this.pd != null) {
 				return this.pd.getPropertyType();
 			}
 			else {
+				// 方法第一个参数的类型
 				return ((Method) this.member).getParameterTypes()[0];
 			}
 		}
@@ -246,11 +253,12 @@ public class InjectionMetadata {
 
 		/**
 		 * Either this or {@link #getResourceToInject} needs to be overridden.
+		 * --
+		 * 要么这个，要么 getResourceToInject 需要被覆盖。
 		 *
-		 * 需要覆盖此或 {@link #getResourceToInject}。
-		 *
-		 * @param target bean to inject
-		 * @param requestingBeanName the name of the bean requesting injection
+		 * @param target bean to inject -- 要注入的Bean
+		 * @param requestingBeanName the name of the bean requesting injection -- 请求注入的 bean 的名称
+		 * @param pvs -- 解析依赖Bean之后的
 		 */
 		protected void inject(Object target, @Nullable String requestingBeanName, @Nullable PropertyValues pvs)
 				throws Throwable {
@@ -258,6 +266,7 @@ public class InjectionMetadata {
 			if (this.isField) {
 				Field field = (Field) this.member;
 				ReflectionUtils.makeAccessible(field);
+				// 给bean的字段注入解析的bean
 				field.set(target, getResourceToInject(target, requestingBeanName));
 			}
 			else {
@@ -267,6 +276,7 @@ public class InjectionMetadata {
 				try {
 					Method method = (Method) this.member;
 					ReflectionUtils.makeAccessible(method);
+					// 设置set方法的参数为已解析的bean
 					method.invoke(target, getResourceToInject(target, requestingBeanName));
 				}
 				catch (InvocationTargetException ex) {
@@ -279,6 +289,8 @@ public class InjectionMetadata {
 		 * Check whether this injector's property needs to be skipped due to
 		 * an explicit property value having been specified. Also marks the
 		 * affected property as processed for other processors to ignore it.
+		 * --
+		 * 这段代码是关于检查注入器的属性是否需要跳过，因为已经指定了显式的属性值。它还将受影响的属性标记为已处理，以便其他处理器忽略它。
 		 */
 		protected boolean checkPropertySkipping(@Nullable PropertyValues pvs) {
 			Boolean skip = this.skip;

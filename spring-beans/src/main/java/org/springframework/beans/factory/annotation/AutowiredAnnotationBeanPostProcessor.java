@@ -786,8 +786,15 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		private final boolean required;
 
+		/**
+		 * 解析出的bean依赖只有一个才是true
+		 */
 		private volatile boolean cached;
 
+		/**
+		 * 默认DependencyDescriptor
+		 * 解析出的bean依赖只有一个才是true则为ShortcutDependencyDescriptor(desc, autowiredBeanName)
+		 */
 		@Nullable
 		private volatile Object cachedFieldValue;
 
@@ -830,6 +837,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			Object value;
 			try {
 				// DefaultListableBeanFactory
+				// 解析bean
 				value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
 			}
 			catch (BeansException ex) {
@@ -868,8 +876,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		private final boolean required;
 
+		/**
+		 * 方法参数解析出了相应的Bean
+		 */
 		private volatile boolean cached;
 
+		/**
+		 * 方法参数解析的bean缓存
+		 */
 		@Nullable
 		private volatile Object[] cachedMethodArguments;
 
@@ -899,6 +913,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			else {
 				arguments = resolveMethodArguments(method, bean, beanName);
 			}
+			// 使用反射调用设置相应的参数
 			if (arguments != null) {
 				try {
 					ReflectionUtils.makeAccessible(method);
@@ -924,19 +939,23 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		@Nullable
 		private Object[] resolveMethodArguments(Method method, Object bean, @Nullable String beanName) {
+			// 参数数量
 			int argumentCount = method.getParameterCount();
 			Object[] arguments = new Object[argumentCount];
 			DependencyDescriptor[] descriptors = new DependencyDescriptor[argumentCount];
 			Set<String> autowiredBeanNames = new LinkedHashSet<>(argumentCount * 2);
 			Assert.state(beanFactory != null, "No BeanFactory available");
 			TypeConverter typeConverter = beanFactory.getTypeConverter();
+			// 表里方法的每个参数
 			for (int i = 0; i < arguments.length; i++) {
 				MethodParameter methodParam = new MethodParameter(method, i);
 				DependencyDescriptor currDesc = new DependencyDescriptor(methodParam, this.required);
 				currDesc.setContainingClass(bean.getClass());
 				descriptors[i] = currDesc;
 				try {
+					// 解析当前参数的bean
 					Object arg = beanFactory.resolveDependency(currDesc, beanName, autowiredBeanNames, typeConverter);
+					// 有一个参数为null && 当前参数不是必需依赖，之前跳槽循环
 					if (arg == null && !this.required) {
 						arguments = null;
 						break;
