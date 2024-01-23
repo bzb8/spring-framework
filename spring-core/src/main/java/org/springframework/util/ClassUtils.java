@@ -84,7 +84,10 @@ public abstract class ClassUtils {
 	/** The ".class" file suffix. */
 	public static final String CLASS_FILE_SUFFIX = ".class";
 
-	/** Precomputed value for the combination of private, static and final modifiers. */
+	/**
+	 * Precomputed value for the combination of private, static and final modifiers.
+	 * 私有、静态和最终修饰符组合的预计算值。
+	 */
 	private static final int NON_OVERRIDABLE_MODIFIER = Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL;
 
 	/** Precomputed value for the combination of public and protected modifiers. */
@@ -278,7 +281,7 @@ public abstract class ClassUtils {
 		if (name.endsWith(ARRAY_SUFFIX)) {
 			String elementClassName = name.substring(0, name.length() - ARRAY_SUFFIX.length());
 			Class<?> elementClass = forName(elementClassName, classLoader);
-			// 创建数组，并数组对象
+			// 创建数组对象，并获取它的class
 			return Array.newInstance(elementClass, 0).getClass();
 		}
 
@@ -1110,6 +1113,7 @@ public abstract class ClassUtils {
 	/**
 	 * Return the qualified name of the given method, consisting of
 	 * fully qualified interface/class name + "." + method name.
+	 * 返回给定方法的限定名，由完全限定的 interface/class name + “.” + method name 组成。
 	 * @param method the method
 	 * @return the qualified name of the method
 	 */
@@ -1122,7 +1126,7 @@ public abstract class ClassUtils {
 	 * fully qualified interface/class name + "." + method name.
 	 * @param method the method
 	 * @param clazz the clazz that the method is being invoked on
-	 * (may be {@code null} to indicate the method's declaring class)
+	 * (may be {@code null} to indicate the method's declaring class) -- 调用方法的 clazz（可能用于 null 指示方法的声明类）
 	 * @return the qualified name of the method
 	 * @since 4.3.4
 	 */
@@ -1342,28 +1346,33 @@ public abstract class ClassUtils {
 	 * <p><b>NOTE:</b> Since Spring 3.1.1, if Java security settings disallow reflective
 	 * access (e.g. calls to {@code Class#getDeclaredMethods} etc, this implementation
 	 * will fall back to returning the originally provided method.
+	 * --
+	 * 给定一个方法，它可能来自一个接口，以及一个用于当前反射调用的目标类，如果有的话，找到相应的目标方法。
+	 * 例如，方法可能是{@code IFoo.bar()}，而目标类可能是{@code DefaultFoo}。在这种情况下，
+	 * 方法可能是 {@code DefaultFoo.bar()}。这使得可以找到该方法上的属性。
+	 * 注意：与{@link org.springframework.aop.support.AopUtils#getMostSpecificMethod}不同，此方法不自动解析桥接方法。
+	 * 如果需要桥接方法解析（例如，从原始方法定义中获取元数据），请调用{@link org.springframework.core.BridgeMethodResolver#findBridgedMethod}。
+	 * 注意：从Spring 3.1.1开始，如果Java安全设置不允许反射访问（例如，对{@code Class#getDeclaredMethods}等的调用，
+	 * 此实现将回退到返回原始提供的方法。
 	 *
-	 * 给定一个方法（可能来自接口）和当前反射调用中使用的目标类，如果有，请查找相应的目标方法。
-	 * 例如，方法可以是 {@code IFoo.bar()}，目标类可以是 {@code DefaultFoo}。在这种情况下，该方法可以是 {@code DefaultFoo.bar()}。
-	 * 这样就可以找到该方法的属性。
-	 * 注意：与{@link org.springframework.aop.support.AopUtils#getMostSpecificMethod}相比，
-	 * 此方法不会自动解析桥接方法。如果需要桥接方法解析（例如，用于从原始方法定义中获取元数据），
-	 * 请调用{@link org.springframework.core.BridgeMethod#ResolverfindBridgedMethod}。
-	 * 注意：<b>从 Spring 3.1.1 开始，如果 Java 安全设置不允许反射访问（例如，调用 {@code Class#getDeclaredMethods} 等），
-	 * 则此实现将回退到返回最初提供的方法。
-	 *
-	 * @param method the method to be invoked, which may come from an interface
+	 * @param method the method to be invoked, which may come from an interface -- 要调用的方法，它可能来自一个接口。
 	 * @param targetClass the target class for the current invocation
 	 * (may be {@code null} or may not even implement the method)
+	 * -- 当前调用的目标类（可能为{@code null}，甚至可能不实现该方法）
+	 *
 	 * @return the specific target method, or the original method if the
 	 * {@code targetClass} does not implement it
+	 * -- 具体的目标方法，或者如果{@code targetClass}不实现它，则为原始方法
+	 *
 	 * @see #getInterfaceMethodIfPossible(Method, Class)
 	 */
 	public static Method getMostSpecificMethod(Method method, @Nullable Class<?> targetClass) {
+		// 方法的声明类和目标类不是同一个类，&& 方法在目标类中可重写
 		if (targetClass != null && targetClass != method.getDeclaringClass() && isOverridable(method, targetClass)) {
 			try {
 				if (Modifier.isPublic(method.getModifiers())) {
 					try {
+						// 从目标类中获取和方法同名和同参数的方法
 						return targetClass.getMethod(method.getName(), method.getParameterTypes());
 					}
 					catch (NoSuchMethodException ex) {
@@ -1462,7 +1471,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Determine whether the given method is overridable in the given target class.
-	 *
+	 * --
 	 * 确定给定的方法在给定的目标类中是否可重写。
 	 *
 	 * @param method the method to check

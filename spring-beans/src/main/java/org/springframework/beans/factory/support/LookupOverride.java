@@ -26,9 +26,13 @@ import org.springframework.util.ObjectUtils;
 /**
  * Represents an override of a method that looks up an object in the same IoC context,
  * either by bean name or by bean type (based on the declared method return type).
+ * --
+ * 表示方法的重写，该方法按 Bean 名称或 Bean 类型（基于声明的方法返回类型）在同一 IoC 上下文中查找对象。
  *
  * <p>Methods eligible for lookup override may declare arguments in which case the
  * given arguments are passed to the bean retrieval operation.
+ * --
+ * 符合查找覆盖条件的方法可以声明参数，在这种情况下，给定的参数将传递给 Bean 检索操作。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

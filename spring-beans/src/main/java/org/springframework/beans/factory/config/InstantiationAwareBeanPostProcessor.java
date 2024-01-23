@@ -95,10 +95,10 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * <p>This is the ideal callback for performing custom field injection on the given bean
 	 * instance, right before Spring's autowiring kicks in.
 	 * <p>The default implementation returns {@code true}.
-	 *
-	 * 在通过构造函数或工厂方法实例化 bean 之后，但在 Spring 属性填充（来自显式属性或自动装配）发生之前执行操作。
-	 * 这是在Spring自动装配启动之前，在给定的bean实例上执行自定义字段注入的理想回调方法。
-	 * 默认实现返回true。
+	 * --
+	 * 通过构造函数或工厂方法实例化bean后，但在Spring属性填充（从显式属性或自动装配）发生之前执行操作。
+	 * 这是在Spring的自动装配启动之前在给定bean实例上执行自定义字段注入的理想回调。
+	 * <p>默认实现返回{@code true}。
 	 *
 	 * @param bean the bean instance created, with properties not having been set yet -- 已创建的 Bean 实例，其属性尚未设置
 	 * @param beanName the name of the bean
@@ -106,6 +106,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * if property population should be skipped. Normal implementations should return {@code true}.
 	 * Returning {@code false} will also prevent any subsequent InstantiationAwareBeanPostProcessor
 	 * instances being invoked on this bean instance.
+	 * --
 	 * 如果应该在bean上设置属性，则返回 `true` ；如果应该跳过属性设置，则返回 `false` 。正常情况下，实现应该返回 `true` 。
 	 * 返回 `false` 也将阻止在此bean实例上调用任何后续的InstantiationAwareBeanPostProcessor实例。
 	 *
@@ -123,19 +124,22 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * {@link #postProcessPropertyValues} implementation, and {@code pvs} otherwise.
 	 * In a future version of this interface (with {@link #postProcessPropertyValues} removed),
 	 * the default implementation will return the given {@code pvs} as-is directly.
+	 * --
+	 * 在工厂将给定的属性值应用到给定的Bean之前，对这些属性值进行后处理，而不需要使用任何属性描述符。
 	 *
-	 * 在工厂将给定的属性值应用于给定的 Bean 之前，对它们进行后处理，而无需任何属性描述符。
-	 * 如果实现提供自定义 {@link #postProcessPropertyValues} 实现，则应返回 {@code null}（默认值），否则应返回 {@code pvs}。
-	 * 在此接口的未来版本中（删除了 {@link #postProcessPropertyValues}），默认实现将直接按原样返回给定的 {@code pvs}。
+	 * <p>实现应该在提供自定义{@link #postProcessPropertyValues}实现时返回{@code null}（默认值），在未提供自定义实现时返回{@code pvs}。
+	 * 在这个接口的将来版本中（{@link #postProcessPropertyValues}被移除的版本中），
+	 * 默认实现将直接返回给定的{@code pvs}。
 	 *
 	 * @param pvs the property values that the factory is about to apply (never {@code null})
-	 * @param bean the bean instance created, but whose properties have not yet been set
+	 *               -- 工厂将要应用的属性值（从不 null），解析依赖Bean之后的
+	 * @param bean the bean instance created, but whose properties have not yet been set -- 已创建但尚未设置其属性的 Bean 实例
 	 * @param beanName the name of the bean
 	 * @return the actual property values to apply to the given bean (can be the passed-in
 	 * PropertyValues instance), or {@code null} which proceeds with the existing properties
 	 * but specifically continues with a call to {@link #postProcessPropertyValues}
 	 * (requiring initialized {@code PropertyDescriptor}s for the current bean class)
-	 *
+	 * --
 	 * 应用于给定 Bean 的实际属性值（可以是传入的 PropertyValues 实例），或 {@code null}，它继续处理现有属性，
 	 * 但专门继续调用 {@link #postProcessPropertyValues}（需要初始化当前 Bean 类的 {@code PropertyDescriptor}）
 	 *
@@ -158,14 +162,15 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * creating a new MutablePropertyValues instance based on the original PropertyValues,
 	 * adding or removing specific values.
 	 * <p>The default implementation returns the given {@code pvs} as-is.
-	 *
+	 * --
 	 * 在工厂将给定的属性值应用于给定的 Bean 之前，对它们进行后处理。允许检查是否满足所有依赖项，例如，基于 Bean 属性设置器上的“必需”注解。
 	 * 还允许替换要应用的属性值，通常是通过基于原始 PropertyValues 创建新的 MutablePropertyValues 实例，添加或删除特定值。
 	 * 默认实现按原样返回给定的 {@code pvs}。
 	 *
 	 * @param pvs the property values that the factory is about to apply (never {@code null}) 工厂即将应用的属性值 （从不 {@code null}）
 	 * @param pds the relevant property descriptors for the target bean (with ignored
-	 * dependency types - which the factory handles specifically - already filtered out) 目标 Bean 的相关属性描述符（忽略依赖类型 - 工厂专门处理 - 已经过滤掉）
+	 * dependency types - which the factory handles specifically - already filtered out)
+	 *            -- 目标 Bean 的相关属性描述符（忽略依赖类型 - 工厂专门处理 - 已经过滤掉）
 	 * @param bean the bean instance created, but whose properties have not yet been set 已创建但尚未设置其属性的 Bean 实例
 	 * @param beanName the name of the bean
 	 * @return the actual property values to apply to the given bean (can be the passed-in

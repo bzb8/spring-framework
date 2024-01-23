@@ -94,16 +94,17 @@ public interface SmartInstantiationAwareBeanPostProcessor extends InstantiationA
 	 * for the affected bean has been built for a call to this method already,
 	 * it will be exposes as final bean reference by default).
 	 * <p>The default implementation returns the given {@code bean} as-is.
+	 * --
+	 * 获取对指定bean的早期访问引用，通常用于解析循环引用。
+	 * 此回调为后处理器提供了在目标bean实例完全初始化之前提前公开包装器的机会。
+	 * 公开的对象应该等同于{@link #postProcessBeforeInitialization} / {@link #postProcessAfterInitialization}
+	 * 否则将公开的对象视为bean引用，除非后处理器从这些后处理回调中返回不同的包装器。
+	 * 换句话说：这些后处理回调可以最终公开相同的引用，或者从这些后续回调中返回受影响的bean的原始实例
+	 * （如果已为对此方法的调用构建了受影响的bean的包装器，则默认情况下将其公开为最终bean引用）。
+	 * 默认实现将给定的{@code bean}原样返回。
 	 *
-	 * 获取用于早期访问指定 Bean 的引用，通常用于解析循环引用。
-	 * 此回调使后处理器有机会提前暴露包装器 - 即在目标 Bean 实例完全初始化之前。
-	 * 公开的对象应等同于 {@link #postProcessBeforeInitialization} {@link #postProcessAfterInitialization} 否则将公开的内容。
-	 * 请注意，此方法返回的对象将用作 Bean 引用，除非后处理器返回与所述后处理回调不同的包装器。换言之：这些后处理回调可能最终公开相同的引用，
-	 * 或者从这些后续回调中返回原始 Bean 实例（如果受影响的 Bean 的包装器已经为调用此方法而构建，则默认情况下它将作为最终的 Bean 引用公开）。
-	 * 缺省实现按原样返回给定的 {@code bean}。
-	 *
-	 * @param bean the raw bean instance
-	 * @param beanName the name of the bean
+	 * @param bean the raw bean instance -- 原始bean实例
+	 * @param beanName the name of the bean -- bean的名称
 	 * @return the object to expose as bean reference
 	 * (typically with the passed-in bean instance as default)
 	 * @throws org.springframework.beans.BeansException in case of errors

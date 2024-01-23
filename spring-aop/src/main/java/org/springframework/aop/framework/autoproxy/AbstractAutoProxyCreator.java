@@ -269,8 +269,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	@Override
 	public Object getEarlyBeanReference(Object bean, String beanName) {
+		// bean name 或 bean class
 		Object cacheKey = getCacheKey(bean.getClass(), beanName);
 		this.earlyProxyReferences.put(cacheKey, bean);
+		// 返回代理
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
 
@@ -342,7 +344,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * a plain bean name, prepended with {@link BeanFactory#FACTORY_BEAN_PREFIX}
 	 * in case of a {@code FactoryBean}; or if no bean name specified, then the
 	 * given bean {@code Class} as-is.
-	 *
+	 * --
 	 * 为给定的 Bean 类和 Bean 名称构建缓存键。
 	 * 注意：从 4.2.3 开始，此实现不再返回级联的class/name String，而是返回最有效的缓存键：一个普通的 Bean 名称，如果是 {@code FactoryBean}，
 	 * 则在前面加上 {@link BeanFactory#FACTORY_BEAN_PREFIX};或者，如果没有指定 Bean 名称，则按原样返回给定的 Bean {@code Class}。
@@ -363,12 +365,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	/**
 	 * Wrap the given bean if necessary, i.e. if it is eligible for being proxied.
-	 *
+	 * --
 	 * 如有必要，即如果它有资格被代理，请包装给定的 bean。
 	 *
 	 * @param bean the raw bean instance
 	 * @param beanName the name of the bean
-	 * @param cacheKey the cache key for metadata access 用于元数据访问的缓存键
+	 * @param cacheKey the cache key for metadata access -- 用于元数据访问的缓存键
 	 * @return a proxy wrapping the bean, or the raw bean instance as-is
 	 */
 	protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {

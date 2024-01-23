@@ -91,8 +91,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
-	/** Set of registered singletons, containing the bean names in registration order. */
-	// 一组已注册的单例，包含按注册顺序排列的 Bean 名称。
+	/**
+	 * Set of registered singletons, containing the bean names in registration order.
+	 * 一组已注册的单例，包含按注册顺序排列的 Bean 名称。
+	 * 包含提前暴漏的前期引用
+	 */
 	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
 
 	/**
@@ -403,7 +406,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/**
 	 * Return whether the specified singleton bean is currently in creation
 	 * (within the entire factory).
-	 *
+	 * --
 	 * 返回指定的单例 bean 当前是否正在创建（在整个工厂内）。
 	 * @param beanName the name of the bean
 	 */

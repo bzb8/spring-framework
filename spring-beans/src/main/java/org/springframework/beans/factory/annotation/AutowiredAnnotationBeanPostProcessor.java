@@ -100,7 +100,7 @@ import org.springframework.util.StringUtils;
  * then a primary/default constructor (if present) will be used. If a class only
  * declares a single constructor to begin with, it will always be used, even if not
  * annotated. An annotated constructor does not have to be public.
- *
+ * --
  * 任何给定 bean 类的一个构造函数都可以声明此注解，并将 'required' 属性设置为 {@code true}，指示构造函数在用作 Spring Bean 时自动注入。
  * 此外，如果“required”属性设置为 {@code true}，则只能使用 {@code @Autowired} 注解单个构造函数。如果多个非必需的构造函数声明了注解，则它们将被视为自动注解的候选项。
  * 将选择具有最多依赖项的构造函数，这些构造函数可以通过匹配 Spring 容器中的 bean 来满足。如果不能满足任何候选者，则将使用 primary/default 构造函数（如果存在）。
@@ -109,7 +109,7 @@ import org.springframework.util.StringUtils;
  * <h3>Autowired Fields</h3>
  * <p>Fields are injected right after construction of a bean, before any
  * config methods are invoked. Such a config field does not have to be public.
- *
+ * --
  * 字段在 bean 构造之后、调用任何配置方法之前立即注入。这样的配置字段不必是公共的。
  *
  * <h3>Autowired Methods</h3>
@@ -117,8 +117,9 @@ import org.springframework.util.StringUtils;
  * those arguments will be autowired with a matching bean in the Spring container.
  * Bean property setter methods are effectively just a special case of such a
  * general config method. Config methods do not have to be public.
- *
- * 配置方法可以有任意名称和任意数量的参数；这些参数中的每一个都将使用 Spring 容器中的匹配 bean 自动装配。 Bean 属性设置方法实际上只是这种通用配置方法的一个特例。配置方法不必是公共的。
+ * -- -
+ * 配置方法可以有任意名称和任意数量的参数；这些参数中的每一个都将使用 Spring 容器中的匹配 bean 自动装配。
+ * Bean 属性设置方法实际上只是这种通用配置方法的一个特例。配置方法不必是公共的。
  *
  * <h3>Annotation Config vs. XML Config</h3>
  * <p>A default {@code AutowiredAnnotationBeanPostProcessor} will be registered
@@ -141,9 +142,10 @@ import org.springframework.util.StringUtils;
  * methods to be replaced by the container at runtime. This is essentially a type-safe
  * version of {@code getBean(Class, args)} and {@code getBean(String, args)}.
  * See {@link Lookup @Lookup's javadoc} for details.
- *
+ * --
  * 除了上面讨论的常规注入点之外，这个后处理器还处理 Spring 的 {@link Lookup @Lookup} 注解，该注解标识要在运行时被容器替换的查找方法。
- * 这实质上是 {@code getBean(Class, args)} 和 {@code getBean(String, args)} 的类型安全版本。有关详细信息，请参阅 {@link Lookup @Lookup's javadoc}。
+ * 这实质上是 {@code getBean(Class, args)} 和 {@code getBean(String, args)} 的类型安全版本。
+ * 有关详细信息，请参阅 {@link Lookup @Lookup's javadoc}。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -177,10 +179,17 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	@Nullable
 	private MetadataReaderFactory metadataReaderFactory;
 
+	/**
+	 * 对@Lookup方法的支持
+	 * 已查找@Lookup注解的方法的bean缓存
+	 */
 	private final Set<String> lookupMethodsChecked = Collections.newSetFromMap(new ConcurrentHashMap<>(256));
 
 	private final Map<Class<?>, Constructor<?>[]> candidateConstructorsCache = new ConcurrentHashMap<>(256);
 
+	/**
+	 * bean name或bean class name -> bean的本类或父类 字段和方法上存在@Autowired注解 的缓存
+	 */
 	private final Map<String, InjectionMetadata> injectionMetadataCache = new ConcurrentHashMap<>(256);
 
 
@@ -295,6 +304,19 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		this.injectionMetadataCache.remove(beanName);
 	}
 
+	/**
+	 * 1. 缓存@Lookup注解到bean定义中
+	 * 2. 检查标记了@Autowired注解的构造方法：
+	 * 3. 如果标记了@Autowired注解的构造方法不为空，且没有@Autowired注解的required==true，则将默认构造器添加到列表末尾返回。
+	 * 4. 如果没有标记@Autowired注解的方法
+	 * 5. 则如果只有一个无参的构造函数，直接返回默认构造函数，
+	 * 6. 否则返回primaryConstructor（java == null），返回null
+	 * @param beanClass the raw class of the bean (never {@code null})
+	 * @param beanName the name of the bean
+	 * @return
+	 * @throws BeanCreationException
+	 */
+
 	@Override
 	@Nullable
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, final String beanName)
@@ -305,15 +327,20 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			if (AnnotationUtils.isCandidateClass(beanClass, Lookup.class)) {
 				try {
 					Class<?> targetClass = beanClass;
+					// 递归查找本地及其父类所有声明@Lookup注解的方法，并缓存
 					do {
 						ReflectionUtils.doWithLocalMethods(targetClass, method -> {
+							// 查找@Lookup注解
 							Lookup lookup = method.getAnnotation(Lookup.class);
 							if (lookup != null) {
 								Assert.state(this.beanFactory != null, "No BeanFactory available");
+								// 创建LookupOverride对象，@Lookup的value属性表示bean名称，为null则根据方法的返回类型按类型检索bean
 								LookupOverride override = new LookupOverride(method, lookup.value());
 								try {
+									// 获取bean定义
 									RootBeanDefinition mbd = (RootBeanDefinition)
 											this.beanFactory.getMergedBeanDefinition(beanName);
+									// 存储在bean定义的methodOverrides属性中
 									mbd.getMethodOverrides().addOverride(override);
 								}
 								catch (NoSuchBeanDefinitionException ex) {
@@ -331,10 +358,12 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					throw new BeanCreationException(beanName, "Lookup method resolution failed", ex);
 				}
 			}
+			// 缓存
 			this.lookupMethodsChecked.add(beanName);
 		}
 
 		// Quick check on the concurrent map first, with minimal locking.
+		// 首先快速检查并发 map，锁定最少。
 		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
@@ -343,6 +372,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
+						// 返回该类声明的所有构造函数，包括私有的
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {
@@ -350,9 +380,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 								"Resolution of declared constructors on bean Class [" + beanClass.getName() +
 								"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 					}
+					// 候选构造函数
 					List<Constructor<?>> candidates = new ArrayList<>(rawCandidates.length);
+					// 带有依赖项的构造函数, required == true，只可有一个
+					// @Autowired标记了required=true，则不能再有其他构造函数标记@Autowired
 					Constructor<?> requiredConstructor = null;
+					// 默认构造函数
 					Constructor<?> defaultConstructor = null;
+					// 对java类来说，只会返回null
 					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
 					int nonSyntheticConstructors = 0;
 					for (Constructor<?> candidate : rawCandidates) {
@@ -362,17 +397,22 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						else if (primaryConstructor != null) {
 							continue;
 						}
+						// 查找@Autowired、@Value、@javax.inject.Inject 其中某个注解
 						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
 						if (ann == null) {
+							// 返回本类或cglib的父类
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
 								try {
+									// 获取参数类型相同的构造函数
 									Constructor<?> superCtor =
 											userClass.getDeclaredConstructor(candidate.getParameterTypes());
+									// 继续查找注解
 									ann = findAutowiredAnnotation(superCtor);
 								}
 								catch (NoSuchMethodException ex) {
 									// Simply proceed, no equivalent superclass constructor found...
+									// 只需继续，没有找到等效的超类构造函数......
 								}
 							}
 						}
@@ -383,6 +423,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 										". Found constructor with 'required' Autowired annotation already: " +
 										requiredConstructor);
 							}
+							// 判断注解的required属性是否为true
 							boolean required = determineRequiredStatus(ann);
 							if (required) {
 								if (!candidates.isEmpty()) {
@@ -395,12 +436,19 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							}
 							candidates.add(candidate);
 						}
+						// 没有标记@Autowired注解
+						// 如果构造函数的参数为零，则是默认构造函数
 						else if (candidate.getParameterCount() == 0) {
 							defaultConstructor = candidate;
 						}
 					}
+
+					// 有标记@Autowired注解的构造函数
 					if (!candidates.isEmpty()) {
 						// Add default constructor to list of optional constructors, as fallback.
+						// 将默认构造函数添加到可选构造函数列表中，作为回退。
+
+						// 没有必选的构造函数
 						if (requiredConstructor == null) {
 							if (defaultConstructor != null) {
 								candidates.add(defaultConstructor);
@@ -414,6 +462,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						}
 						candidateConstructors = candidates.toArray(new Constructor<?>[0]);
 					}
+					// 只有一个构造函数并且它的 参数数量 > 0, 返回它
 					else if (rawCandidates.length == 1 && rawCandidates[0].getParameterCount() > 0) {
 						candidateConstructors = new Constructor<?>[] {rawCandidates[0]};
 					}
@@ -523,6 +572,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		final List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
 
+		// 查找子类或父类上 字段和方法上存在@Autowired @Value @javax.inject.Inject注解，并解析为AutowiredFieldElement
 		do {
 			final List<InjectionMetadata.InjectedElement> fieldElements = new ArrayList<>();
 			// 查找指定bean类型所有字段上的@Autowired @Value @javax.inject.Inject注解，并存入fieldElements中
@@ -536,6 +586,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						}
 						return;
 					}
+					// 判断@Autowired的required == true
 					boolean required = determineRequiredStatus(ann);
 					fieldElements.add(new AutowiredFieldElement(field, required));
 				}
@@ -569,6 +620,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 			// 按照声明顺序排序
 			elements.addAll(0, sortMethodElements(methodElements, targetClass));
+			// 字段在前，方法在后面
 			elements.addAll(0, fieldElements);
 			targetClass = targetClass.getSuperclass();
 		}
@@ -577,6 +629,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		return InjectionMetadata.forElements(elements, clazz);
 	}
 
+	/**
+	 * ao上只要存在@Autowired、@Value、@javax.inject.Inject 其中某个注解，就返回该注解
+	 * @param ao
+	 * @return
+	 */
 	@Nullable
 	private MergedAnnotation<?> findAutowiredAnnotation(AccessibleObject ao) {
 		// ao上的注解
@@ -596,7 +653,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 	 * <p>A 'required' dependency means that autowiring should fail when no beans
 	 * are found. Otherwise, the autowiring process will simply bypass the field
 	 * or method when no beans are found.
-	 *
+	 * --
 	 * 确定带注解的字段或方法是否需要其依赖项。
 	 * “必需”依赖意味着当没有找到 bean 时自动装配应该失败。否则，当没有找到 bean 时，自动装配过程将简单地绕过该字段或方法。
 	 *
@@ -645,7 +702,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	/**
 	 * Sort the method elements via ASM for deterministic declaration order if possible.
-	 *
+	 * --
 	 * 如果可能，通过 ASM 对方法元素进行排序以确定声明顺序。
 	 */
 	private List<InjectionMetadata.InjectedElement> sortMethodElements(
@@ -729,8 +786,15 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		private final boolean required;
 
+		/**
+		 * 解析出的bean依赖只有一个才是true
+		 */
 		private volatile boolean cached;
 
+		/**
+		 * 默认DependencyDescriptor
+		 * 解析出的bean依赖只有一个才是true则为ShortcutDependencyDescriptor(desc, autowiredBeanName)
+		 */
 		@Nullable
 		private volatile Object cachedFieldValue;
 
@@ -773,6 +837,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			Object value;
 			try {
 				// DefaultListableBeanFactory
+				// 解析bean
 				value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
 			}
 			catch (BeansException ex) {
@@ -811,8 +876,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		private final boolean required;
 
+		/**
+		 * 方法参数解析出了相应的Bean
+		 */
 		private volatile boolean cached;
 
+		/**
+		 * 方法参数解析的bean缓存
+		 */
 		@Nullable
 		private volatile Object[] cachedMethodArguments;
 
@@ -842,6 +913,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			else {
 				arguments = resolveMethodArguments(method, bean, beanName);
 			}
+			// 使用反射调用设置相应的参数
 			if (arguments != null) {
 				try {
 					ReflectionUtils.makeAccessible(method);
@@ -867,19 +939,23 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		@Nullable
 		private Object[] resolveMethodArguments(Method method, Object bean, @Nullable String beanName) {
+			// 参数数量
 			int argumentCount = method.getParameterCount();
 			Object[] arguments = new Object[argumentCount];
 			DependencyDescriptor[] descriptors = new DependencyDescriptor[argumentCount];
 			Set<String> autowiredBeanNames = new LinkedHashSet<>(argumentCount * 2);
 			Assert.state(beanFactory != null, "No BeanFactory available");
 			TypeConverter typeConverter = beanFactory.getTypeConverter();
+			// 表里方法的每个参数
 			for (int i = 0; i < arguments.length; i++) {
 				MethodParameter methodParam = new MethodParameter(method, i);
 				DependencyDescriptor currDesc = new DependencyDescriptor(methodParam, this.required);
 				currDesc.setContainingClass(bean.getClass());
 				descriptors[i] = currDesc;
 				try {
+					// 解析当前参数的bean
 					Object arg = beanFactory.resolveDependency(currDesc, beanName, autowiredBeanNames, typeConverter);
+					// 有一个参数为null && 当前参数不是必需依赖，之前跳槽循环
 					if (arg == null && !this.required) {
 						arguments = null;
 						break;

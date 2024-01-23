@@ -281,6 +281,9 @@ public abstract class BeanUtils {
 	 * returns the Java constructor corresponding to the Kotlin primary constructor
 	 * (as defined in the Kotlin specification). Otherwise, in particular for non-Kotlin
 	 * classes, this simply returns {@code null}.
+	 * --
+	 * 返回所提供类的主构造函数。对于 Kotlin 类，这将返回与 Kotlin 主构造函数（如 Kotlin 规范中所定义）相对应的 Java 构造函数。否则，特别是对于非 Kotlin 类，这只会返回 null.
+	 *
 	 * @param clazz the class to check
 	 * @since 5.0
 	 * @see <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">Kotlin docs</a>
@@ -532,9 +535,12 @@ public abstract class BeanUtils {
 	 * Find a JavaBeans {@code PropertyDescriptor} for the given method,
 	 * with the method either being the read method or the write method for
 	 * that bean property.
-	 * @param method the method to find a corresponding PropertyDescriptor for
-	 * @param clazz the (most specific) class to introspect for descriptors
-	 * @return the corresponding PropertyDescriptor, or {@code null} if none
+	 * --
+	 * 为给定的方法查找JavaBeans {@code PropertyDescriptor}，该方法是该bean属性的读方法或写方法。
+	 *
+	 * @param method the method to find a corresponding PropertyDescriptor for -- 要查找相应PropertyDescriptor的方法
+	 * @param clazz the (most specific) class to introspect for descriptors -- 要检查描述符的（最具体）类
+	 * @return the corresponding PropertyDescriptor, or {@code null} if none -- 相应的PropertyDescriptor，如果没有则返回{@code null}
 	 * @throws BeansException if PropertyDescriptor lookup fails
 	 * @since 3.2.13
 	 */
@@ -665,13 +671,13 @@ public abstract class BeanUtils {
 	 * <p>See {@link #isSimpleValueType(Class)} for the definition of <em>simple
 	 * value type</em>.
 	 * <p>Used to determine properties to check for a "simple" dependency-check.
-	 *
+	 * --
 	 * 检查给定类型是否表示“简单”属性：简单值类型或简单值类型的数组。
 	 * 有关简单值类型的定义，请参阅 {@link #isSimpleValueType(Class)}。
 	 * 用于确定属性以检查“简单”依赖项检查。
 	 *
 	 * @param type the type to check 要检查的类型
-	 * @return whether the given type represents a "simple" property 给定类型是否表示“简单”属性
+	 * @return whether the given type represents a "simple" property -- 给定类型是否表示“简单”属性
 	 * @see org.springframework.beans.factory.support.RootBeanDefinition#DEPENDENCY_CHECK_SIMPLE
 	 * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#checkDependencies
 	 * @see #isSimpleValueType(Class)
@@ -686,7 +692,7 @@ public abstract class BeanUtils {
 	 * primitive wrapper, an enum, a String or other CharSequence, a Number, a
 	 * Date, a Temporal, a URI, a URL, a Locale, or a Class.
 	 * <p>{@code Void} and {@code void} are not considered simple value types.
-	 *
+	 * --
 	 * 检查给定类型是否表示“简单”值类型：基元或基元包装器、枚举、字符串或其他 CharSequence、数字、日期、
 	 * 时间、URI、URL、区域设置或类。
 	 * {@code Void} 和 {@code void} 不被视为简单值类型。

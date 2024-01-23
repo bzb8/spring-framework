@@ -67,7 +67,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
-	 *
+	 * --
 	 * 指示没有外部定义的自动装配的常量。请注意，BeanFactoryAware 等和注解驱动的注入仍将应用。
 	 *
 	 * @see #createBean
@@ -409,7 +409,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
 	 * Resolve the specified dependency against the beans defined in this factory.
-	 * 将指定的依赖项解析为此工厂中定义的 bean。
+	 * -- 将指定的依赖项解析为此工厂中定义的 bean。
 	 *
 	 * @param descriptor the descriptor for the dependency (field/method/constructor) -- 依赖项（字段/方法/构造函数）的描述符
 	 * @param requestingBeanName the name of the bean which declares the given dependency -- 声明给定依赖关系的 Bean 的名称

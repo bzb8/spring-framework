@@ -153,7 +153,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine whether the given class is a candidate for carrying one of the specified
 	 * annotations (at type, method or field level).
-	 *
+	 * --
 	 * 确定给定类是否是携带指定注解之一的候选类（在类型、方法或字段级别）。
 	 *
 	 * @param clazz the class to introspect
@@ -201,17 +201,17 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine whether the given class is a candidate for carrying the specified annotation
 	 * (at type, method or field level).
-	 *
-	 * 确定给定类是否是携带指定注释的候选类（在类型、方法或字段级别）。
+	 * -
+	 * 确定给定类是否是携带指注解的候选类（在类型、方法或字段级别）。
 	 *
 	 * @param clazz the class to introspect
-	 * @param annotationName the fully-qualified name of the searchable annotation type
+	 * @param annotationName the fully-qualified name of the searchable annotation type -- 可搜索注解类型的完全限定名称
 	 * @return {@code false} if the class is known to have no such annotations at any level;
 	 * {@code true} otherwise. Callers will usually perform full method/field introspection
 	 * if {@code true} is being returned here.
-	 *
-	 * 如果已知该类在任何级别上都没有此类注释;{@code true} 否则。如果此处返回 {@code true}，调用者通常会执行完整的方法字段自省。
-	 * 除了class是以java开头的或是Order直接，就返回false，否则返回true
+	 * --
+	 * return {@code false}如果已知该类在任何级别都没有这样的注解;
+	 * 否则{@code true}。如果在这里返回{@code true}，调用者通常会执行完整的方法/字段内省
 	 *
 	 * @since 5.2
 	 * @see #isCandidateClass(Class, Class)

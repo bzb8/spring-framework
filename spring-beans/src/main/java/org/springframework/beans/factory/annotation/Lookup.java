@@ -74,6 +74,7 @@ public @interface Lookup {
 	 * This annotation attribute may suggest a target bean name to look up.
 	 * If not specified, the target bean will be resolved based on the
 	 * annotated method's return type declaration.
+	 * 此注解属性可能会建议要查找的目标 Bean 名称。如果未指定，则将根据带注解方法的返回类型声明解析目标 bean。
 	 */
 	String value() default "";
 

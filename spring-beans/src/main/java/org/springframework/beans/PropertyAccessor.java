@@ -182,7 +182,13 @@ public interface PropertyAccessor {
 	 * This exception can be examined later to see all binding errors.
 	 * Properties that were successfully updated remain changed.
 	 * <p>Does not allow unknown fields or invalid fields.
-	 * @param pvs a PropertyValues to set on the target object
+	 * --
+	 * 这段代码是关于执行批量更新的首选方式的说明。
+	 * 请注意，执行批量更新与执行单个更新不同，因为此类的实现将在遇到可恢复错误（例如类型不匹配，但不是无效的字段名或类似情况）时继续更新属性，
+	 * 并抛出包含所有单个错误的{@link PropertyBatchUpdateException}。稍后可以检查此异常以查看所有绑定错误。已成功更新的属性保持不变。
+	 * 不允许未知字段或无效字段。
+	 *
+	 * @param pvs a PropertyValues to set on the target object -- 要在目标对象上设置的PropertyValues
 	 * @throws InvalidPropertyException if there is no such property or
 	 * if the property isn't writable
 	 * @throws PropertyBatchUpdateException if one or more PropertyAccessExceptions
@@ -224,15 +230,23 @@ public interface PropertyAccessor {
 	 * {@link PropertyBatchUpdateException} containing all the individual errors.
 	 * This exception can be examined later to see all binding errors.
 	 * Properties that were successfully updated remain changed.
-	 * @param pvs a PropertyValues to set on the target object
-	 * @param ignoreUnknown should we ignore unknown properties (not found in the bean)
-	 * @param ignoreInvalid should we ignore invalid properties (found but not accessible)
+	 * --
+	 * 这段代码是关于执行具有完全行为控制的批量更新的说明。
+	 * 请注意，执行批量更新与执行单个更新不同，因为此类的实现将在遇到可恢复错误（例如类型不匹配，但不是无效的字段名或类似情况）时继续更新属性，
+	 * 并抛出包含所有单个错误的{@link PropertyBatchUpdateException}。稍后可以检查此异常以查看所有绑定错误。已成功更新的属性保持不变。
+	 *
+	 * @param pvs a PropertyValues to set on the target object -- 要在目标对象上设置的PropertyValues
+	 * @param ignoreUnknown should we ignore unknown properties (not found in the bean) -- 是否应该忽略未知属性（在bean中找不到）
+	 * @param ignoreInvalid should we ignore invalid properties (found but not accessible) -- 是否应该忽略无效属性（找到但不可访问）
 	 * @throws InvalidPropertyException if there is no such property or
-	 * if the property isn't writable
+	 * if the property isn't writable -- 如果没有这样的属性或属性不可写
 	 * @throws PropertyBatchUpdateException if one or more PropertyAccessExceptions
 	 * occurred for specific properties during the batch update. This exception bundles
 	 * all individual PropertyAccessExceptions. All other properties will have been
 	 * successfully updated.
+	 * 如果在批量更新期间为特定属性发生了一个或多个PropertyAccessExceptions。此异常捆绑了所有单个PropertyAccessExceptions。
+	 * 所有其他属性都将成功更新。
+	 *
 	 */
 	void setPropertyValues(PropertyValues pvs, boolean ignoreUnknown, boolean ignoreInvalid)
 			throws BeansException;

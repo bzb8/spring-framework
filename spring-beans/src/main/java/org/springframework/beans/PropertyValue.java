@@ -54,6 +54,9 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 
 	private boolean optional = false;
 
+	/**
+	 * 解析bean和转换之后的属性值
+	 */
 	private boolean converted = false;
 
 	@Nullable
@@ -71,7 +74,7 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 	/**
 	 * Create a new PropertyValue instance.
 	 * @param name the name of the property (never {@code null})
-	 * @param value the value of the property (possibly before type conversion)
+	 * @param value the value of the property (possibly before type conversion) -- 属性的值（可能在类型转换之前）
 	 */
 	public PropertyValue(String name, @Nullable Object value) {
 		Assert.notNull(name, "Name must not be null");

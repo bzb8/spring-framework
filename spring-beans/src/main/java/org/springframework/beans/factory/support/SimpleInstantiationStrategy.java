@@ -107,7 +107,9 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			final Constructor<?> ctor, Object... args) {
-
+		// 不存在MethodOverride
+		// 其中有两种情况会存在MethodOverride，第一种是使用了lookup-method,这种方式因为定了抽象类的抽象方法来返回bean，所以会动态生成抽象类的子类，
+		// 并实现抽象方法。第二种是使用了replaced-method,这种方式是通过MethodReplacer接口动态替换的某个方法，因此也需要动态生成子类。
 		if (!bd.hasMethodOverrides()) {
 			if (System.getSecurityManager() != null) {
 				// use own privileged to change accessibility (when security is on)
@@ -116,9 +118,11 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					return null;
 				});
 			}
+			// 使用反射调用构造函数创建对象
 			return BeanUtils.instantiateClass(ctor, args);
 		}
 		else {
+			// 存在MethodOverride，使用CGLIB创建动态子类
 			return instantiateWithMethodInjection(bd, beanName, owner, ctor, args);
 		}
 	}
@@ -128,6 +132,9 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	 * UnsupportedOperationException, if they can instantiate an object with
 	 * the Method Injection specified in the given RootBeanDefinition.
 	 * Instantiation should use the given constructor and parameters.
+	 * --
+	 * 子类可以重写此方法，该方法实现为抛出UnsupportedOperationException，
+	 * 如果它们可以使用给定的RootBeanDefinition中指定的方法注入来实例化对象。实例化应该使用给定的构造函数和参数。
 	 */
 	protected Object instantiateWithMethodInjection(RootBeanDefinition bd, @Nullable String beanName,
 			BeanFactory owner, @Nullable Constructor<?> ctor, Object... args) {

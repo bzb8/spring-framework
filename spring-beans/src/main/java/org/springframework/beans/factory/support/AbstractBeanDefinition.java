@@ -74,7 +74,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Constant that indicates no external autowiring at all.
-	 *
+	 * --
 	 * 表示根本没有外部自动装配的常量。
 	 *
 	 * @see #setAutowireMode
@@ -640,7 +640,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Return the resolved autowire code,
 	 * (resolving AUTOWIRE_AUTODETECT to AUTOWIRE_CONSTRUCTOR or AUTOWIRE_BY_TYPE).
-	 *
+	 * --
 	 * 返回已解析的自动注入代码（将AUTOWIRE_AUTODETECT解析为 AUTOWIRE_CONSTRUCTOR 或 AUTOWIRE_BY_TYPE）。
 	 *
 	 * @see #AUTOWIRE_AUTODETECT
@@ -652,7 +652,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 			// Work out whether to apply setter autowiring or constructor autowiring.
 			// If it has a no-arg constructor it's deemed to be setter autowiring,
 			// otherwise we'll try constructor autowiring.
-			// 确定是应用 setter autowiring 还是 constructor autowiring。如果它有一个无参数的构造函数，则它被视为 setter autowiring，否则我们将尝试构造函数 autowiring。
+			// 确定是应用setter自动装配还是构造函数自动装配。
+			// 如果它有一个无参构造函数，则被视为setter自动装配，
+			// 否则我们将尝试构造函数自动装配。
 
 			Constructor<?>[] constructors = getBeanClass().getConstructors();
 			for (Constructor<?> constructor : constructors) {
@@ -952,6 +954,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return property values for this bean (never {@code null}).
+	 * 返回此 Bean 的属性值（从不 {@code null}）。
 	 */
 	@Override
 	public MutablePropertyValues getPropertyValues() {
@@ -963,7 +966,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return if there are property values defined for this bean.
-	 *
+	 * --
 	 * 如果为此 Bean 定义了属性值，则返回。
 	 *
 	 * @since 5.0.2

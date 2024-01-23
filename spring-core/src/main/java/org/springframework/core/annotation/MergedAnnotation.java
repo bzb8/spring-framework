@@ -497,10 +497,13 @@ public interface MergedAnnotation<A extends Annotation> {
 	/**
 	 * Create a new {@link Map} instance of the given type that contains all the annotation
 	 * attributes.
-	 * 创建给定类型的新 {@link Map} 实例，其中包含所有注解属性。
+	 * -- 创建给定类型的新 {@link Map} 实例，其中包含所有注解属性。
+	 *
 	 * <p>The {@link Adapt adaptations} may be used to change the way that values are added.
+	 * -- {@link Adapt adaptations} 可用于更改添加值的方式。
+	 *
 	 * @param factory a map factory
-	 * @param adaptations the adaptations that should be applied to the annotation values
+	 * @param adaptations the adaptations that should be applied to the annotation values -- 应应用于注解值的适配
 	 * @return a map containing the attributes and values
 	 */
 	<T extends Map<String, Object>> T asMap(Function<MergedAnnotation<?>, T> factory, Adapt... adaptations);
