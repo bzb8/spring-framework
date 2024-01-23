@@ -1318,6 +1318,10 @@ public abstract class StringUtils {
 	/**
 	 * Convert a {@link Collection} to a delimited {@code String} (e.g. CSV).
 	 * <p>Useful for {@code toString()} implementations.
+	 * --
+	 * 将一个 Collection 转换为分隔符 String （例如.CSV）。
+	 * 对 toString() 实现很有用。
+	 *
 	 * @param coll the {@code Collection} to convert (potentially {@code null} or empty)
 	 * @param delim the delimiter to use (typically a ",")
 	 * @param prefix the {@code String} to start each element with

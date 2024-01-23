@@ -61,6 +61,8 @@ import org.springframework.util.StringUtils;
  * 如有必要，此访问器会将集合和数组值转换为相应的目标集合或数组。处理集合或数组的自定义属性编辑器可以通过 PropertyEditor 的 {@code setValue} 编写，
  * 也可以通过 {@code setAsText} 针对逗号分隔的 String 进行编写，因为如果数组本身不可赋值，则 String 数组会以这种格式进行转换。
  *
+ * @see {https://www.cnblogs.com/binarylei/p/10267928.html}
+ *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
  * @author Rod Johnson
@@ -87,8 +89,14 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	@Nullable
 	Object wrappedObject;
 
+	/**
+	 * 当前 BeanWrapper 对象所属嵌套层次的属性名，最顶层的 BeanWrapper 此属性的值为空
+	 */
 	private String nestedPath = "";
 
+	/**
+	 * 最顶层 BeanWrapper 所包装的对象
+	 */
 	@Nullable
 	Object rootObject;
 
@@ -633,6 +641,12 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return nestedPa.getPropertyValue(tokens);
 	}
 
+	/**
+	 * 根据属性名称获取对应的值。
+	 * @param tokens
+	 * @return
+	 * @throws BeansException
+	 */
 	@SuppressWarnings("unchecked")
 	@Nullable
 	protected Object getPropertyValue(PropertyTokenHolder tokens) throws BeansException {
@@ -824,14 +838,27 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Recursively navigate to return a property accessor for the nested property path.
+	 * --
+	 * 递归导航以返回嵌套属性路径的属性访问器。
+	 *
 	 * @param propertyPath property path, which may be nested
 	 * @return a property accessor for the target bean
 	 */
 	protected AbstractNestablePropertyAccessor getPropertyAccessorForPropertyPath(String propertyPath) {
+		// 1. 获取第一个点之前的属性部分。eg: director.info.name 返回 director
+
+		// 1. 获取第一个点之前的索引
 		int pos = PropertyAccessorUtils.getFirstNestedPropertySeparatorIndex(propertyPath);
+
 		// Handle nested properties recursively.
+		// 2. 递归处理嵌套属性
+		// 2.1 先获取 director 属性所在类的 rootBeanWrapper
+		// 2.2 再获取 info 属性所在类的 directorBeanWrapper
+		// 2.3 依此类推，获取最后一个属性 name 属性所在类的 infoBeanWrapper
 		if (pos > -1) {
+			// . 前面的部分
 			String nestedProperty = propertyPath.substring(0, pos);
+			// . 后面的部分
 			String nestedPath = propertyPath.substring(pos + 1);
 			AbstractNestablePropertyAccessor nestedPa = getNestedPropertyAccessor(nestedProperty);
 			return nestedPa.getPropertyAccessorForPropertyPath(nestedPath);
@@ -855,6 +882,8 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		}
 		// Get value of bean property.
 		PropertyTokenHolder tokens = getPropertyNameTokens(nestedProperty);
+		// 规范的名称
+		// 1. 获取属性对应的 token 值，主要用于解析 attrs['key'][0] 这样 Map/Array/Collection 循环嵌套的属性
 		String canonicalName = tokens.canonicalName;
 		Object value = getPropertyValue(tokens);
 		if (value == null || (value instanceof Optional && !((Optional<?>) value).isPresent())) {
@@ -942,34 +971,47 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Parse the given property name into the corresponding property name tokens.
+	 * --
+	 * 将给定的属性名称解析为相应的属性名称标记
+	 *
 	 * @param propertyName the property name to parse
-	 * @return representation of the parsed property tokens
+	 * @return representation of the parsed property tokens -- 已分析属性标记的表示形式
 	 */
 	private PropertyTokenHolder getPropertyNameTokens(String propertyName) {
+		// 第一个[之前的属性名部分
 		String actualName = null;
 		List<String> keys = new ArrayList<>(2);
 		int searchIndex = 0;
+		// 找到[]之间的key，并存入keys列表中
 		while (searchIndex != -1) {
+			// 从searchIndex开始搜索[, 返回[的位置
 			int keyStart = propertyName.indexOf(PROPERTY_KEY_PREFIX, searchIndex);
 			searchIndex = -1;
+			// 表示找到了[
 			if (keyStart != -1) {
+				// ]的位置
 				int keyEnd = getPropertyNameKeyEnd(propertyName, keyStart + PROPERTY_KEY_PREFIX.length());
 				if (keyEnd != -1) {
 					if (actualName == null) {
+						// [ 之前的属性名部分
 						actualName = propertyName.substring(0, keyStart);
 					}
+					// []里面的属性名部分
 					String key = propertyName.substring(keyStart + PROPERTY_KEY_PREFIX.length(), keyEnd);
 					if (key.length() > 1 && (key.startsWith("'") && key.endsWith("'")) ||
 							(key.startsWith("\"") && key.endsWith("\""))) {
+						// 如果key是以''或""包围的，就移除''和""
 						key = key.substring(1, key.length() - 1);
 					}
 					keys.add(key);
+					// 将searchIndex重置为]之后的位置
 					searchIndex = keyEnd + PROPERTY_KEY_SUFFIX.length();
 				}
 			}
 		}
 		PropertyTokenHolder tokens = new PropertyTokenHolder(actualName != null ? actualName : propertyName);
 		if (!keys.isEmpty()) {
+			// 3. canonicalName 为原始属性名称去除单引和双引之后的名称
 			tokens.canonicalName += PROPERTY_KEY_PREFIX +
 					StringUtils.collectionToDelimitedString(keys, PROPERTY_KEY_SUFFIX + PROPERTY_KEY_PREFIX) +
 					PROPERTY_KEY_SUFFIX;
@@ -978,24 +1020,35 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return tokens;
 	}
 
+	/**
+	 * 返回]的位置
+	 * @param propertyName 属性名
+	 * @param startIndex [ 之后的一个位置
+	 * @return
+	 */
 	private int getPropertyNameKeyEnd(String propertyName, int startIndex) {
 		int unclosedPrefixes = 0;
 		int length = propertyName.length();
 		for (int i = startIndex; i < length; i++) {
+			// 获取属性名的每一个字符
 			switch (propertyName.charAt(i)) {
+				// [
 				case PropertyAccessor.PROPERTY_KEY_PREFIX_CHAR:
 					// The property name contains opening prefix(es)...
+					// 属性名称包含开始前缀...
 					unclosedPrefixes++;
 					break;
 				case PropertyAccessor.PROPERTY_KEY_SUFFIX_CHAR:
 					if (unclosedPrefixes == 0) {
 						// No unclosed prefix(es) in the property name (left) ->
 						// this is the suffix we are looking for.
+						// 属性名称中没有未关闭的前缀（左）>这是我们正在寻找的后缀。
 						return i;
 					}
 					else {
 						// This suffix does not close the initial prefix but rather
 						// just one that occurred within the property name.
+						// 此后缀不会关闭初始前缀，而只是关闭属性名称中出现的前缀。
 						unclosedPrefixes--;
 					}
 					break;
@@ -1075,18 +1128,21 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Holder class used to store property tokens.
+	 * --
+	 * 用于存储属性标记的 Holder 类。
 	 */
 	protected static class PropertyTokenHolder {
-
 		public PropertyTokenHolder(String name) {
+			// 对应 bean 中的属性名称，如嵌套属性 attrs['key'][0] 在 bean 中的属性名称为 attrs
 			this.actualName = name;
+			// 对应 bean 中的属性名称，如嵌套属性 attrs['key'][0] 在 bean 中的属性名称为 attrs
 			this.canonicalName = name;
 		}
-
+		// 对应 bean 中的属性名称，如嵌套属性 attrs['key'][0] 在 bean 中的属性名称为 attrs
 		public String actualName;
-
+		// 将原始的嵌套属性处理成标准的 token，如 attrs['key'][0] 处理成 attrs[key][0]
 		public String canonicalName;
-
+		// 这个数组存放的是嵌套属性 [] 中的内容，如 attrs['key'][0] 处理成 ["key", "0"]
 		@Nullable
 		public String[] keys;
 	}

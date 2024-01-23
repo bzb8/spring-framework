@@ -54,6 +54,7 @@ public interface PropertyAccessor {
 	/**
 	 * Marker that indicates the start of a property key for an
 	 * indexed or mapped property like "person.addresses[0]".
+	 * 指示索引或映射属性（如“person.addresses[0]”）的属性键开始的标记。
 	 */
 	String PROPERTY_KEY_PREFIX = "[";
 
