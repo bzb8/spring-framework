@@ -619,8 +619,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * at this point, e.g. checking {@code postProcessBeforeInstantiation} callbacks.
 	 * <p>Differentiates between default bean instantiation, use of a
 	 * factory method, and autowiring a constructor.
-	 *
-	 * 在此时实际创建指定的bean。在这一点上，已经进行了预创建处理，例如检查postProcessBeforeInstantiation回调。
+	 * -- 在此时实际创建指定的bean。在这一点上，已经进行了预创建处理，例如检查postProcessBeforeInstantiation回调。
 	 * 区分默认的bean实例化、使用工厂方法和自动装配构造函数。
 	 *
 	 * @param beanName the name of the bean
@@ -1264,6 +1263,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) {
 		// Make sure bean class is actually resolved at this point.
 		// 确保此时 bean 类实际上已解析。
+		// 获取mdb解析出对应的bean class
 		Class<?> beanClass = resolveBeanClass(mbd, beanName);
 
 		// 如果Bean不是public，而且是不允许共有权限访问，直接抛出异常.
@@ -1291,22 +1291,33 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
+		// 没有工厂方法的情况
+
 		// Shortcut when re-creating the same bean...
 		// 重新创建同一 Bean 时的快捷方式...
+		// 是否已解析出构造函数标记，默认为false，表示还没有解析
 		boolean resolved = false;
+		// 必须要自动注入标记，默认为false，表示不需要
 		boolean autowireNecessary = false;
+		// 如果args为null
 		if (args == null) {
 			synchronized (mbd.constructorArgumentLock) {
 				if (mbd.resolvedConstructorOrFactoryMethod != null) {
+					// 设置resloved为true，表示已解析
 					resolved = true;
+					// 让autowireNecessary引用mbd的构造函数参数已解析标记值【{@link RootBeanDefinition#constructorArgumentsResolved}】,
+					// 如果构造函数参数已解析，表示必须要自动注入；否则不需要自动注入
 					autowireNecessary = mbd.constructorArgumentsResolved;
 				}
 			}
 		}
+		// 如果已解析出构造函数
 		if (resolved) {
 			if (autowireNecessary) {
+				// 以自动注入方式调用最匹配的构造函数来实例化参数对象并返回出去
 				return autowireConstructor(beanName, mbd, null, null);
 			} else {
+				// 使用其默认构造函数实例化给定的Bean并返回出去
 				return instantiateBean(beanName, mbd);
 			}
 		}
@@ -1469,22 +1480,23 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * <p>This corresponds to constructor injection: In this mode, a Spring
 	 * bean factory is able to host components that expect constructor-based
 	 * dependency resolution.
-	 * <p>
-	 * “AutoWire 构造函数”（按类型使用构造函数参数）行为。如果指定了显式构造函数参数值，则也适用，将所有剩余参数与 Bean 工厂中的 Bean 进行匹配。
-	 * 这对应于构造函数注入：在这种模式下，Spring Bean 工厂能够托管需要基于构造函数的依赖项解析的组件。
+	 * --
+	 * autowire constructor"（通过类型自动装配构造函数参数）的行为。
+	 * 如果明确指定了构造函数参数值，则也会应用于匹配所有剩余参数与 bean 工厂中的 bean。
+	 * 这对应于构造函数注入：在这种模式下，Spring bean 工厂能够托管期望通过构造函数进行依赖项解析的组件。
 	 *
-	 * @param beanName     the name of the bean
-	 * @param mbd          the bean definition for the bean
-	 * @param ctors        the chosen candidate constructors 所选候选构造函数
+	 * @param beanName     the name of the bean -- bean 的名称
+	 * @param mbd          the bean definition for the bean --  bean 定义
+	 * @param ctors        the chosen candidate constructors -- 所选候选构造函数
 	 * @param explicitArgs argument values passed in programmatically via the getBean method,
 	 *                     or {@code null} if none (implying the use of constructor argument values from bean definition)
-	 *                     <p>
+	 *                     --
 	 *                     通过 getBean 方法以编程方式传入的参数值，如果没有，则为 {@code null}（暗示使用 Bean 定义中的构造函数参数值）
 	 * @return a BeanWrapper for the new instance
 	 */
 	protected BeanWrapper autowireConstructor(
 			String beanName, RootBeanDefinition mbd, @Nullable Constructor<?>[] ctors, @Nullable Object[] explicitArgs) {
-
+		// 实例化一个新的ConstructorResolver对象，以自动注入方式调用最匹配的构造函数来实例化参数对象
 		return new ConstructorResolver(this).autowireConstructor(beanName, mbd, ctors, explicitArgs);
 	}
 
