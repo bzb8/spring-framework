@@ -406,6 +406,9 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 
 	/**
 	 * Return the names of all beans that the specified bean depends on, if any.
+	 * --
+	 * 我依赖的其他bean的数组
+	 *
 	 * @param beanName the name of the bean
 	 * @return the array of names of beans which the bean depends on,
 	 * or an empty array if none
@@ -436,7 +439,9 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * been registered as disposable. To be called on shutdown of a factory.
 	 * <p>Any exception that arises during destruction should be caught
 	 * and logged instead of propagated to the caller of this method.
-	 * 销毁此工厂中的所有单例 Bean，包括已注册为一次性的内部 Bean。在工厂关闭时被要求。销毁期间出现的任何异常都应捕获并记录，而不是传播到此方法的调用方。
+	 * --
+	 * 销毁此工厂中的所有单例 bean，包括已注册为可处理的内部 bean。在关闭工厂时调用。
+	 * 在销毁过程中出现的任何异常都应捕获并记录，而不是传播给此方法的调用者。
 	 */
 	void destroySingletons();
 

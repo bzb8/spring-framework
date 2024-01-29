@@ -134,6 +134,7 @@ public abstract class AbstractPropertyAccessor extends TypeConverterSupport impl
 		}
 
 		// If we encountered individual exceptions, throw the composite exception.
+		// 如果我们遇到单个异常，请抛出复合异常。
 		if (propertyAccessExceptions != null) {
 			PropertyAccessException[] paeArray = propertyAccessExceptions.toArray(new PropertyAccessException[0]);
 			throw new PropertyBatchUpdateException(paeArray);

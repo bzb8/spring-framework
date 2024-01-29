@@ -304,6 +304,10 @@ public abstract class BeanUtils {
 	 * <p>Checks {@code Class.getMethod} first, falling back to
 	 * {@code findDeclaredMethod}. This allows to find public methods
 	 * without issues even in environments with restricted Java security settings.
+	 * --
+	 * 查找具有给定方法名称和给定参数类型的方法，该方法在给定类或其超类之一上声明。首选公共方法，但也会返回受保护的包访问或私有方法。
+	 * 首先检查 Class.getMethod ，回退到 findDeclaredMethod.这样，即使在 Java 安全设置受限的环境中，也可以毫无问题地查找公共方法
+	 *
 	 * @param clazz the class to check
 	 * @param methodName the name of the method to find
 	 * @param paramTypes the parameter types of the method to find
@@ -364,6 +368,7 @@ public abstract class BeanUtils {
 	public static Method findMethodWithMinimalParameters(Class<?> clazz, String methodName)
 			throws IllegalArgumentException {
 
+		// 查找public方法
 		Method targetMethod = findMethodWithMinimalParameters(clazz.getMethods(), methodName);
 		if (targetMethod == null) {
 			targetMethod = findDeclaredMethodWithMinimalParameters(clazz, methodName);
@@ -387,7 +392,9 @@ public abstract class BeanUtils {
 	public static Method findDeclaredMethodWithMinimalParameters(Class<?> clazz, String methodName)
 			throws IllegalArgumentException {
 
+		// 查找包括私有的方法
 		Method targetMethod = findMethodWithMinimalParameters(clazz.getDeclaredMethods(), methodName);
+		// 从父类中查找包括私有的方法
 		if (targetMethod == null && clazz.getSuperclass() != null) {
 			targetMethod = findDeclaredMethodWithMinimalParameters(clazz.getSuperclass(), methodName);
 		}
@@ -397,6 +404,9 @@ public abstract class BeanUtils {
 	/**
 	 * Find a method with the given method name and minimal parameters (best case: none)
 	 * in the given list of methods.
+	 * --
+	 * 在给定的方法列表中查找具有给定方法名称和最少参数（最佳情况：无）的方法。
+	 *
 	 * @param methods the methods to check
 	 * @param methodName the name of the method to find
 	 * @return the Method object, or {@code null} if not found
@@ -406,11 +416,14 @@ public abstract class BeanUtils {
 	@Nullable
 	public static Method findMethodWithMinimalParameters(Method[] methods, String methodName)
 			throws IllegalArgumentException {
-
+		// 方法参数最少的方法
 		Method targetMethod = null;
+		// 方法参数最少的方法
 		int numMethodsFoundWithCurrentMinimumArgs = 0;
 		for (Method method : methods) {
+			// 方法名相等
 			if (method.getName().equals(methodName)) {
+				// 当前方法的参数数量
 				int numParams = method.getParameterCount();
 				if (targetMethod == null || numParams < targetMethod.getParameterCount()) {
 					targetMethod = method;
@@ -419,10 +432,12 @@ public abstract class BeanUtils {
 				else if (!method.isBridge() && targetMethod.getParameterCount() == numParams) {
 					if (targetMethod.isBridge()) {
 						// Prefer regular method over bridge...
+						// 比起桥接，更喜欢常规方法......
 						targetMethod = method;
 					}
 					else {
 						// Additional candidate with same length
+						// 具有相同长度的其他候选者
 						numMethodsFoundWithCurrentMinimumArgs++;
 					}
 				}

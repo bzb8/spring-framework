@@ -30,6 +30,8 @@ import org.springframework.util.ConcurrentReferenceHashMap;
 /**
  * {@link GenericApplicationListener} adapter that determines supported event types
  * through introspecting the generically declared type of the target listener.
+ * --
+ * GenericApplicationListener 适配器，通过自省目标侦听器的一般声明类型来确定支持的事件类型。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -38,11 +40,19 @@ import org.springframework.util.ConcurrentReferenceHashMap;
  */
 public class GenericApplicationListenerAdapter implements GenericApplicationListener {
 
+	/**
+	 * 监听器的类型 -> 事件类型
+	 */
 	private static final Map<Class<?>, ResolvableType> eventTypeCache = new ConcurrentReferenceHashMap<>();
 
-
+	/**
+	 * 监听器
+	 */
 	private final ApplicationListener<ApplicationEvent> delegate;
 
+	/**
+	 * 监听器的泛型类型即为事件类型
+	 */
 	@Nullable
 	private final ResolvableType declaredEventType;
 
@@ -70,17 +80,20 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 		if (this.delegate instanceof GenericApplicationListener) {
 			return ((GenericApplicationListener) this.delegate).supportsEventType(eventType);
 		}
+		// 委托给SmartApplicationListener的supportsEventType方法处理
 		else if (this.delegate instanceof SmartApplicationListener) {
 			Class<? extends ApplicationEvent> eventClass = (Class<? extends ApplicationEvent>) eventType.resolve();
 			return (eventClass != null && ((SmartApplicationListener) this.delegate).supportsEventType(eventClass));
 		}
 		else {
+			// 监听器的泛型声明为null || 泛型是事件类型的超类型或本类
 			return (this.declaredEventType == null || this.declaredEventType.isAssignableFrom(eventType));
 		}
 	}
 
 	@Override
 	public boolean supportsSourceType(@Nullable Class<?> sourceType) {
+		// 非SmartApplicationListener监听器 || true
 		return !(this.delegate instanceof SmartApplicationListener) ||
 				((SmartApplicationListener) this.delegate).supportsSourceType(sourceType);
 	}
@@ -96,12 +109,17 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 				((SmartApplicationListener) this.delegate).getListenerId() : "");
 	}
 
-
+	/**
+	 * 解析事件的类型，为监听器的泛型
+	 * @param listener
+	 * @return
+	 */
 	@Nullable
 	private static ResolvableType resolveDeclaredEventType(ApplicationListener<ApplicationEvent> listener) {
 		ResolvableType declaredEventType = resolveDeclaredEventType(listener.getClass());
 		if (declaredEventType == null || declaredEventType.isAssignableFrom(ApplicationEvent.class)) {
 			Class<?> targetClass = AopUtils.getTargetClass(listener);
+			// 目标类和监听器的类型不一样，则获取目标类的泛型类型
 			if (targetClass != listener.getClass()) {
 				declaredEventType = resolveDeclaredEventType(targetClass);
 			}
@@ -113,6 +131,7 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 	static ResolvableType resolveDeclaredEventType(Class<?> listenerType) {
 		ResolvableType eventType = eventTypeCache.get(listenerType);
 		if (eventType == null) {
+			// 事件类型为它的泛型
 			eventType = ResolvableType.forClass(listenerType).as(ApplicationListener.class).getGeneric();
 			eventTypeCache.put(listenerType, eventType);
 		}

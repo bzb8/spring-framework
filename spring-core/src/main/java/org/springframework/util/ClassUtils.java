@@ -130,6 +130,8 @@ public abstract class ClassUtils {
 
 	/**
 	 * Cache for equivalent methods on an interface implemented by the declaring class.
+	 * 缓存由声明类实现的接口上的等效方法。
+	 * 当前类的方法 -> 继承层级上的方法
 	 */
 	private static final Map<Method, Method> interfaceMethodCache = new ConcurrentReferenceHashMap<>(256);
 
@@ -418,7 +420,7 @@ public abstract class ClassUtils {
 	/**
 	 * Check whether the given class is cache-safe in the given context,
 	 * i.e. whether it is loaded by the given ClassLoader or a parent of it.
-	 *
+	 * --
 	 * 检查给定的类在给定的上下文中是否是缓存安全的，即它是否由给定的 ClassLoader 或它的父类加载。
 	 *
 	 * @param clazz the class to analyze
@@ -430,6 +432,7 @@ public abstract class ClassUtils {
 		try {
 			ClassLoader target = clazz.getClassLoader();
 			// Common cases
+			// 一般情况
 			if (target == classLoader || target == null) {
 				return true;
 			}
@@ -437,6 +440,8 @@ public abstract class ClassUtils {
 				return false;
 			}
 			// Check for match in ancestors -> positive
+			// 检查祖先中的匹配
+			// 指定的类加载器的祖先
 			ClassLoader current = classLoader;
 			while (current != null) {
 				current = current.getParent();
@@ -445,6 +450,7 @@ public abstract class ClassUtils {
 				}
 			}
 			// Check for match in children -> negative
+			// 检查当前类的祖先加载器
 			while (target != null) {
 				target = target.getParent();
 				if (target == classLoader) {
@@ -458,6 +464,7 @@ public abstract class ClassUtils {
 
 		// Fallback for ClassLoaders without parent/child relationship:
 		// safe if same Class can be loaded from given ClassLoader
+		// 没有父子关系的类加载器的回退：如果可以从给定的类加载器加载相同的类，则是安全的
 		return (classLoader != null && isLoadable(clazz, classLoader));
 	}
 
@@ -1113,7 +1120,8 @@ public abstract class ClassUtils {
 	/**
 	 * Return the qualified name of the given method, consisting of
 	 * fully qualified interface/class name + "." + method name.
-	 * 返回给定方法的限定名，由完全限定的 interface/class name + “.” + method name 组成。
+	 * -- 返回给定方法的限定名，由完全限定的 interface/class name + “.” + method name 组成。
+	 *
 	 * @param method the method
 	 * @return the qualified name of the method
 	 */
@@ -1246,7 +1254,7 @@ public abstract class ClassUtils {
 	 * <p>In case of any signature specified, only returns the method if there is a
 	 * unique candidate, i.e. a single public method with the specified name.
 	 * <p>Essentially translates {@code NoSuchMethodException} to {@code null}.
-	 *
+	 * --
 	 * 确定给定类是否具有具有给定签名的公共方法，如果可用则返回它（否则返回 {@code null}）。
 	 * 如果指定了任何签名，则仅在存在唯一候选者（即具有指定名称的单个公共方法）时才返回该方法。
 	 * 本质上将 {@code NoSuchMethodException} 翻译为 {@code null}。
@@ -1417,10 +1425,12 @@ public abstract class ClassUtils {
 	 * @see #getMostSpecificMethod
 	 */
 	public static Method getInterfaceMethodIfPossible(Method method, @Nullable Class<?> targetClass) {
+		// 非 public方法 或者 方法是在接口中声明的直接返回
 		if (!Modifier.isPublic(method.getModifiers()) || method.getDeclaringClass().isInterface()) {
 			return method;
 		}
 		// Try cached version of method in its declaring class
+		// 尝试在其声明类中缓存方法的版本
 		Method result = interfaceMethodCache.computeIfAbsent(method,
 				key -> findInterfaceMethodIfPossible(key, key.getDeclaringClass(), Object.class));
 		if (result == method && targetClass != null) {
@@ -1433,6 +1443,7 @@ public abstract class ClassUtils {
 	}
 
 	private static Method findInterfaceMethodIfPossible(Method method, Class<?> startClass, Class<?> endClass) {
+		// 从当前类的继承层次上查找指定的方法
 		Class<?> current = startClass;
 		while (current != null && current != endClass) {
 			Class<?>[] ifcs = current.getInterfaces();

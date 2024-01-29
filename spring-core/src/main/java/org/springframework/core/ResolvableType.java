@@ -944,6 +944,7 @@ public class ResolvableType implements Serializable {
 	 * 则返回一个空的数组。如果需要访问特定的泛型，请考虑使用{@link #getGeneric(int...)} 方法，
 	 * 因为它允许访问嵌套的泛型并防止{@code IndexOutBoundsExceptions}
 	 * </p>
+	 * <T>
 	 *
 	 * @return an array of {@link ResolvableType ResolvableTypes} representing the generic parameters
 	 * (never {@code null})
@@ -962,6 +963,7 @@ public class ResolvableType implements Serializable {
 			// 处理Class
 			if (this.type instanceof Class) {
 				// 从type中获取一个代表该泛型声明中声明的类型变量TypeVariable对象的数组。
+				// List<T> 中的T
 				Type[] typeParams = ((Class<?>) this.type).getTypeParameters();
 				generics = new ResolvableType[typeParams.length];
 				for (int i = 0; i < generics.length; i++) {
@@ -969,7 +971,7 @@ public class ResolvableType implements Serializable {
 				}
 			}
 			else if (this.type instanceof ParameterizedType) {
-				//处理参数化类型
+				// 处理参数化类型 List<T>
 				Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
 				generics = new ResolvableType[actualTypeArguments.length];
 				for (int i = 0; i < actualTypeArguments.length; i++) {

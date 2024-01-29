@@ -99,7 +99,11 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	volatile Method factoryMethodToIntrospect;
 
-	/** Package-visible field for caching a resolved destroy method name (also for inferred). */
+	/**
+	 * Package-visible field for caching a resolved destroy method name (also for inferred).
+	 * 用于缓存已解析的销毁方法名称的 Package-visible 字段（也用于推断）。
+	 * close或shutdown
+	 */
 	@Nullable
 	volatile String resolvedDestroyMethodName;
 
@@ -148,6 +152,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	private Set<Member> externallyManagedConfigMembers;
 
+	/**
+	 * 标识由外部管理的初始化方法
+	 */
 	@Nullable
 	private Set<String> externallyManagedInitMethods;
 
@@ -520,6 +527,12 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	 * qualified method name} for {@code private} methods. A qualified name is
 	 * necessary for {@code private} methods in order to disambiguate between
 	 * multiple private methods with the same name within a class hierarchy.
+	 * --
+	 * 注册一个外部管理的配置初始化方法，例如，一个用 JSR-250 的 {@link javax.annotation.PostConstruct} 注解注释的方法。
+	 * 对于非私有方法，提供的{@code initMethod}可以是{@linkplain Method#getName() 简单方法名称}，对
+	 * 于{@code私有}方法，提供的{@linkplain org.springframework.util.ClassUtils#getQualifiedMethodName(Method) 限定方法名称}。
+	 * {@code private} 方法需要限定名，以便在类层次结构中具有相同名称的多个私有方法之间消除歧义。
+	 *
 	 */
 	public void registerExternallyManagedInitMethod(String initMethod) {
 		synchronized (this.postProcessingLock) {
@@ -555,6 +568,12 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	 * {@linkplain #registerExternallyManagedInitMethod(String) registered}
 	 * using a qualified method name instead of a simple method name.
 	 * @since 5.3.17
+	 * --
+	 * 判断给定的方法名是否表示一个由外部管理的初始化方法，无论该方法的可见性如何。
+	 * <p>与{@link #isExternallyManagedInitMethod(String)}不同，
+	 * 该方法还在存在一个被{@code private}修饰的由外部管理的初始化方法时返回{@code true}，
+	 * 该方法已使用合格的方法名而不是简单的方法名进行{@linkplain #registerExternallyManagedInitMethod(String) 注册}。
+	 *
 	 */
 	boolean hasAnyExternallyManagedInitMethod(String initMethod) {
 		synchronized (this.postProcessingLock) {
@@ -636,6 +655,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 			for (String candidate : candidates) {
 				int indexOfDot = candidate.lastIndexOf('.');
 				if (indexOfDot > 0) {
+					// 截取最后一个.之后的方法名是否和参数methodName相等
 					String candidateMethodName = candidate.substring(indexOfDot + 1);
 					if (candidateMethodName.equals(methodName)) {
 						return true;

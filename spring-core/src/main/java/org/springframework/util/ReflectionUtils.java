@@ -627,6 +627,9 @@ public abstract class ReflectionUtils {
 	/**
 	 * Attempt to find a {@link Field field} on the supplied {@link Class} with the
 	 * supplied {@code name}. Searches all superclasses up to {@link Object}.
+	 * --
+	 * 尝试在提供的 {@link Class} 上查找具有提供的 {@code name} 的 {@link Field field}。搜索所有超类，直到 {@link Object}。
+	 *
 	 * @param clazz the class to introspect
 	 * @param name the name of the field
 	 * @return the corresponding Field object, or {@code null} if not found
@@ -642,7 +645,7 @@ public abstract class ReflectionUtils {
 	 * up to {@link Object}.
 	 * @param clazz the class to introspect
 	 * @param name the name of the field (may be {@code null} if type is specified)
-	 * @param type the type of the field (may be {@code null} if name is specified)
+	 * @param type the type of the field (may be {@code null} if name is specified) -- 字段的类型（如果指定了 name，则可能是 {@code null}）
 	 * @return the corresponding Field object, or {@code null} if not found
 	 */
 	@Nullable
@@ -650,14 +653,17 @@ public abstract class ReflectionUtils {
 		Assert.notNull(clazz, "Class must not be null");
 		Assert.isTrue(name != null || type != null, "Either name or type of the field must be specified");
 		Class<?> searchType = clazz;
+		// 知道它的父类为Object，则停止搜索
 		while (Object.class != searchType && searchType != null) {
 			Field[] fields = getDeclaredFields(searchType);
 			for (Field field : fields) {
+				// 要么字段名称相等要么字段的类型相同
 				if ((name == null || name.equals(field.getName())) &&
 						(type == null || type.equals(field.getType()))) {
 					return field;
 				}
 			}
+			// 重置为当前class的父类
 			searchType = searchType.getSuperclass();
 		}
 		return null;

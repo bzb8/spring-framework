@@ -21,6 +21,8 @@ package org.springframework.util;
  * errors that occur during asynchronous execution of tasks that have been
  * submitted to a TaskScheduler. In such cases, it may not be possible to
  * throw the error to the original caller.
+ * --
+ * 处理错误的策略。这对于处理在异步执行已提交到 TaskScheduler 的任务期间发生的错误特别有用。在这种情况下，可能无法将错误抛出给原始调用方。
  *
  * @author Mark Fisher
  * @since 3.0

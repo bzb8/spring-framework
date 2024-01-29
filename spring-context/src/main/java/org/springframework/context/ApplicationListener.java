@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 /**
  * Interface to be implemented by application event listeners.
- *
+ * --
  * 由应用程序事件监听器实现的接口
  *
  * <p>Based on the standard {@code java.util.EventListener} interface

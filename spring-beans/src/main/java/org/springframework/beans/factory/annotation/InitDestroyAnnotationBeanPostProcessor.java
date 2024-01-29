@@ -182,6 +182,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
+			// 通过反射调用@PreDestroy标注的方法
 			metadata.invokeDestroyMethods(bean, beanName);
 		}
 		catch (InvocationTargetException ex) {
@@ -200,6 +201,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public boolean requiresDestruction(Object bean) {
+		// 是否由@PreDestroy标记的方法
 		return findLifecycleMetadata(bean.getClass()).hasDestroyMethods();
 	}
 

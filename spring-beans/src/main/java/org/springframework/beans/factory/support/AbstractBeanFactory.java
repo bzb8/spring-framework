@@ -1130,6 +1130,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Return whether this factory holds a DestructionAwareBeanPostProcessor
 	 * that will get applied to singleton beans on shutdown.
+	 * --
+	 * 返回此工厂是否包含将在关闭时应用于单例 Bean 的 DestructionAwareBeanPostProcessor。
 	 *
 	 * @see #addBeanPostProcessor
 	 * @see org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor
@@ -2146,6 +2148,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected boolean requiresDestruction(Object bean, RootBeanDefinition mbd) {
 		return (bean.getClass() != NullBean.class && (DisposableBeanAdapter.hasDestroyMethod(bean, mbd) ||
+				// 工厂中有DestructionAwareBeanPostProcessor && DestructionAwareBeanPostProcessor.requiresDestruction()返回true
 				(hasDestructionAwareBeanPostProcessors() && DisposableBeanAdapter.hasApplicableProcessors(
 						bean, getBeanPostProcessorCache().destructionAware))));
 	}
@@ -2165,11 +2168,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected void registerDisposableBeanIfNecessary(String beanName, Object bean, RootBeanDefinition mbd) {
 		AccessControlContext acc = (System.getSecurityManager() != null ? getAccessControlContext() : null);
+		// bean定义非原型bean && 具有销毁方法
 		if (!mbd.isPrototype() && requiresDestruction(bean, mbd)) {
+			// bean是单例
 			if (mbd.isSingleton()) {
 				// Register a DisposableBean implementation that performs all destruction
 				// work for the given bean: DestructionAwareBeanPostProcessors,
 				// DisposableBean interface, custom destroy method.
+				// 注册一个 DisposableBean 实现，该实现对给定 Bean 执行所有销毁工作：DestructionAwareBeanPostProcessors、DisposableBean 接口、自定义销毁方法。
+				// 缓存销毁的bean实例
 				registerDisposableBean(beanName, new DisposableBeanAdapter(
 						bean, beanName, mbd, getBeanPostProcessorCache().destructionAware, acc));
 			} else {
@@ -2178,6 +2185,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				if (scope == null) {
 					throw new IllegalStateException("No Scope registered for scope name '" + mbd.getScope() + "'");
 				}
+				// 如果bean具有自定义的作用域，则注册销毁回调
 				scope.registerDestructionCallback(beanName, new DisposableBeanAdapter(
 						bean, beanName, mbd, getBeanPostProcessorCache().destructionAware, acc));
 			}

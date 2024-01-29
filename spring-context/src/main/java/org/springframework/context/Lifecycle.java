@@ -21,17 +21,17 @@ package org.springframework.context;
  * The typical use case for this is to control asynchronous processing.
  * <b>NOTE: This interface does not imply specific auto-startup semantics.
  * Consider implementing {@link SmartLifecycle} for that purpose.</b>
- *
- * 定义 startstop 生命周期控制方法的通用接口。其典型用例是控制异步处理。
+ * --
+ * 定义 start/stop 生命周期控制方法的通用接口。其典型用例是控制异步处理。
  * 注意：此接口并不意味着特定的自动启动语义。请考虑为此目的实现 {@link SmartLifecycle}。
  *
  * <p>Can be implemented by both components (typically a Spring bean defined in a
  * Spring context) and containers  (typically a Spring {@link ApplicationContext}
  * itself). Containers will propagate start/stop signals to all components that
  * apply within each container, e.g. for a stop/restart scenario at runtime.
- *
+ * --
  * 可以由组件（通常是在 Spring 上下文中定义的 Spring bean）和容器（通常是 Spring {@link ApplicationContext} 本身）实现。
- * 容器会将 startstop 信号传播到每个容器中应用的所有组件，例如，用于运行时的 stoprestart 方案。
+ * 容器会将 start/stop 信号传播到每个容器中应用的所有组件，例如，用于运行时的 stop/restart 方案。
  *
  * <p>Can be used for direct invocations or for management operations via JMX.
  * In the latter case, the {@link org.springframework.jmx.export.MBeanExporter}
@@ -39,7 +39,7 @@ package org.springframework.context;
  * {@link org.springframework.jmx.export.assembler.InterfaceBasedMBeanInfoAssembler},
  * restricting the visibility of activity-controlled components to the Lifecycle
  * interface.
- *
+ * --
  * 可用于直接调用或通过 JMX 进行管理操作。在后一种情况下，{@link org.springframework.jmx.export.MBeanExporter}
  * 通常使用{@link org.springframework.jmx.export.assembler.InterfaceBasedMBeanInfoAssembler}定义，从而将活动控制组件的可见性限制为生命周期接口。
  *

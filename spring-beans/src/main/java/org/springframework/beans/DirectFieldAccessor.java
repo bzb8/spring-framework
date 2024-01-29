@@ -81,8 +81,10 @@ public class DirectFieldAccessor extends AbstractNestablePropertyAccessor {
 	protected FieldPropertyHandler getLocalPropertyHandler(String propertyName) {
 		FieldPropertyHandler propertyHandler = this.fieldMap.get(propertyName);
 		if (propertyHandler == null) {
+			// 查找当前类的指定属性名的字段
 			Field field = ReflectionUtils.findField(getWrappedClass(), propertyName);
 			if (field != null) {
+				// 创建handler，可读可写的
 				propertyHandler = new FieldPropertyHandler(field);
 				this.fieldMap.put(propertyName, propertyHandler);
 			}

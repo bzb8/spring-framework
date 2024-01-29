@@ -20,11 +20,13 @@ package org.springframework.beans.factory;
  * Callback that allows a bean to be aware of the bean
  * {@link ClassLoader class loader}; that is, the class loader used by the
  * present bean factory to load bean classes.
- * 允许 Bean 感知 Bean 的回调 {@link ClassLoader class loader};也就是说，当前 Bean 工厂用来装入 Bean 类的类加载器。
+ * --
+ * 允许 Bean 感知 Bean class loader的回调; 即当前 Bean 工厂用来加载 Bean 类的类加载器
  *
  * <p>This is mainly intended to be implemented by framework classes which
  * have to pick up application classes by name despite themselves potentially
  * being loaded from a shared class loader.
+ * --
  * 这主要是由框架类实现的，这些框架类必须按名称选取应用程序类，尽管它们可能是从共享类加载器加载的。
  *
  * <p>For a list of all bean lifecycle methods, see the
@@ -48,7 +50,11 @@ public interface BeanClassLoaderAware extends Aware {
 	 * {@link InitializingBean InitializingBean's}
 	 * {@link InitializingBean#afterPropertiesSet()}
 	 * method or a custom init-method.
-	 * @param classLoader the owning class loader
+	 * --
+	 * 向 Bean 实例提供 Bean class loader 的回调。
+	 * 在填充正常 Bean 属性 之后 但在初始化回调 （ 如 InitializingBean's InitializingBean.afterPropertiesSet() method 或自定义 init-method）之前调用
+	 *
+	 * @param classLoader the owning class loader -- 拥有的类加载器
 	 */
 	void setBeanClassLoader(ClassLoader classLoader);
 

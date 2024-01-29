@@ -53,6 +53,7 @@ public class PayloadApplicationEvent<T> extends ApplicationEvent implements Reso
 
 	@Override
 	public ResolvableType getResolvableType() {
+		// 泛型为payload对象
 		return ResolvableType.forClassWithGenerics(getClass(), ResolvableType.forInstance(getPayload()));
 	}
 

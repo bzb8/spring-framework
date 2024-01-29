@@ -145,6 +145,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Whether to resort to injecting a raw bean instance in case of circular reference,
 	 * even if the injected bean eventually got wrapped.
+	 * --
+	 * 在循环引用的情况下是否求助于注入原始 Bean 实例，即使注入的 Bean 最终被包装。
+	 *
 	 */
 	private boolean allowRawInjectionDespiteWrapping = false;
 
@@ -469,10 +472,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object result = existingBean;
 
-//		System.out.println(">>> getBeanPostProcessors() S");
-//		System.out.println(getBeanPostProcessors());
-//		System.out.println(">>> getBeanPostProcessors() E");
-
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
 			if (current == null) {
@@ -721,12 +720,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
+		// 如果是提前暴漏对象的话
 		if (earlySingletonExposure) {
+			// 从一级和二级缓存中获取对象
 			Object earlySingletonReference = getSingleton(beanName, false);
 			if (earlySingletonReference != null) {
 				if (exposedObject == bean) {
+					// 赋值为早期引用的对象
 					exposedObject = earlySingletonReference;
 				} else if (!this.allowRawInjectionDespiteWrapping && hasDependentBean(beanName)) {
+					// 依赖当前beanName的bean数组
 					String[] dependentBeans = getDependentBeans(beanName);
 					Set<String> actualDependentBeans = new LinkedHashSet<>(dependentBeans.length);
 					for (String dependentBean : dependentBeans) {
@@ -1633,6 +1636,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (pvs != null) {
+			// 设置属性，TODO
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
 	}
@@ -2021,18 +2025,22 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			invokeAwareMethods(beanName, bean);
 		}
 
+		// 在bean初始化之前调用beanProcessor.postProcessBeforeInitialization(result, beanName);
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
 		try {
+			// 调用初始化方法
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		} catch (Throwable ex) {
 			throw new BeanCreationException(
 					(mbd != null ? mbd.getResourceDescription() : null),
 					beanName, "Invocation of init method failed", ex);
 		}
+
+		// 在bean初始化之后调用beanProcessor.postProcessBeforeInitialization(result, beanName);
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
@@ -2040,6 +2048,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		return wrappedBean;
 	}
 
+	/**
+	 * 如果bean实现了相应的Aware接口，则调用相应Aware接口中的方法
+	 * @param beanName
+	 * @param bean
+	 */
 	private void invokeAwareMethods(String beanName, Object bean) {
 		if (bean instanceof Aware) {
 			if (bean instanceof BeanNameAware) {
@@ -2073,7 +2086,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected void invokeInitMethods(String beanName, Object bean, @Nullable RootBeanDefinition mbd)
 			throws Throwable {
 
+		// 调用InitializingBean的afterPropertiesSet方法
 		boolean isInitializingBean = (bean instanceof InitializingBean);
+		// bean是InitializingBean && mbd的afterPropertiesSet不是外部管理的方法
 		if (isInitializingBean && (mbd == null || !mbd.hasAnyExternallyManagedInitMethod("afterPropertiesSet"))) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Invoking afterPropertiesSet() on bean with name '" + beanName + "'");
@@ -2088,11 +2103,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					throw pae.getException();
 				}
 			} else {
+				// 调用bean的afterPropertiesSet()方法
 				((InitializingBean) bean).afterPropertiesSet();
 			}
 		}
 
+		// 调用bean定义的initMethodName方法
 		if (mbd != null && bean.getClass() != NullBean.class) {
+			// mdb具有initMethodName && 初始化方法不是外部管理的
 			String initMethodName = mbd.getInitMethodName();
 			if (StringUtils.hasLength(initMethodName) &&
 					!(isInitializingBean && "afterPropertiesSet".equals(initMethodName)) &&
@@ -2117,8 +2135,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Assert.state(initMethodName != null, "No init method set");
 		Method initMethod = (mbd.isNonPublicAccessAllowed() ?
 				BeanUtils.findMethod(bean.getClass(), initMethodName) :
+				// 只会查找公共方法
 				ClassUtils.getMethodIfAvailable(bean.getClass(), initMethodName));
 
+		// 找不到指定的初始化方法，直接返回
 		if (initMethod == null) {
 			if (mbd.isEnforceInitMethod()) {
 				throw new BeanDefinitionValidationException("Could not find an init method named '" +
@@ -2138,6 +2158,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		Method methodToInvoke = ClassUtils.getInterfaceMethodIfPossible(initMethod, bean.getClass());
 
+		// 反射调用指定的初始化方法
 		if (System.getSecurityManager() != null) {
 			AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
 				ReflectionUtils.makeAccessible(methodToInvoke);

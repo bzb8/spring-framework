@@ -41,6 +41,10 @@ import org.springframework.util.StringUtils;
  * and their dependencies from either a local {@code ApplicationContext} (with a
  * local {@code LiveBeansView} bean definition) or all registered ApplicationContexts
  * (driven by the {@value #MBEAN_DOMAIN_PROPERTY_NAME} environment property).
+ * --
+ * 用于公开活动 bean 视图的适配器。
+ * 它从本地 {@code ApplicationContext}（具有本地 {@code LiveBeansView} bean 定义）或
+ * 所有已注册的 {@code ApplicationContext} 构建当前 bean 及其依赖项的快照。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll

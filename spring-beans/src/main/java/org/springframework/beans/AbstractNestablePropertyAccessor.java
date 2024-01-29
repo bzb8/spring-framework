@@ -48,7 +48,7 @@ import org.springframework.util.StringUtils;
 /**
  * A basic {@link ConfigurablePropertyAccessor} that provides the necessary
  * infrastructure for all typical use cases.
- *
+ * --
  * 一个基本的 {@link ConfigurablePropertyAccessor}，为所有典型用例提供必要的基础结构。
  *
  * <p>This accessor will convert collection and array values to the corresponding
@@ -57,7 +57,7 @@ import org.springframework.util.StringUtils;
  * {@code setValue}, or against a comma-delimited String via {@code setAsText},
  * as String arrays are converted in such a format if the array itself is not
  * assignable.
- *
+ * --
  * 如有必要，此访问器会将集合和数组值转换为相应的目标集合或数组。处理集合或数组的自定义属性编辑器可以通过 PropertyEditor 的 {@code setValue} 编写，
  * 也可以通过 {@code setAsText} 针对逗号分隔的 String 进行编写，因为如果数组本身不可赋值，则 String 数组会以这种格式进行转换。
  *
@@ -651,12 +651,15 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	@Nullable
 	protected Object getPropertyValue(PropertyTokenHolder tokens) throws BeansException {
 		String propertyName = tokens.canonicalName;
+		// 真实的属性名称，最顶层的属性名
 		String actualName = tokens.actualName;
+		//
 		PropertyHandler ph = getLocalPropertyHandler(actualName);
 		if (ph == null || !ph.isReadable()) {
 			throw new NotReadablePropertyException(getRootClass(), this.nestedPath + propertyName);
 		}
 		try {
+			// 通过反射获取当前属性对应的值
 			Object value = ph.getValue();
 			if (tokens.keys != null) {
 				if (value == null) {
@@ -841,7 +844,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 	 * --
 	 * 递归导航以返回嵌套属性路径的属性访问器。
 	 *
-	 * @param propertyPath property path, which may be nested
+	 * @param propertyPath property path, which may be nested -- 属性路径，可以嵌套
 	 * @return a property accessor for the target bean
 	 */
 	protected AbstractNestablePropertyAccessor getPropertyAccessorForPropertyPath(String propertyPath) {
@@ -1070,6 +1073,8 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * A handler for a specific property.
+	 * --
+	 * 指定属性的处理器
 	 */
 	protected abstract static class PropertyHandler {
 

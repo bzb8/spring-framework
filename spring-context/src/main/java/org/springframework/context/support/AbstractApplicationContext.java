@@ -233,16 +233,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** System time in milliseconds when this context started. -- 此上下文启动时的系统时间（以毫秒为单位）。*/
 	private long startupDate;
 
-	/** Flag that indicates whether this context is currently active. -- 指示此上下文当前是否处于活动状态的标记，该变量是线程安全的 */
+	/**
+	 * Flag that indicates whether this context is currently active.
+	 * -- 指示此上下文当前是否处于活动状态的标记，该变量是线程安全的
+	 */
 	private final AtomicBoolean active = new AtomicBoolean();
 
-	/** Flag that indicates whether this context has been closed already. -- 指示此上下文是否已经关闭的标记，该变量是线程安全的*/
+	/** Flag that indicates whether this context has been closed already.
+	 * -- 指示此上下文是否已经关闭的标记，该变量是线程安全的
+	 */
 	private final AtomicBoolean closed = new AtomicBoolean();
 
 	/** Synchronization monitor for the "refresh" and "destroy". -- 刷新和销毁的同步监视器 */
 	private final Object startupShutdownMonitor = new Object();
 
-	/** Reference to the JVM shutdown hook, if registered. -- 对 JVM 关闭钩子的引用（如果已注册）。*/
+	/**
+	 * Reference to the JVM shutdown hook, if registered.
+	 * 对 JVM 关闭钩子的引用（如果已注册）。
+	 */
 	@Nullable
 	private Thread shutdownHook;
 
@@ -467,8 +475,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * <p>Note: Listeners get initialized after the MessageSource, to be able
 	 * to access it within listener implementations. Thus, MessageSource
 	 * implementations cannot publish events.
+	 * --
+	 * 将给定事件发布到所有侦听器。
+	 * 注意：侦听器在 MessageSource 之后初始化，以便能够在侦听器实现中访问它。因此，MessageSource 实现无法发布事件。
+	 *
 	 * @param event the event to publish (may be an {@link ApplicationEvent}
 	 * or a payload object to be turned into a {@link PayloadApplicationEvent})
+	 * 要发布的事件（可以是 ApplicationEvent  或 要转换为 PayloadApplicationEvent的有效负载对象）
 	 */
 	@Override
 	public void publishEvent(Object event) {
@@ -477,8 +490,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Publish the given event to all listeners.
+	 * --
 	 * 将给定事件发布到所有监听器
-	 *
 	 * 将 event 多播到所有适合的监听器。如果 event 不是 ApplicationEvent 实例，会将其封装成 PayloadApplicationEvent 对象再进行多播。
 	 * 当上下文的多播器没有初始化时，会将event暂时保存起来，待多播器初始化后才将缓存的event进行多播
 	 *
@@ -497,6 +510,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			applicationEvent = (ApplicationEvent) event;
 		}
 		else {
+			// 将事件包装为PayloadApplicationEvent
 			applicationEvent = new PayloadApplicationEvent<>(this, event);
 			if (eventType == null) {
 				// 将 applicationEvent 转换为 PayloadApplicationEvent 对象，引用其 ResolvableType 对象
@@ -518,6 +532,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Publish event via parent context as well...
+		// 也可以通过父上下文发布事件...
 		if (this.parent != null) {
 			if (this.parent instanceof AbstractApplicationContext) {
 				((AbstractApplicationContext) this.parent).publishEvent(event, eventType);
@@ -1090,6 +1105,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void initLifecycleProcessor() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		// 初始化LifecycleProcessor类型的对象
 		if (beanFactory.containsLocalBean(LIFECYCLE_PROCESSOR_BEAN_NAME)) {
 			this.lifecycleProcessor =
 					beanFactory.getBean(LIFECYCLE_PROCESSOR_BEAN_NAME, LifecycleProcessor.class);
@@ -1211,7 +1227,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Finish the refresh of this context, invoking the LifecycleProcessor's
 	 * onRefresh() method and publishing the
 	 * {@link org.springframework.context.event.ContextRefreshedEvent}.
-	 *
+	 * --
 	 * 完成此上下文的刷新，调用 LifecycleProcessor 的 onRefresh（） 方法并发布 {@link org.springframework.context.event.ContextRefreshedEvent}。
 	 *
 	 */
@@ -1258,6 +1274,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Reset Spring's common reflection metadata caches, in particular the
 	 * {@link ReflectionUtils}, {@link AnnotationUtils}, {@link ResolvableType}
 	 * and {@link CachedIntrospectionResults} caches.
+	 * --
+	 * 重置 Spring 的常见反射元数据缓存，特别是 {@link ReflectionUtils}、{@link AnnotationUtils}、{@link ResolvableType}
+	 * 和 {@link CachedIntrospectionResults} 缓存。
+	 *
 	 * @since 4.2
 	 * @see ReflectionUtils#clearCache()
 	 * @see AnnotationUtils#clearCache()
@@ -1286,6 +1306,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	public void registerShutdownHook() {
 		if (this.shutdownHook == null) {
 			// No shutdown hook registered yet.
+			// 尚未注册关闭钩子
 			this.shutdownHook = new Thread(SHUTDOWN_HOOK_THREAD_NAME) {
 				@Override
 				public void run() {
@@ -1314,6 +1335,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Close this application context, destroying all beans in its bean factory.
 	 * <p>Delegates to {@code doClose()} for the actual closing procedure.
 	 * Also removes a JVM shutdown hook, if registered, as it's not needed anymore.
+	 * --
+	 * 关闭此应用程序上下文，销毁其 Bean 工厂中的所有 Bean。
+	 * 委托给 {@code doClose()} 执行实际的关闭过程。如果已注册，还会删除 JVM 关闭钩子，因为不再需要它。
+	 *
 	 * @see #doClose()
 	 * @see #registerShutdownHook()
 	 */
@@ -1323,6 +1348,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			doClose();
 			// If we registered a JVM shutdown hook, we don't need it anymore now:
 			// We've already explicitly closed the context.
+			// 如果我们注册了一个 JVM shutdown 钩子，我们现在就不再需要它了：我们已经显式关闭了上下文。
 			if (this.shutdownHook != null) {
 				try {
 					Runtime.getRuntime().removeShutdownHook(this.shutdownHook);
@@ -1338,6 +1364,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Actually performs context closing: publishes a ContextClosedEvent and
 	 * destroys the singletons in the bean factory of this application context.
 	 * <p>Called by both {@code close()} and a JVM shutdown hook, if any.
+	 * --
+	 * 实际执行上下文关闭：发布 ContextClosedEvent 并销毁此应用程序上下文的 Bean 工厂中的单例。
+	 * 由 close() 和 JVM 关闭钩子（如果有）调用
+	 *
 	 * @see org.springframework.context.event.ContextClosedEvent
 	 * @see #destroyBeans()
 	 * @see #close()
@@ -1346,12 +1376,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@SuppressWarnings("deprecation")
 	protected void doClose() {
 		// Check whether an actual close attempt is necessary...
+		// 检查是否需要实际的关闭尝试...
+		// 当前上下文是激活的 && 乐观锁将closed标记设为true，并返回true
 		if (this.active.get() && this.closed.compareAndSet(false, true)) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Closing " + this);
 			}
 
+			// 非graalvm
 			if (!NativeDetector.inNativeImage()) {
+				// 取消MBean注册
 				LiveBeansView.unregisterApplicationContext(this);
 			}
 
@@ -1364,6 +1398,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			// Stop all Lifecycle beans, to avoid delays during individual destruction.
+			// 停止所有 Lifecycle Bean，以避免在单个销毁期间出现延迟。
 			if (this.lifecycleProcessor != null) {
 				try {
 					this.lifecycleProcessor.onClose();
@@ -1374,18 +1409,22 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			// Destroy all cached singletons in the context's BeanFactory.
+			// 销毁上下文的 BeanFactory 中所有缓存的单例。
 			destroyBeans();
 
 			// Close the state of this context itself.
 			closeBeanFactory();
 
 			// Let subclasses do some final clean-up if they wish...
+			// 如果他们愿意，让子类做一些最后的清理......
 			onClose();
 
 			// Reset common introspection caches to avoid class reference leaks.
+			// 重置常见的自省缓存以避免类引用泄漏。
 			resetCommonCaches();
 
 			// Reset local application listeners to pre-refresh state.
+			// 将本地应用程序监听器重置为刷新前状态。
 			if (this.earlyApplicationListeners != null) {
 				this.applicationListeners.clear();
 				this.applicationListeners.addAll(this.earlyApplicationListeners);
@@ -1401,11 +1440,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * The default implementation destroy all cached singletons in this context,
 	 * invoking {@code DisposableBean.destroy()} and/or the specified
 	 * "destroy-method".
-	 * 用于销毁此上下文管理的所有 Bean 的模板方法。默认实现会销毁此上下文中所有缓存的单例，调用 {@code DisposableBean.destroy（）} 和/或指定的“destroy-method”。
+	 * --
+	 * 用于销毁此上下文管理的所有 Bean 的模板方法。默认实现会销毁此上下文中所有缓存的单例，
+	 * 调用 {@code DisposableBean.destroy（）} 和/或指定的“destroy-method”。
+	 *
 	 * <p>Can be overridden to add context-specific bean destruction steps
 	 * right before or right after standard singleton destruction,
 	 * while the context's BeanFactory is still active.
+	 * --
 	 * 可以重写以在标准单例销毁之前或之后添加特定于上下文的 Bean 销毁步骤，而上下文的 BeanFactory 仍处于活动状态。
+	 *
 	 * @see #getBeanFactory()
 	 * @see org.springframework.beans.factory.config.ConfigurableBeanFactory#destroySingletons()
 	 */
@@ -1420,6 +1464,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * this context's BeanFactory has been closed. If custom shutdown logic
 	 * needs to execute while the BeanFactory is still active, override
 	 * the {@link #destroyBeans()} method instead.
+	 * --
+	 * 模板方法，可以重写以添加特定于上下文的关闭工作。默认实现为空。<p>在 {@link #doClose} 的关闭过程结束时调用，
+	 * 在此上下文的 BeanFactory 关闭之后。如果需要在 BeanFactory 仍处于活动状态时执行自定义关闭逻辑，
+	 * 请改为重写 {@link #destroyBeans()} 方法。
 	 */
 	protected void onClose() {
 		// For subclasses: do nothing by default.
@@ -1776,6 +1824,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Subclasses must implement this method to release their internal bean factory.
 	 * This method gets invoked by {@link #close()} after all other shutdown work.
 	 * <p>Should never throw an exception but rather log shutdown failures.
+	 * 子类必须实现此方法来释放其内部 Bean 工厂。此方法在所有其他关闭工作后由 {@link #close()} 调用。
+	 * 不应引发异常，而应记录关闭失败。
 	 */
 	protected abstract void closeBeanFactory();
 

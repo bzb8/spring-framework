@@ -87,6 +87,11 @@ public interface SmartLifecycle extends Lifecycle, Phased {
 	 * be started through an explicit {@link #start()} call instead, analogous
 	 * to a plain {@link Lifecycle} implementation.
 	 * <p>The default implementation returns {@code true}.
+	 * --
+	 *  如果此 {@code Lifecycle} 组件应该在包含的 {@link ApplicationContext} 刷新时由容器自动启动，则返回 {@code true} 。
+	 *  值为 {@code false} 表示组件旨在通过显式 {@link #start()} 调用启动，类似于普通的 {@link Lifecycle} 实现。
+	 *  默认实现返回 {@code true}。
+	 *
 	 * @see #start()
 	 * @see #getPhase()
 	 * @see LifecycleProcessor#onRefresh()

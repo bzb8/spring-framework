@@ -496,13 +496,22 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	/**
 	 * Manages all converters registered with the service.
+	 * 管理在服务中注册的所有转换器。
+	 * 它管理所有转换器，包括添加、删除、查找。
 	 */
 	private static class Converters {
-
+		// 存取通用的转换器，并不限定转换类型，一般用于兜底
 		private final Set<GenericConverter> globalConverters = new CopyOnWriteArraySet<>();
 
 		private final Map<ConvertiblePair, ConvertersForPair> converters = new ConcurrentHashMap<>(256);
 
+		/**
+		 * ：对于三种转换器Converter、ConverterFactory、GenericConverter在添加到Converters之前都统一被适配为了GenericConverter，
+		 * 这样做的目的是方便统一管理。对应的两个适配器是ConverterAdapter和ConverterFactoryAdapter，
+		 * 它俩都是ConditionalGenericConverter的内部类。
+		 *
+		 * @param converter
+		 */
 		public void add(GenericConverter converter) {
 			Set<ConvertiblePair> convertibleTypes = converter.getConvertibleTypes();
 			if (convertibleTypes == null) {
@@ -649,7 +658,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 	 * Manages converters registered with a specific {@link ConvertiblePair}.
 	 */
 	private static class ConvertersForPair {
-
+		// 这一对对应的转换器们（因为能处理一对的可能存在多个转换器）
 		private final Deque<GenericConverter> converters = new ConcurrentLinkedDeque<>();
 
 		public void add(GenericConverter converter) {

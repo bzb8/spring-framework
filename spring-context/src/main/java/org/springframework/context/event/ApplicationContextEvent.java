@@ -32,6 +32,7 @@ public abstract class ApplicationContextEvent extends ApplicationEvent {
 	 * Create a new ContextStartedEvent.
 	 * @param source the {@code ApplicationContext} that the event is raised for
 	 * (must not be {@code null})
+	 *               -- 引发事件的 {@code ApplicationContext} （不得为 {@code null}）
 	 */
 	public ApplicationContextEvent(ApplicationContext source) {
 		super(source);

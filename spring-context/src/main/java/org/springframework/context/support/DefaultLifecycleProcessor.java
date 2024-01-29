@@ -55,6 +55,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 
 	private final Log logger = LogFactory.getLog(getClass());
 
+	// 每个关机阶段的超时
 	private volatile long timeoutPerShutdownPhase = 30000;
 
 	private volatile boolean running;
@@ -140,11 +141,14 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	// Internal helpers
 
 	private void startBeans(boolean autoStartupOnly) {
+		// 获取实现了Lifecycle接口的bean
 		Map<String, Lifecycle> lifecycleBeans = getLifecycleBeans();
 		Map<Integer, LifecycleGroup> phases = new TreeMap<>();
 
+		// 将lifecycleBeans按照phase值分组，然后依次启动
 		lifecycleBeans.forEach((beanName, bean) -> {
 			if (!autoStartupOnly || (bean instanceof SmartLifecycle && ((SmartLifecycle) bean).isAutoStartup())) {
+				// 获取bean的阶段值
 				int phase = getPhase(bean);
 				phases.computeIfAbsent(
 						phase,
@@ -164,8 +168,10 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	 * @param beanName the name of the bean to start
 	 */
 	private void doStart(Map<String, ? extends Lifecycle> lifecycleBeans, String beanName, boolean autoStartupOnly) {
+		// 当前Lifecycle bean
 		Lifecycle bean = lifecycleBeans.remove(beanName);
 		if (bean != null && bean != this) {
+			// 先启动我依赖的其他bean，然后在启动我
 			String[] dependenciesForBean = getBeanFactory().getDependenciesForBean(beanName);
 			for (String dependency : dependenciesForBean) {
 				doStart(lifecycleBeans, dependency, autoStartupOnly);
@@ -270,7 +276,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	/**
 	 * Retrieve all applicable Lifecycle beans: all singletons that have already been created,
 	 * as well as all SmartLifecycle beans (even if they are marked as lazy-init).
-	 *
+	 * --
 	 * 检索所有适用的 Lifecycle bean：所有已创建的单例，以及所有 SmartLifecycle bean（即使它们被标记为惰性初始化）。
 	 *
 	 * @return the Map of applicable beans, with bean names as keys and bean instances as values
@@ -280,10 +286,13 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	protected Map<String, Lifecycle> getLifecycleBeans() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 		Map<String, Lifecycle> beans = new LinkedHashMap<>();
+		// 获取Lifecycle类型的所有beanName的数组
 		String[] beanNames = beanFactory.getBeanNamesForType(Lifecycle.class, false, false);
 		for (String beanName : beanNames) {
+			// 移除&前缀的beanName
 			String beanNameToRegister = BeanFactoryUtils.transformedBeanName(beanName);
 			boolean isFactoryBean = beanFactory.isFactoryBean(beanNameToRegister);
+			// 如果是factoryBean的话 就添加&前缀
 			String beanNameToCheck = (isFactoryBean ? BeanFactory.FACTORY_BEAN_PREFIX + beanName : beanName);
 			if ((beanFactory.containsSingleton(beanNameToRegister) &&
 					(!isFactoryBean || matchesBeanType(Lifecycle.class, beanNameToCheck, beanFactory))) ||
@@ -319,6 +328,8 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	/**
 	 * Helper class for maintaining a group of Lifecycle beans that should be started
 	 * and stopped together based on their 'phase' value (or the default value of 0).
+	 * --
+	 * 用于维护一组应根据其“阶段”值（或默认值 0）一起启动和停止的生命周期 bean 的帮助类。
 	 */
 	private class LifecycleGroup {
 
@@ -332,6 +343,9 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 
 		private final List<LifecycleGroupMember> members = new ArrayList<>();
 
+		/**
+		 * 实现SmartLifecycle接口的成员数量
+		 */
 		private int smartMemberCount;
 
 		public LifecycleGroup(
@@ -400,6 +414,7 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 
 	/**
 	 * Adapts the Comparable interface onto the lifecycle phase model.
+	 * 将 Comparable 接口适配到生命周期阶段模型上。
 	 */
 	private class LifecycleGroupMember implements Comparable<LifecycleGroupMember> {
 

@@ -164,6 +164,9 @@ public final class CachedIntrospectionResults {
 
 	/**
 	 * Create CachedIntrospectionResults for the given bean class.
+	 * --
+	 * 为给定的 Bean 类创建 CachedIntrospectionResults。
+	 *
 	 * @param beanClass the bean class to analyze
 	 * @return the corresponding CachedIntrospectionResults
 	 * @throws BeansException in case of introspection failure

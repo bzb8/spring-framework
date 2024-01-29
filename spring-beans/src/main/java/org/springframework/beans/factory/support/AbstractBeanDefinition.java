@@ -156,6 +156,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * name.
 	 * <p>Currently, the method names detected during destroy method inference
 	 * are "close" and "shutdown", if present on the specific bean class.
+	 * --
+	 * 用于指示容器应尝试推断一个bean的销毁方法名称，而不是显式地指定方法名称。
+	 * 常量的值是{@value}，专门设计为包含在方法名称中通常非法的字符，以确保与具有相同名称的合法命名方法不发生冲突。
+	 * 当前，在销毁方法推断期间检测到的方法名称包括特定bean类上存在的"close"和"shutdown"。
 	 */
 	public static final String INFER_METHOD = "(inferred)";
 
@@ -845,7 +849,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return whether to allow access to non-public constructors and methods.
-	 *
+	 * --
 	 * 返回是否允许访问非公共构造函数和方法。
 	 */
 	public boolean isNonPublicAccessAllowed() {
@@ -1042,6 +1046,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Indicate whether the configured initializer method is the default.
 	 * @see #getInitMethodName()
+	 * --
+	 * 指示配置的初始值设定项方法是否为默认值。
+	 * 必须要执行初始化方法
 	 */
 	public boolean isEnforceInitMethod() {
 		return this.enforceInitMethod;

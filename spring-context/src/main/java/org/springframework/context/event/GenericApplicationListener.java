@@ -29,6 +29,10 @@ import org.springframework.core.ResolvableType;
  * As of 5.3.5, it formally extends {@link SmartApplicationListener}, adapting
  * {@link #supportsEventType(Class)} to {@link #supportsEventType(ResolvableType)}
  * with a default method.
+ * --
+ * 标准 ApplicationListener 接口的扩展变体，公开更多元数据，例如支持的事件和源类型。
+ * 从 Spring Framework 4.2 开始，此接口取代了基于SmartApplicationListener类的泛型事件类型的完整处理。
+ * 从 5.3.5 开始，它正式扩展SmartApplicationListener，适配 supportsEventType(Class) -> supportsEventType(ResolvableType)默认方法。
  *
  * @author Stephane Nicoll
  * @author Juergen Hoeller

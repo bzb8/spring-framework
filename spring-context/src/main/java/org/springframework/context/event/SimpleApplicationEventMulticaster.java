@@ -142,11 +142,19 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 		multicastEvent(event, resolveDefaultEventType(event));
 	}
 
+	/**
+	 * 获取与事件类型匹配的监听器，依赖调用它们的onApplicationEvent方法
+	 * @param event the event to multicast
+	 * @param eventType the type of event (can be {@code null})
+	 */
 	@Override
 	public void multicastEvent(final ApplicationEvent event, @Nullable ResolvableType eventType) {
+		// 根据event类型生成默认类型
 		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
+		// 获取线程执行器
 		Executor executor = getTaskExecutor();
 		for (ApplicationListener<?> listener : getApplicationListeners(event, type)) {
+			// 是否在线程中执行
 			if (executor != null) {
 				executor.execute(() -> invokeListener(listener, event));
 			}
@@ -170,9 +178,11 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 		ErrorHandler errorHandler = getErrorHandler();
 		if (errorHandler != null) {
 			try {
+				// 调用监听器的onApplicationEvent方法
 				doInvokeListener(listener, event);
 			}
 			catch (Throwable err) {
+				// 使用错误处理器处理异常
 				errorHandler.handleError(err);
 			}
 		}

@@ -232,7 +232,6 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * List of names of manually registered singletons, in registration order.
 	 * 手动注册的单例名称列表，按注册顺序排序。
 	 */
-	//
 	private volatile Set<String> manualSingletonNames = new LinkedHashSet<>(16);
 
 	/**
@@ -1495,7 +1494,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * Update the factory's internal set of manual singleton names. 更新工厂的内部手动单例名称集。
+	 * Update the factory's internal set of manual singleton names.
+	 * 更新工厂的内部手动单例名称集。
 	 *
 	 * @param action    the modification action 修改操作
 	 * @param condition a precondition for the modification action
