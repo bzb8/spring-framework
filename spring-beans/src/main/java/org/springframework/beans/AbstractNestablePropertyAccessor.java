@@ -438,6 +438,11 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return propValue;
 	}
 
+	/**
+	 * 简单属性注入，而 Array, Collection, Map 则走 processKeyedProperty 方法
+	 * @param tokens
+	 * @param pv
+	 */
 	private void processLocalProperty(PropertyTokenHolder tokens, PropertyValue pv) {
 		PropertyHandler ph = getLocalPropertyHandler(tokens.actualName);
 		if (ph == null || !ph.isWritable()) {
