@@ -230,7 +230,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	// BeanFactoryPostProcessors，以便在刷新时应用。
 	private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors = new ArrayList<>();
 
-	/** System time in milliseconds when this context started. -- 此上下文启动时的系统时间（以毫秒为单位）。*/
+	/**
+	 * System time in milliseconds when this context started.
+	 * 此上下文启动时的系统时间（以毫秒为单位）。
+	 */
 	private long startupDate;
 
 	/**
@@ -278,7 +281,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@Nullable
 	private ApplicationEventMulticaster applicationEventMulticaster;
 
-	/** Application startup metrics. -- 应用程序启动指标 **/
+	/**
+	 * Application startup metrics.
+	 * -- 应用程序启动指标
+	 */
 	private ApplicationStartup applicationStartup = ApplicationStartup.DEFAULT;
 
 	/**
@@ -287,7 +293,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	private final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
 
-	/** Local listeners registered before refresh. -- 刷新前注册的本地监听器。*/
+	/** Local listeners registered before refresh.
+	 * -- 刷新前注册的本地监听器。
+	 */
 	@Nullable
 	private Set<ApplicationListener<?>> earlyApplicationListeners;
 
@@ -681,6 +689,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			// Prepare this context for refreshing.
 			// 准备此上下文以进行刷新。
+			// 主要是初始化一些关于监听器的属性
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
@@ -813,6 +822,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Initialize any placeholder property sources in the context environment.
 		// 初始化上下文环境中的任何占位符属性源
 		// 这个一个钩子方法，用于交由子类替换任何存根属性源
+		// web环境将任何存根属性源替换为实际实例
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
@@ -830,7 +840,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
 		else {
-			// Reset local application listeners to pre-refresh state. 将本地应用程序侦听器重置为刷新前状态。
+			// Reset local application listeners to pre-refresh state.
+			// 将本地应用程序监听器重置为刷新前状态。
 			this.applicationListeners.clear();
 			this.applicationListeners.addAll(this.earlyApplicationListeners);
 		}
@@ -843,6 +854,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * <p>Replace any stub property sources with actual instances.
+	 * -- 将任何存根属性源替换为实际实例。
+	 *
 	 * @see org.springframework.core.env.PropertySource.StubPropertySource
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#initServletPropertySources
 	 */
@@ -852,8 +865,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Tell the subclass to refresh the internal bean factory.
-	 *
+	 * --
 	 * 告诉子类刷新内部 Bean 工厂。
+	 *
 	 * @return the fresh BeanFactory instance -- 新的 BeanFactory 实例
 	 * @see #refreshBeanFactory()
 	 * @see #getBeanFactory()

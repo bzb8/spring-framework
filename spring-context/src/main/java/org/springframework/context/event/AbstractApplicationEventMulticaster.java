@@ -73,6 +73,9 @@ public abstract class AbstractApplicationEventMulticaster
 
 	private final DefaultListenerRetriever defaultRetriever = new DefaultListenerRetriever();
 
+	/**
+	 * defaultRetriever添加、删除后会清空缓存
+	 */
 	final Map<ListenerCacheKey, CachedListenerRetriever> retrieverCache = new ConcurrentHashMap<>(64);
 
 	@Nullable
@@ -554,6 +557,9 @@ public abstract class AbstractApplicationEventMulticaster
 	 */
 	private class DefaultListenerRetriever {
 
+		/**
+		 * 只会添加单例对象
+		 */
 		public final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<>();
 		/**
 		 * 待创建的监听器

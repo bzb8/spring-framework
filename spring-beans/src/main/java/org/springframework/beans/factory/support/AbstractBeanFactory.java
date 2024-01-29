@@ -129,6 +129,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * ClassLoader to resolve bean class names with, if necessary.
 	 * 如果需要，用于解析bean类名称的类加载器。
+	 * 通常为当前上下文的类加载器
 	 */
 	@Nullable
 	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
@@ -185,6 +186,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	/**
 	 * BeanPostProcessors to apply.
+	 * prepareBeanFactory方法中会添加它
 	 */
 	private final List<BeanPostProcessor> beanPostProcessors = new BeanPostProcessorCacheAwareList();
 
@@ -509,7 +511,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@Override
 	public boolean containsBean(String name) {
 		String beanName = transformedBeanName(name);
+		// 单例缓存中存在或bean定义缓存中存在
 		if (containsSingleton(beanName) || containsBeanDefinition(beanName)) {
+			// name不以&开头 || 以&开头但是它是工厂bean
 			return (!BeanFactoryUtils.isFactoryDereference(name) || isFactoryBean(name));
 		}
 		// Not found -> check parent.
@@ -606,7 +610,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * to check whether the bean with the given name matches the specified type. Allow
 	 * additional constraints to be applied to ensure that beans are not created early.
 	 * <p>
-	 * {@link #isTypeMatch(String, ResolvableType)的内部扩展变体，用于检查具有给定名称的 Bean 是否与指定类型匹配。允许应用其他约束以确保不会过早创建 Bean。
+	 * {@link #isTypeMatch(String, ResolvableType) 的内部扩展变体，用于检查具有给定名称的 Bean 是否与指定类型匹配。允许应用其他约束以确保不会过早创建 Bean。
 	 *
 	 * @param name        the name of the bean to query
 	 * @param typeToMatch the type to match against (as a
@@ -625,9 +629,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		boolean isFactoryDereference = BeanFactoryUtils.isFactoryDereference(name);
 
 		// Check manually registered singletons.
+		// 检查手动注册的单例。
 		Object beanInstance = getSingleton(beanName, false);
 		if (beanInstance != null && beanInstance.getClass() != NullBean.class) {
+			// 工厂bean
 			if (beanInstance instanceof FactoryBean) {
+				// 表示不是为了查找工厂bean，调用getObjectType方法
 				if (!isFactoryDereference) {
 					Class<?> type = getTypeForFactoryBean((FactoryBean<?>) beanInstance);
 					return (type != null && typeToMatch.isAssignableFrom(type));
@@ -1039,8 +1046,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Assert.notNull(beanPostProcessor, "BeanPostProcessor must not be null");
 		synchronized (this.beanPostProcessors) {
 			// Remove from old position, if any
+			// 从旧位置移除（如果有）
 			this.beanPostProcessors.remove(beanPostProcessor);
 			// Add to end of list
+			// 添加到末尾，可能和优先级执行顺序有关系
 			this.beanPostProcessors.add(beanPostProcessor);
 		}
 	}
@@ -1699,7 +1708,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * Resolve the bean class for the specified bean definition,
 	 * resolving a bean class name into a Class reference (if necessary)
 	 * and storing the resolved Class in the bean definition for further use.
-	 * <p>
+	 * --
 	 * 解析指定 Bean 定义的 Bean 类，将 Bean 类名解析为 Class 引用（如有必要），并将解析的 Class 存储在 Bean 定义中以供进一步使用。
 	 *
 	 * @param mbd          the merged bean definition to determine the class for 用于确定 的类的合并 Bean 定义
@@ -1754,6 +1763,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		ClassLoader dynamicLoader = beanClassLoader;
 		boolean freshResolve = false;
 
+		//
 		if (!ObjectUtils.isEmpty(typesToMatch)) {
 			// When just doing type checks (i.e. not creating an actual instance yet),
 			// use the specified temporary class loader (e.g. in a weaving scenario).
@@ -2059,8 +2069,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
-	 * <p>
+	 * --
 	 * 获取给定 bean 实例的对象，可以是 bean 实例本身，也可以是它创建的对象（如果是 FactoryBean, 以&开头的FactoryBean则返回FactoryBean本身，否则返回它的getObject()返回的对象）。
+	 * 如果非工厂bean，直接返回bean，否则以&开头的工厂bean，直接返回它，否则不以&开头的工厂bean，返回它的getObject()返回的对象
 	 *
 	 * @param beanInstance the shared bean instance -- getSingleton(beanName)获取的对象
 	 * @param name         the name that may include factory dereference prefix -- 可能包含工厂解引用前缀的名称
@@ -2100,6 +2111,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			return beanInstance;
 		}
 
+		// 它是工厂bean 但不是以&开头的
 		Object object = null;
 		if (mbd != null) {
 			mbd.isFactoryBean = true;

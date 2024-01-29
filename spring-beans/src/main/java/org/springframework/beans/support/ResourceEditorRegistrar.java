@@ -54,7 +54,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  * creation within an {@link org.springframework.context.ApplicationContext})
  * with resource editors. Used by
  * {@link org.springframework.context.support.AbstractApplicationContext}.
- *
+ * --
  * PropertyEditorRegistrar 实现，它使用资源编辑器填充给定的 {@link org.springframework.beans.PropertyEditorRegistry}
  * （通常是用于在 {@link org.springframework.context.ApplicationContext} 中创建 Bean 的 {@link org.springframework.beans.BeanWrapper}）。
  * 由 {@link org.springframework.context.support.AbstractApplicationContext} 使用。
@@ -75,6 +75,7 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 	 * and {@link PropertyResolver}.
 	 * @param resourceLoader the ResourceLoader (or ResourcePatternResolver)
 	 * to create editors for (usually an ApplicationContext)
+	 *                       -- 要为其创建编辑器的 ResourceLoader（或 ResourcePatternResolver）（通常是 ApplicationContext）
 	 * @param propertyResolver the PropertyResolver (usually an Environment)
 	 * @see org.springframework.core.env.Environment
 	 * @see org.springframework.core.io.support.ResourcePatternResolver

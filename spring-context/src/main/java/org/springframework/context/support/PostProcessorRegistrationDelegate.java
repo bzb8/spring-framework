@@ -84,6 +84,8 @@ final class PostProcessorRegistrationDelegate {
 		// 存储已经处理完的BeanPostPorcessor对象Bean名称
 		Set<String> processedBeans = new HashSet<>();
 
+		// 处理实现了BeanDefinitionRegistry接口的处理工厂类
+
 		// 如果bean工厂是BeanDefinitionRegistry的实例。
 		if (beanFactory instanceof BeanDefinitionRegistry) { // true
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
@@ -199,6 +201,8 @@ final class PostProcessorRegistrationDelegate {
 			// 调用向上下文实例注册的工厂处理器。
 			invokeBeanFactoryPostProcessors(beanFactoryPostProcessors, beanFactory);
 		}
+
+		// 处理实现了BeanFactoryPostProcessor接口的处理工厂类
 
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!

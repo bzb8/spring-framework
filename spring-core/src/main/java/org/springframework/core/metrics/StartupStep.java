@@ -109,6 +109,7 @@ public interface StartupStep {
 
 	/**
 	 * Simple key/value association for storing step metadata.
+	 * 用于存储步骤元数据的简单键值关联。
 	 */
 	interface Tag {
 

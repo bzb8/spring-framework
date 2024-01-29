@@ -35,7 +35,7 @@ public interface StringValueResolver {
 
 	/**
 	 * Resolve the given String value, for example parsing placeholders.
-	 *
+	 * --
 	 * 解析给定的字符串值，例如解析占位符。
 	 *
 	 * @param strVal the original String value (never {@code null})

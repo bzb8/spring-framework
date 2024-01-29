@@ -61,8 +61,8 @@ public abstract class AopProxyUtils {
 
 	/**
 	 * Obtain the singleton target object behind the given proxy, if any.
-	 *
-	 * 获取给定代理后面的单一实例目标对象（如果有）。
+	 * --
+	 * 获取给定代理后面的单实目标对象（如果有）。
 	 *
 	 * @param candidate the (potential) proxy to check 要检查的（潜在）代理
 	 * @return the singleton target object managed in a {@link SingletonTargetSource},

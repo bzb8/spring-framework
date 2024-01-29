@@ -55,6 +55,10 @@ class ApplicationListenerDetector implements DestructionAwareBeanPostProcessor, 
 
 	private final transient AbstractApplicationContext applicationContext;
 
+	/**
+	 * 监听器的实例
+	 * beanName -> 是否单例
+	 */
 	private final transient Map<String, Boolean> singletonNames = new ConcurrentHashMap<>(256);
 
 
@@ -83,6 +87,7 @@ class ApplicationListenerDetector implements DestructionAwareBeanPostProcessor, 
 			Boolean flag = this.singletonNames.get(beanName);
 			if (Boolean.TRUE.equals(flag)) {
 				// singleton bean (top-level or inner): register on the fly
+				// 单例 Bean（顶级或内部）：动态注册
 				this.applicationContext.addApplicationListener((ApplicationListener<?>) bean);
 			}
 			else if (Boolean.FALSE.equals(flag)) {

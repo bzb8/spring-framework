@@ -28,7 +28,7 @@ import org.springframework.util.StringValueResolver;
  * to the {@link ConfigurableBeanFactory#resolveEmbeddedValue} method.
  * The {@link BeanExpressionContext} used is for the plain bean factory,
  * with no scope specified for any contextual objects to access.
- *
+ * --
  * 请注意，此适配器还解析表达式，这与 {@link ConfigurableBeanFactory#resolveEmbeddedValue} 方法相反。
  * 使用的 {@link BeanExpressionContext} 用于普通 Bean 工厂，没有为任何上下文对象指定访问范围。
  *

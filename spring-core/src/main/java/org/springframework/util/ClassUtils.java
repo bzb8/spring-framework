@@ -576,8 +576,9 @@ public abstract class ClassUtils {
 	 * Check if the right-hand side type may be assigned to the left-hand side
 	 * type, assuming setting by reflection. Considers primitive wrapper
 	 * classes as assignable to the corresponding primitive types.
-	 *
+	 * --
 	 * 假设通过反射进行设置，请检查是否可以将右侧类型分配给左侧类型。将基元包装类视为可分配给相应的基元类型。
+	 * rhsType是否是lhsType的本类或子类
 	 *
 	 * @param lhsType the target type
 	 * @param rhsType the value type that should be assigned to the target type

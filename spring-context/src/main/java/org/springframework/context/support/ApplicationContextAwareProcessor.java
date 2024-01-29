@@ -54,6 +54,8 @@ import org.springframework.util.StringValueResolver;
  * underlying bean factory. Applications do not use this directly.
  * 应用程序上下文将自动将其注册到其底层 Bean 工厂。应用程序不直接使用它。
  *
+ * prepareBeanFactory方法中会初始化它
+ *
  * @author Juergen Hoeller
  * @author Costin Leau
  * @author Chris Beams

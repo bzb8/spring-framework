@@ -83,6 +83,7 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 							propertySource.getName() + "'");
 				}
 				Object value = propertySource.getProperty(key);
+				// 直接返回
 				if (value != null) {
 					if (resolveNestedPlaceholders && value instanceof String) {
 						value = resolveNestedPlaceholders((String) value);

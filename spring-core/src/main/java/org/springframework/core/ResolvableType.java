@@ -1352,7 +1352,7 @@ public class ResolvableType implements Serializable {
 	 * doing assignability checks against the raw class only (analogous to
 	 * {@link Class#isAssignableFrom}, which this serves as a wrapper for).
 	 * <p>For example: {@code ResolvableType.forRawClass(List.class)}.
-	 *
+	 * ---
 	 * 返回指定 {@link Class} 的 {@link ResolvableType}，仅对原始类执行可分配性检查（类似于 {@link Class#isAssignableFrom}，用作包装器）。
 	 * 例如：{@code ResolvableType.forRawClass（List.class）}。
 	 *
@@ -1367,6 +1367,7 @@ public class ResolvableType implements Serializable {
 	 * @see #getRawClass()
 	 */
 	public static ResolvableType forRawClass(@Nullable Class<?> clazz) {
+		// class == null 返回 true
 		return new ResolvableType(clazz) {
 			@Override
 			public ResolvableType[] getGenerics() {

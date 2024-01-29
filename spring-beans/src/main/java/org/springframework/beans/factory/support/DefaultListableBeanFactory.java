@@ -193,6 +193,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * 依赖项类型 -> 相应的自动装配值
 	 * 存放着手动显式注册的依赖项类型 -> 相应的自动装配值的缓存
 	 * 手动显示注册指直接调用{@link #registerResolvableDependency(Class, Object)}
+	 * prepareBeanFactory方法中会添加它的值
 	 */
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
@@ -272,6 +273,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Specify an id for serialization purposes, allowing this BeanFactory to be
 	 * deserialized from this id back into the BeanFactory object, if needed.
+	 * --
 	 * 指定一个ID以进行序列化，如果需要的话，允许该BeanFactory从该ID反序列化为BeanFactory对象
 	 * 更新并保存序列化ID与当前工厂实例的映射关系
 	 */
@@ -907,6 +909,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 * @return whether eager initialization is necessary
 	 */
 	private boolean requiresEagerInitForType(@Nullable String factoryBeanName) {
+		// 它是工厂bean && 它不在单例缓存中
 		return (factoryBeanName != null && isFactoryBean(factoryBeanName) && !containsSingleton(factoryBeanName));
 	}
 
