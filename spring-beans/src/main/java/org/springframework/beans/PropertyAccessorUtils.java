@@ -82,13 +82,18 @@ public abstract class PropertyAccessorUtils {
 	/**
 	 * Determine the first (or last) nested property separator in the
 	 * given property path, ignoring dots in keys (like "map[my.key]").
-	 * @param propertyPath the property path to check
-	 * @param last whether to return the last separator rather than the first
+	 * --
+	 * 确定给定属性路径中的第一个（或最后一个）嵌套属性分隔符，忽略键中的点（如“map[my.key]”）
+	 *
+	 * @param propertyPath the property path to check -- 要检查的属性路径
+	 * @param last whether to return the last separator rather than the first -- 是否返回最后一个分隔符而不是第一个
 	 * @return the index of the nested property separator, or -1 if none
+	 * 嵌套属性分隔符的索引，如果没有则为 -1
 	 */
 	private static int getNestedPropertySeparatorIndex(String propertyPath, boolean last) {
 		boolean inKey = false;
 		int length = propertyPath.length();
+		// last 则取最后的索引，否则第一个
 		int i = (last ? length - 1 : 0);
 		while (last ? i >= 0 : i < length) {
 			switch (propertyPath.charAt(i)) {

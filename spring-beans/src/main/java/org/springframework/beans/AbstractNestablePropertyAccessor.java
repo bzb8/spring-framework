@@ -48,7 +48,7 @@ import org.springframework.util.StringUtils;
 /**
  * A basic {@link ConfigurablePropertyAccessor} that provides the necessary
  * infrastructure for all typical use cases.
- *
+ * --
  * 一个基本的 {@link ConfigurablePropertyAccessor}，为所有典型用例提供必要的基础结构。
  *
  * <p>This accessor will convert collection and array values to the corresponding
@@ -438,6 +438,11 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		return propValue;
 	}
 
+	/**
+	 * 简单属性注入，而 Array, Collection, Map 则走 processKeyedProperty 方法
+	 * @param tokens
+	 * @param pv
+	 */
 	private void processLocalProperty(PropertyTokenHolder tokens, PropertyValue pv) {
 		PropertyHandler ph = getLocalPropertyHandler(tokens.actualName);
 		if (ph == null || !ph.isWritable()) {

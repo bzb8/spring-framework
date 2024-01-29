@@ -110,15 +110,20 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	private boolean configValueEditorsActive = false;
 
+	// 装载【默认的】编辑器们，初始化的时候会注册好
 	@Nullable
 	private Map<Class<?>, PropertyEditor> defaultEditors;
 
+	// 如果想覆盖掉【默认行为】，可通过此Map覆盖（比如处理Charset类型你不想用默认的编辑器处理）
+	// 通过API：overrideDefaultEditor(...)放进此Map里
 	@Nullable
 	private Map<Class<?>, PropertyEditor> overriddenDefaultEditors;
 
+	// 通过API：registerCustomEditor(...)放进此Map里（若没指定propertyPath）
 	@Nullable
 	private Map<Class<?>, PropertyEditor> customEditors;
 
+	// 通过API：registerCustomEditor(...)放进此Map里（若指定了propertyPath）
 	@Nullable
 	private Map<String, CustomEditorHolder> customEditorsForPath;
 

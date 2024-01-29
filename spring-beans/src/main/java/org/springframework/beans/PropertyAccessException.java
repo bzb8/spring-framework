@@ -23,6 +23,8 @@ import org.springframework.lang.Nullable;
 /**
  * Superclass for exceptions related to a property access,
  * such as type mismatch or invocation target exception.
+ * --
+ * 与属性访问相关的异常的超类，例如类型不匹配或调用目标异常.
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

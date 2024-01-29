@@ -1,9 +1,7 @@
 package org.springframework;
 
-import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.PropertyAccessorUtils;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +15,8 @@ public class Test {
 	public static void main(String[] args) {
 		List<String> list = Arrays.asList("a", "b");
 		System.out.println(StringUtils.collectionToDelimitedString(list, "]" + "["));
+//		String[][] a = new String[5][3];
+//		System.out.println(a.getClass().getName());
+		System.out.println(PropertyAccessorUtils.getFirstNestedPropertySeparatorIndex("my[a][a.b]"));
 	}
-
 }
