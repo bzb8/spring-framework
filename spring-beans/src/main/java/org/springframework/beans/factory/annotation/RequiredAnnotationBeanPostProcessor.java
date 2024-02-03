@@ -82,6 +82,7 @@ public class RequiredAnnotationBeanPostProcessor implements SmartInstantiationAw
 	 * Bean definition attribute that may indicate whether a given bean is supposed
 	 * to be skipped when performing this post-processor's required property check.
 	 * @see #shouldSkip
+	 * Bean 定义属性，该属性可能指示在执行此后处理器的必需属性检查时是否应跳过给定的 Bean。
 	 */
 	public static final String SKIP_REQUIRED_CHECK_ATTRIBUTE =
 			Conventions.getQualifiedAttributeName(RequiredAnnotationBeanPostProcessor.class, "skipRequiredCheck");

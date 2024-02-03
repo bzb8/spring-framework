@@ -30,8 +30,9 @@ import org.springframework.lang.Nullable;
  * Caching implementation of the {@link MetadataReaderFactory} interface,
  * caching a {@link MetadataReader} instance per Spring {@link Resource} handle
  * (i.e. per ".class" file).
- *
- * 缓存 {@link MetadataReaderFactory} 接口的实现，每个 Spring {@link Resource} 句柄（即每个“.class”文件）缓存一个 {@link MetadataReader} 实例。
+ * --
+ * 缓存 {@link MetadataReaderFactory} 接口的实现，每个 Spring {@link Resource} 句柄（即每个“.class”文件）
+ * 缓存一个 {@link MetadataReader} 实例。
  *
  * @author Juergen Hoeller
  * @author Costin Leau
@@ -42,7 +43,10 @@ public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 	/** Default maximum number of entries for a local MetadataReader cache: 256. */
 	public static final int DEFAULT_CACHE_LIMIT = 256;
 
-	/** MetadataReader cache: either local or shared at the ResourceLoader level. */
+	/**
+	 * MetadataReader cache: either local or shared at the ResourceLoader level.
+	 * MetadataReader 缓存：本地缓存或在 ResourceLoader 级别共享缓存。
+	 */
 	@Nullable
 	private Map<Resource, MetadataReader> metadataReaderCache;
 

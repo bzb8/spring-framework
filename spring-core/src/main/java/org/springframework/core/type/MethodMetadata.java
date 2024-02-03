@@ -70,6 +70,7 @@ public interface MethodMetadata extends AnnotatedTypeMetadata {
 	/**
 	 * Determine whether the underlying method is overridable,
 	 * i.e. not marked as static, final, or private.
+	 * 确定基础方法是否可重写，即未标记为静态、最终或私有。
 	 */
 	boolean isOverridable();
 

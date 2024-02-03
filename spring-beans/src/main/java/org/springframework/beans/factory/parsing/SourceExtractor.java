@@ -40,7 +40,7 @@ public interface SourceExtractor {
 	/**
 	 * Extract the source metadata from the candidate object supplied
 	 * by the configuration parser.
-	 *
+	 * --
 	 * 从配置解析器提供的候选对象中提取源元数据。
 	 *
 	 * @param sourceCandidate the original source metadata (never {@code null}) 原始源元数据（绝不是 {@code null}）

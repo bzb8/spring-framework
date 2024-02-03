@@ -39,6 +39,9 @@ final class AttributeMethods {
 
 	static final AttributeMethods NONE = new AttributeMethods(null, new Method[0]);
 
+	/**
+	 * 注解类型 -> 该注解的属性方法
+	 */
 	static final Map<Class<? extends Annotation>, AttributeMethods> cache = new ConcurrentReferenceHashMap<>();
 
 	private static final Comparator<Method> methodComparator = (m1, m2) -> {
@@ -112,7 +115,7 @@ final class AttributeMethods {
 	 * this method is designed to cover Google App Engine's late arrival of such
 	 * exceptions for {@code Class} values (instead of the more typical early
 	 * {@code Class.getAnnotations() failure}).
-	 *
+	 * --
 	 * 检查是否可以安全地访问给定注解中的值，而不会导致任何 {@link TypeNotPresentException TypeNotPresentExceptions}。
 	 * 具体而言，此方法旨在涵盖 Google App Engine 延迟出现的 {@code Class} 值的此类异常（而不是更典型的早期 {@code Class.getAnnotations() failure}）。
 	 *
@@ -234,7 +237,7 @@ final class AttributeMethods {
 
 	/**
 	 * Get the attribute methods for the given annotation type.
-	 *
+	 * --
 	 * 获取给定注解类型的属性方法。
 	 *
 	 * @param annotationType the annotation type
@@ -244,6 +247,7 @@ final class AttributeMethods {
 		if (annotationType == null) {
 			return NONE;
 		}
+
 		return cache.computeIfAbsent(annotationType, AttributeMethods::compute);
 	}
 
@@ -269,6 +273,7 @@ final class AttributeMethods {
 	}
 
 	private static boolean isAttributeMethod(Method method) {
+		// 方法参数个数 == 0 && 方法返回类型不是void
 		return (method.getParameterCount() == 0 && method.getReturnType() != void.class);
 	}
 

@@ -28,7 +28,7 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 /**
  * Interface that defines abstract access to the annotations of a specific
  * class, in a form that does not require that class to be loaded yet.
- *
+ * --
  * 定义对特定类的注解的抽象访问的接口，其形式尚不需要加载该类。
  * AnnotationMetadata 是 Spring Framework 中的一个接口，用于表示类的注解元数据。它提供了一种方便的方式来检查和访问类上的注解信息。
  * 在 Spring 中，AnnotationMetadata 接口的实现类通常包括 StandardAnnotationMetadata 和 StandardMethodMetadata
@@ -48,7 +48,7 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	/**
 	 * Get the fully qualified class names of all annotation types that
 	 * are <em>present</em> on the underlying class.
-	 *
+	 * --
 	 * 获取基础类上存在的所有注解类型的完全限定类名。
 	 *
 	 * @return the annotation type names
@@ -63,7 +63,7 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	/**
 	 * Get the fully qualified class names of all meta-annotation types that
 	 * are <em>present</em> on the given annotation type on the underlying class.
-	 *
+	 * --
 	 * 获取基础类上给定注解类型上存在的所有元注解类型的完全限定类名。
 	 *
 	 * @param annotationName the fully qualified class name of the meta-annotation
@@ -106,7 +106,7 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	/**
 	 * Determine whether the underlying class has any methods that are
 	 * annotated (or meta-annotated) with the given annotation type.
-	 *
+	 * --
 	 * 确定基础类是否具有任何使用给定注解类型进行注解（或元注解）的方法。
 	 *
 	 * @param annotationName the fully qualified class name of the annotation

@@ -36,7 +36,7 @@ import org.springframework.util.ReflectionUtils;
 /**
  * {@link AnnotationMetadata} implementation that uses standard reflection
  * to introspect a given {@link Class}.
- *
+ * --
  * {@link AnnotationMetadata} 实现，它使用标准反射来内省给定的 {@link Class}。
  *
  * @author Juergen Hoeller
@@ -80,7 +80,7 @@ public class StandardAnnotationMetadata extends StandardClassMetadata implements
 	 * @param nestedAnnotationsAsMap return nested annotations and annotation arrays as
 	 * {@link org.springframework.core.annotation.AnnotationAttributes} for compatibility
 	 * with ASM-based {@link AnnotationMetadata} implementations
-	 *
+	 * --
 	 * 将嵌套的注解和注解数组返回为 {@link org.springframework.core.annotation.AnnotationAttributes}，
 	 * 以便与基于 ASM 的 {@link AnnotationMetadata} 实现兼容
 	 *

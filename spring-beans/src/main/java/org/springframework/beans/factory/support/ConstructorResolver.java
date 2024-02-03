@@ -69,11 +69,11 @@ import org.springframework.util.StringUtils;
 
 /**
  * Delegate for resolving constructors and factory methods.
- *
+ * --
  * 用于解析构造函数和工厂方法的委托。
  *
  * Performs constructor resolution through argument matching.
- *
+ * --
  * 通过参数匹配执行构造函数解析。
  *
  * @author Juergen Hoeller
@@ -460,9 +460,12 @@ class ConstructorResolver {
 		// 工厂对象
 		Object factoryBean;
 		// 定义一个用于存放工厂Bean对象的类对象的Class
+		// 静态方法的话是bean class
 		Class<?> factoryClass;
 		// 定义一个表示是静态工厂方法的标记
 		boolean isStatic;
+
+		// -- 创建工厂对象
 
 		// 获取工厂bean名称，如果工厂bean名称不为空，表示以实例工厂的方式创建实例对象
 		String factoryBeanName = mbd.getFactoryBeanName();
@@ -789,7 +792,7 @@ class ConstructorResolver {
 			}
 		}
 
-		// 使用反射调用工厂方法，并储存在ThreadLocal中
+		// 使用反射调用工厂方法
 		bw.setBeanInstance(instantiate(beanName, mbd, factoryBean, factoryMethodToUse, argsToUse));
 		return bw;
 	}
@@ -1183,7 +1186,7 @@ class ConstructorResolver {
 	 * @param mbd beanName对于的合并后RootBeanDefinition
 	 * @param bw bean的包装类，此时bw还没有拿到bean
 	 * @param executable mbd已解析的构造函数或工厂方法对象
-	 * @param argsToResolve mbd部分准备好的构造函数参数值
+	 * @param argsToResolve mbd部分准备好的构造函数参数值，待解析的参数
 	 * @param fallback 是否可在抛出NoSuchBeanDefinitionException返回null，而不抛出异常
 	 */
 	private Object[] resolvePreparedArguments(String beanName, RootBeanDefinition mbd, BeanWrapper bw,
@@ -1280,6 +1283,7 @@ class ConstructorResolver {
 
 	/**
 	 * Resolve the specified argument which is supposed to be autowired.
+	 * --
 	 * 解析应该自动注入的指定参数。
 	 *
 	 * @param descriptor 参数依赖描述符

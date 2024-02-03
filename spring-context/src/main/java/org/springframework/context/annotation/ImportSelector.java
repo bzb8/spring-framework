@@ -74,8 +74,9 @@ public interface ImportSelector {
 	/**
 	 * Select and return the names of which class(es) should be imported based on
 	 * the {@link AnnotationMetadata} of the importing @{@link Configuration} class.
-	 *
+	 * --
 	 * 根据导入 @{@link Configuration} 类的 {@link AnnotationMetadata} 选择并返回应导入的类的名称。
+	 * 相当于导入一批@Import类
 	 *
 	 * @return the class names, or an empty array if none 类名，如果没有，则为空数组
 	 */
@@ -87,7 +88,7 @@ public interface ImportSelector {
 	 * <p>If this predicate returns {@code true} for a given fully-qualified
 	 * class name, said class will not be considered as an imported configuration
 	 * class, bypassing class file loading as well as metadata introspection.
-	 *
+	 * --
 	 * 返回一个谓词，用于从导入候选项中排除类，以传递方式应用于通过此选择器的导入找到的所有类。
 	 * 如果此谓词为给定的完全限定类名返回 {@code true}，则该类将不被视为导入的配置类，从而绕过类文件加载和元数据自省。
 	 * 为传递导入的配置类的完全限定候选类名称

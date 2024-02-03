@@ -35,7 +35,13 @@ final class ScopedProxyCreator {
 	private ScopedProxyCreator() {
 	}
 
-
+	/**
+	 *
+	 * @param definitionHolder
+	 * @param registry
+	 * @param proxyTargetClass -- 是否创建CGLIB子类, ScopedProxyMode.TARGET_CLASS
+	 * @return
+	 */
 	public static BeanDefinitionHolder createScopedProxy(
 			BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry, boolean proxyTargetClass) {
 

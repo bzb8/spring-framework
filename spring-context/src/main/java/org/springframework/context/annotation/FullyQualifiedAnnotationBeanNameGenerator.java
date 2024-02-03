@@ -53,6 +53,7 @@ public class FullyQualifiedAnnotationBeanNameGenerator extends AnnotationBeanNam
 	/**
 	 * A convenient constant for a default {@code FullyQualifiedAnnotationBeanNameGenerator}
 	 * instance, as used for configuration-level import purposes.
+	 * 默认 FullyQualifiedAnnotationBeanNameGenerator 实例的方便常量，用于配置级导入目的。
 	 * @since 5.2.11
 	 */
 	public static final FullyQualifiedAnnotationBeanNameGenerator INSTANCE =

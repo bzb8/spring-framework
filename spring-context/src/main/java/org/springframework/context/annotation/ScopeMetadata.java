@@ -22,12 +22,12 @@ import org.springframework.util.Assert;
 /**
  * Describes scope characteristics for a Spring-managed bean including the scope
  * name and the scoped-proxy behavior.
- *
+ * --
  * 描述 Spring 管理的 Bean 的作用域特征，包括作用域名称和作用域代理行为。
  *
  * <p>The default scope is "singleton", and the default is to <i>not</i> create
  * scoped-proxies.
- *
+ * --
  * 默认作用域为“单例”，默认为不创建作用域代理。
  *
  * @author Mark Fisher
@@ -38,6 +38,9 @@ import org.springframework.util.Assert;
  */
 public class ScopeMetadata {
 
+	/**
+	 * 默认是单例的
+	 */
 	private String scopeName = BeanDefinition.SCOPE_SINGLETON;
 
 	private ScopedProxyMode scopedProxyMode = ScopedProxyMode.NO;

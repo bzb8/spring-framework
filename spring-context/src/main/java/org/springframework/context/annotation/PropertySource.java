@@ -224,8 +224,9 @@ public @interface PropertySource {
 	 * {@link org.springframework.core.io.support.ResourcePropertySource} constructor).
 	 * @see org.springframework.core.env.PropertySource#getName()
 	 * @see org.springframework.core.io.Resource#getDescription()
-	 *
-	 * 指示此属性源的名称。如果省略，{@link #factory}将基于底层资源生成一个名称（在{@link org.springframework.core.io.support.DefaultPropertySourceFactory}的情况下：
+	 * --
+	 * 指示此属性源的名称。如果省略，{@link #factory}将基于底层资源生成一个名称
+	 * （在{@link org.springframework.core.io.support.DefaultPropertySourceFactory}的情况下：
 	 * 通过相应的无名称{@link org.springframework.core.io.support.ResourcePropertySource}构造函数从资源描述派生）。
 	 */
 	String name() default "";
@@ -258,7 +259,7 @@ public @interface PropertySource {
 	 * ignored.
 	 * <p>{@code true} is appropriate if the properties file is completely optional.
 	 * <p>Default is {@code false}.
-	 *
+	 * --
 	 * 指示是否应忽略查找 {@link #value property resource} 的失败。
 	 * 如果属性文件是完全可选的，则 {@code true} 是合适的。
 	 * 默认值为 {@code false}。
@@ -276,7 +277,7 @@ public @interface PropertySource {
 	/**
 	 * Specify a custom {@link PropertySourceFactory}, if any.
 	 * <p>By default, a default factory for standard resource files will be used.
-	 *
+	 * --
 	 * 指定自定义 {@link PropertySourceFactory}（如果有）。
 	 * 默认情况下，将使用标准资源文件的默认工厂。
 	 *

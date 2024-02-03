@@ -85,7 +85,10 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	private int autoGrowCollectionLimit = Integer.MAX_VALUE;
 
-	// bean instance
+	/**
+	 * 	bean instance
+	 * 	被包装的bean实例
+ 	 */
 	@Nullable
 	Object wrappedObject;
 
@@ -96,6 +99,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * 最顶层 BeanWrapper 所包装的对象
+	 * nestedPath为空则为wrappedObject
 	 */
 	@Nullable
 	Object rootObject;

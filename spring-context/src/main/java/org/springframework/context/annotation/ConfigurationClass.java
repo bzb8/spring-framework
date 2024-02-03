@@ -55,22 +55,38 @@ final class ConfigurationClass {
 
 	private final Resource resource;
 
+	/**
+	 * 配置类的beanName
+	 */
 	@Nullable
 	private String beanName;
 
+	/**
+	 * 表示导入该配置类的配置类集
+	 */
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
 
 	/**
-	 * @Bean 标记的方法
+	 * -- @Bean 标记的方法
 	 */
 	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>();
 
+	/**
+	 * -- @ImportResource 的locations 解析后的某个值 -> @ImportResource的reader()属性值
+	 */
 	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
 			new LinkedHashMap<>();
 
+	/**
+	 * 将该ImportBeanDefinitionRegistrar缓存在configClass的importBeanDefinitionRegistrars
+	 * 处理@Import注解缓存的
+	 */
 	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars =
 			new LinkedHashMap<>();
 
+	/**
+	 * 缓存跳过的@Bean方法，不应该生成其bean定义
+	 */
 	final Set<String> skippedBeanMethods = new HashSet<>();
 
 
@@ -118,8 +134,12 @@ final class ConfigurationClass {
 	 * Create a new {@link ConfigurationClass} representing a class that was imported
 	 * using the {@link Import} annotation or automatically processed as a nested
 	 * configuration class (if imported is {@code true}).
-	 * @param clazz the underlying {@link Class} to represent
-	 * @param importedBy the configuration class importing this one (or {@code null})
+	 * --
+	 * 创建一个新的 {@link ConfigurationClass}，表示使用 {@link Import} 注解导入的类，
+	 * 或者作为自动处理的嵌套配置类（如果 imported 参数为 {@code true}）。
+	 *
+	 * @param clazz the underlying {@link Class} to represent -- 要表示的底层 {@link Class}
+	 * @param importedBy the configuration class importing this one (or {@code null}) -- 导入该配置类的配置类（或 {@code null}）
 	 * @since 3.1.1
 	 */
 	ConfigurationClass(Class<?> clazz, @Nullable ConfigurationClass importedBy) {
@@ -166,8 +186,8 @@ final class ConfigurationClass {
 	/**
 	 * Return whether this configuration class was registered via @{@link Import} or
 	 * automatically registered due to being nested within another configuration class.
-	 *
-	 * 返回此配置类是否是通过@{@link Import}注册的，还是由于嵌套在另一个配置类中而自动注册的。
+	 * --
+	 * 返回此配置类是否是通过@{@link Import}注册的，或者由于嵌套在另一个配置类中而自动注册的。
 	 *
 	 * @since 3.1.1
 	 * @see #getImportedBy()
@@ -220,10 +240,20 @@ final class ConfigurationClass {
 		return this.importedResources;
 	}
 
+	/**
+	 * -- @Configuration 注解的proxyBeanMethods属性 == true的情况下，
+	 * 则 1. 类不能是final的 2. @Bean 方法必须是可重写的，不能是final或private的
+	 *
+	 * @param problemReporter
+	 */
 	void validate(ProblemReporter problemReporter) {
 		// A configuration class may not be final (CGLIB limitation) unless it declares proxyBeanMethods=false
+		// 配置类可能不是最终的（CGLIB 限制），除非它声明了 proxyBeanMethods=false
+		// 获取配置类的@Configuration注解的属性
 		Map<String, Object> attributes = this.metadata.getAnnotationAttributes(Configuration.class.getName());
+		// 它的proxyBeanMethods == true
 		if (attributes != null && (Boolean) attributes.get("proxyBeanMethods")) {
+			// 配置类不能是final
 			if (this.metadata.isFinal()) {
 				problemReporter.error(new FinalConfigurationProblem());
 			}

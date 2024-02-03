@@ -550,12 +550,14 @@ public @interface Configuration {
 	 * methods individually like when declared on non-{@code @Configuration} classes,
 	 * a.k.a. "@Bean Lite Mode" (see {@link Bean @Bean's javadoc}). It is therefore
 	 * behaviorally equivalent to removing the {@code @Configuration} stereotype.
-	 *
-	 * 指定是否应该对 {@code @Bean} 方法进行代理，以强制执行 Bean 生命周期行为，例如，即使在用户代码中直接调用 {@code @Bean} 方法的情况下，也要返回共享的单例 Bean 实例。
+	 * --
+	 * 指定是否应该对 {@code @Bean} 方法进行代理，以强制执行 Bean 生命周期行为，例如，即使在用户代码中直接调用 {@code @Bean} 方法的情况下，
+	 * 也要返回共享的单例 Bean 实例。
 	 * 此功能需要方法拦截，通过运行时生成的 CGLIB 子类实现，该子类具有限制，例如不允许配置类及其方法声明 {@code final}。
 	 * 默认值为 {@code true}，允许通过配置类中的直接方法调用进行“bean 间引用”，以及对此配置的 {@code @Bean} 方法进行外部调用，例如从另一个配置类调用。
 	 * 如果不需要这样做，因为此特定配置的每个 {@code @Bean} 方法都是独立的，并且设计为供容器使用的普通工厂方法，请将此标志切换为 {@code false} 以避免 CGLIB 子类处理。
-	 * 关闭 Bean 方法拦截可以有效地单独处理 {@code @Bean} 个方法，就像在非 {@code @Configuration} 类上声明时一样，也称为“@Bean Lite 模式”（参见 {@link Bean @Bean的 javadoc}）。
+	 * 关闭 Bean 方法拦截可以有效地单独处理 {@code @Bean} 个方法，就像在非 {@code @Configuration} 类上声明时一样，
+	 * 也称为“@Bean Lite 模式”（参见 {@link Bean @Bean的 javadoc}）。
 	 * 因此，它在行为上等同于删除 {@code @Configuration} 构造型。
 	 *
 	 * @since 5.2

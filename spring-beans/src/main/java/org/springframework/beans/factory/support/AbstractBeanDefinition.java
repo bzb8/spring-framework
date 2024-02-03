@@ -163,7 +163,9 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 */
 	public static final String INFER_METHOD = "(inferred)";
 
-	// Class or String(class name)
+	/**
+	 * 	Class（基于标准反射的） or String(class name)
+ 	 */
 	@Nullable
 	private volatile Object beanClass;
 
@@ -202,6 +204,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	@Nullable
 	private String factoryBeanName;
 
+	/**
+	 * 创建bean的工厂方法
+	 * -- @Bean 方法会设置它
+	 */
 	@Nullable
 	private String factoryMethodName;
 

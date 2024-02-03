@@ -288,12 +288,15 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * returning the registered bean definitions.
 	 * <p>This method does <i>not</i> register an annotation config processor
 	 * but rather leaves this up to the caller.
-	 *
+	 * --
 	 * 在指定的基础包中执行扫描，返回已注册的 Bean 定义。
 	 * 此方法不注册注解配置处理器，而是将其留给调用方。
+	 * --
+	 * 扫描给定的包，解析并注册bean定义
 	 *
-	 * @param basePackages the packages to check for annotated classes
-	 * @return set of beans registered if any for tooling registration purposes (never {@code null}) 为工具注册目的注册的 Bean 集（如果有）（从不 {@code null}）
+	 * @param basePackages the packages to check for annotated classes -- 要检查带注解的类的包
+	 * @return set of beans registered if any for tooling registration purposes (never {@code null})
+	 * 为工具注册目的注册的 Bean 集（如果有）（从不 {@code null}）
 	 */
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
@@ -305,6 +308,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
 
+				// 处理bean定义的其他属性
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
@@ -312,10 +316,12 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				if (candidate instanceof AnnotatedBeanDefinition) {
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					// 注册bean定义
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}
@@ -369,6 +375,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * has been found for the specified name
 	 */
 	protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws IllegalStateException {
+		// 注册表不包含该bean定义
 		if (!this.registry.containsBeanDefinition(beanName)) {
 			return true;
 		}

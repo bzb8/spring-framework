@@ -32,6 +32,10 @@ import org.springframework.lang.Nullable;
 @SuppressWarnings("serial")
 public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport implements BeanMetadataElement {
 
+	/**
+	 * bean的来源
+	 * 扫描的bean的来源是class 文件 Resource
+	 */
 	@Nullable
 	private Object source;
 
@@ -39,7 +43,7 @@ public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport impl
 	/**
 	 * Set the configuration source {@code Object} for this metadata element.
 	 * <p>The exact type of the object will depend on the configuration mechanism used.
-	 *
+	 * --
 	 * 为此元数据元素设置配置源 {@code Object}。对象的确切类型将取决于所使用的配置机制。
 	 *
 	 */

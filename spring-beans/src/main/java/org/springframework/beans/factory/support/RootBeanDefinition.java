@@ -74,6 +74,10 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	boolean allowCaching = true;
 
+	/**
+	 * 工厂方法是否是唯一的
+	 * -- @Bean 方法会设置它
+	 */
 	boolean isFactoryMethodUnique;
 
 	@Nullable
@@ -434,7 +438,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Specify a factory method name that refers to a non-overloaded method.
-	 *
+	 * --
 	 * 指定引用非重载方法的工厂方法名称。
 	 */
 	public void setUniqueFactoryMethodName(String name) {

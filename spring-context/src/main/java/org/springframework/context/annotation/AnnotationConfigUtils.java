@@ -295,6 +295,7 @@ public abstract class AnnotationConfigUtils {
 			ScopeMetadata metadata, BeanDefinitionHolder definition, BeanDefinitionRegistry registry) {
 
 		ScopedProxyMode scopedProxyMode = metadata.getScopedProxyMode();
+		// 如果作用域代理模式为 NO，则直接返回原始的bean定义
 		if (scopedProxyMode.equals(ScopedProxyMode.NO)) {
 			return definition;
 		}
@@ -318,6 +319,14 @@ public abstract class AnnotationConfigUtils {
 		return attributesForRepeatable(metadata, containerClass.getName(), annotationClass.getName());
 	}
 
+	/**
+	 * 获取可重复注解的属性
+	 *
+	 * @param metadata 注解的元数据
+	 * @param containerClassName 包含可重复注解的容器类的类名
+	 * @param annotationClassName 可重复注解的类名
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	static Set<AnnotationAttributes> attributesForRepeatable(
 			AnnotationMetadata metadata, String containerClassName, String annotationClassName) {

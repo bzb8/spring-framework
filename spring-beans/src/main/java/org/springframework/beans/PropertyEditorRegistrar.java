@@ -45,7 +45,7 @@ public interface PropertyEditorRegistrar {
 	 * <p>It is expected that implementations will create brand new
 	 * {@code PropertyEditors} instances for each invocation of this
 	 * method (since {@code PropertyEditors} are not threadsafe).
-	 *
+	 * 00
 	 * 将自定义 {@link java.beans.PropertyEditor PropertyEditors} 注册到给定的 {@code PropertyEditorRegistry}。
 	 * 传入的注册表通常是{@link BeanWrapper}或{@link org.springframework.validation.DataBinder DataBinder}。
 	 * 预计实现将为每次调用此方法创建全新的 {@code PropertyEditors} 实例（因为 {@code PropertyEditors} 不是线程安全的）。

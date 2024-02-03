@@ -126,6 +126,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	/**
 	 * Strategy for creating bean instances.
+	 * 创建bean实例的策略
 	 */
 	private InstantiationStrategy instantiationStrategy;
 
@@ -627,7 +628,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 *
 	 * @param beanName the name of the bean
 	 * @param mbd      the merged bean definition for the bean
-	 * @param args     explicit arguments to use for constructor or factory method invocation -- 用于构造函数或工厂方法调用的显式参数
+	 * @param args     explicit arguments to use for constructor or factory method invocation
+	 *                 -- 用于构造函数或工厂方法调用的显式参数
 	 * @return a new instance of the bean
 	 * @throws BeanCreationException if the bean could not be created
 	 * @see #instantiateBean
@@ -1240,8 +1242,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
+
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
 					if (bean != null) {
+						// 应用初始化后处理器
 						bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
 					}
 				}
@@ -1408,6 +1412,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		/** 将instance赋值给wrappedObject属性中，使用的时候直接通过BeanWrapper接口的getWrappedInstance获取到wrappedObject */
 		BeanWrapper bw = new BeanWrapperImpl(instance);
+		// 注册ConvertService和属性编辑器
 		initBeanWrapper(bw);
 		return bw;
 	}

@@ -250,7 +250,7 @@ public abstract class ClassUtils {
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
 	 * Furthermore, it is also capable of resolving nested class names in Java source
 	 * style (e.g. "java.lang.Thread.State" instead of "java.lang.Thread$State").
-	 *
+	 * --
 	 * 替换 {@code Class.forName（）}，它还返回基元（例如“int”）和数组类名（例如“String[]”）的类实例。
 	 * 此外，它还能够解析 Java 源代码样式中的嵌套类名（例如“java.lang.Thread.State”而不是“java.lang.Thread$State”）。
 	 *
@@ -626,6 +626,9 @@ public abstract class ClassUtils {
 
 	/**
 	 * Convert a "."-based fully qualified class name to a "/"-based resource path.
+	 * --
+	 * 转换基于“.”的完全限定类名转换为基于“/”的资源路径。(.替换为/)
+	 *
 	 * @param className the fully qualified class name
 	 * @return the corresponding resource path, pointing to the class
 	 */

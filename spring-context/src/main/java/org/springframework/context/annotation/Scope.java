@@ -103,6 +103,12 @@ public @interface Scope {
 	 * has been configured at the component-scan instruction level.
 	 * <p>Analogous to {@code <aop:scoped-proxy/>} support in Spring XML.
 	 * @see ScopedProxyMode
+	 * --
+	 * 指定组件是否应该配置为作用域代理，以及如果是的话，代理应该基于接口还是基于子类。
+	 * 默认值为 {@link ScopedProxyMode#DEFAULT}，通常表示除非在组件扫描指令级别配置了不同的默认值，
+	 * 否则不应该创建作用域代理。
+	 * 类似于 Spring XML 中的 {@code <aop:scoped-proxy/>} 支持。
+	 * @see ScopedProxyMode
 	 */
 	ScopedProxyMode proxyMode() default ScopedProxyMode.DEFAULT;
 

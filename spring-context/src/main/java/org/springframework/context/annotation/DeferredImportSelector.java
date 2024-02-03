@@ -48,7 +48,7 @@ public interface DeferredImportSelector extends ImportSelector {
 	 * Return a specific import group.
 	 * <p>The default implementations return {@code null} for no grouping required.
 	 * @return the import group class, or {@code null} if none
-	 *
+	 * --
 	 * 返回特定的导入组。
 	 * 默认实现返回 {@code null} ，无需分组。
 	 * @return 导入组类，如果没有则返回 {@code null}
@@ -63,7 +63,7 @@ public interface DeferredImportSelector extends ImportSelector {
 
 	/**
 	 * Interface used to group results from different import selectors.
-	 *
+	 * --
 	 * 用于对来自不同导入选择器的结果进行分组的接口。
 	 *
 	 * @since 5.0
@@ -73,7 +73,7 @@ public interface DeferredImportSelector extends ImportSelector {
 		/**
 		 * Process the {@link AnnotationMetadata} of the importing @{@link Configuration}
 		 * class using the specified {@link DeferredImportSelector}.
-		 *
+		 * --
 		 * 使用指定的 {@link DeferredImportSelector} 处理导入 @{@link Configuration} 类的 {@link AnnotationMetadata}。
 		 */
 		void process(AnnotationMetadata metadata, DeferredImportSelector selector);
@@ -81,7 +81,7 @@ public interface DeferredImportSelector extends ImportSelector {
 		/**
 		 * Return the {@link Entry entries} of which class(es) should be imported
 		 * for this group.
-		 *
+		 * --
 		 * 返回应为此组导入哪个类的{@link Entry 条目}。
 		 */
 		Iterable<Entry> selectImports();
@@ -95,8 +95,14 @@ public interface DeferredImportSelector extends ImportSelector {
 		 */
 		class Entry {
 
+			/**
+			 * 配置类的注解元数据
+			 */
 			private final AnnotationMetadata metadata;
 
+			/**
+			 * 要导入的class name
+			 */
 			private final String importClassName;
 
 			public Entry(AnnotationMetadata metadata, String importClassName) {

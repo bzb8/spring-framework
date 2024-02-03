@@ -23,7 +23,7 @@ import org.springframework.core.io.Resource;
 /**
  * Factory interface for {@link MetadataReader} instances.
  * Allows for caching a MetadataReader per original resource.
- *
+ * --
  * {@link MetadataReader} 实例的工厂接口。允许缓存每个原始资源的 MetadataReader。
  * MetadataReaderFactory 是 Spring Framework 中用于读取类元数据（metadata）的工厂接口。
  * 它提供了一种方式来获取包含有关类的元数据的 MetadataReader 实例。元数据通常包括有关类的注解、类名、接口信息等。
@@ -41,8 +41,11 @@ public interface MetadataReaderFactory {
 
 	/**
 	 * Obtain a MetadataReader for the given class name.
-	 * @param className the class name (to be resolved to a ".class" file)
-	 * @return a holder for the ClassReader instance (never {@code null})
+	 * --
+	 * 获取给定类名的 MetadataReader。
+	 *
+	 * @param className the class name (to be resolved to a ".class" file) -- 类名（要解析为“.class”文件）
+	 * @return a holder for the ClassReader instance (never {@code null}) -- ClassReader 实例的持有者 （从不 {@code null}）
 	 * @throws IOException in case of I/O failure
 	 */
 	MetadataReader getMetadataReader(String className) throws IOException;

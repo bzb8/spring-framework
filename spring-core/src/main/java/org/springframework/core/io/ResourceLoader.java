@@ -49,7 +49,10 @@ import org.springframework.util.ResourceUtils;
  */
 public interface ResourceLoader {
 
-	/** Pseudo URL prefix for loading from the class path: "classpath:". */
+	/**
+	 * Pseudo URL prefix for loading from the class path: "classpath:".
+	 * 用于从类路径加载的伪 URL 前缀：“classpath:”。
+	 */
 	String CLASSPATH_URL_PREFIX = ResourceUtils.CLASSPATH_URL_PREFIX;
 
 
@@ -57,9 +60,9 @@ public interface ResourceLoader {
 	 * Return a {@code Resource} handle for the specified resource location.
 	 * <p>The handle should always be a reusable resource descriptor,
 	 * allowing for multiple {@link Resource#getInputStream()} calls.
-	 *
-	 * 返回指定资源位置的 {@code Resource} 句柄。 <p>句柄应始终是可重用的资源描述符，
-	 * 允许多个 {@link ResourcegetInputStream()} 调用
+	 * --
+	 * 返回指定资源位置的 {@code Resource} 句柄。
+	 * 句柄应始终是可重用的资源描述符，允许多个 {@link Resource#getInputStream()} 调用
 	 *
 	 * <p><ul>
 	 * <li>Must support fully qualified URLs, e.g. "file:C:/test.dat".
@@ -75,7 +78,7 @@ public interface ResourceLoader {
 	 * <p>Note that a {@code Resource} handle does not imply an existing resource;
 	 * you need to invoke {@link Resource#exists} to check for existence.
 	 *
-	 * <p>请注意，{@code Resource} 句柄并不意味着存在资源;您需要调用 {@link Resourceexists} 来检查是否存在。
+	 * <p>请注意，{@code Resource} 句柄并不意味着存在资源;您需要调用 {@link Resource#exists} 来检查是否存在。
 	 *
 	 * @param location the resource location
 	 * @return a corresponding {@code Resource} handle (never {@code null})

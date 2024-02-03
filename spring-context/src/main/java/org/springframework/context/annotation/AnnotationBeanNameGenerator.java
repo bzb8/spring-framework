@@ -74,6 +74,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 * A convenient constant for a default {@code AnnotationBeanNameGenerator} instance,
 	 * as used for component scanning purposes.
 	 * @since 5.2
+	 * 默认 AnnotationBeanNameGenerator 实例的方便常量，用于组件扫描目的。
 	 */
 	public static final AnnotationBeanNameGenerator INSTANCE = new AnnotationBeanNameGenerator();
 
@@ -100,7 +101,7 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 
 	/**
 	 * Derive a bean name from one of the annotations on the class.
-	 *
+	 * --
 	 * 从类的某个注解中派生 Bean 名称。
 	 * 从Component注解中获取value属性的值做为bean名称
 	 *

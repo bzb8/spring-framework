@@ -1444,13 +1444,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * <p>To be called for BeanWrappers that will create and populate bean
 	 * instances, and for SimpleTypeConverter used for constructor argument
 	 * and factory method type conversion.
+	 * --
 	 * 使用已在此BeanFactory中注册的自定义编辑器初始化给定的PropertyEditorRegistry。
 	 * 要为将创建和填充bean实例的BeanWrappers以及用于构造函数参数和工厂方法类型转换的SimpleTypeConverter调用。
+	 * 注册属性编辑器
 	 *
 	 * @param registry the PropertyEditorRegistry to initialize
 	 */
 	protected void registerCustomEditors(PropertyEditorRegistry registry) {
 		if (registry instanceof PropertyEditorRegistrySupport) {
+			// configValueEditorsActive = true
 			((PropertyEditorRegistrySupport) registry).useConfigValueEditors();
 		}
 		if (!this.propertyEditorRegistrars.isEmpty()) {
@@ -2187,7 +2190,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// Register a DisposableBean implementation that performs all destruction
 				// work for the given bean: DestructionAwareBeanPostProcessors,
 				// DisposableBean interface, custom destroy method.
-				// 注册一个 DisposableBean 实现，该实现对给定 Bean 执行所有销毁工作：DestructionAwareBeanPostProcessors、DisposableBean 接口、自定义销毁方法。
+				// 注册一个 DisposableBean 实现，该实现对给定 Bean 执行所有销毁工作：DestructionAwareBeanPostProcessors、
+				// DisposableBean 接口、自定义销毁方法。
 				// 缓存销毁的bean实例
 				registerDisposableBean(beanName, new DisposableBeanAdapter(
 						bean, beanName, mbd, getBeanPostProcessorCache().destructionAware, acc));
@@ -2268,7 +2272,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 *
 	 * @param beanName the name of the bean
 	 * @param mbd      the merged bean definition for the bean -- Bean 的合并 Bean 定义
-	 * @param args     explicit arguments to use for constructor or factory method invocation -- 用于构造函数或工厂方法调用的显式参数
+	 * @param args     explicit arguments to use for constructor or factory method invocation
+	 *                 -- 用于构造函数或工厂方法调用的显式参数
 	 * @return a new instance of the bean
 	 * @throws BeanCreationException if the bean could not be created
 	 */

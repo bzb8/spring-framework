@@ -82,7 +82,7 @@ public interface InstantiationStrategy {
 	 * @param factoryBean the factory bean instance to call the factory method on,
 	 * or {@code null} in case of a static factory method 要调用工厂方法的工厂 Bean 实例，如果是静态工厂方法，则为 {@code null}
 	 * @param factoryMethod the factory method to use
-	 * @param args the factory method arguments to apply
+	 * @param args the factory method arguments to apply -- 要使用的工厂方法参数
 	 * @return a bean instance for this bean definition
 	 * @throws BeansException if the instantiation attempt failed
 	 */

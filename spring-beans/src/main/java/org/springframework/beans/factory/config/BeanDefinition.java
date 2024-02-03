@@ -125,6 +125,12 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * even be empty in case of a factory bean reference that a method is called on.
 	 * Hence, do <i>not</i> consider this to be the definitive bean type at runtime but
 	 * rather only use it for parsing purposes at the individual bean definition level.
+	 * --
+	 * 返回此bean定义的当前bean类名。
+	 * 请注意，这不一定是运行时使用的实际类名，特别是在子定义覆盖或继承其父类的类名的情况下。
+	 * 此外，这可能只是工厂方法调用的类，或者在方法调用的工厂bean引用的情况下，它甚至可能是空的。
+	 * 因此，不要将其视为运行时的最终bean类型，而应在单个bean定义级别仅用于解析目的
+	 *
 	 * @see #getParentName()
 	 * @see #getFactoryBeanName()
 	 * @see #getFactoryMethodName()

@@ -291,7 +291,7 @@ public @interface Bean {
 	 * <p>The bean name and aliases may also be configured via the {@link #value}
 	 * attribute if no other attributes are declared.
 	 * @see #value
-	 *
+	 * --
 	 * 该 bean 的名称，或者如果有多个名称，则为主 bean 名称加上别名。
 	 * 如果未指定，bean 的名称就是带注解的方法的名称。如果指定，则忽略方法名称。
 	 * 如果没有声明其他属性，bean 名称和别名也可以通过 {@link #value} 属性进行配置。
@@ -319,6 +319,10 @@ public @interface Bean {
 	 * <p>Default is {@code true}; set this to {@code false} for internal delegates
 	 * that are not meant to get in the way of beans of the same type in other places.
 	 * @since 5.1
+	 * 此 Bean 是否是自动装配的候选项？
+	 * <p>默认值为 {@code true}；将其设置为 {@code false} 用于内部委托，
+	 * 这些委托不应该妨碍在其他位置的相同类型的 Beans。
+	 * 如果将其设置为 false，则表明此 Bean 不应该作为自动装配的候选项。
 	 */
 	boolean autowireCandidate() default true;
 
