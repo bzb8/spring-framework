@@ -121,7 +121,7 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	 * (or meta-annotated) with the given annotation type.
 	 * <p>For any returned method, {@link MethodMetadata#isAnnotated} will
 	 * return {@code true} for the given annotation type.
-	 *
+	 * --
 	 * 检索使用给定注解类型进行注解（或元注解）的所有方法的方法元数据。
 	 * 对于任何返回的方法，{@link MethodMetadata#isAnnotated} 将为给定的注解类型返回 {@code true}。
 	 *

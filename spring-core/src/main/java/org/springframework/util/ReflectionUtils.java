@@ -653,7 +653,7 @@ public abstract class ReflectionUtils {
 		Assert.notNull(clazz, "Class must not be null");
 		Assert.isTrue(name != null || type != null, "Either name or type of the field must be specified");
 		Class<?> searchType = clazz;
-		// 知道它的父类为Object，则停止搜索
+		// 直到它的父类为Object，则停止搜索
 		while (Object.class != searchType && searchType != null) {
 			Field[] fields = getDeclaredFields(searchType);
 			for (Field field : fields) {

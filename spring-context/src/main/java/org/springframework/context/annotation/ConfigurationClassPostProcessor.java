@@ -464,29 +464,43 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * any candidates are then enhanced by a {@link ConfigurationClassEnhancer}.
 	 * Candidate status is determined by BeanDefinition attribute metadata.
 	 * --
-	 * 后处理 BeanFactory 以搜索配置类 BeanDefinitions；然后，所有候选者都会通过 {@link ConfigurationClassEnhancer} 得到增强。候选状态由 BeanDefinition 属性元数据确定。
+	 * 后处理 BeanFactory 以搜索配置类 BeanDefinitions；然后，所有候选者都会通过 {@link ConfigurationClassEnhancer} 得到增强。
+	 * 候选状态由 BeanDefinition 属性元数据确定。
+	 * --
+	 * 为 full 类型的配置类 生成增强子类 ConfigurationClassEnhancer，设置到 beanClass中，
+	 * 并设置属性 {@link AutoProxyUtils#PRESERVE_TARGET_CLASS_ATTRIBUTE}
 	 *
 	 * @see ConfigurationClassEnhancer
 	 */
 	public void enhanceConfigurationClasses(ConfigurableListableBeanFactory beanFactory) {
 		StartupStep enhanceConfigClasses = this.applicationStartup.start("spring.context.config-classes.enhance");
+		// beanName -> full 类型配置类（@Configuration标记的 && proxyBeanMethods == true）
 		Map<String, AbstractBeanDefinition> configBeanDefs = new LinkedHashMap<>();
+
+		// 从所有的bean定义中筛选出 configBeanDefs
 		for (String beanName : beanFactory.getBeanDefinitionNames()) {
 			BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
+			// full or lite 配置类
 			Object configClassAttr = beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE);
+			// bean定义的类注解元数据
 			AnnotationMetadata annotationMetadata = null;
+			// 工厂方法的元数据
 			MethodMetadata methodMetadata = null;
 			if (beanDef instanceof AnnotatedBeanDefinition) {
 				AnnotatedBeanDefinition annotatedBeanDefinition = (AnnotatedBeanDefinition) beanDef;
 				annotationMetadata = annotatedBeanDefinition.getMetadata();
 				methodMetadata = annotatedBeanDefinition.getFactoryMethodMetadata();
 			}
+
+			// 解析beanClass
 			if ((configClassAttr != null || methodMetadata != null) && beanDef instanceof AbstractBeanDefinition) {
 				// Configuration class (full or lite) or a configuration-derived @Bean method
 				// -> eagerly resolve bean class at this point, unless it's a 'lite' configuration
 				// or component class without @Bean methods.
+				// 配置类（full 或 lite）或派生自 @Bean 方法的配置类 -> 此时急切地解析 bean 类，除非它是的“lite”配置类或没有@Bean方法的组件类。
 				AbstractBeanDefinition abd = (AbstractBeanDefinition) beanDef;
 				if (!abd.hasBeanClass()) {
+					// lite 配置类 && 没有@Bean注解的方法
 					boolean liteConfigurationCandidateWithoutBeanMethods =
 							(ConfigurationClassUtils.CONFIGURATION_CLASS_LITE.equals(configClassAttr) &&
 								annotationMetadata != null && !ConfigurationClassUtils.hasBeanMethods(annotationMetadata));
@@ -503,6 +517,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			}
 			if (ConfigurationClassUtils.CONFIGURATION_CLASS_FULL.equals(configClassAttr)) {
 				if (!(beanDef instanceof AbstractBeanDefinition)) {
+					// 无法增强@Configuration Bean 定义，因为它未存储在 AbstractBeanDefinition 子类中
 					throw new BeanDefinitionStoreException("Cannot enhance @Configuration bean definition '" +
 							beanName + "' since it is not stored in an AbstractBeanDefinition subclass");
 				}
@@ -515,6 +530,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				configBeanDefs.put(beanName, (AbstractBeanDefinition) beanDef);
 			}
 		}
+
 		if (configBeanDefs.isEmpty() || NativeDetector.inNativeImage()) {
 			// nothing to enhance -> return immediately
 			enhanceConfigClasses.end();
@@ -525,9 +541,12 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		for (Map.Entry<String, AbstractBeanDefinition> entry : configBeanDefs.entrySet()) {
 			AbstractBeanDefinition beanDef = entry.getValue();
 			// If a @Configuration class gets proxied, always proxy the target class
+			// 如果@Configuration类被代理，请始终代理目标类
 			beanDef.setAttribute(AutoProxyUtils.PRESERVE_TARGET_CLASS_ATTRIBUTE, Boolean.TRUE);
 			// Set enhanced subclass of the user-specified bean class
+			// 设置用户指定的 Bean 类的增强子类
 			Class<?> configClass = beanDef.getBeanClass();
+			// 生成增强的子类 并替换到 bean定义的beanClass
 			Class<?> enhancedClass = enhancer.enhance(configClass, this.beanClassLoader);
 			if (configClass != enhancedClass) {
 				if (logger.isTraceEnabled()) {
@@ -537,6 +556,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				beanDef.setBeanClass(enhancedClass);
 			}
 		}
+
 		enhanceConfigClasses.tag("classCount", () -> String.valueOf(configBeanDefs.keySet().size())).end();
 	}
 

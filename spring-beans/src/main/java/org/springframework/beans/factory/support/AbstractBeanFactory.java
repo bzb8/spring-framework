@@ -503,7 +503,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
-	 * 保存单例bean或bean定义
+	 * 包含单例bean或bean定义
 	 *
 	 * @param name the name of the bean to query
 	 * @return
