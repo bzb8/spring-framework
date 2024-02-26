@@ -30,6 +30,14 @@ import org.springframework.util.Assert;
  * Interceptor to wrap an {@link org.springframework.aop.AfterReturningAdvice}.
  * Used internally by the AOP framework; application developers should not need
  * to use this class directly.
+ * --
+ * 通知包装器
+ * 负责将各种非MethodInterceptor类型的通知(Advice)包装为MethodInterceptor类型。
+ * Aop中所有的Advice最终都会转换为MethodInterceptor类型的，组成一个方法调用链，然后执行
+ * 3个包装器类：
+ * MethodBeforeAdviceInterceptor
+ * AfterReturningAdviceInterceptor
+ * ThrowsAdviceInterceptor
  *
  * @author Rod Johnson
  * @see MethodBeforeAdviceInterceptor
@@ -54,8 +62,11 @@ public class AfterReturningAdviceInterceptor implements MethodInterceptor, After
 	@Override
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
+		// 先执行方法调用链,可以获取目标方法的执行结果
 		Object retVal = mi.proceed();
+		// 执行后置通知
 		this.advice.afterReturning(retVal, mi.getMethod(), mi.getArguments(), mi.getThis());
+		// 返回结果
 		return retVal;
 	}
 

@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 /**
  * Intercepts calls on an interface on its way to the target. These
  * are nested "on top" of the target.
- *
+ * --
  * 拦截目标的接口上的调用。它们嵌套在目标的“顶部”。
  *
  * <p>The user should implement the {@link #invoke(MethodInvocation)}
@@ -43,6 +43,8 @@ import javax.annotation.Nullable;
  *   }
  * }
  * </pre>
+ * --
+ * 方法拦截器，所有的通知均需要转换为MethodInterceptor类型的，最终多个MethodInterceptor组成一个方法拦截器连。
  *
  * @author Rod Johnson
  */
@@ -53,8 +55,9 @@ public interface MethodInterceptor extends Interceptor {
 	 * Implement this method to perform extra treatments before and
 	 * after the invocation. Polite implementations would certainly
 	 * like to invoke {@link Joinpoint#proceed()}.
-	 *
+	 * --
 	 * 实现此方法以在调用之前和之后执行额外的处理。礼貌的实现肯定会调用 {@link Joinpoint#proceed()}.
+	 * 拦截目标方法的执行，可以在这个方法内部实现需要增强的逻辑，以及主动调用目标方法。
 	 *
 	 * @param invocation the method invocation joinpoint 方法调用连接点
 	 * @return the result of the call to {@link Joinpoint#proceed()};

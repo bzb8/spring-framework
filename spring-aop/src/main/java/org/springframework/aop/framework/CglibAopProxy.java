@@ -70,6 +70,9 @@ import org.springframework.util.ReflectionUtils;
  *
  * <p>Proxies created using this class are thread-safe if the underlying
  * (target) class is thread-safe.
+ * --
+ * 功能和上面的类似，当代理对象是采用cglib创建的，通过代理对象来访问目标对象的方法的时，
+ * 最终过程是由CglibMethodInvocation来处理的，内部会通过递归调用方法拦截器，最终会调用到目标方法。
  *
  * @author Rod Johnson
  * @author Rob Harrop

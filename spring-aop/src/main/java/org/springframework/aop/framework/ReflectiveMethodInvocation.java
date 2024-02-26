@@ -49,6 +49,9 @@ import org.springframework.lang.Nullable;
  * directly accessed. The sole reason for it being public is compatibility
  * with existing framework integrations (e.g. Pitchfork). For any other
  * purposes, use the {@link ProxyMethodInvocation} interface instead.
+ * --
+ * 当代理对象是采用jdk动态代理创建的，通过代理对象来访问目标对象的方法的时，最终过程是由ReflectiveMethodInvocation来处理的，
+ * 内部会通过递归调用方法拦截器，最终会调用到目标方法。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

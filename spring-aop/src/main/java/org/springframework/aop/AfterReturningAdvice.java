@@ -23,6 +23,7 @@ import org.springframework.lang.Nullable;
 /**
  * After returning advice is invoked only on normal method return, not if an
  * exception is thrown. Such advice can see the return value, but cannot change it.
+ * 返回后，仅在正常方法返回时调用建议，而不是在抛出异常时调用。此类建议可以看到返回值，但无法更改它
  *
  * @author Rod Johnson
  * @see MethodBeforeAdvice
@@ -32,6 +33,8 @@ public interface AfterReturningAdvice extends AfterAdvice {
 
 	/**
 	 * Callback after a given method successfully returned.
+	 * 给定方法成功返回后的回调
+	 *
 	 * @param returnValue the value returned by the method, if any
 	 * @param method the method being invoked
 	 * @param args the arguments to the method
