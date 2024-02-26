@@ -20,7 +20,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * Minimal interface for exposing the target class behind a proxy.
- *
+ * --
  * 用于在代理后面公开目标类的最小接口。
  *
  * <p>Implemented by AOP proxy objects and proxy factories
@@ -38,8 +38,9 @@ public interface TargetClassAware {
 	/**
 	 * Return the target class behind the implementing object
 	 * (typically a proxy configuration or an actual proxy).
-	 *
+	 * --
 	 * 返回实现对象（通常是代理配置或实际代理）后面的目标类。
+	 * 获取目标对象类型。
 	 *
 	 * @return the target Class, or {@code null} if not known
 	 */

@@ -74,6 +74,7 @@ public interface MethodMatcher {
 	 *
 	 * 执行静态检查给定方法是否匹配。
 	 * 如果返回 {@code false} 或 {@link #isRuntime()} 方法返回 {@code false}，则不进行运行时检查（即没有 {@link #matches(java.lang.reflect.Method, Class, Object[]) 调用} 。
+	 * --
 	 *
 	 * @param method the candidate method
 	 * @param targetClass the target class
@@ -91,6 +92,10 @@ public interface MethodMatcher {
 	 * 这个 MethodMatcher 是动态的吗？也就是说，必须在运行时对 {@link #matches(java.lang.reflect.Method, Class, Object[])} 方法进行最终调用，
 	 * 即使 2-arg matches 方法返回 true？
 	 * 可以在创建AOP代理时调用，不需要在每次方法调用前再次调用，
+	 * -- 是否是动态匹配，即是否每次执行目标方法的时候都去验证一下
+	 * 通过上面的过程，大家可以看出来，如果isRuntime为false的时候，只需要对方法名称进行校验，当目标方法调用多次的时候，
+	 * 实际上第一步的验证结果是一样的，所以如果isRuntime为false的情况，可以将验证结果放在缓存中，提升效率，而spring内部就是这么做的，
+	 * isRuntime为false的时候，需要每次都进行校验，效率会低一些，不过对性能的影响基本上可以忽略。
 	 *
 	 * @return whether a runtime match via the 3-arg
 	 * {@link #matches(java.lang.reflect.Method, Class, Object[])} method
@@ -110,6 +115,8 @@ public interface MethodMatcher {
 	 * 检查此方法是否存在运行时（动态）匹配，该方法必须静态匹配。
 	 * 仅当 2-arg matches 方法为给定方法和目标类返回 {@code true}，并且 {@link #isRuntime()} 方法返回 {@code true} 时，才会调用此方法。
 	 * 在建议链中较早的任何advice运行之后，在可能运行advice之前立即调用。
+	 * --
+	 * 动态匹配验证的方法，比第一个matches方法多了一个参数args，这个参数是调用目标方法传入的参数
 	 *
 	 * @param method the candidate method
 	 * @param targetClass the target class
@@ -122,6 +129,7 @@ public interface MethodMatcher {
 
 	/**
 	 * Canonical instance that matches all methods.
+	 * 匹配所有方法，这个内部的2个matches方法任何时候都返回true
 	 */
 	MethodMatcher TRUE = TrueMethodMatcher.INSTANCE;
 
