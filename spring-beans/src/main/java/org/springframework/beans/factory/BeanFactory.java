@@ -440,7 +440,7 @@ public interface BeanFactory {
 	 *
 	 * @param name the name of the bean to query
 	 * @param allowFactoryBeanInit whether a {@code FactoryBean} may get initialized
-	 * just for the purpose of determining its object type
+	 * just for the purpose of determining its object type -- 一个 {@code FactoryBean} 是否可以仅仅为了确定其对象类型而进行初始化
 	 * @return the type of the bean, or {@code null} if not determinable
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
 	 * @since 5.2

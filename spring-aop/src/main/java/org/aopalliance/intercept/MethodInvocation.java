@@ -28,8 +28,9 @@ import javax.annotation.Nonnull;
  *
  * <p>A method invocation is a joinpoint and can be intercepted by a
  * method interceptor.
- *
+ * --
  * 方法调用是一个连接点，可以被方法拦截器拦截。
+ * 方法调用的描述，在方法调用时提供给拦截器。
  *
  * @author Rod Johnson
  * @see MethodInterceptor
@@ -45,6 +46,8 @@ public interface MethodInvocation extends Invocation {
 	 * 此方法是该 Joinpoint.getStaticPart() 方法的友好实现（结果相同）
 	 *
 	 * @return the method being called
+	 * 返回正在被调用得方法，返回的是当前Method对象。
+	 * 此时，效果同父类的AccessibleObject getStaticPart() 这个方法
 	 */
 	@Nonnull
 	Method getMethod();

@@ -95,13 +95,17 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	volatile Boolean isFactoryBean;
 
-	/** Package-visible field for caching the return type of a generically typed factory method. */
-	// 用于缓存泛型类型化工厂方法的返回类型的 Package-visible 字段
+	/**
+	 * Package-visible field for caching the return type of a generically typed factory method.
+	 * 用于缓存泛型类型化工厂方法的返回类型的 Package-visible 字段
+	 */
 	@Nullable
 	volatile ResolvableType factoryMethodReturnType;
 
-	/** Package-visible field for caching a unique factory method candidate for introspection. */
-	// Package-visible 字段，用于缓存用于自检的唯一工厂方法候选。
+	/**
+	 * Package-visible field for caching a unique factory method candidate for introspection.
+	 * Package-visible 字段，用于缓存用于自检的唯一工厂方法候选。
+	 */
 	@Nullable
 	volatile Method factoryMethodToIntrospect;
 

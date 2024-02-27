@@ -74,7 +74,7 @@ public abstract class MethodOverride implements BeanMetadataElement {
 	 * type matching needs to occur to disambiguate methods of the same name).
 	 * <p>Default is {@code true}; can be switched to {@code false} to optimize
 	 * runtime performance.
-	 *
+	 * --
 	 * 设置重写的方法是否重载（即是否需要进行参数类型匹配以消除同名方法的歧义）。
 	 * 默认为{@code true}；可以切换到 {@code false} 以优化运行时性能。
 	 */
