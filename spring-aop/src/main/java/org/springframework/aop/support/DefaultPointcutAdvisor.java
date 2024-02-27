@@ -29,6 +29,8 @@ import org.springframework.lang.Nullable;
  * <p>This is the most commonly used Advisor implementation. It can be used
  * with any pointcut and advice type, except for introductions. There is
  * normally no need to subclass this class, or to implement custom Advisors.
+ * PointcutAdvisor的默认实现，这是最常用的Advisor实现，它可以用于任何Pointcut和Advice类型，
+ * 代码相当简单，里面定义了2个属性：pointcut和advisor，由使用者指定。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

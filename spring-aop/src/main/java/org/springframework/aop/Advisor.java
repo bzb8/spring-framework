@@ -38,6 +38,12 @@ import org.aopalliance.aop.Advice;
  *
  * Spring AOP 基于通过方法拦截提供的advice，符合 AOP 联盟拦截 API。Advisor 接口允许支持不同类型的advice，例如之前和之后的建议，
  * 这些建议不需要使用拦截来实现。
+ * --
+ * 通知定义了需要做什么，切入点定义了在哪些类的哪些方法中执行通知，那么需要将他们2个组合起来才有效啊。
+ * 顾问（Advisor）就是做这个事情的。
+ * 在spring aop中，你可以将advisor理解为切面，切面中通常有2个关键信息：
+ * 1. 需要增强的目标方法列表，这个通过切入点(Pointcut)来指定
+ * 2. 需要在目标方法中增强的逻辑，这个通过(Advice)通知来指定
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -55,6 +61,8 @@ public interface Advisor {
 	/**
 	 * Return the advice part of this aspect. An advice may be an
 	 * interceptor, a before advice, a throws advice, etc.
+	 * -- 返回引用的通知
+	 *
 	 * @return the advice that should apply if the pointcut matches
 	 * 返回引用的通知
 	 * @see org.aopalliance.intercept.MethodInterceptor

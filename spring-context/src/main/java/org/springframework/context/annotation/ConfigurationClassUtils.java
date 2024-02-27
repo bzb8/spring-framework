@@ -58,6 +58,7 @@ abstract class ConfigurationClassUtils {
 	/**
 	 * 表示它是一个配置类
 	 * org.springframework.context.annotation.ConfigurationClassPostProcessor.configurationClass
+	 * full | lite 模式的配置类
 	 */
 	public static final String CONFIGURATION_CLASS_ATTRIBUTE =
 			Conventions.getQualifiedAttributeName(ConfigurationClassPostProcessor.class, "configurationClass");
@@ -214,6 +215,11 @@ abstract class ConfigurationClassUtils {
 		return hasBeanMethods(metadata);
 	}
 
+	/**
+	 * 检索给定的注解元数据，判断是否有@Bean注解的方法
+	 * @param metadata
+	 * @return
+	 */
 	static boolean hasBeanMethods(AnnotationMetadata metadata) {
 		try {
 			return metadata.hasAnnotatedMethods(Bean.class.getName());

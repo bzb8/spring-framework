@@ -24,6 +24,8 @@ package org.springframework.aop;
  *
  * <p>Introduction is the implementation of additional interfaces
  * (not implemented by a target) via AOP advice.
+ * --
+ * 一个Java类，没有实现A接口，在不修改Java类的情况下，使其具备A接口的功能。可以通过IntroductionAdvisor给目标类引入更多接口的功能，这个功能是不是非常牛逼。
  *
  * 一个Java类，没有实现A接口，在不修改Java类的情况下，使其具备A接口的功能。可以通过IntroductionAdvisor给目标类引入更多接口的功能，这个功能是不是非常牛逼。
  *

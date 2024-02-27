@@ -23,7 +23,8 @@ package org.springframework.aop;
  * --
  * 由切入点驱动的所有 Advisor 的超级接口。
  * 这几乎涵盖了除introduction advisors之外的所有advisors，方法级匹配不适用于这些advisors。
- * 在目标方法中实现各种增强功能基本上都是通过PointcutAdvisor来实现的。
+ * 通过名字就能看出来，这个和Pointcut有关，内部有个方法用来获取Pointcut，AOP使用到的大部分Advisor都属于这种类型的。
+ *
  * @author Rod Johnson
  */
 public interface PointcutAdvisor extends Advisor {
@@ -31,6 +32,7 @@ public interface PointcutAdvisor extends Advisor {
 	/**
 	 * Get the Pointcut that drives this advisor.
 	 * 获取驱动该advisor的切入点。
+	 * 获取顾问中使用的切入点
 	 */
 	Pointcut getPointcut();
 

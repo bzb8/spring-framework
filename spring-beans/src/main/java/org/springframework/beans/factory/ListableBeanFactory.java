@@ -89,8 +89,12 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * <p>Does not consider any hierarchy this factory may participate in,
 	 * and ignores any singleton beans that have been registered by
 	 * other means than bean definitions.
+	 * --
+	 * 返回此工厂中定义的所有 Bean 的名称。
+	 * 不考虑此工厂可能参与的任何层次结构，并忽略已通过 Bean 定义以外的其他方式注册的任何单例 Bean。
+	 *
 	 * @return the names of all beans defined in this factory,
-	 * or an empty array if none defined
+	 * or an empty array if none defined 此工厂中定义的所有 Bean 的名称，如果未定义，则为空数组
 	 */
 	String[] getBeanDefinitionNames();
 

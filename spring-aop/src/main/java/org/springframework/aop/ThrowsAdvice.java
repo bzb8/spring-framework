@@ -18,10 +18,11 @@ package org.springframework.aop;
 
 /**
  * Tag interface for throws advice.
+ * 用于抛出建议的tag接口。
  *
  * <p>There are not any methods on this interface, as methods are invoked by
  * reflection. Implementing classes must implement methods of the form:
- * 因为方法是通过反射调用的。实现类必须实现以下形式的方法，前3个参数是可选的，最后一个参数为需要匹配的异常的类型。
+ * 此接口上没有任何方法，因为方法是通过反射调用的。实现类必须实现以下形式的方法：
  *
  * <pre class="code">void afterThrowing([Method, args, target], ThrowableSubclass);</pre>
  *
@@ -34,6 +35,7 @@ package org.springframework.aop;
  *
  * The first three arguments are optional, and only useful if we want further
  * information about the joinpoint, as in AspectJ <b>after-throwing</b> advice.
+ * 前3个参数是可选的，最后一个参数为需要匹配的异常的类型。
  *
  * <p><b>Note:</b> If a throws-advice method throws an exception itself, it will
  * override the original exception (i.e. change the exception thrown to the user).
