@@ -25,7 +25,8 @@ import javax.annotation.Nonnull;
  *
  * <p>An invocation is a joinpoint and can be intercepted by an
  * interceptor.
- *
+ * --
+ * 此接口表示程序中的调用
  * 调用是一个连接点，可以被拦截器拦截。
  *
  * @author Rod Johnson
@@ -36,8 +37,9 @@ public interface Invocation extends Joinpoint {
 	 * Get the arguments as an array object.
 	 * It is possible to change element values within this
 	 * array to change the arguments.
-	 *
+	 * --
 	 * 获取数组对象形式的参数。可以更改此数组中的元素值来更改参数。
+	 * 通常用来获取调用目标方法的参数
 	 *
 	 * @return the argument of the invocation
 	 */

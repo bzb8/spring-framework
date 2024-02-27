@@ -23,9 +23,12 @@ import org.aopalliance.aop.Advice;
  * and a filter determining the applicability of the advice (such as
  * a pointcut). <i>This interface is not for use by Spring users, but to
  * allow for commonality in support for different types of advice.</i>
- *
+ * --
  * 基本接口包含 AOP advice（在连接点处执行的操作）和确定advice适用性的过滤器（例如切入点）。
  * 此接口不是供 Spring 用户使用的，而是为了允许支持不同类型的advice的通用性。
+ * --
+ * 包含AOP通知（在joinpoint处执行的操作）和确定通知适用性的过滤器（如切入点[PointCut]）的基本接口。
+ * 这个接口不是供Spring用户使用的，而是为了支持不同类型的建议的通用性。
  *
  * <p>Spring AOP is based around <b>around advice</b> delivered via method
  * <b>interception</b>, compliant with the AOP Alliance interception API.
@@ -53,6 +56,7 @@ public interface Advisor {
 	 * Return the advice part of this aspect. An advice may be an
 	 * interceptor, a before advice, a throws advice, etc.
 	 * @return the advice that should apply if the pointcut matches
+	 * 返回引用的通知
 	 * @see org.aopalliance.intercept.MethodInterceptor
 	 * @see BeforeAdvice
 	 * @see ThrowsAdvice

@@ -21,6 +21,7 @@ package org.springframework.aop;
  *
  * <p>There are not any methods on this interface, as methods are invoked by
  * reflection. Implementing classes must implement methods of the form:
+ * 因为方法是通过反射调用的。实现类必须实现以下形式的方法，前3个参数是可选的，最后一个参数为需要匹配的异常的类型。
  *
  * <pre class="code">void afterThrowing([Method, args, target], ThrowableSubclass);</pre>
  *

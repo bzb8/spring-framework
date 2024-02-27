@@ -545,7 +545,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/**
 	 * Central method of this class: creates a bean instance,
 	 * populates the bean instance, applies post-processors, etc.
-	 * <p>
+	 * --
 	 * 此类的中心方法：创建一个 Bean 实例、填充 Bean 实例、应用后处理器等。
 	 *
 	 * @see #doCreateBean
@@ -843,6 +843,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			Class<?> factoryClass;
 			boolean isStatic = true;
 
+			// 没有工厂实例，表示静态方法
 			String factoryBeanName = mbd.getFactoryBeanName();
 			if (factoryBeanName != null) {
 				if (factoryBeanName.equals(beanName)) {
@@ -850,6 +851,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 							"factory-bean reference points back to the same bean definition");
 				}
 				// Check declared factory method return type on factory class.
+				// 检查工厂类上声明的工厂方法返回类型。
 				factoryClass = getType(factoryBeanName);
 				isStatic = false;
 			} else {
@@ -1242,10 +1244,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
-
+					// 应用实例化前后处理器
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
 					if (bean != null) {
-						// 应用初始化后处理器
+						// 应用初始化后后处理器
 						bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
 					}
 				}

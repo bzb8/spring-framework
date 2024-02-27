@@ -85,8 +85,10 @@ import org.springframework.util.ClassUtils;
  * {@link Bean @Bean} methods declared in {@code @Configuration} classes have
  * their corresponding bean definitions registered before any other
  * {@code BeanFactoryPostProcessor} executes.
- *
+ * --
  * 此后处理器是按优先级排序的，因为在 {@code @Configuration} 类中声明的任何 {@link Bean @Bean} 方法都必须在执行任何其他 {@code BeanFactoryPostProcessor} 之前注册其相应的 Bean 定义。
+ * --
+ * 解析注解给bean容器添加bean定义: @Configuration，@Import，@ComponentScan，@Bean等注解
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -252,13 +254,15 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
 		int registryId = System.identityHashCode(registry);
-		// postProcessBeanDefinitionRegistry 已在此后处理器上调用
+		// 校验是否已经处理过了
 		if (this.registriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
+					// 已经针对该注册表调用了此后处理器
 					"postProcessBeanDefinitionRegistry already called on this post-processor against " + registry);
 		}
 		if (this.factoriesPostProcessed.contains(registryId)) {
 			throw new IllegalStateException(
+					// 已经针对该注册表调用了此后处理器
 					"postProcessBeanFactory already called on this post-processor against " + registry);
 		}
 		this.registriesPostProcessed.add(registryId);
@@ -269,8 +273,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	/**
 	 * Prepare the Configuration classes for servicing bean requests at runtime
 	 * by replacing them with CGLIB-enhanced subclasses.
-	 *
+	 * --
 	 * 准备配置类，以便在运行时处理 Bean 请求，方法是将其替换为 CGLIB 增强的子类。
+	 * 完成对@Bean方法的代理 (目的是为了在配置类中多次调用@Bean方法返回的是同一个结果)
 	 */
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
@@ -316,9 +321,11 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		for (String beanName : candidateNames) {
 			// 根据beanName获取BeanDefinition
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
+			// 有configurationClass属性，表示它已经是一个配置类了
 			// 防止bean重复解析
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
 				if (logger.isDebugEnabled()) {
+					// Bean定义已经被处理为配置类
 					// Bean 定义已作为配置类进行处理
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
@@ -464,13 +471,15 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * any candidates are then enhanced by a {@link ConfigurationClassEnhancer}.
 	 * Candidate status is determined by BeanDefinition attribute metadata.
 	 * --
-	 * 后处理 BeanFactory 以搜索配置类 BeanDefinitions；然后，所有候选者都会通过 {@link ConfigurationClassEnhancer} 得到增强。候选状态由 BeanDefinition 属性元数据确定。
+	 * 后处理 BeanFactory 以搜索配置类 BeanDefinitions；然后，所有候选者都会通过 {@link ConfigurationClassEnhancer} 得到增强。
+	 * 候选状态由 BeanDefinition 属性元数据确定。
 	 *
 	 * @see ConfigurationClassEnhancer
 	 */
 	public void enhanceConfigurationClasses(ConfigurableListableBeanFactory beanFactory) {
 		StartupStep enhanceConfigClasses = this.applicationStartup.start("spring.context.config-classes.enhance");
 		Map<String, AbstractBeanDefinition> configBeanDefs = new LinkedHashMap<>();
+		//
 		for (String beanName : beanFactory.getBeanDefinitionNames()) {
 			BeanDefinition beanDef = beanFactory.getBeanDefinition(beanName);
 			Object configClassAttr = beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE);

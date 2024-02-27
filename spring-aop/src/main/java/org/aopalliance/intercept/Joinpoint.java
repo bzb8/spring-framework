@@ -67,7 +67,7 @@ public interface Joinpoint {
 	 * Return the object that holds the current joinpoint's static part.
 	 * <p>For instance, the target object for an invocation.
 	 *
-	 * 返回保存当前连接点静态部分的对象。
+	 * 返回保存当前连接点静态部分的对象，这里一般指被代理的目标对象
 	 * 例如，调用的目标对象。
 	 *
 	 * @return the object (can be null if the accessible object is static)
@@ -79,6 +79,10 @@ public interface Joinpoint {
 	 * Return the static part of this joinpoint.
 	 * <p>The static part is an accessible object on which a chain of
 	 * interceptors is installed.
+	 *  返回此静态连接点  一般就为当前的Method(至少目前的唯一实现是MethodInvocation,所以连接点得静态部分肯定就是本方法)
+	 * 返回此连接点的静态部分。
+	 * 静态部分是一个可访问的对象，上面安装了一系列拦截器
+	 *
 	 */
 	@Nonnull
 	AccessibleObject getStaticPart();

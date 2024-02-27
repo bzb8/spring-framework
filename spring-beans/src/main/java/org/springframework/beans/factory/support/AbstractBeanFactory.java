@@ -215,8 +215,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	/**
 	 * Names of beans that have already been created at least once.
+	 * 已经创建过至少一次的 Bean 的名称。
+	 * typeCheckOnly 不仅仅是类型检查时，标记当前bean创建了
 	 */
-	// 已经创建过至少一次的 Bean 的名称。
 	private final Set<String> alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap<>(256));
 
 	/**
@@ -377,7 +378,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
-						// 解析循环依赖，则跑车依赖
+						// 解析循环依赖，则依赖
 						if (isDependent(beanName, dep)) {
 							throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 									"Circular depends-on relationship between '" + beanName + "' and '" + dep + "'");
@@ -788,6 +789,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// 检查手动注册的单例。
 		Object beanInstance = getSingleton(beanName, false);
 		if (beanInstance != null && beanInstance.getClass() != NullBean.class) {
+			// 不是以&开头的工厂bean
 			if (beanInstance instanceof FactoryBean && !BeanFactoryUtils.isFactoryDereference(name)) {
 				return getTypeForFactoryBean((FactoryBean<?>) beanInstance);
 			} else {
