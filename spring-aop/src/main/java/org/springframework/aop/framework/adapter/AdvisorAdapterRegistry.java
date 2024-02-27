@@ -28,6 +28,8 @@ import org.springframework.aop.Advisor;
  * <p><i>This is an SPI interface, not to be implemented by any Spring user.</i>
  *
  * 这是一个 SPI 接口，任何 Spring 用户都不能实现。
+ * --
+ * AdvisorAdapter注册器，AdvisorAdapter可以将Advisor中的Advice适配为MethodInterceptor
  *
  * @author Rod Johnson
  * @author Rob Harrop
@@ -41,6 +43,8 @@ public interface AdvisorAdapterRegistry {
 	 * {@link org.springframework.aop.MethodBeforeAdvice},
 	 * {@link org.springframework.aop.AfterReturningAdvice},
 	 * {@link org.springframework.aop.ThrowsAdvice}.
+	 * 将一个通知（Advice）包装为Advisor对象
+	 *
 	 * @param advice an object that should be an advice
 	 * @return an Advisor wrapping the given advice (never {@code null};
 	 * if the advice parameter is an Advisor, it is to be returned as-is)
@@ -54,6 +58,8 @@ public interface AdvisorAdapterRegistry {
 	 * given Advisor in an interception-based framework.
 	 * <p>Don't worry about the pointcut associated with the {@link Advisor}, if it is
 	 * a {@link org.springframework.aop.PointcutAdvisor}: just return an interceptor.
+	 * 根据Advisor获取方法MethodInterceptor列表
+	 *
 	 * @param advisor the Advisor to find an interceptor for
 	 * @return an array of MethodInterceptors to expose this Advisor's behavior
 	 * @throws UnknownAdviceTypeException if the Advisor type is
@@ -65,6 +71,8 @@ public interface AdvisorAdapterRegistry {
 	 * Register the given {@link AdvisorAdapter}. Note that it is not necessary to register
 	 * adapters for an AOP Alliance Interceptors or Spring Advices: these must be
 	 * automatically recognized by an {@code AdvisorAdapterRegistry} implementation.
+	 * 注册AdvisorAdapter，AdvisorAdapter可以将Advisor中的Advice适配为MethodInterceptor
+	 *
 	 * @param adapter an AdvisorAdapter that understands particular Advisor or Advice types
 	 */
 	void registerAdvisorAdapter(AdvisorAdapter adapter);

@@ -917,6 +917,7 @@ public abstract class ClassUtils {
 	 * @since 5.3.19
 	 */
 	public static boolean isLambdaClass(Class<?> clazz) {
+		// 指定类是合成类 && 它的父类是Object && 它的接口数量为0 && 它的类名包含$$Lambda
 		return (clazz.isSynthetic() && (clazz.getSuperclass() == Object.class) &&
 				(clazz.getInterfaces().length > 0) && clazz.getName().contains("$$Lambda"));
 	}

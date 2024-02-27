@@ -33,6 +33,7 @@ import org.springframework.util.Assert;
  * --
  * 这个类实现了MethodInterceptor接口，负责将MethodBeforeAdvice方法前置通知包装为MethodInterceptor类型，
  * 创建这个类型的对象的时候需要传递一个MethodBeforeAdvice类型的参数，重点是invoke方法
+ * 将MethodBeforeAdvice通知适配为MethodInterceptor类型的
  *
  * @author Rod Johnson
  * @see AfterReturningAdviceInterceptor
@@ -57,9 +58,9 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeA
 	@Override
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
-		// 负责调用前置通知的方法
+		// 先调用前置通知
  		this.advice.before(mi.getMethod(), mi.getArguments(), mi.getThis());
-		// 继续执行方法调用链
+		// 然后继续处理连接器连，内部会调用目标方法
 		return mi.proceed();
 	}
 

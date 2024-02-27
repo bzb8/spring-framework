@@ -27,6 +27,7 @@ import org.springframework.aop.AfterReturningAdvice;
 /**
  * Adapter to enable {@link org.springframework.aop.AfterReturningAdvice}
  * to be used in the Spring AOP framework.
+ * 适配AfterReturningAdvice后置通知，负责将AfterReturningAdvice类型的通知转换为AfterReturningAdviceInterceptor类型的
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

@@ -169,12 +169,16 @@ class CglibAopProxy implements AopProxy, Serializable {
 		}
 
 		try {
+			// 获取被代理的类
 			Class<?> rootClass = this.advised.getTargetClass();
 			Assert.state(rootClass != null, "Target class must be available for creating a CGLIB proxy");
 
+			// 代理对象的父类（cglib是采用继承的方式是创建代理对象的，所以将被代理的类作为代理对象的父类）
 			Class<?> proxySuperClass = rootClass;
+			// 判断被代理的类是不是cglib创建的类，如果是cgglib创建的类，会将其父类作为被代理的类
 			if (rootClass.getName().contains(ClassUtils.CGLIB_CLASS_SEPARATOR)) {
 				proxySuperClass = rootClass.getSuperclass();
+				// 添加需要被代理的接口
 				Class<?>[] additionalInterfaces = rootClass.getInterfaces();
 				for (Class<?> additionalInterface : additionalInterfaces) {
 					this.advised.addInterface(additionalInterface);
@@ -185,6 +189,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 			validateClassIfNecessary(proxySuperClass, classLoader);
 
 			// Configure CGLIB Enhancer...
+			// 开始cglib创建代理，这个大家对cglib比较熟悉的一看就懂
 			Enhancer enhancer = createEnhancer();
 			if (classLoader != null) {
 				enhancer.setClassLoader(classLoader);
@@ -193,22 +198,28 @@ class CglibAopProxy implements AopProxy, Serializable {
 					enhancer.setUseCache(false);
 				}
 			}
+			// 设置被代理的父类
 			enhancer.setSuperclass(proxySuperClass);
+			// 设置被代理的接口[开发者硬编码指定的需要被代理的接口列表,SpringProxy,Advised]，这个比jdk动态代理的方式少了一个DecoratingProxy接口
 			enhancer.setInterfaces(AopProxyUtils.completeProxiedInterfaces(this.advised));
+			// 设置代理类类名生成策略
 			enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
+			// 设置字节码的生成策略
 			enhancer.setStrategy(new ClassLoaderAwareGeneratorStrategy(classLoader));
-
+			// 获取Callback列表
 			Callback[] callbacks = getCallbacks(rootClass);
 			Class<?>[] types = new Class<?>[callbacks.length];
 			for (int x = 0; x < types.length; x++) {
 				types[x] = callbacks[x].getClass();
 			}
 			// fixedInterceptorMap only populated at this point, after getCallbacks call above
+			// 设置CallbackFilter，CallbackFilter内部会判断被代理对象中的方法最终会被callbacks列表中的那个Callback来处理
 			enhancer.setCallbackFilter(new ProxyCallbackFilter(
 					this.advised.getConfigurationOnlyCopy(), this.fixedInterceptorMap, this.fixedInterceptorOffset));
 			enhancer.setCallbackTypes(types);
 
 			// Generate the proxy class and create a proxy instance.
+			// 获取代理对象（内部会先创建代理类，然后会根据代理类生成一个代理对象）
 			return createProxyClassAndInstance(enhancer, callbacks);
 		}
 		catch (CodeGenerationException | IllegalArgumentException ex) {
@@ -287,18 +298,36 @@ class CglibAopProxy implements AopProxy, Serializable {
 		}
 	}
 
+	/**
+	 * 通过被代理的类来获取Callback列表，Callback是用来处理代理对象的方法调用的，代理对象中可能有很多方法，
+	 * 每个方法可能采用不同的处理方式，所以会有多个Callback
+	 *
+	 * @param rootClass 被代理的目标类，从glib的父类
+	 * @return
+	 * @throws Exception
+	 */
 	private Callback[] getCallbacks(Class<?> rootClass) throws Exception {
 		// Parameters used for optimization choices...
+		// 配置是否是冻结的
 		boolean isFrozen = this.advised.isFrozen();
+		// 是否需要将代理暴露在threadLocal中
 		boolean exposeProxy = this.advised.isExposeProxy();
+		// 被代理的目标对象是否是动态的（是否是单例的）
 		boolean isStatic = this.advised.getTargetSource().isStatic();
 
 		// Choose an "aop" interceptor (used for AOP calls).
+		// 当方法上有需要执行的拦截器的时候，会用这个来处理
 		Callback aopInterceptor = new DynamicAdvisedInterceptor(this.advised);
 
 		// Choose a "straight to target" interceptor. (used for calls that are
 		// unadvised but can return this). May be required to expose the proxy.
+		// 当方法上没有需要执行的拦截器的时候，会使用targetInterceptor来处理，内部会通过反射直接调用目标对象的方法
 		Callback targetInterceptor;
+
+		/**
+		 * 这块根据是否需要暴露代理到threadLocal中以及目标对象是否是动态的，会创建不同的Callback
+		 * isStatic为true的时候，同一个代理的不同方法可能都是新的目标对象，所以当代理方法执行完毕之后，需要对目标对象进行释放
+		 */
 		if (exposeProxy) {
 			targetInterceptor = (isStatic ?
 					new StaticUnadvisedExposedInterceptor(this.advised.getTargetSource().getTarget()) :
@@ -312,16 +341,18 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 		// Choose a "direct to target" dispatcher (used for
 		// unadvised calls to static targets that cannot return this).
+		// targetDispatcher会直接调用目标方法
 		Callback targetDispatcher = (isStatic ?
 				new StaticDispatcher(this.advised.getTargetSource().getTarget()) : new SerializableNoOp());
 
 		Callback[] mainCallbacks = new Callback[] {
-				aopInterceptor,  // for normal advice
-				targetInterceptor,  // invoke target without considering advice, if optimized
+				aopInterceptor,  // for normal advice // 处理匹配到拦截器的方法
+				targetInterceptor,  // invoke target without considering advice, if optimized  处理未匹配到拦截器的方法
 				new SerializableNoOp(),  // no override for methods mapped to this
-				targetDispatcher, this.advisedDispatcher,
-				new EqualsInterceptor(this.advised),
-				new HashCodeInterceptor(this.advised)
+				targetDispatcher,  // 处理未匹配到拦截器的方法，和targetInterceptor有何不同呢？目标方法如果返回值的结果是目标对象类型的，会使用 targetInterceptor 处理，内部会返回代理对象
+				this.advisedDispatcher, // 处理Advised接口中定义的方法
+				new EqualsInterceptor(this.advised), // 处理equals方法
+				new HashCodeInterceptor(this.advised) // 处理hashCode方法
 		};
 
 		Callback[] callbacks;
@@ -329,11 +360,15 @@ class CglibAopProxy implements AopProxy, Serializable {
 		// If the target is a static one and the advice chain is frozen,
 		// then we can make some optimizations by sending the AOP calls
 		// direct to the target using the fixed chain for that method.
+		// 如果被代理的对象是单例的 && 配置是冻结的，此时会进行优化，怎么优化呢？
+		// 配置冻结的情况下，生成好的代理中通知是无法修改的，所以可以提前将每个方法对应的拦截器链找到给缓存起来
+		// 调用方法的时候，就直接从缓存中可以拿到方法对应的缓存信息，效率会高一些
 		if (isStatic && isFrozen) {
 			Method[] methods = rootClass.getMethods();
 			Callback[] fixedCallbacks = new Callback[methods.length];
 			this.fixedInterceptorMap = CollectionUtils.newHashMap(methods.length);
 
+			// 获取每个方法的调用链，然后给缓存在fixedInterceptorMap中
 			// TODO: small memory optimization here (can skip creation for methods with no advice)
 			for (int x = 0; x < methods.length; x++) {
 				Method method = methods[x];
@@ -675,54 +710,77 @@ class CglibAopProxy implements AopProxy, Serializable {
 	 * proxy is not frozen.
 	 */
 	private static class DynamicAdvisedInterceptor implements MethodInterceptor, Serializable {
-
+		// 代理配置信息
 		private final AdvisedSupport advised;
-
+		// 构造器，需要一个AdvisedSupport
 		public DynamicAdvisedInterceptor(AdvisedSupport advised) {
 			this.advised = advised;
 		}
-
+		/**
+		 * 这个方法是关键，用来处理代理对象中方法的调用
+		 */
 		@Override
 		@Nullable
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+			// 被暴露在threadLocal中旧的代理对象
 			Object oldProxy = null;
+			// 用来标记代理对象是否被暴露在threadLocal中
 			boolean setProxyContext = false;
+			// 目标对象
 			Object target = null;
+			// 目标源
 			TargetSource targetSource = this.advised.getTargetSource();
 			try {
+				// 代理配置中是否需要将代理暴露在threadLocal中
 				if (this.advised.exposeProxy) {
 					// Make invocation available if necessary.
+					// 将代理对象暴露出去
 					oldProxy = AopContext.setCurrentProxy(proxy);
+					// 将setProxyContext置为true
 					setProxyContext = true;
 				}
 				// Get as late as possible to minimize the time we "own" the target, in case it comes from a pool...
+				// 获取目标对象（即被代理的对象）
 				target = targetSource.getTarget();
 				Class<?> targetClass = (target != null ? target.getClass() : null);
+				// 获取当前方法的拦截器链
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
+				// 记录方法返回值
 				Object retVal;
 				// Check whether we only have one InvokerInterceptor: that is,
 				// no real advice, but just reflective invocation of the target.
+				// 拦截器链为空 && 方法是public类型的
 				if (chain.isEmpty() && CglibMethodInvocation.isMethodProxyCompatible(method)) {
 					// We can skip creating a MethodInvocation: just invoke the target directly.
 					// Note that the final invoker must be an InvokerInterceptor, so we know
 					// it does nothing but a reflective operation on the target, and no hot
 					// swapping or fancy proxying.
+					// 获取方法调用参数
 					Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);
+					//  直接调用目标对象的方法
 					retVal = invokeMethod(target, method, argsToUse, methodProxy);
 				}
 				else {
 					// We need to create a method invocation...
+					// 创建一个方法调用器（包含了代理对象、目标对象、调用的方法、参数、目标类型、方法拦截器链）
+					// 并执行方法调用器的processd()方法，此方法会执行一次方法调用链，最终会调用目标方法，获取返回结果
 					retVal = new CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).proceed();
 				}
+				// 处理方法返回结果：会根据方法返回值的类型，做一些处理，比如方法返回的类型为自己，则最后需要将返回值置为代理对象
 				retVal = processReturnType(proxy, target, method, retVal);
 				return retVal;
 			}
 			finally {
+				// 目标对象不为null && 目标源不是静态的
+				// 所谓静态的，你可以理解为是否是单例的
+				// isStatic为true，表示目标对象是单例的，同一个代理对象中所有方法共享一个目标对象
+				// isStatic为false的时候，通常每次调用代理的方法，target对象是不一样的，所以方法调用之后需要进行释放，可能有些资源清理，连接的关闭等操作
 				if (target != null && !targetSource.isStatic()) {
 					targetSource.releaseTarget(target);
 				}
 				if (setProxyContext) {
 					// Restore old proxy.
+					// 需要将旧的代理再放回到上线文中
 					AopContext.setCurrentProxy(oldProxy);
 				}
 			}

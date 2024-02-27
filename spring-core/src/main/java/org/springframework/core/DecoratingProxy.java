@@ -47,7 +47,7 @@ public interface DecoratingProxy {
 	 * <p>In case of an AOP proxy, this will be the ultimate target class,
 	 * not just the immediate target (in case of multiple nested proxies).
 	 * @return the decorated class (never {@code null}) 装饰类（绝不是 {@code null}）
-	 *
+	 * --
 	 * 返回此代理后面的（最终）装饰类。
 	 * 对于 AOP 代理，这将是最终目标类，而不仅仅是直接目标（在多个嵌套代理的情况下）。
 	 */

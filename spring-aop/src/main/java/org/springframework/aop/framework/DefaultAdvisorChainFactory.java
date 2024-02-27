@@ -57,17 +57,23 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 		// but we need to preserve order in the ultimate list.
 
 		// 这有点棘手......我们必须首先处理introductions，但我们需要保留最终列表中的顺序。
-
+		// 获取Advisor适配器注册器，前面我们有提到过一个知识点：所有的Advisor最终都会转换为MethodInterceptor类型的，
+		// 然后注册方法调用链去执行，AdvisorAdapterRegistry就是搞这个事情的,
+		// 其内部会将非MethodInterceptor类型通知通过适配器转换为MethodInterceptor类型
 		AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();
+		// 获取配置中的Advisor列表
 		Advisor[] advisors = config.getAdvisors();
 		List<Object> interceptorList = new ArrayList<>(advisors.length);
+		// 获取被调用方法所在类实际的类型
 		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
 		Boolean hasIntroductions = null;
-
+		// 遍历Advisor列表，找到和actualClass和方法匹配的所有方法拦截器（MethodInterceptor）链列表
 		for (Advisor advisor : advisors) {
+			// 判断是否是PointcutAdvisor类型的，这种类型的匹配分为2个阶段，先看类是否匹配，然后再看方法是否匹配
 			if (advisor instanceof PointcutAdvisor) {
 				// Add it conditionally.
 				PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;
+				// 如果isPreFiltered为true，表示类已经匹配过，不需要看类是否匹配了
 				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
 					boolean match;
@@ -78,13 +84,18 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 						match = ((IntroductionAwareMethodMatcher) mm).matches(method, actualClass, hasIntroductions);
 					}
 					else {
+						// 方法是否匹配
 						match = mm.matches(method, actualClass);
 					}
+					// 方法匹配
 					if (match) {
+						// 通过AdvisorAdapterRegistry的getInterceptors将advisor转换为MethodInterceptor列表
 						MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
+						// 方法是否动态匹配
 						if (mm.isRuntime()) {
 							// Creating a new object instance in the getInterceptors() method
 							// isn't a problem as we normally cache created chains.
+							// 轮询连接器，将其包装为InterceptorAndDynamicMethodMatcher对象，后续方法调用的时候可以做动态匹配
 							for (MethodInterceptor interceptor : interceptors) {
 								interceptorList.add(new InterceptorAndDynamicMethodMatcher(interceptor, mm));
 							}

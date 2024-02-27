@@ -461,14 +461,16 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * Determine a list of {@link org.aopalliance.intercept.MethodInterceptor} objects
 	 * for the given method, based on this configuration.
-	 *
+	 * --
 	 * 根据此配置确定给定方法的 {@link org.aopalliance.intercept.MethodInterceptor} 对象列表。
+	 * 根据方法和目标类型获取方法上面匹配的拦截器链
 	 *
 	 * @param method the proxied method
 	 * @param targetClass the target class
 	 * @return a List of MethodInterceptors (may also include InterceptorAndDynamicMethodMatchers)
 	 */
 	public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, @Nullable Class<?> targetClass) {
+		//会先尝试从缓存中获取，如果获取不到，会从advisorChainFactory中获取，然后将其丢到缓存中
 		MethodCacheKey cacheKey = new MethodCacheKey(method);
 		List<Object> cached = this.methodCache.get(cacheKey);
 		if (cached == null) {
