@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  * invocation is the runtime joinpoint on a method (static joinpoint).
  * The static part of a given joinpoint can be generically retrieved
  * using the {@link #getStaticPart()} method.
- *
+ * --
  * 运行时连接点是在静态连接点（即程序中的某个位置）上发生的事件。例如，调用是方法上的运行时连接点（静态连接点）。
  * 一般可以使用 {@link #getStaticPart()} 方法检索给定连接点的静态部分。
  *

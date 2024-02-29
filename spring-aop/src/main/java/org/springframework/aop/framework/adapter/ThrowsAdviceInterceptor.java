@@ -68,7 +68,7 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 
 	/**
 	 * Methods on throws advice, keyed by exception class.
-	 * 异常类型->异常处理方法
+	 * 异常类型->异常处理方法（afterThrowing名称的方法）
 	 */
 	private final Map<Class<?>, Method> exceptionHandlerMap = new HashMap<>();
 
@@ -77,6 +77,7 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 	 * Create a new ThrowsAdviceInterceptor for the given ThrowsAdvice.
 	 * @param throwsAdvice the advice object that defines the exception handler methods
 	 * (usually a {@link org.springframework.aop.ThrowsAdvice} implementation)
+	 *                    -- 定义异常处理程序方法（通常是 org.springframework.aop.ThrowsAdvice 实现）的 Advice 对象
 	 */
 	public ThrowsAdviceInterceptor(Object throwsAdvice) {
 		Assert.notNull(throwsAdvice, "Advice must not be null");
@@ -165,6 +166,13 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 		return handler;
 	}
 
+	/**
+	 *
+	 * @param mi
+	 * @param ex
+	 * @param method
+	 * @throws Throwable
+	 */
 	private void invokeHandlerMethod(MethodInvocation mi, Throwable ex, Method method) throws Throwable {
 		Object[] handlerArgs;
 		if (method.getParameterCount() == 1) {
