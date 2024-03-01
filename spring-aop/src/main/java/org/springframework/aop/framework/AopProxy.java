@@ -39,7 +39,7 @@ public interface AopProxy {
 	 * Create a new proxy object.
 	 * <p>Uses the AopProxy's default class loader (if necessary for proxy creation):
 	 * usually, the thread context class loader.
-	 *
+	 * --
 	 * 使用 AopProxy 的默认类加载器（如果需要创建代理）：通常是线程上下文类加载器。
 	 *
 	 * @return the new proxy object (never {@code null})

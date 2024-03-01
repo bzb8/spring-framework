@@ -45,6 +45,8 @@ public interface AopProxyFactory {
 
 	/**
 	 * Create an {@link AopProxy} for the given AOP configuration.
+	 * 根据Aop的配置信息AdvisedSupport来获取AopProxy对象，主要是判断采用cglib的方式还是采用jdk动态代理的方式。
+	 *
 	 * @param config the AOP configuration in the form of an
 	 * AdvisedSupport object
 	 * @return the corresponding AOP proxy

@@ -73,7 +73,8 @@ public interface MethodMatcher {
 	 * will be made.
 	 *
 	 * 执行静态检查给定方法是否匹配。
-	 * 如果返回 {@code false} 或 {@link #isRuntime()} 方法返回 {@code false}，则不进行运行时检查（即没有 {@link #matches(java.lang.reflect.Method, Class, Object[]) 调用} 。
+	 * 如果返回 {@code false} 或 {@link #isRuntime()} 方法返回 {@code false}，
+	 * 则不进行运行时检查（即没有 {@link #matches(java.lang.reflect.Method, Class, Object[]) 调用} 。
 	 * --
 	 *
 	 * @param method the candidate method
@@ -89,7 +90,8 @@ public interface MethodMatcher {
 	 * <p>Can be invoked when an AOP proxy is created, and need not be invoked
 	 * again before each method invocation,
 	 *
-	 * 这个 MethodMatcher 是动态的吗？也就是说，必须在运行时对 {@link #matches(java.lang.reflect.Method, Class, Object[])} 方法进行最终调用，
+	 * 这个 MethodMatcher 是动态的吗？也就是说，必须在运行时对 {@link #matches(java.lang.reflect.Method, Class, Object[])}
+	 * 方法进行最终调用，
 	 * 即使 2-arg matches 方法返回 true？
 	 * 可以在创建AOP代理时调用，不需要在每次方法调用前再次调用，
 	 * -- 是否是动态匹配，即是否每次执行目标方法的时候都去验证一下

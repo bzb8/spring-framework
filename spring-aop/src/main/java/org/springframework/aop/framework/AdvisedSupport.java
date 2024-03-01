@@ -443,7 +443,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/**
 	 * 添加通知
-	 * @param advice the advice to add to the tail of the chain
+	 * @param advice the advice to add to the tail of the chain 添加到链条尾部的建议
 	 * @throws AopConfigException
 	 */
 	@Override
@@ -454,7 +454,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/**
 	 * Cannot add introductions this way unless the advice implements IntroductionInfo.
-	 * 指定的位置添加通知
+	 * 在指定的位置添加通知
 	 */
 	@Override
 	public void addAdvice(int pos, Advice advice) throws AopConfigException {

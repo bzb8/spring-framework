@@ -26,17 +26,20 @@ import org.springframework.util.ClassUtils;
 /**
  * Default {@link AopProxyFactory} implementation, creating either a CGLIB proxy
  * or a JDK dynamic proxy.
+ * 默认 AopProxyFactory 实现，创建 CGLIB 代理或 JDK 动态代理。
  *
  * <p>Creates a CGLIB proxy if one the following is true for a given
  * {@link AdvisedSupport} instance:
+ * 如果给定 AdvisedSupport 实例满足以下条件之一，则创建 CGLIB 代理：
  * <ul>
- * <li>the {@code optimize} flag is set
- * <li>the {@code proxyTargetClass} flag is set
- * <li>no proxy interfaces have been specified
+ * <li>the {@code optimize} flag is set -- optimize标志已设置
+ * <li>the {@code proxyTargetClass} flag is set -- proxyTargetClass标志已设置
+ * <li>no proxy interfaces have been specified -- 未指定代理接口
  * </ul>
  *
  * <p>In general, specify {@code proxyTargetClass} to enforce a CGLIB proxy,
  * or specify one or more interfaces to use a JDK dynamic proxy.
+ * 通常，指定 proxyTargetClass 强制执行 CGLIB 代理，或指定一个或多个接口以使用 JDK 动态代理。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -54,6 +57,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 
 	@Override
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
+		// optimize==true || proxyTargetClass 为true || 配置中没有需要代理的接口
 		if (!NativeDetector.inNativeImage() &&
 				(config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config))) {
 			Class<?> targetClass = config.getTargetClass();
@@ -61,6 +65,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 				throw new AopConfigException("TargetSource cannot determine target class: " +
 						"Either an interface or a target is required for proxy creation.");
 			}
+			// 如果被代理的类为接口 或者 被代理的类是jdk动态代理创建代理类，则采用JdkDynamicAopProxy的方式，否则采用cglib代理的方式
 			if (targetClass.isInterface() || Proxy.isProxyClass(targetClass) || ClassUtils.isLambdaClass(targetClass)) {
 				return new JdkDynamicAopProxy(config);
 			}
