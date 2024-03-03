@@ -324,8 +324,8 @@ public abstract class AopUtils {
 	/**
 	 * Determine the sublist of the {@code candidateAdvisors} list
 	 * that is applicable to the given class.
-	 *
 	 * 确定适用于给定类的 {@code CandidateAdvisors} 列表的子列表。
+	 * 根据pointcut过滤
 	 *
 	 * @param candidateAdvisors the Advisors to evaluate
 	 * @param clazz the target class

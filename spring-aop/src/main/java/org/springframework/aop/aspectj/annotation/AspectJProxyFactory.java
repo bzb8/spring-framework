@@ -35,6 +35,8 @@ import org.springframework.util.ClassUtils;
  * AspectJ-based proxy factory, allowing for programmatic building
  * of proxies which include AspectJ aspects (code style as well
  * annotation style).
+ * 基于 AspectJ 的代理工厂，允许以编程方式构建代理，其中包括 AspectJ 方面（代码样式和注释样式）。
+ * AspectJProxyFactory这个类可以通过解析@Aspect标注的类来生成代理aop代理对象，对开发者来说，使创建代理变的更简洁了。
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
@@ -86,6 +88,9 @@ public class AspectJProxyFactory extends ProxyCreatorSupport {
 	 * supplied must be a singleton aspect. True singleton lifecycle is not honoured when
 	 * using this method - the caller is responsible for managing the lifecycle of any
 	 * aspects added in this way.
+	 * 将提供的方面实例添加到链中。提供的方面实例的类型必须是单一实例方面。使用此方法时，不会实现真正的单例生命周期
+	 * - 调用方负责管理以这种方式添加的任何方面的生命周期
+	 *
 	 * @param aspectInstance the AspectJ aspect instance
 	 */
 	public void addAspect(Object aspectInstance) {
@@ -102,10 +107,14 @@ public class AspectJProxyFactory extends ProxyCreatorSupport {
 
 	/**
 	 * Add an aspect of the supplied type to the end of the advice chain.
+	 * 将所提供类型的一个方面添加到建议链的末尾。
+	 *
 	 * @param aspectClass the AspectJ aspect class
 	 */
 	public void addAspect(Class<?> aspectClass) {
+		// 获取切面类的名称
 		String aspectName = aspectClass.getName();
+		// 非@Aspect注解标记，将会抛出异常
 		AspectMetadata am = createAspectMetadata(aspectClass, aspectName);
 		MetadataAwareAspectInstanceFactory instanceFactory = createAspectInstanceFactory(am, aspectClass, aspectName);
 		addAdvisorsFromAspectInstanceFactory(instanceFactory);
@@ -115,9 +124,13 @@ public class AspectJProxyFactory extends ProxyCreatorSupport {
 	/**
 	 * Add all {@link Advisor Advisors} from the supplied {@link MetadataAwareAspectInstanceFactory}
 	 * to the current chain. Exposes any special purpose {@link Advisor Advisors} if needed.
+	 * 将提供的 {@link MetadataAwareAspectInstanceFactory} 中的所有 {@link Advisor Advisors} 添加到当前链中。
+	 * 如有需要，公开任何特殊用途的 {@link Advisor Advisors}。
+	 *
 	 * @see AspectJProxyUtils#makeAdvisorChainAspectJCapableIfNecessary(List)
 	 */
 	private void addAdvisorsFromAspectInstanceFactory(MetadataAwareAspectInstanceFactory instanceFactory) {
+		// 根据AspectFactory创建Advisor列表
 		List<Advisor> advisors = this.aspectFactory.getAdvisors(instanceFactory);
 		Class<?> targetClass = getTargetClass();
 		Assert.state(targetClass != null, "Unresolvable target class");
@@ -142,6 +155,8 @@ public class AspectJProxyFactory extends ProxyCreatorSupport {
 	 * Create a {@link MetadataAwareAspectInstanceFactory} for the supplied aspect type. If the aspect type
 	 * has no per clause, then a {@link SingletonMetadataAwareAspectInstanceFactory} is returned, otherwise
 	 * a {@link PrototypeAspectInstanceFactory} is returned.
+	 * 为提供的方面类型创建 {@link MetadataAwareAspectInstanceFactory}。如果方面类型没有 per 子句，
+	 * 则返回 {@link SingletonMetadataAwareAspectInstanceFactory}，否则返回 {@link PrototypeAspectInstanceFactory}。
 	 */
 	private MetadataAwareAspectInstanceFactory createAspectInstanceFactory(
 			AspectMetadata am, Class<?> aspectClass, String aspectName) {
@@ -149,11 +164,14 @@ public class AspectJProxyFactory extends ProxyCreatorSupport {
 		MetadataAwareAspectInstanceFactory instanceFactory;
 		if (am.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {
 			// Create a shared aspect instance.
+			// 创建共享方面实例。
+			// 通过反射创建切面实例，并缓存
 			Object instance = getSingletonAspectInstance(aspectClass);
 			instanceFactory = new SingletonMetadataAwareAspectInstanceFactory(instance, aspectName);
 		}
 		else {
 			// Create a factory for independent aspect instances.
+			// 为独立的方面实例创建工厂。
 			instanceFactory = new SimpleMetadataAwareAspectInstanceFactory(aspectClass, aspectName);
 		}
 		return instanceFactory;
@@ -162,6 +180,7 @@ public class AspectJProxyFactory extends ProxyCreatorSupport {
 	/**
 	 * Get the singleton aspect instance for the supplied aspect type.
 	 * An instance is created if one cannot be found in the instance cache.
+	 * 获取所提供方面类型的单一实例方面实例。如果在实例缓存中找不到实例，则创建实例。
 	 */
 	private Object getSingletonAspectInstance(Class<?> aspectClass) {
 		return aspectCache.computeIfAbsent(aspectClass,

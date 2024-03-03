@@ -388,6 +388,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 
 	/**
 	 * Add all the given advisors to this proxy configuration.
+	 * 添加给定的advisors到当前代理配置中
+	 *
 	 * @param advisors the advisors to register
 	 */
 	public void addAdvisors(Collection<Advisor> advisors) {
@@ -540,13 +542,14 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	 * --
 	 * 根据此配置确定给定方法的 {@link org.aopalliance.intercept.MethodInterceptor} 对象列表。
 	 * 基于当前配置，获取给定方法的方法调用链列表（即org.aopalliance.intercept.MethodInterceptor对象列表）
+	 * 根据方法和目标类型获取方法上面匹配的拦截器链
 	 *
 	 * @param method the proxied method
 	 * @param targetClass the target class
 	 * @return a List of MethodInterceptors (may also include InterceptorAndDynamicMethodMatchers)
 	 */
 	public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, @Nullable Class<?> targetClass) {
-		//会先尝试从缓存中获取，如果获取不到，会从advisorChainFactory中获取，然后将其丢到缓存中
+		// 会先尝试从缓存中获取，如果获取不到，会从advisorChainFactory中获取，然后将其丢到缓存中
 		MethodCacheKey cacheKey = new MethodCacheKey(method);
 		// 先从缓存中获取
 		List<Object> cached = this.methodCache.get(cacheKey);

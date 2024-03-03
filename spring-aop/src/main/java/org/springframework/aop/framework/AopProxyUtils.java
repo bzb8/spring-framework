@@ -254,29 +254,44 @@ public abstract class AopProxyUtils {
 	 * Adapt the given arguments to the target signature in the given method,
 	 * if necessary: in particular, if a given vararg argument array does not
 	 * match the array type of the declared vararg parameter in the method.
-	 * @param method the target method
-	 * @param arguments the given arguments
+	 * 如有必要，将给定的参数调整为给定方法中的目标签名：特别是，如果给定的 vararg 参数数组与方法中声明的 vararg 参数的数组类型不匹配
+	 *
+	 * @param method the target method -- 目标方法
+	 * @param arguments the given arguments -- 给定的原始参数
 	 * @return a cloned argument array, or the original if no adaptation is needed
+	 * 克隆的参数数组，如果不需要调整，则为原始参数数组
 	 * @since 4.2.3
 	 */
 	static Object[] adaptArgumentsIfNecessary(Method method, @Nullable Object[] arguments) {
 		if (ObjectUtils.isEmpty(arguments)) {
 			return new Object[0];
 		}
+		// 方法是具有可变参数类型的方法
 		if (method.isVarArgs()) {
+			// 当前调用方法和给定的参数数量相等
 			if (method.getParameterCount() == arguments.length) {
+				// 方法的参数类型列表
 				Class<?>[] paramTypes = method.getParameterTypes();
+				// 可变参数的索引下标，最后一个
 				int varargIndex = paramTypes.length - 1;
+				// 获取可变参数的类型
 				Class<?> varargType = paramTypes[varargIndex];
+				// 可变参数是数组类型的
 				if (varargType.isArray()) {
+					// 可变参数的值
 					Object varargArray = arguments[varargIndex];
+					// 给定的可变参数的值是Object[] && 给定的可变参数的值不是当前方法的可变参数类型的实例
 					if (varargArray instanceof Object[] && !varargType.isInstance(varargArray)) {
+						// 新创建一个参数的数组对象
 						Object[] newArguments = new Object[arguments.length];
+						// 复制原来的参数值 - 1
 						System.arraycopy(arguments, 0, newArguments, 0, varargIndex);
 						Class<?> targetElementType = varargType.getComponentType();
 						int varargLength = Array.getLength(varargArray);
 						Object newVarargArray = Array.newInstance(targetElementType, varargLength);
+						// 将当前可变参数的值复制给新的可变参数
 						System.arraycopy(varargArray, 0, newVarargArray, 0, varargLength);
+						// 给方法参数最后一个可变参数复制
 						newArguments[varargIndex] = newVarargArray;
 						return newArguments;
 					}

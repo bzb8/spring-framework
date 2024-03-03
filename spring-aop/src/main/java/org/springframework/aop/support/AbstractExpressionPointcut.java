@@ -42,7 +42,8 @@ public abstract class AbstractExpressionPointcut implements ExpressionPointcut, 
 	private String location;
 
 	/**
-	 * @Aspect 注解value属性值
+	 * @Advice注解 value属性值
+	 * 切面表达式
 	 */
 	@Nullable
 	private String expression;

@@ -36,6 +36,7 @@ import org.springframework.lang.Nullable;
 /**
  * Internal implementation of AspectJPointcutAdvisor.
  * Note that there will be one instance of this advisor for each target method.
+ * AspectJPointcutAdvisor 的内部实现。请注意，每个目标方法都有一个此顾问程序的实例。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -48,18 +49,37 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 	private static final Advice EMPTY_ADVICE = new Advice() {};
 
 
+	/**
+	 * AspectJ切入点表达式
+	 */
 	private final AspectJExpressionPointcut declaredPointcut;
 
 	private final Class<?> declaringClass;
 
+	/**
+	 * 标记了@Advice注解的方法名称
+	 */
 	private final String methodName;
 
+	/**
+	 * 通知方法参数类型
+	 */
 	private final Class<?>[] parameterTypes;
 
+	/**
+	 * 标记了@Advice注解的方法
+	 */
 	private transient Method aspectJAdviceMethod;
 
+	/**
+	 *
+	 * ReflectiveAspectJAdvisorFactory
+	 */
 	private final AspectJAdvisorFactory aspectJAdvisorFactory;
 
+	/**
+	 * 切面实例工厂
+	 */
 	private final MetadataAwareAspectInstanceFactory aspectInstanceFactory;
 
 	private final int declarationOrder;

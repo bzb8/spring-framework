@@ -23,7 +23,6 @@ import org.springframework.util.Assert;
 
 /**
  * Decorator to cause a {@link MetadataAwareAspectInstanceFactory} to instantiate only once.
- *
  * 装饰器使 {@link MetadataAwareAspectInstanceFactory} 仅实例化一次。
  *
  * @author Rod Johnson
@@ -42,6 +41,7 @@ public class LazySingletonAspectInstanceFactoryDecorator implements MetadataAwar
 	/**
 	 * Create a new lazily initializing decorator for the given AspectInstanceFactory.
 	 * 为给定的 AspectInstanceFactory 创建一个新的延迟初始化装饰器。
+	 *
 	 * @param maaif the MetadataAwareAspectInstanceFactory to decorate
 	 */
 	public LazySingletonAspectInstanceFactoryDecorator(MetadataAwareAspectInstanceFactory maaif) {

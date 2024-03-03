@@ -71,7 +71,6 @@ public interface AspectJAdvisorFactory {
 	/**
 	 * Build Spring AOP Advisors for all annotated At-AspectJ methods
 	 * on the specified aspect instance.
-	 *
 	 * 在指定的 aspect 实例上为所有带注解的 At-AspectJ 方法构建 Spring AOP Advisors。
 	 *
 	 * @param aspectInstanceFactory the aspect instance factory
@@ -99,7 +98,7 @@ public interface AspectJAdvisorFactory {
 	 *
 	 * 为给定的 AspectJ advice方法构建 Spring AOP Advice。
 	 *
-	 * @param candidateAdviceMethod the candidate advice method
+	 * @param candidateAdviceMethod the candidate advice method -- 标记了@Advice注解的方法
 	 * @param expressionPointcut the AspectJ expression pointcut AspectJ 表达式切入点
 	 * @param aspectInstanceFactory the aspect instance factory
 	 * @param declarationOrder the declaration order within the aspect aspect内的声明顺序

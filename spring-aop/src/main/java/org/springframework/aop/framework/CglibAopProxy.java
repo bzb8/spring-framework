@@ -88,6 +88,7 @@ import org.springframework.util.ReflectionUtils;
 class CglibAopProxy implements AopProxy, Serializable {
 
 	// Constants for CGLIB callback array indices
+	// CGLIB 回调数组索引的常量
 	private static final int AOP_PROXY = 0;
 	private static final int INVOKE_TARGET = 1;
 	private static final int NO_OVERRIDE = 2;
@@ -175,7 +176,8 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 			// 代理对象的父类（cglib是采用继承的方式是创建代理对象的，所以将被代理的类作为代理对象的父类）
 			Class<?> proxySuperClass = rootClass;
-			// 判断被代理的类是不是cglib创建的类，如果是cgglib创建的类，会将其父类作为被代理的类
+			// 判断被代理的类是不是cglib创建的类，如果是cglib创建的类，会将其父类作为被代理的类
+			// cglib创建的类
 			if (rootClass.getName().contains(ClassUtils.CGLIB_CLASS_SEPARATOR)) {
 				proxySuperClass = rootClass.getSuperclass();
 				// 添加需要被代理的接口
@@ -302,7 +304,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 	 * 通过被代理的类来获取Callback列表，Callback是用来处理代理对象的方法调用的，代理对象中可能有很多方法，
 	 * 每个方法可能采用不同的处理方式，所以会有多个Callback
 	 *
-	 * @param rootClass 被代理的目标类，从glib的父类
+	 * @param rootClass 被代理的目标类，cglib的父类
 	 * @return
 	 * @throws Exception
 	 */
@@ -349,7 +351,9 @@ class CglibAopProxy implements AopProxy, Serializable {
 				aopInterceptor,  // for normal advice // 处理匹配到拦截器的方法
 				targetInterceptor,  // invoke target without considering advice, if optimized  处理未匹配到拦截器的方法
 				new SerializableNoOp(),  // no override for methods mapped to this
-				targetDispatcher,  // 处理未匹配到拦截器的方法，和targetInterceptor有何不同呢？目标方法如果返回值的结果是目标对象类型的，会使用 targetInterceptor 处理，内部会返回代理对象
+				// 处理未匹配到拦截器的方法，和targetInterceptor有何不同呢？目标方法如果返回值的结果是目标对象类型的，
+				// 会使用 targetInterceptor 处理，内部会返回代理对象
+				targetDispatcher,
 				this.advisedDispatcher, // 处理Advised接口中定义的方法
 				new EqualsInterceptor(this.advised), // 处理equals方法
 				new HashCodeInterceptor(this.advised) // 处理hashCode方法

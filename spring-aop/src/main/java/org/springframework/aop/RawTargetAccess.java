@@ -27,6 +27,9 @@ package org.springframework.aop;
  * interface only (typically an introduction interface that does not serve
  * as the primary interface of an AOP proxy), and hence does not affect
  * other interfaces that a concrete AOP proxy may implement.
+ * AOP 代理接口（特别是：引入接口）的标记，这些接口显式打算返回原始目标对象（从方法调用返回时通常会替换为代理对象）。
+ * 请注意，这是一个样式为 java.io.Serializable的标记接口，在语义上应用于声明的接口，而不是具体对象的完整类。
+ * 换言之，此标记仅适用于特定接口（通常是不用作 AOP 代理主接口的引入接口），因此不会影响具体 AOP 代理可能实现的其他接口。
  *
  * @author Juergen Hoeller
  * @since 2.0.5

@@ -111,12 +111,15 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 		// If the parent has the annotation and isn't abstract it's an error
 		// 如果父类具有注解并且不是抽象的，则为错误
 		Class<?> superclass = aspectClass.getSuperclass();
+		// 父类标记了@Aspect注解 && 父类非抽象的，抛出异常
+		// 标记了@Aspect注解的类不允许继承
 		if (superclass.getAnnotation(Aspect.class) != null &&
 				!Modifier.isAbstract(superclass.getModifiers())) {
 			throw new AopConfigException("[" + aspectClass.getName() + "] cannot extend concrete aspect [" +
 					superclass.getName() + "]");
 		}
 
+		// 切面类不是@Aspect注解标记的，抛出异常
 		AjType<?> ajType = AjTypeSystem.getAjType(aspectClass);
 		if (!ajType.isAspect()) {
 			throw new NotAnAtAspectException(aspectClass);
@@ -134,9 +137,8 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 	/**
 	 * Find and return the first AspectJ annotation on the given method
 	 * (there <i>should</i> only be one anyway...).
-	 *
-	 * 在给定方法上查找并返回第一个 AspectJ 注解（无论如何应该只有一个......
-	 * @Pointcut, @Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class
+	 * 在给定方法上查找并返回第一个 AspectJ 注解（无论如何应该只有一个......)
+	 * -- @Pointcut, @Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class
 	 */
 	@SuppressWarnings("unchecked")
 	@Nullable
@@ -192,13 +194,32 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 			annotationTypeMap.put(AfterThrowing.class, AspectJAnnotationType.AtAfterThrowing);
 		}
 
+		/**
+		 * @Pointcut.class
+		 * @Around.class
+		 * @Before.class
+		 * @After.class
+		 * @AfterReturning
+		 * @AfterThrowing
+		 * 类型的注解
+		 */
 		private final A annotation;
 
+		/**
+		 * 注解类型
+		 */
 		private final AspectJAnnotationType annotationType;
 
-		// 注解上的"pointcut", "value"属性值
+		/**
+		 * 注解上的"pointcut", "value"属性值
+		 * 就是切点表达式
+ 		 */
 		private final String pointcutExpression;
 
+		/**
+		 * 获取Advice注解中的argNames属性值
+		 * 参考：https://blog.csdn.net/b15735105314/article/details/105088734/
+		 */
 		private final String argumentNames;
 
 		public AspectJAnnotation(A annotation) {
