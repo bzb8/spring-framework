@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class AopExample {
 
-    //@DeclareParents(value = "org.springframework.aop.Person", defaultImpl = ProxyClassImpl.class)
+    //@DeclareParents(value = "org.springfra mework.aop.Person", defaultImpl = ProxyClassImpl.class)
     ProxyClass proxy;
 
 
