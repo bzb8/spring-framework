@@ -65,6 +65,8 @@ public final class BridgeMethodResolver {
 	 * 找到提供的{@link Method 桥接方法}的原始方法。
 	 * 可以安全地调用此方法，并传入非桥接{@link Method}实例。 在这种情况下，提供的{@link Method}实例将直接返回给调用者。
 	 *  调用者不需要在调用此方法之前检查桥接。
+	 * --
+	 * 查找桥接方法的实际方法
 	 *
 	 * @param bridgeMethod the method to introspect -- 要检查的方法
 	 * @return the original method (either the bridged method or the passed-in method
@@ -72,27 +74,35 @@ public final class BridgeMethodResolver {
 	 * 原始方法（桥接方法或传入的方法，如果找不到更具体的方法）
 	 */
 	public static Method findBridgedMethod(Method bridgeMethod) {
+		// 如果不是桥连方法，就直接返回原方法。
 		if (!bridgeMethod.isBridge()) {
 			return bridgeMethod;
 		}
+		// 先从本地缓存读取，缓存中有则直接返回。
 		Method bridgedMethod = cache.get(bridgeMethod);
 		if (bridgedMethod == null) {
 			// Gather all methods with matching name and parameter size.
 			// 收集具有匹配名称和参数大小的所有方法。
 			List<Method> candidateMethods = new ArrayList<>();
+			// 以方法名称和入参个数相等为筛选条件。
 			MethodFilter filter = candidateMethod ->
 					isBridgedCandidateFor(candidateMethod, bridgeMethod);
+			// 递归该类及其所有父类上的所有方法，符合筛选条件就添加进来。
 			ReflectionUtils.doWithMethods(bridgeMethod.getDeclaringClass(), candidateMethods::add, filter);
 			if (!candidateMethods.isEmpty()) {
+				// 如果符合筛选条件的方法个数为1，则直接采用；
+				// 否则，调用searchCandidates方法再次筛选。
 				bridgedMethod = candidateMethods.size() == 1 ?
 						candidateMethods.get(0) :
 						searchCandidates(candidateMethods, bridgeMethod);
 			}
+			// 如果找不到实际方法，则返回原来的桥连方法。
 			if (bridgedMethod == null) {
 				// A bridge method was passed in but we couldn't find the bridged method.
 				// Let's proceed with the passed-in method and hope for the best...
 				bridgedMethod = bridgeMethod;
 			}
+			// 把查找的结果放入内存缓存。
 			cache.put(bridgeMethod, bridgedMethod);
 		}
 		return bridgedMethod;
@@ -108,6 +118,7 @@ public final class BridgeMethodResolver {
 	 * ，则返回{@code true}。该方法执行廉价的检查，并且可以快速用于过滤一组可能的匹配。
 	 */
 	private static boolean isBridgedCandidateFor(Method candidateMethod, Method bridgeMethod) {
+		// 非桥接方法 && 和桥接方法不同 && 和交接方法的方法名称和参数个数一样
 		return (!candidateMethod.isBridge() && !candidateMethod.equals(bridgeMethod) &&
 				candidateMethod.getName().equals(bridgeMethod.getName()) &&
 				candidateMethod.getParameterCount() == bridgeMethod.getParameterCount());
@@ -126,11 +137,14 @@ public final class BridgeMethodResolver {
 		}
 		Method previousMethod = null;
 		boolean sameSig = true;
+		// 遍历候选方法的列表
 		for (Method candidateMethod : candidateMethods) {
+			// 对比桥接方法的泛型类型参数和候选方法是否匹配，如果匹配则直接返回该候选方法。
 			if (isBridgeMethodFor(bridgeMethod, candidateMethod, bridgeMethod.getDeclaringClass())) {
 				return candidateMethod;
 			}
 			else if (previousMethod != null) {
+				// 如果不匹配，则判断所有候选方法的参数列表是否相等。
 				sameSig = sameSig &&
 						Arrays.equals(candidateMethod.getGenericParameterTypes(), previousMethod.getGenericParameterTypes());
 			}
@@ -142,7 +156,7 @@ public final class BridgeMethodResolver {
 	/**
 	 * Determines whether the bridge {@link Method} is the bridge for the
 	 * supplied candidate {@link Method}.
-	 *
+	 * --
 	 * 确定桥 {@link Method} 是否是提供的候选 {@link Method} 的桥。
 	 */
 	static boolean isBridgeMethodFor(Method bridgeMethod, Method candidateMethod, Class<?> declaringClass) {

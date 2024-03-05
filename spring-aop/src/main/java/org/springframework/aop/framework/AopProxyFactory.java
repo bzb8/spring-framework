@@ -37,6 +37,8 @@ package org.springframework.aop.framework;
  * If they do not permit advice changes (for example, because
  * the configuration was frozen) a proxy should throw an
  * {@link AopConfigException} on an attempted advice change.
+ * --
+ * 是一个工厂，负责创建AopProxy，使用的是简单工厂模式
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -45,11 +47,11 @@ public interface AopProxyFactory {
 
 	/**
 	 * Create an {@link AopProxy} for the given AOP configuration.
-	 * 根据Aop的配置信息AdvisedSupport来获取AopProxy对象，主要是判断采用cglib的方式还是采用jdk动态代理的方式。
+	 * 为给定的 AOP 配置创建一个 {@link AopProxy}。
 	 *
 	 * @param config the AOP configuration in the form of an
-	 * AdvisedSupport object
-	 * @return the corresponding AOP proxy
+	 * AdvisedSupport object -- AdvisedSupport 对象形式的 AOP 配置
+	 * @return the corresponding AOP proxy -- 对应的AOP代理
 	 * @throws AopConfigException if the configuration is invalid
 	 */
 	AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException;
