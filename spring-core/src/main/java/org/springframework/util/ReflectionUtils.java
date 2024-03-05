@@ -48,9 +48,8 @@ public abstract class ReflectionUtils {
 	/**
 	 * Pre-built {@link MethodFilter} that matches all non-bridge non-synthetic methods
 	 * which are not declared on {@code java.lang.Object}.
-	 *
 	 * 预构建的 {@link MethodFilter} 匹配所有未在 {@code java.lang.Object} 上声明的非桥接非合成方法。
-	 *
+	 * 非桥接非合成方法 && 方法的声明类不是Object
 	 * @since 3.0.5
 	 */
 	public static final MethodFilter USER_DECLARED_METHODS =

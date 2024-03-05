@@ -105,6 +105,11 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 		return advisors;
 	}
 
+	/**
+	 * 判断是否基础架构的bean(Advice、PointCut、Advisor、AopInfrastructureBean) || (它是@Aspect注解标记的 && 它不是Aspect编译器编译的)
+	 * @param beanClass the class of the bean
+	 * @return
+	 */
 	@Override
 	protected boolean isInfrastructureClass(Class<?> beanClass) {
 		// Previously we setProxyTargetClass(true) in the constructor, but that has too

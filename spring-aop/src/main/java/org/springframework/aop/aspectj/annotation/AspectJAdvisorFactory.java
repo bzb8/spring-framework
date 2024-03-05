@@ -95,7 +95,6 @@ public interface AspectJAdvisorFactory {
 
 	/**
 	 * Build a Spring AOP Advice for the given AspectJ advice method.
-	 *
 	 * 为给定的 AspectJ advice方法构建 Spring AOP Advice。
 	 *
 	 * @param candidateAdviceMethod the candidate advice method -- 标记了@Advice注解的方法

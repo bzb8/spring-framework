@@ -46,6 +46,10 @@ public class BeanFactoryAdvisorRetrievalHelper {
 
 	private final ConfigurableListableBeanFactory beanFactory;
 
+	/**
+	 * Advisor类型的所有bean定义的bean name
+	 * 空数组
+	 */
 	@Nullable
 	private volatile String[] cachedAdvisorBeanNames;
 
@@ -64,9 +68,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 	 * Find all eligible Advisor beans in the current bean factory,
 	 * ignoring FactoryBeans and excluding beans that are currently in creation.
 	 * @return the list of {@link org.springframework.aop.Advisor} beans
-	 *
 	 * 在当前 Bean 工厂中查找所有符合条件的 Advisor Bean，忽略 FactoryBeans 并排除当前正在创建的 Bean。
-	 *
 	 * 一般为new ArrayList<>()
 	 *
 	 * @see #isEligibleBean
@@ -90,6 +92,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 
 		List<Advisor> advisors = new ArrayList<>();
 		for (String name : advisorNames) {
+			// 默认返回true
 			if (isEligibleBean(name)) {
 				if (this.beanFactory.isCurrentlyInCreation(name)) {
 					if (logger.isTraceEnabled()) {
@@ -98,6 +101,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 				}
 				else {
 					try {
+						// 创建advisor并添加到返回集合中
 						advisors.add(this.beanFactory.getBean(name, Advisor.class));
 					}
 					catch (BeanCreationException ex) {
@@ -126,7 +130,6 @@ public class BeanFactoryAdvisorRetrievalHelper {
 	/**
 	 * Determine whether the aspect bean with the given name is eligible.
 	 * <p>The default implementation always returns {@code true}.
-	 *
 	 * 确定具有给定名称的 aspect bean 是否符合条件。
 	 * 默认实现始终返回 {@code true}。
 	 *

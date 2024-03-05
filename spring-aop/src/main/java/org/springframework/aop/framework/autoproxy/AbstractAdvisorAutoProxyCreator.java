@@ -117,7 +117,6 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 	/**
 	 * Find all candidate Advisors to use in auto-proxying.
-	 *
 	 * 查找所有用于自动代理的候选Advisors。
 	 * BeanFactory中的所有Advisors
 	 *

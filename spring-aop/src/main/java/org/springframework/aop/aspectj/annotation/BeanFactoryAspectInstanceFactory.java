@@ -50,7 +50,9 @@ public class BeanFactoryAspectInstanceFactory implements MetadataAwareAspectInst
 
 	private final BeanFactory beanFactory;
 
-	// beanName
+	/**
+	 * beanName
+ 	 */
 	private final String name;
 
 	private final AspectMetadata aspectMetadata;

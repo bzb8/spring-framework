@@ -54,6 +54,9 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 	 */
 	private final AspectJExpressionPointcut declaredPointcut;
 
+	/**
+	 * advice方法的声明类
+	 */
 	private final Class<?> declaringClass;
 
 	/**
@@ -84,12 +87,25 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 
 	private final int declarationOrder;
 
+	/**
+	 * 切面名称
+	 */
 	private final String aspectName;
 
+	/**
+	 * 切面表达式
+	 */
 	private final Pointcut pointcut;
 
+	/**
+	 * false
+	 */
 	private final boolean lazy;
 
+	/**
+	 * Advice对象
+	 * 查看AbstractAspectJAdvice的实现类
+	 */
 	@Nullable
 	private Advice instantiatedAdvice;
 
@@ -132,6 +148,7 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 			// A singleton aspect.
 			this.pointcut = this.declaredPointcut;
 			this.lazy = false;
+			// 创建Advice对象
 			this.instantiatedAdvice = instantiateAdvice(this.declaredPointcut);
 		}
 	}

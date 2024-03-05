@@ -44,9 +44,14 @@ public class DeclareParentsAdvisor implements IntroductionAdvisor {
 
 	/**
 	 * Create a new advisor for this DeclareParents field.
-	 * @param interfaceType static field defining the introduction
-	 * @param typePattern type pattern the introduction is restricted to
-	 * @param defaultImpl the default implementation class
+	 * // value: 目标类，defaultImpl：要实现的接口
+	 * // @DeclareParents(value = "org.springfra mework.aop.Person", defaultImpl = ProxyClassImpl.class)
+	 * // ProxyClass proxy;
+	 *
+	 *
+	 * @param interfaceType static field defining the introduction -- 引入接口的类型，上面的ProxyClass
+	 * @param typePattern type pattern the introduction is restricted to -- 要匹配的目标类，上面的org.springfra mework.aop.Person
+	 * @param defaultImpl the default implementation class -- 引入接口的类型的实现类，上面的ProxyClassImpl.class
 	 */
 	public DeclareParentsAdvisor(Class<?> interfaceType, String typePattern, Class<?> defaultImpl) {
 		this(interfaceType, typePattern,

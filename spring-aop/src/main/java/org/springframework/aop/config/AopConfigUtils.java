@@ -53,6 +53,7 @@ public abstract class AopConfigUtils {
 
 	/**
 	 * Stores the auto proxy creator classes in escalation order.
+	 * 按照升级顺序存储自动代理创建器类。
 	 */
 	private static final List<Class<?>> APC_PRIORITY_LIST = new ArrayList<>(3);
 
@@ -114,17 +115,29 @@ public abstract class AopConfigUtils {
 		}
 	}
 
+	/**
+	 * 创建并注册AnnotationAwareAspectJAutoProxyCreator bean定义（org.springframework.aop.config.internalAutoProxyCreator -> AnnotationAwareAspectJAutoProxyCreator）
+	 * 1. 添加属性：设置order属性 -> Integer.MIN_VALUE
+	 * 2. 设置角色为ROLE_INFRASTRUCTURE（基础架构）
+	 * @param cls bean定义 bean class
+	 * @param registry BeanDefinitionRegistry
+	 * @param source bean定义源
+	 * @return
+	 */
 	@Nullable
 	private static BeanDefinition registerOrEscalateApcAsRequired(
 			Class<?> cls, BeanDefinitionRegistry registry, @Nullable Object source) {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 
+		// 已经存在internalAutoProxyCreator bean定义
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
+				// 0, 1, 2
 				int currentPriority = findPriorityForClass(apcDefinition.getBeanClassName());
 				int requiredPriority = findPriorityForClass(cls);
+				// 重新设置它的bean class name
 				if (currentPriority < requiredPriority) {
 					apcDefinition.setBeanClassName(cls.getName());
 				}
@@ -134,8 +147,11 @@ public abstract class AopConfigUtils {
 
 		RootBeanDefinition beanDefinition = new RootBeanDefinition(cls);
 		beanDefinition.setSource(source);
+		// 设置order属性 -> Integer.MIN_VALUE
 		beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);
+		// 设置角色为ROLE_INFRASTRUCTURE（基础架构）
 		beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+		// 注册bean定义，org.springframework.aop.config.internalAutoProxyCreator -> beanDefinition
 		registry.registerBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME, beanDefinition);
 		return beanDefinition;
 	}

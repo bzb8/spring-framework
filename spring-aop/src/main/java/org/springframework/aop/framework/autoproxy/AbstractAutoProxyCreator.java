@@ -170,6 +170,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	/**
 	 * 存储切面bean或应该被代理的bean，value=false.
 	 * 代理的value=true
+	 * 缓存key -> false(不应该被代理) / true(应该被代理)
+	 *
 	 */
 	private final Map<Object, Boolean> advisedBeans = new ConcurrentHashMap<>(256);
 
@@ -278,14 +280,21 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	@Override
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) {
-		// beanName或beanClass
+		// 构建缓存key
+		// beanName不为空则为beanName, 否则为beanClass
 		Object cacheKey = getCacheKey(beanClass, beanName);
 
 		// 判断bean是否已经处理过了，处理了的会放在targetSourcedBeans
 		if (!StringUtils.hasLength(beanName) || !this.targetSourcedBeans.contains(beanName)) {
+			// 如果被解析过直接返回
 			if (this.advisedBeans.containsKey(cacheKey)) {
 				return null;
 			}
+
+			/**
+			 * 判断是不是基础的Bean（Advice、PointCut、Advisor、AopInfrastructureBean）是就直接跳过
+			 * 判断是不是应该跳过 (AOP解析直接解析出我们的切面信息(并且把我们的切面信息进行缓存)，而事务在这里是不会解析的)
+			 */
 			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
 				// 不应该被代理的Bean
 				this.advisedBeans.put(cacheKey, Boolean.FALSE);

@@ -35,6 +35,7 @@ public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport impl
 	/**
 	 * bean的来源
 	 * 扫描的bean的来源是class 文件 Resource
+	 * 源对象可以是任何对象，用于标识Bean定义的来源，例如配置文件、注解等。设置源对象有助于跟踪和调试Bean定义的来源。
 	 */
 	@Nullable
 	private Object source;
