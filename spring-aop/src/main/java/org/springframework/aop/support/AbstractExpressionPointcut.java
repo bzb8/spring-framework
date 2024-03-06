@@ -43,7 +43,7 @@ public abstract class AbstractExpressionPointcut implements ExpressionPointcut, 
 
 	/**
 	 * @Advice注解 value属性值
-	 * 切面表达式
+	 * 切点表达式
 	 */
 	@Nullable
 	private String expression;

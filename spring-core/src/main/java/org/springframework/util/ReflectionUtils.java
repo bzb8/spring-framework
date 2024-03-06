@@ -411,7 +411,6 @@ public abstract class ReflectionUtils {
 	/**
 	 * Get all declared methods on the leaf class and all superclasses.
 	 * Leaf class methods are included first.
-	 *
 	 * 获取叶类和所有超类上的所有声明方法。首先包括叶类方法。
 	 *
 	 * @param leafClass the class to introspect 要内省的类

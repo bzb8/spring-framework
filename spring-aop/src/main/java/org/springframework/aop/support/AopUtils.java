@@ -240,6 +240,7 @@ public abstract class AopUtils {
 	 */
 	public static boolean canApply(Pointcut pc, Class<?> targetClass, boolean hasIntroductions) {
 		Assert.notNull(pc, "Pointcut must not be null");
+		// 类不匹配，返回false
 		if (!pc.getClassFilter().matches(targetClass)) {
 			return false;
 		}
@@ -258,16 +259,20 @@ public abstract class AopUtils {
 
 		Set<Class<?>> classes = new LinkedHashSet<>();
 		// 非jdk代理
+		// 添加目标类
 		if (!Proxy.isProxyClass(targetClass)) {
 			classes.add(ClassUtils.getUserClass(targetClass));
 		}
+		// 添加目标类的所有接口
 		classes.addAll(ClassUtils.getAllInterfacesForClassAsSet(targetClass));
 
 		for (Class<?> clazz : classes) {
+			// 获取当前clazz的所有方法
 			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
 			for (Method method : methods) {
 				if (introductionAwareMethodMatcher != null ?
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions) :
+						// 只要有一个方法匹配，就返回true
 						methodMatcher.matches(method, targetClass)) {
 					return true;
 				}
@@ -303,11 +308,13 @@ public abstract class AopUtils {
 	 * @param advisor the advisor to check
 	 * @param targetClass class we're testing
 	 * @param hasIntroductions whether the advisor chain for this bean includes
-	 * any introductions 该 bean 的advisor链是否包含任何introductions
+	 * any introductions -- 该 bean 的advisor链是否包含任何introductions
 	 * @return whether the pointcut can apply on any method
+	 * 切入点是否可以应用于任何方法
 	 */
 	public static boolean canApply(Advisor advisor, Class<?> targetClass, boolean hasIntroductions) {
 		if (advisor instanceof IntroductionAdvisor) {
+			// 只判断类型是否匹配
 			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);
 		}
 		else if (advisor instanceof PointcutAdvisor) {
@@ -327,10 +334,11 @@ public abstract class AopUtils {
 	 * 确定适用于给定类的 {@code CandidateAdvisors} 列表的子列表。
 	 * 根据pointcut过滤
 	 *
-	 * @param candidateAdvisors the Advisors to evaluate
+	 * @param candidateAdvisors the Advisors to evaluate -- 工厂中所有advice方法对应的advisor列表
 	 * @param clazz the target class
 	 * @return sublist of Advisors that can apply to an object of the given class
 	 * (may be the incoming List as-is)
+	 * 可应用于给定类对象的顾问的子列表（可以按原样是传入的列表）
 	 */
 	public static List<Advisor> findAdvisorsThatCanApply(List<Advisor> candidateAdvisors, Class<?> clazz) {
 		if (candidateAdvisors.isEmpty()) {

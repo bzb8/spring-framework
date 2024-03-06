@@ -160,6 +160,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 	private final Set<String> targetSourcedBeans = Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
+	/**
+	 * cacheKey ->
+	 */
 	private final Map<Object, Object> earlyProxyReferences = new ConcurrentHashMap<>(16);
 
 	/**
@@ -282,7 +285,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) {
 		// 构建缓存key
 		// beanName不为空则为beanName, 否则为beanClass
-		Object cacheKey = getCacheKey(beanClass, beanName);
+ 		Object cacheKey = getCacheKey(beanClass, beanName);
 
 		// 判断bean是否已经处理过了，处理了的会放在targetSourcedBeans
 		if (!StringUtils.hasLength(beanName) || !this.targetSourcedBeans.contains(beanName)) {
@@ -329,14 +332,13 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	/**
 	 * Create a proxy with the configured interceptors if the bean is
 	 * identified as one to proxy by the subclass.
-	 *
 	 * 如果该 bean 被子类识别为要代理的 bean，则使用配置的拦截器创建一个代理。
 	 *
 	 * @see #getAdvicesAndAdvisorsForBean
 	 */
-	@Override
 	public Object postProcessAfterInitialization(@Nullable Object bean, String beanName) {
 		if (bean != null) {
+			// 构建缓存key
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
 			if (this.earlyProxyReferences.remove(cacheKey) != bean) {
 				return wrapIfNecessary(bean, beanName, cacheKey);
@@ -357,6 +359,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * 为给定的 Bean 类和 Bean 名称构建缓存键。
 	 * 注意：从 4.2.3 开始，此实现不再返回级联的class/name String，而是返回最有效的缓存键：一个普通的 Bean 名称，如果是 {@code FactoryBean}，
 	 * 则在前面加上 {@link BeanFactory#FACTORY_BEAN_PREFIX};或者，如果没有指定 Bean 名称，则按原样返回给定的 Bean {@code Class}。
+	 * --
+	 * 创建缓存key： bean name不为空则为bean name（工厂bean为&beanName），否则为beanClass
 	 *
 	 * @param beanClass the bean class
 	 * @param beanName the bean name
@@ -377,8 +381,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * --
 	 * 如有必要，即如果它有资格被代理，请包装给定的 bean。
 	 *
-	 * @param bean the raw bean instance
-	 * @param beanName the name of the bean
+	 * @param bean the raw bean instance -- 原始的bean实例
+	 * @param beanName the name of the bean -- bean name
 	 * @param cacheKey the cache key for metadata access -- 用于元数据访问的缓存键
 	 * @return a proxy wrapping the bean, or the raw bean instance as-is
 	 */
@@ -386,9 +390,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (StringUtils.hasLength(beanName) && this.targetSourcedBeans.contains(beanName)) {
 			return bean;
 		}
+		// 不需要创建代理，直接返回
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
 		}
+
+		// 为aop的基础架构的bean || 应该跳过创建代理，直接返回
 		if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
 			this.advisedBeans.put(cacheKey, Boolean.FALSE);
 			return bean;
@@ -658,11 +665,11 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 *
 	 * 返回是否要代理给定的 bean，应用附加的advices（例如 AOP 联盟拦截器）和advisors。
 	 *
-	 * @param beanClass the class of the bean to advise 要advice的 bean 的类
+	 * @param beanClass the class of the bean to advise -- 要advice的 bean 的类
 	 * @param beanName the name of the bean
 	 * @param customTargetSource the TargetSource returned by the
 	 * {@link #getCustomTargetSource} method: may be ignored.
-	 * Will be {@code null} if no custom target source is in use.
+	 * Will be {@code null} if no custom target source is in use. -- null
 	 *
 	 * {@link #getCustomTargetSource} method：返回的 TargetSource 可能会被忽略。如果未使用自定义目标源，则为 {@code null}。
 	 *
