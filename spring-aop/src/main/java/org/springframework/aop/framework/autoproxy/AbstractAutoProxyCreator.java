@@ -525,8 +525,10 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		if (proxyFactory.isProxyTargetClass()) {
 			// Explicit handling of JDK proxy targets and lambdas (for introduction advice scenarios)
+			// 显式处理 JDK 代理目标和 lambda（用于引入建议方案）
 			if (Proxy.isProxyClass(beanClass) || ClassUtils.isLambdaClass(beanClass)) {
 				// Must allow for introductions; can't just set interfaces to the proxy's interfaces only.
+				// 必须允许介绍;不能只将接口设置为代理的接口。
 				for (Class<?> ifc : beanClass.getInterfaces()) {
 					proxyFactory.addInterface(ifc);
 				}

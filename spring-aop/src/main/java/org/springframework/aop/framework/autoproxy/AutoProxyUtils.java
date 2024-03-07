@@ -116,7 +116,6 @@ public abstract class AutoProxyUtils {
 
 	/**
 	 * Expose the given target class for the specified bean, if possible.
-	 *
 	 * 如果可能的话，公开指定 bean 的给定目标类。
 	 *
 	 * @param beanFactory the containing ConfigurableListableBeanFactory
@@ -126,7 +125,7 @@ public abstract class AutoProxyUtils {
 	 */
 	static void exposeTargetClass(
 			ConfigurableListableBeanFactory beanFactory, @Nullable String beanName, Class<?> targetClass) {
-
+		// 设置originalTargetClass属性为目标类
 		if (beanName != null && beanFactory.containsBeanDefinition(beanName)) {
 			beanFactory.getMergedBeanDefinition(beanName).setAttribute(ORIGINAL_TARGET_CLASS_ATTRIBUTE, targetClass);
 		}
