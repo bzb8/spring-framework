@@ -51,7 +51,7 @@ public class BeanFactoryAspectInstanceFactory implements MetadataAwareAspectInst
 	private final BeanFactory beanFactory;
 
 	/**
-	 * beanName
+	 * 标记@Aspect注解的切面的beanName
  	 */
 	private final String name;
 

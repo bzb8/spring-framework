@@ -2,6 +2,7 @@ package org.springframework;
 
 import org.springframework.aop.ILouzai;
 import org.springframework.aop.Louzai;
+import org.springframework.aop.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.service.BzbService;
 import org.springframework.service.DService;
@@ -15,7 +16,9 @@ public class Main {
 		//System.out.println(bean);
 
 		AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-		BzbService bzbService = annotationConfigApplicationContext.getBean(BzbService.class);
+		UserService userService = annotationConfigApplicationContext.getBean(UserService.class);
+		userService.test();
+		//BzbService bzbService = annotationConfigApplicationContext.getBean(BzbService.class);
 		//System.out.println(bzbService);
 		//User user = annotationConfigApplicationContext.getBean(User.class);
 		//System.out.println(user);
@@ -27,8 +30,8 @@ public class Main {
 		//AService aService = annotationConfigApplicationContext.getBean(AService.class);
 		//aService.testA();
 
-		ILouzai louzai = annotationConfigApplicationContext.getBean(ILouzai.class);
-		louzai.everyDay();
+		//ILouzai louzai = annotationConfigApplicationContext.getBean(ILouzai.class);
+		//louzai.everyDay();
 		//
 		//DService dService = annotationConfigApplicationContext.getBean(DService.class);
 

@@ -193,7 +193,6 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 		}
 
 		/**
-		 * @Pointcut.class
 		 * @Around.class
 		 * @Before.class
 		 * @After.class
@@ -209,7 +208,7 @@ public abstract class AbstractAspectJAdvisorFactory implements AspectJAdvisorFac
 		private final AspectJAnnotationType annotationType;
 
 		/**
-		 * 注解上的"pointcut", "value"属性值
+		 * 注解上的"Around", "value"属性值
 		 * 就是切点表达式
  		 */
 		private final String pointcutExpression;

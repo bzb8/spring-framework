@@ -96,8 +96,9 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		Comparator<Method> adviceKindComparator = new ConvertingComparator<>(
 				new InstanceComparator<>(
 						Around.class, Before.class, After.class, AfterReturning.class, AfterThrowing.class),
+				// 将方法转换为advice注解
 				(Converter<Method, Annotation>) method -> {
-					// 查找方法上的@Before等注解
+					// 查找方法上的增强（@Before等）注解
 					AspectJAnnotation<?> ann = AbstractAspectJAdvisorFactory.findAspectJAnnotationOnMethod(method);
 					return (ann != null ? ann.getAnnotation() : null);
 				});
@@ -141,20 +142,26 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 	 */
 	@Override
 	public List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory) {
-		// 切面类
+		// 获取我们的标记为@Aspect注解的类
 		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
-		// 切面类名称
+		// 切面类的名称
 		String aspectName = aspectInstanceFactory.getAspectMetadata().getAspectName();
+		// 校验我们的切面类，是否@Aspect注解标记的
 		validate(aspectClass);
 
 		// We need to wrap the MetadataAwareAspectInstanceFactory with a decorator
 		// so that it will only instantiate once.
 		// 我们需要用装饰器包装 MetadataAwareAspectInstanceFactory，以便它只会实例化一次。
+
+		// 保证切面Bean对象只会实例化一次
+		// 一定要注意，这里是直接new出来一个LazySingletonAspectInstanceFactoryDecorator
+		// 也就是OrderService这个Bean在执行Bean生命周期过程中，会需要判断要不要进行AOP，就会找到切面，
+		// 发现切面如果是pertarget或perthis，那么就会进入到这个方法，就会new一个LazySingletonAspectInstanceFactoryDecorator
+		// 对于UserService也是一样的，在它的Bean的生命周期过程中，也会进入到这个方法，也会new一个LazySingletonAspectInstanceFactoryDecorator
 		MetadataAwareAspectInstanceFactory lazySingletonAspectInstanceFactory =
 				new LazySingletonAspectInstanceFactoryDecorator(aspectInstanceFactory);
 
 		// 查找切面类（标注@Aspect注解的类）中的advice方法，遍历，并根据Advice的类型创建不同的advisor
-
 		List<Advisor> advisors = new ArrayList<>();
 		// 每个@BeforeAdvice方法都初始化为不同类型的Adisor
 		for (Method method : getAdvisorMethods(aspectClass)) {
@@ -182,6 +189,10 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 		// If it's a per target aspect, emit the dummy instantiating aspect.
 		// 如果是每个目标方面，则发出虚拟实例化方面。
+		// @Aspect("pertarget(this(com.xiaoyuanzai.service.UserService))")
+		// @Aspect("perthis(this(com.xiaoyuanzai.service.UserService))")
+		// 如果是pertarget或perthis，则会多生成一个Advisor并放在最前面
+		// 在一个代理对象调用方法的时候，就会执行该Advisor，并且会利用lazySingletonAspectInstanceFactory来生成一个切面Bean
 		if (!advisors.isEmpty() && lazySingletonAspectInstanceFactory.getAspectMetadata().isLazilyInstantiated()) {
 			Advisor instantiationAdvisor = new SyntheticInstantiationAdvisor(lazySingletonAspectInstanceFactory);
 			advisors.add(0, instantiationAdvisor);
@@ -191,6 +202,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		// 查找introduction字段。
 
 		// 添加引入类型的advisor
+		// 找到哪些字段上加了@DeclareParents注解，把这些字段以及对于的注解解析封装为Advisor，生成代理对象时会把对于的接口添加到ProxyFactory中
 		for (Field field : aspectClass.getDeclaredFields()) {
 			Advisor advisor = getDeclareParentsAdvisor(field);
 			if (advisor != null) {
@@ -281,6 +293,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 	 */
 	@Nullable
 	private AspectJExpressionPointcut getPointcut(Method candidateAdviceMethod, Class<?> candidateAspectClass) {
+		// advice注解
 		AspectJAnnotation<?> aspectJAnnotation =
 				AbstractAspectJAdvisorFactory.findAspectJAnnotationOnMethod(candidateAdviceMethod);
 		if (aspectJAnnotation == null) {
@@ -296,6 +309,15 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		return ajexp;
 	}
 
+	/**
+	 * 根据advice方法的不同注解创建不同的Advice
+	 * @param candidateAdviceMethod the candidate advice method -- 标记了@Advice注解的方法
+	 * @param expressionPointcut the AspectJ expression pointcut AspectJ 表达式切入点
+	 * @param aspectInstanceFactory the aspect instance factory
+	 * @param declarationOrder the declaration order within the aspect aspect内的声明顺序
+	 * @param aspectName the name of the aspect
+	 * @return
+	 */
 
 	@Override
 	@Nullable

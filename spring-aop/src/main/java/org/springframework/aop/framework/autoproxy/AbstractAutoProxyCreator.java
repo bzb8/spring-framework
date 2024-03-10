@@ -507,7 +507,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * @param beanClass the class of the bean
 	 * @param beanName the name of the bean
 	 * @param specificInterceptors the set of interceptors that is
-	 * specific to this bean (may be empty, but not null)
+	 * specific to this bean (may be empty, but not null) -- 特定于此 Bean 的拦截器集（可能为空，但不是null）
 	 * @param targetSource the TargetSource for the proxy,
 	 * already pre-configured to access the bean
 	 * @return the AOP proxy for the bean
@@ -520,9 +520,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			AutoProxyUtils.exposeTargetClass((ConfigurableListableBeanFactory) this.beanFactory, beanName, beanClass);
 		}
 
+		//创建一个代理对象工厂
 		ProxyFactory proxyFactory = new ProxyFactory();
+		// 复制配置参数
 		proxyFactory.copyFrom(this);
-
+		// 为proxyFactory设置创建jdk代理还是cglib代理
+		// 如果设置了 <aop:aspectj-autoproxy proxy-target-class="true"/>不会进if，说明强制使用cglib
 		if (proxyFactory.isProxyTargetClass()) {
 			// Explicit handling of JDK proxy targets and lambdas (for introduction advice scenarios)
 			// 显式处理 JDK 代理目标和 lambda（用于引入建议方案）
@@ -540,11 +543,14 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				proxyFactory.setProxyTargetClass(true);
 			}
 			else {
+				// 是否进行jdk动态代理，如果当前beanClass实现了某个接口，那么则会使用JDK动态代理
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
 
+		// 将commonInterceptors和specificInterceptors整合再一起
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
+		// 在这一步会去判断advisors中是否存在IntroductionAdvisor，如果存在则会把对应的interface添加到proxyFactory中去
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);
 		customizeProxyFactory(proxyFactory);
@@ -626,6 +632,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		Advisor[] advisors = new Advisor[allInterceptors.size()];
 		for (int i = 0; i < allInterceptors.size(); i++) {
+			// 将advice包装成advisor
 			advisors[i] = this.advisorAdapterRegistry.wrap(allInterceptors.get(i));
 		}
 		return advisors;

@@ -41,8 +41,14 @@ import org.springframework.util.comparator.Comparators;
  */
 public class ConvertingComparator<S, T> implements Comparator<S> {
 
+	/**
+	 * 比较器
+	 */
 	private final Comparator<T> comparator;
 
+	/**
+	 * 转换器，先调用转换器转换值后，再调用比较器进行比较
+	 */
 	private final Converter<S, T> converter;
 
 

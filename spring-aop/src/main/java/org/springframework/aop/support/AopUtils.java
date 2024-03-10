@@ -232,19 +232,27 @@ public abstract class AopUtils {
 	 * Can the given pointcut apply at all on the given class?
 	 * <p>This is an important test as it can be used to optimize
 	 * out a pointcut for a class.
-	 * @param pc the static or dynamic pointcut to check 要检查的静态或动态切入点
-	 * @param targetClass the class to test
+	 * @param pc the static or dynamic pointcut to check -- 要检查的静态或动态切入点
+	 * @param targetClass the class to test -- 要测试的目标类
 	 * @param hasIntroductions whether the advisor chain
 	 * for this bean includes any introductions
 	 * @return whether the pointcut can apply on any method
 	 */
 	public static boolean canApply(Pointcut pc, Class<?> targetClass, boolean hasIntroductions) {
 		Assert.notNull(pc, "Pointcut must not be null");
-		// 类不匹配，返回false
+		// 1. 类不匹配，返回false
+		/**
+		 * 判断targetClass是不是和当前Pointcut匹配
+		 * 1. 进行类级别过滤(通过AspectJ)
+		 */
 		if (!pc.getClassFilter().matches(targetClass)) {
 			return false;
 		}
 
+		/**
+		 * 进行方法级别过滤
+		 * 如果pc.getMethodMatcher()返回TrueMethodMatcher则匹配所有方法
+		 */
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
 		if (methodMatcher == MethodMatcher.TRUE) {
 			// No need to iterate the methods if we're matching any method anyway...
@@ -252,11 +260,13 @@ public abstract class AopUtils {
 			return true;
 		}
 
+		// 判断匹配器是不是IntroductionAwareMethodMatcher  只有AspectJExpressionPointCut才会实现这个接口
 		IntroductionAwareMethodMatcher introductionAwareMethodMatcher = null;
 		if (methodMatcher instanceof IntroductionAwareMethodMatcher) {
 			introductionAwareMethodMatcher = (IntroductionAwareMethodMatcher) methodMatcher;
 		}
 
+		// 创建一个集合用于保存targetClass 的class对象
 		Set<Class<?>> classes = new LinkedHashSet<>();
 		// 非jdk代理
 		// 添加目标类
@@ -269,8 +279,10 @@ public abstract class AopUtils {
 		for (Class<?> clazz : classes) {
 			// 获取当前clazz的所有方法
 			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
+			// 通过methodMatcher.matches来匹配我们的方法
 			for (Method method : methods) {
 				if (introductionAwareMethodMatcher != null ?
+						// 通过切点表达式进行匹配 AspectJ方式
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions) :
 						// 只要有一个方法匹配，就返回true
 						methodMatcher.matches(method, targetClass)) {
@@ -306,7 +318,7 @@ public abstract class AopUtils {
 	 * 这是一个重要的测试，因为它可用于优化class的advisor。此版本还考虑了introductions（对于IntroductionAwareMethodMatchers）。
 	 *
 	 * @param advisor the advisor to check
-	 * @param targetClass class we're testing
+	 * @param targetClass class we're testing -- 要测试的目标类
 	 * @param hasIntroductions whether the advisor chain for this bean includes
 	 * any introductions -- 该 bean 的advisor链是否包含任何introductions
 	 * @return whether the pointcut can apply on any method
@@ -317,8 +329,10 @@ public abstract class AopUtils {
 			// 只判断类型是否匹配
 			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);
 		}
+		// PointcutAdvisor 类型的匹配，Spring AOP 生成的advisor,通过这种类型匹配
 		else if (advisor instanceof PointcutAdvisor) {
 			PointcutAdvisor pca = (PointcutAdvisor) advisor;
+			// 找到真正能用的增强器
 			return canApply(pca.getPointcut(), targetClass, hasIntroductions);
 		}
 		else {
@@ -344,16 +358,21 @@ public abstract class AopUtils {
 		if (candidateAdvisors.isEmpty()) {
 			return candidateAdvisors;
 		}
+		// 定义一个匹配到的增强器集合对象
 		List<Advisor> eligibleAdvisors = new ArrayList<>();
 		for (Advisor candidate : candidateAdvisors) {
+			//判断我们的增强器对象是不是实现了IntroductionAdvisor
 			if (candidate instanceof IntroductionAdvisor && canApply(candidate, clazz)) {
 				eligibleAdvisors.add(candidate);
 			}
 		}
+
 		boolean hasIntroductions = !eligibleAdvisors.isEmpty();
 		for (Advisor candidate : candidateAdvisors) {
+			// 判断我们的增强器对象是不是实现了IntroductionAdvisor
 			if (candidate instanceof IntroductionAdvisor) {
 				// already processed
+				// 在上面已经处理过 ，不需要处理
 				continue;
 			}
 			if (canApply(candidate, clazz, hasIntroductions)) {

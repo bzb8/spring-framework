@@ -54,6 +54,7 @@ public class AspectMetadata implements Serializable {
 	 * The name of this aspect as defined to Spring (the bean name) -
 	 * allows us to determine if two pieces of advice come from the
 	 * same aspect and hence their relative precedence.
+	 * 这个方面的名称（在Spring中定义的bean名称）允许我们确定两个建议是否来自同一个方面，从而确定它们的相对优先级。
 	 */
 	private final String aspectName;
 
@@ -71,6 +72,7 @@ public class AspectMetadata implements Serializable {
 	 * AspectJ 反射信息。
 	 * 由于它本身不是可序列化的，因此在反序列化时重新解析。
 	 * 标记了@Aspect注解的类型
+	 * AjTypeImpl类型，和java中的aspectClass对应
 	 */
 	private transient AjType<?> ajType;
 
@@ -116,6 +118,7 @@ public class AspectMetadata implements Serializable {
 		this.aspectClass = ajType.getJavaClass();
 		this.ajType = ajType;
 
+		// @Aspect注解的value属性值为空时，它的类型为SINGLETON
 		switch (this.ajType.getPerClause().getKind()) {
 			case SINGLETON:
 				// 进入这里
@@ -141,8 +144,8 @@ public class AspectMetadata implements Serializable {
 
 	/**
 	 * Extract contents from String of form {@code pertarget(contents)}.
-	 *
 	 * 从 {@code pertarget(contents)} 形式的字符串中提取内容。
+	 * 1. @Aspect注解的value属性值的 () 里面的内容
 	 */
 	private String findPerClause(Class<?> aspectClass) {
 		String str = aspectClass.getAnnotation(Aspect.class).value();

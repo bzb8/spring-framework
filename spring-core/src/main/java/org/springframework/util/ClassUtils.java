@@ -391,7 +391,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the given class is visible in the given ClassLoader.
-	 *
+	 * --
 	 * 检查给定的类在给定的类加载器中是否可见。
 	 *
 	 * @param clazz the class to check (typically an interface) 要检查的类（通常是接口）
@@ -812,9 +812,12 @@ public abstract class ClassUtils {
 	 */
 	public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, @Nullable ClassLoader classLoader) {
 		Assert.notNull(clazz, "Class must not be null");
+		// 类是接口，就直接返回它本身
 		if (clazz.isInterface() && isVisible(clazz, classLoader)) {
 			return Collections.singleton(clazz);
 		}
+
+		// 递归获取的它和它父类实现的接口集
 		Set<Class<?>> interfaces = new LinkedHashSet<>();
 		Class<?> current = clazz;
 		while (current != null) {

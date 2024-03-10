@@ -67,6 +67,7 @@ public class InstanceComparator<T> implements Comparator<T> {
 	}
 
 	private int getOrder(@Nullable T object) {
+		// 返回参数object对应的instanceOrder的索引下标
 		if (object != null) {
 			for (int i = 0; i < this.instanceOrder.length; i++) {
 				if (this.instanceOrder[i].isInstance(object)) {
@@ -74,6 +75,7 @@ public class InstanceComparator<T> implements Comparator<T> {
 				}
 			}
 		}
+		// object为null，返回instanceOrder的长度
 		return this.instanceOrder.length;
 	}
 

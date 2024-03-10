@@ -70,6 +70,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 	 * @return the list of {@link org.springframework.aop.Advisor} beans
 	 * 在当前 Bean 工厂中查找所有符合条件的 Advisor Bean，忽略 FactoryBeans 并排除当前正在创建的 Bean。
 	 * 一般为new ArrayList<>()
+	 * xml方式配置的Advisors
 	 *
 	 * @see #isEligibleBean
 	 */
@@ -81,7 +82,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 			// Do not initialize FactoryBeans here: We need to leave all regular beans
 			// uninitialized to let the auto-proxy creator apply to them!
 			// 不要在这里初始化 FactoryBeans：我们需要让所有常规 Bean 都未初始化，以便让自动代理创建者应用于它们！
-			// 获取所有Advisor类型的BeanNames
+			// 1. 获取所有Advisor类型的BeanNames
 			advisorNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 					this.beanFactory, Advisor.class, true, false);
 			this.cachedAdvisorBeanNames = advisorNames;
@@ -101,7 +102,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 				}
 				else {
 					try {
-						// 创建advisor并添加到返回集合中
+						// 2. 创建advisor并添加到返回集合中
 						advisors.add(this.beanFactory.getBean(name, Advisor.class));
 					}
 					catch (BeanCreationException ex) {

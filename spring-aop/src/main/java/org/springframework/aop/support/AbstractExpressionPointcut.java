@@ -42,8 +42,8 @@ public abstract class AbstractExpressionPointcut implements ExpressionPointcut, 
 	private String location;
 
 	/**
-	 * @Advice注解 value属性值
-	 * 切点表达式
+	 * -- @Aspect注解的value属性值的 () 里面的内容
+	 * 如pointCut()
 	 */
 	@Nullable
 	private String expression;
@@ -88,7 +88,7 @@ public abstract class AbstractExpressionPointcut implements ExpressionPointcut, 
 	 * Called when a new pointcut expression is set.
 	 * The expression should be parsed at this point if possible.
 	 * <p>This implementation is empty.
-	 *
+	 * --
 	 * 在设置新的切入点表达式时调用。如果可能，此时应分析表达式。
 	 * 此实现为空。
 	 *

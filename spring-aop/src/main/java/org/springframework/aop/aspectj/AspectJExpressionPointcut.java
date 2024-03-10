@@ -91,6 +91,9 @@ import org.springframework.util.StringUtils;
 public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		implements ClassFilter, IntroductionAwareMethodMatcher, BeanFactoryAware {
 
+	/**
+	 * 	AspectJ 支持的不同类型的切入原语的枚举。
+ 	 */
 	private static final Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<>();
 
 	static {
@@ -201,13 +204,18 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	/**
 	 * Check whether this pointcut is ready to match,
 	 * lazily building the underlying AspectJ pointcut expression.
+	 * 检查此切入点是否准备好匹配，懒惰地构建底层 AspectJ 切入表达式。
+	 *
+	 * @return PointcutExpressionImpl
 	 */
 	private PointcutExpression obtainPointcutExpression() {
 		if (getExpression() == null) {
 			throw new IllegalStateException("Must set property 'expression' before attempting to match");
 		}
 		if (this.pointcutExpression == null) {
+			// 获取类加载器
 			this.pointcutClassLoader = determinePointcutClassLoader();
+			// 获取切点表达式信息
 			this.pointcutExpression = buildPointcutExpression(this.pointcutClassLoader);
 		}
 		return this.pointcutExpression;
@@ -215,6 +223,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	/**
 	 * Determine the ClassLoader to use for pointcut evaluation.
+	 * 确定要用于切点计算的 ClassLoader
 	 */
 	@Nullable
 	private ClassLoader determinePointcutClassLoader() {
@@ -229,14 +238,21 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	/**
 	 * Build the underlying AspectJ pointcut expression.
+	 * 构建底层的 AspectJ 切入表达式。
 	 */
 	private PointcutExpression buildPointcutExpression(@Nullable ClassLoader classLoader) {
 		PointcutParser parser = initializePointcutParser(classLoader);
+		// 创建切入点参数
 		PointcutParameter[] pointcutParameters = new PointcutParameter[this.pointcutParameterNames.length];
 		for (int i = 0; i < pointcutParameters.length; i++) {
 			pointcutParameters[i] = parser.createPointcutParameter(
 					this.pointcutParameterNames[i], this.pointcutParameterTypes[i]);
 		}
+		/**
+		 * @param expression 原始的字符串类型的切点表达式
+		 * @param inScope 切面类
+		 * @param formalParameters 切入点表达式参数
+		 */
 		return parser.parsePointcutExpression(replaceBooleanOperators(resolveExpression()),
 				this.pointcutDeclarationScope, pointcutParameters);
 	}
@@ -249,11 +265,13 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	/**
 	 * Initialize the underlying AspectJ pointcut parser.
+	 * 初始化底层的 AspectJ 切点解析器。
 	 */
 	private PointcutParser initializePointcutParser(@Nullable ClassLoader classLoader) {
 		PointcutParser parser = PointcutParser
 				.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(
 						SUPPORTED_PRIMITIVES, classLoader);
+		// 扩展了 bean 匹配的表达式
 		parser.registerPointcutDesignatorHandler(new BeanPointcutDesignatorHandler());
 		return parser;
 	}
@@ -304,6 +322,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	@Override
 	public boolean matches(Method method, Class<?> targetClass, boolean hasIntroductions) {
+		// 解析节点表达式
 		obtainPointcutExpression();
 		ShadowMatch shadowMatch = getTargetShadowMatch(method, targetClass);
 
