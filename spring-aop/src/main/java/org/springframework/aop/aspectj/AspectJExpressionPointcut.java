@@ -93,7 +93,10 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	/**
 	 * 	AspectJ 支持的不同类型的切入原语的枚举。
- 	 */
+	 * 	Spring支持的AspectJ的切点表达式一共有10种（加上后面的自己的Bean方式一共11种）
+	 *  AspectJ框架本省支持的非常非常多，详解枚举类：org.aspectj.weaver.tools.PointcutPrimitive
+	 *
+	 */
 	private static final Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<>();
 
 	static {
@@ -122,12 +125,19 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 
 	private Class<?>[] pointcutParameterTypes = new Class<?>[0];
 
+	/**
+	 * 它持有BeanFactory 的引用，但是允许为null，表示它可以脱离容器也能够正常工作
+	 */
 	@Nullable
 	private BeanFactory beanFactory;
 
 	@Nullable
 	private transient ClassLoader pointcutClassLoader;
 
+	/**
+	 * org.aspectj.weaver.tools.PointcutExpression 看路径可得知是AspectJ的类
+	 * 它是由org.aspectj.weaver.tools.PointcutParser#parsePointcutExpression从字符串表达式解析出来
+ 	 */
 	@Nullable
 	private transient PointcutExpression pointcutExpression;
 
@@ -187,13 +197,20 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		this.beanFactory = beanFactory;
 	}
 
-
+	/**
+	 * 返回他本身
+	 * @return
+	 */
 	@Override
 	public ClassFilter getClassFilter() {
 		obtainPointcutExpression();
 		return this;
 	}
 
+	/**
+	 * 返回他本身
+	 * @return
+	 */
 	@Override
 	public MethodMatcher getMethodMatcher() {
 		obtainPointcutExpression();
@@ -253,6 +270,8 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		 * @param inScope 切面类
 		 * @param formalParameters 切入点表达式参数
 		 */
+
+		// 解析切点表达式
 		return parser.parsePointcutExpression(replaceBooleanOperators(resolveExpression()),
 				this.pointcutDeclarationScope, pointcutParameters);
 	}
@@ -266,6 +285,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	/**
 	 * Initialize the underlying AspectJ pointcut parser.
 	 * 初始化底层的 AspectJ 切点解析器。
+	 * 初始化一个Pointcut的解析器。我们发现最后一行，新注册了一个BeanPointcutDesignatorHandler  它是用来处理Spring自己支持的bean() 的切点表达式的
 	 */
 	private PointcutParser initializePointcutParser(@Nullable ClassLoader classLoader) {
 		PointcutParser parser = PointcutParser
@@ -282,6 +302,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	 * write "and" as "&&" (though {@code &amp;&amp;} will work).
 	 * <p>We also allow "and" between two pointcut sub-expressions.
 	 * <p>This method converts back to {@code &&} for the AspectJ pointcut parser.
+	 * 由此可见，不仅支持写&& ||  !这种，也支持 and or not这种写法
 	 */
 	private String replaceBooleanOperators(String pcExpr) {
 		String result = StringUtils.replace(pcExpr, " and ", " && ");
@@ -298,6 +319,11 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		return obtainPointcutExpression();
 	}
 
+	/**
+	 * 这是ClassFilter 匹配类。借助的PointcutExpression#couldMatchJoinPointsInType 去匹配
+	 * @param targetClass the candidate target class
+	 * @return
+	 */
 	@Override
 	public boolean matches(Class<?> targetClass) {
 		PointcutExpression pointcutExpression = obtainPointcutExpression();
@@ -320,6 +346,15 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		return false;
 	}
 
+	/**
+	 *  MethodMatcher 匹配方法，借助的PointcutExpression和ShadowMatch去匹配的
+	 * @param method the candidate method -- 候选方法
+	 * @param targetClass the target class -- 目标类
+	 * @param hasIntroductions {@code true} if the object on whose behalf we are
+	 * asking is the subject on one or more introductions; {@code false} otherwise
+	 *                                     -- 如果我们询问的对象是一个或多个介绍的主题，则为true；否则为false
+	 * @return
+	 */
 	@Override
 	public boolean matches(Method method, Class<?> targetClass, boolean hasIntroductions) {
 		// 解析节点表达式
@@ -329,6 +364,8 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 		// Special handling for this, target, @this, @target, @annotation
 		// in Spring - we can optimize since we know we have exactly this class,
 		// and there will never be matching subclass at runtime.
+		// 在 Spring 中对 this、target、@this、@target @annotation 进行特殊处理 - 我们可以优化，因为我们知道我们正好有这个类，
+		// 并且在运行时永远不会有匹配的子类。
 		if (shadowMatch.alwaysMatches()) {
 			return true;
 		}
@@ -344,6 +381,8 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 			// involved in the test (this, target, at_this, at_target, at_annotation) then
 			// we say this is not a match as in Spring there will never be a different
 			// runtime subtype.
+			// 也许返回一个匹配测试 - 如果测试中涉及任何子类型敏感变量（this、target、at_this、at_target、at_annotation），
+			// 那么我们说这不是一个匹配，因为在 Spring 中永远不会有不同的运行时子类型。
 			RuntimeTestWalker walker = getRuntimeTestWalker(shadowMatch);
 			return (!walker.testsSubtypeSensitiveVars() || walker.testTargetInstanceOfResidue(targetClass));
 		}
