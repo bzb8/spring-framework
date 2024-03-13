@@ -19,6 +19,7 @@ public class MyInvocationHandler implements InvocationHandler {
     }
 
 	public static void main( String[] args ) {
+		System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 		Game game = (Game) Proxy.newProxyInstance(
 				MyInvocationHandler.class.getClassLoader(),
 				new Class<?>[]{Game.class},

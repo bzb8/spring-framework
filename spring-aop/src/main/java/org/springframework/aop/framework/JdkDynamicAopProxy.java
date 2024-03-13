@@ -63,6 +63,8 @@ import org.springframework.util.ClassUtils;
  * 只要所有 Advisor（包括 Advice 和 Pointcut）和 TargetSource 都是可序列化的，代理就是可序列化的。
  * --
  * 采用jdk动态代理的方式创建代理对象，并处理代理对象的所有方法调用。
+ * --
+ * 它自己实现了InvocationHandler，处理器就是它自己，所以它会实现invoke方法
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -96,6 +98,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	/**
 	 * Config used to configure this proxy.
 	 * 用于配置此代理的配置信息。
+	 * 保存当前AOP代理所有的配置信息  包括所有的增强器等等
 	 */
 	private final AdvisedSupport advised;
 
@@ -127,11 +130,21 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	 */
 	public JdkDynamicAopProxy(AdvisedSupport config) throws AopConfigException {
 		Assert.notNull(config, "AdvisedSupport must not be null");
+		// 必须有至少一个增强器 或者 目标实例,否则抛错
 		if (config.getAdvisorCount() == 0 && config.getTargetSource() == AdvisedSupport.EMPTY_TARGET_SOURCE) {
 			throw new AopConfigException("No advisors and no TargetSource specified");
 		}
 		this.advised = config;
 		// 根据advised的信息获取代理需要被代理的所有接口列表
+		// 最终Proxy的接口就是这里返回的所有接口（除了自己定义的接口，还有Spring默认的一些接口）
+		// 大致过程如下：
+		// 1、获取Target对象自己实现的所有接口
+		// 2、是否添加`SpringProxy`这个接口：目标对象实现过就不添加了，没实现过就添加true
+		// 3、是否新增`Adviced`接口，注意不是Advice通知接口。 实现过就不实现了，没实现过并且advised.isOpaque()=false就添加（默认是会添加的）
+		// 4、是否新增DecoratingProxy接口。传入的参数decoratingProxy为true，并且没实现过就添加（显然这里，首次进来是会添加的）
+		// 5、代理类的接口一共是目标对象的接口+上面三个接口SpringProxy、Advised、DecoratingProxy（SpringProxy是个标记接口而已，其余的接口都有对应的方法的）
+		// DecoratingProxy 这个接口Spring4.3后才提供
+
 		this.proxiedInterfaces = AopProxyUtils.completeProxiedInterfaces(this.advised, true);
 		// 查找被代理的接口中是否定义了equals、hashCode方法
 		findDefinedEqualsAndHashCodeMethods(this.proxiedInterfaces);
@@ -146,6 +159,9 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 		return getProxy(ClassUtils.getDefaultClassLoader());
 	}
 
+	/**
+	 * 真正创建JDK动态代理实例的地方
+	 */
 	@Override
 	public Object getProxy(@Nullable ClassLoader classLoader) {
 		if (logger.isTraceEnabled()) {
@@ -227,6 +243,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	 * {@code InvocableHandler.invoke} 的实现。
 	 * 调用者将准确地看到目标抛出的异常，除非钩子方法抛出异常。
 	 * 当在程序中调用代理对象的任何方法，最终都会被下面这个invoke方法处理
+	 * 这部分代码和采用CGLIB的大部分逻辑都是一样的
 	 */
 	@Override
 	@Nullable
@@ -242,7 +259,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 
 		// 下面进入代理方法的处理阶段
 		try {
-			// 处理equals方法：被代理的接口中没有定义equals方法 && 当前调用是equals方法
+			// 处理equals方法：被代理的接口中没有定义equals方法 && 当前调用是equals方法, 则调用AOP这里的实现，hashCode同理
 			if (!this.equalsDefined && AopUtils.isEqualsMethod(method)) {
 				// The target does not implement the equals(Object) method itself.
 				// 目标本身不实现 equals(Object) 方法。
@@ -259,9 +276,10 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			 * 方法来源于 DecoratingProxy 接口，这个接口中定义了一个方法
 			 * 用来获取原始的被代理的目标类，主要是用在嵌套代理的情况下（所谓嵌套代理：代理对象又被作为目标对象进行了代理）
 			 */
+			// DecoratingProxy的方法和Advised接口的方法  都是最终调用了this.advised去执行的
 			else if (method.getDeclaringClass() == DecoratingProxy.class) {
 				// There is only getDecoratedClass() declared -> dispatch to proxy config.
-				/// 仅声明了 getDecolatedClass() -> 分派到代理配置。
+				// 仅声明了 getDecolatedClass() -> 分派到代理配置。
 				// 调用AopProxyUtils工具类的方法，内部通过循环遍历的方式，找到最原始的被代理的目标类
 				return AopProxyUtils.ultimateTargetClass(this.advised);
 			}
@@ -298,6 +316,8 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 
 			// Get the interception chain for this method.
 			// 获取当前方法的拦截器链
+			// 代理对象在执行某个方法时，根据方法筛选出所有匹配的Advisor(通知advice+切入点pointcut),并适配成Interceptor,通过责任链模式 依此获取到
+			// 参见DefaultAdvisorChainFactory#getInterceptorsAndDynamicInterceptionAdvice方法
 			List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 
 			// Check whether we have any advice. If we don't, we can fall back on direct
@@ -376,7 +396,6 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	 * Equality means interfaces, advisors and TargetSource are equal.
 	 * <p>The compared object may be a JdkDynamicAopProxy instance itself
 	 * or a dynamic proxy wrapping a JdkDynamicAopProxy instance.
-	 *
 	 * Equality意味着接口、advisors和 TargetSource 是平等的。
 	 * 比较的对象可能是 JdkDynamicAopProxy 实例本身，也可能是包装 JdkDynamicAopProxy 实例的动态代理。
 	 */
