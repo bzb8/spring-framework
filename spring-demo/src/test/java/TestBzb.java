@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.framework.*;
 import org.springframework.lang.Nullable;
-import org.springframework.test.FundsService;
+import org.springframework.bzb.test.FundsService;
 
 import java.lang.reflect.Method;
 
