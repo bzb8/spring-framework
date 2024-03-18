@@ -30,6 +30,8 @@ import org.springframework.core.type.AnnotationMetadata;
  * Registers an auto proxy creator against the current {@link BeanDefinitionRegistry}
  * as appropriate based on an {@code @Enable*} annotation having {@code mode} and
  * {@code proxyTargetClass} attributes set to the correct values.
+ * 根据一个{@code @Enable*}注解中设置正确的{@code mode}和{@code proxyTargetClass}属性，
+ * 在当前的{@link BeanDefinitionRegistry}中注册一个自动代理创建器。
  *
  * @author Chris Beams
  * @since 3.1
@@ -58,6 +60,7 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 		boolean candidateFound = false;
+		// 遍历配置类（AppConfig）上的所有注解，找到有mode和proxyTargetClass的注解
 		Set<String> annTypes = importingClassMetadata.getAnnotationTypes();
 		for (String annType : annTypes) {
 			AnnotationAttributes candidate = AnnotationConfigUtils.attributesFor(importingClassMetadata, annType);
@@ -69,8 +72,10 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 			if (mode != null && proxyTargetClass != null && AdviceMode.class == mode.getClass() &&
 					Boolean.class == proxyTargetClass.getClass()) {
 				candidateFound = true;
+				// 注册aop InfrastructureAdvisorAutoProxyCreator
 				if (mode == AdviceMode.PROXY) {
 					AopConfigUtils.registerAutoProxyCreatorIfNecessary(registry);
+					// 强制设置proxyTargetClass=true后面使用cglib
 					if ((Boolean) proxyTargetClass) {
 						AopConfigUtils.forceAutoProxyCreatorToUseClassProxying(registry);
 						return;

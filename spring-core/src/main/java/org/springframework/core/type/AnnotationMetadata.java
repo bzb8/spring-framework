@@ -33,6 +33,7 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
  * AnnotationMetadata 是 Spring Framework 中的一个接口，用于表示类的注解元数据。它提供了一种方便的方式来检查和访问类上的注解信息。
  * 在 Spring 中，AnnotationMetadata 接口的实现类通常包括 StandardAnnotationMetadata 和 StandardMethodMetadata
  * 。这些实现类提供了对类和方法级别的注解元数据的访问。
+ * <p>导入类的注解元数据对象。该对象包含了目标类上所有注解及其属性值，用于分析和决定应该导入哪些类或包。一般为@Configuraiton配置类的元数据。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher

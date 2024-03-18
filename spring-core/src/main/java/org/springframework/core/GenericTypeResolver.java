@@ -106,6 +106,7 @@ public final class GenericTypeResolver {
 	 * @param clazz the target class to check against
 	 * @param genericIfc the generic interface or superclass to resolve the type argument from
 	 * @return the resolved type of the argument, or {@code null} if not resolvable
+	 * List<T>中的T
 	 */
 	@Nullable
 	public static Class<?> resolveTypeArgument(Class<?> clazz, Class<?> genericIfc) {

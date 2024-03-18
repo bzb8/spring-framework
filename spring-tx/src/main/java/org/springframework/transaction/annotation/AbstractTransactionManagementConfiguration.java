@@ -44,6 +44,9 @@ import org.springframework.util.CollectionUtils;
 @Configuration
 public abstract class AbstractTransactionManagementConfiguration implements ImportAware {
 
+	/**
+	 * Annotation attributes for {@code @EnableTransactionManagement}.
+	 */
 	@Nullable
 	protected AnnotationAttributes enableTx;
 

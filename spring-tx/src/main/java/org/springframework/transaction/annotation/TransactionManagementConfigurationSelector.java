@@ -26,6 +26,7 @@ import org.springframework.util.ClassUtils;
  * Selects which implementation of {@link AbstractTransactionManagementConfiguration}
  * should be used based on the value of {@link EnableTransactionManagement#mode} on the
  * importing {@code @Configuration} class.
+ * 根据EnableTransactionManagement的mode值选择应该使用AbstractTransactionManagementConfiguration的哪个实现。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -47,6 +48,7 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 	protected String[] selectImports(AdviceMode adviceMode) {
 		switch (adviceMode) {
 			case PROXY:
+				// 向容器中注入AutoProxyRegistrar和ProxyTransactionManagementConfiguration
 				return new String[] {AutoProxyRegistrar.class.getName(),
 						ProxyTransactionManagementConfiguration.class.getName()};
 			case ASPECTJ:
