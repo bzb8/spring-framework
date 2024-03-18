@@ -123,6 +123,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 		this.targetClass = targetClass;
 		// 获取桥接方法，关于什么是桥接方法，比较简单，百度一下，这里不做说明
 		this.method = BridgeMethodResolver.findBridgedMethod(method);
+		// 对参数进行适配
 		this.arguments = AopProxyUtils.adaptArgumentsIfNecessary(method, arguments);
 		this.interceptorsAndDynamicMethodMatchers = interceptorsAndDynamicMethodMatchers;
 	}
@@ -170,11 +171,14 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	public Object proceed() throws Throwable {
 		// We start with an index of -1 and increment early.
 		// 拦截器都执行完毕之后，通过反射调用目标对象中的方法
+		// currentInterceptorIndex初始值为-1，如果执行到链条的末尾 则直接调用连接点方法 即 直接调用目标方法
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
+			// 调用了目标方法
 			return invokeJoinpoint();
 		}
 
-		//获取++this.currentInterceptorIndex指定的拦截器
+		// 获取++this.currentInterceptorIndex指定的拦截器
+		// currentInterceptorIndex +1，且获取集合元素MethodInterceptor
 		Object interceptorOrInterceptionAdvice =
 				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
 		// 判断拦截器是否是InterceptorAndDynamicMethodMatcher，这种表示是动态拦截器，
@@ -188,6 +192,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 			// 判断动态拦截器是否需要执行
 			if (dm.methodMatcher.matches(this.method, targetClass, this.arguments)) {
 				// 执行当前拦截器的调用
+				// this透传，这是递归调用的核心
 				return dm.interceptor.invoke(this);
 			}
 			else {
@@ -208,11 +213,14 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	/**
 	 * Invoke the joinpoint using reflection.
 	 * Subclasses can override this to use custom invocation.
+	 * 使用反射调用连接点。子类可以重写它以使用自定义调用。
+	 *
 	 * @return the return value of the joinpoint
 	 * @throws Throwable if invoking the joinpoint resulted in an exception
 	 */
 	@Nullable
 	protected Object invokeJoinpoint() throws Throwable {
+		// 此处传入的是target，而不能是proxy，否则进入死循环
 		return AopUtils.invokeJoinpointUsingReflection(this.target, this.method, this.arguments);
 	}
 

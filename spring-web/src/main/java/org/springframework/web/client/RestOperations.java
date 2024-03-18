@@ -32,6 +32,7 @@ import org.springframework.lang.Nullable;
  * Interface specifying a basic set of RESTful operations.
  * Implemented by {@link RestTemplate}. Not often used directly, but a useful
  * option to enhance testability, as it can easily be mocked or stubbed.
+ * 接口规定了一组基本的RESTful操作。由{@link RestTemplate}实现。通常不直接使用，但作为增强可测试性的有用选项，因为它可以很容易地被模拟或存根化。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
@@ -80,6 +81,8 @@ public interface RestOperations {
 	 * Retrieve an entity by doing a GET on the specified URL.
 	 * The response is converted and stored in an {@link ResponseEntity}.
 	 * <p>URI Template variables are expanded using the given URI variables, if any.
+	 * 通过对指定 URL 执行 GET 来检索实体。响应被转换并存储在ResponseEntity中。
+	 * URI 模板变量使用给定的 URI 变量（如果有）进行扩展
 	 * @param url the URL
 	 * @param responseType the type of the return value
 	 * @param uriVariables the variables to expand the template

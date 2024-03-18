@@ -62,6 +62,7 @@ public abstract class AbstractClientHttpRequest implements ClientHttpRequest {
 
 	@Override
 	public final ClientHttpResponse execute() throws IOException {
+		// execute方法前置校验executed这个flag，executeInternal执行完后打了个true的标记。所以一个ClientHttpRequest将只能被执行一次。
 		assertNotExecuted();
 		ClientHttpResponse result = executeInternal(this.headers);
 		this.executed = true;

@@ -37,6 +37,8 @@ import org.springframework.util.MultiValueMap;
  * String values. Contains convenience getters for all components. Effectively similar
  * to {@link java.net.URI}, but with more powerful encoding options and support for
  * URI template variables.
+ * 表示URI组件的不可变集合，将组件类型映射到字符串值。包含所有组件的便利getter方法。
+ * 在功能上类似于{@link java.net.URI}，但具有更强大的编码选项和对URI模板变量的支持。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
@@ -47,7 +49,11 @@ import org.springframework.util.MultiValueMap;
 @SuppressWarnings("serial")
 public abstract class UriComponents implements Serializable {
 
-	/** Captures URI template variable names. */
+	/**
+	 * Captures URI template variable names.
+	 * 捕获URI模板变量名
+	 * 匹配大括号里面非/开头的变量名
+	 */
 	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
 
@@ -153,8 +159,10 @@ public abstract class UriComponents implements Serializable {
 	 * Replace all URI template variables with the values from a given map.
 	 * <p>The given map keys represent variable names; the corresponding values
 	 * represent variable values. The order of variables is not significant.
-	 * @param uriVariables the map of URI variables
-	 * @return the expanded URI components
+	 * 将所有URI模板变量替换为给定映射中的值。
+	 * 给定的映射键表示变量名；相应的值表示变量值。变量的顺序不重要。
+	 * @param uriVariables the map of URI variables -- URI变量的映射
+	 * @return the expanded URI components -- 扩展后的URI组件
 	 */
 	public final UriComponents expand(Map<String, ?> uriVariables) {
 		Assert.notNull(uriVariables, "'uriVariables' must not be null");
@@ -164,6 +172,8 @@ public abstract class UriComponents implements Serializable {
 	/**
 	 * Replace all URI template variables with the values from a given array.
 	 * <p>The given array represents variable values. The order of variables is significant.
+	 * 替换所有URI模板变量为给定数组中的值。
+	 * 给定数组表示变量值。变量的顺序很重要。
 	 * @param uriVariableValues the URI variable values
 	 * @return the expanded URI components
 	 */
@@ -186,6 +196,7 @@ public abstract class UriComponents implements Serializable {
 	/**
 	 * Replace all URI template variables with the values from the given {@link
 	 * UriTemplateVariables}.
+	 * 真正的expand方法，其实还是子类来实现的
 	 * @param uriVariables the URI template values
 	 * @return the expanded URI components
 	 */
@@ -195,6 +206,7 @@ public abstract class UriComponents implements Serializable {
 	 * Normalize the path removing sequences like "path/..". Note that
 	 * normalization is applied to the full path, and not to individual path
 	 * segments.
+	 * 规范化路径，删除“路径..”等序列。请注意，规范化适用于完整路径，而不是单个路径段。
 	 * @see org.springframework.util.StringUtils#cleanPath(String)
 	 */
 	public abstract UriComponents normalize();
@@ -206,6 +218,10 @@ public abstract class UriComponents implements Serializable {
 	 * characters, for example if URI variables have not been expanded or if
 	 * encoding has not been applied via {@link UriComponentsBuilder#encode()}
 	 * or {@link #encode()}.
+	 * 连接所有URI组件以返回完全格式的URI字符串。
+	 * 连接所有URI组件以返回完整的URI字符串。
+	 * <p>此方法相当于简单地连接当前URI组件的字符串，因此结果可能包含非法的URI字符，
+	 * 例如如果URI变量尚未扩展或者如果未通过{@link UriComponentsBuilder#encode()}或{@link #encode()}应用编码。
 	 */
 	public abstract String toUriString();
 

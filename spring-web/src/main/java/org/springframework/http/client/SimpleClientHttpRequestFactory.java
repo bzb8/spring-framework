@@ -142,9 +142,11 @@ public class SimpleClientHttpRequestFactory implements ClientHttpRequestFactory,
 
 	@Override
 	public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
+		// 通过URI生成了connection
 		HttpURLConnection connection = openConnection(uri.toURL(), this.proxy);
+		// 对Connection进行一些设置
 		prepareConnection(connection, httpMethod.name());
-
+		// 返回一个ClientHttpRequest的实现
 		if (this.bufferRequestBody) {
 			return new SimpleBufferingClientHttpRequest(connection, this.outputStreaming);
 		}

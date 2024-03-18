@@ -54,11 +54,13 @@ public abstract class AbstractRegexpMethodPointcut extends StaticMethodMatcherPo
 
 	/**
 	 * Regular expressions to match.
+	 * 匹配的正则表达式。如.*test.* 第一个.*表示所有路径，第二个.*表示的所有方法名，get表示以get开始的方法
 	 */
 	private String[] patterns = new String[0];
 
 	/**
 	 * Regular expressions <strong>not</strong> to match.
+	 * 排除的正则表达式
 	 */
 	private String[] excludedPatterns = new String[0];
 
@@ -75,6 +77,7 @@ public abstract class AbstractRegexpMethodPointcut extends StaticMethodMatcherPo
 	/**
 	 * Set the regular expressions defining methods to match.
 	 * Matching will be the union of all these; if any match, the pointcut matches.
+	 * 设置要匹配的定义方法的正则表达式。匹配将是所有这些的并集；如果有匹配，则切入点匹配。
 	 * @see #setPattern
 	 */
 	public void setPatterns(String... patterns) {
@@ -128,6 +131,7 @@ public abstract class AbstractRegexpMethodPointcut extends StaticMethodMatcherPo
 	 * Try to match the regular expression against the fully qualified name
 	 * of the target class as well as against the method's declaring class,
 	 * plus the name of the method.
+	 * 尝试将正则表达式与目标类的完全限定名称以及方法的声明类以及方法的名称进行匹配。
 	 */
 	@Override
 	public boolean matches(Method method, Class<?> targetClass) {
@@ -138,13 +142,16 @@ public abstract class AbstractRegexpMethodPointcut extends StaticMethodMatcherPo
 
 	/**
 	 * Match the specified candidate against the configured patterns.
+	 * 将指定的候选者与配置的模式进行匹配。
 	 * @param signatureString "java.lang.Object.hashCode" style signature
 	 * @return whether the candidate matches at least one of the specified patterns
 	 */
 	protected boolean matchesPattern(String signatureString) {
 		for (int i = 0; i < this.patterns.length; i++) {
+			// 如果给定的正则表达式匹配的话
 			boolean matched = matches(signatureString, i);
 			if (matched) {
+				// 只要有一个排除的正则表达式不匹配就返回false
 				for (int j = 0; j < this.excludedPatterns.length; j++) {
 					boolean excluded = matchesExclusion(signatureString, j);
 					if (excluded) {
@@ -180,8 +187,9 @@ public abstract class AbstractRegexpMethodPointcut extends StaticMethodMatcherPo
 
 	/**
 	 * Does the pattern at the given index match the given String?
-	 * @param pattern the {@code String} pattern to match
-	 * @param patternIndex index of pattern (starting from 0)
+	 * 给定索引处的模式是否与给定字符串匹配？
+	 * @param pattern the {@code String} pattern to match -- 要匹配的模式
+	 * @param patternIndex index of pattern (starting from 0) -- 模式索引（从0开始）
 	 * @return {@code true} if there is a match, {@code false} otherwise
 	 */
 	protected abstract boolean matches(String pattern, int patternIndex);

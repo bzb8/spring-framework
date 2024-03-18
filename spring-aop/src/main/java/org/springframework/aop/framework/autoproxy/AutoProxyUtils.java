@@ -135,7 +135,6 @@ public abstract class AutoProxyUtils {
 	 * Determine whether the given bean name indicates an "original instance"
 	 * according to {@link AutowireCapableBeanFactory#ORIGINAL_INSTANCE_SUFFIX},
 	 * skipping any proxy attempts for it.
-	 *
 	 * 根据 {@link AutowireCapableBeanFactory#ORIGINAL_INSTANCE_SUFFIX} 确定给定的 Bean 名称是否表示“原始实例”，以跳过对它的任何代理尝试。
 	 *
 	 * @param beanName the name of the bean
@@ -148,6 +147,7 @@ public abstract class AutoProxyUtils {
 				beanClass.getName().length() + AutowireCapableBeanFactory.ORIGINAL_INSTANCE_SUFFIX.length()) {
 			return false;
 		}
+		// beanName以它的beanClass类名开始 && beanName以.ORIGINAL结尾，则标识它是原始实例，跳过对它的代理尝试
 		return (beanName.startsWith(beanClass.getName()) &&
 				beanName.endsWith(AutowireCapableBeanFactory.ORIGINAL_INSTANCE_SUFFIX));
 	}

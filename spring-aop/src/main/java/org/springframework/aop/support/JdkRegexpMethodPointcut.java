@@ -42,11 +42,13 @@ public class JdkRegexpMethodPointcut extends AbstractRegexpMethodPointcut {
 
 	/**
 	 * Compiled form of the patterns.
+	 * 相当于把正则字符串，Pattern.compile()成正则对象
 	 */
 	private Pattern[] compiledPatterns = new Pattern[0];
 
 	/**
 	 * Compiled form of the exclusion patterns.
+	 * 同上
 	 */
 	private Pattern[] compiledExclusionPatterns = new Pattern[0];
 
@@ -70,6 +72,9 @@ public class JdkRegexpMethodPointcut extends AbstractRegexpMethodPointcut {
 	/**
 	 * Returns {@code true} if the {@link Pattern} at index {@code patternIndex}
 	 * matches the supplied candidate {@code String}.
+	 * 如果索引 {@code patternIndex} 处的 {@link Pattern} 与提供的候选 {@code String} 匹配，则返回 {@code true}。
+	 * --
+	 * 调用预编译的正则表达式匹配给定的pattern，匹配的话就返回true，否则返回false
 	 */
 	@Override
 	protected boolean matches(String pattern, int patternIndex) {

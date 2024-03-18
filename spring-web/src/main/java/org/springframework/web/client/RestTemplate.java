@@ -72,6 +72,8 @@ import org.springframework.web.util.UriTemplateHandler;
  * offers templates for common scenarios by HTTP method, in addition to the
  * generalized {@code exchange} and {@code execute} methods that support of
  * less frequent cases.
+ * RestTemplate，它是一个用于执行HTTP请求的同步客户端，通过简单的模板方法API暴露了基础HTTP客户端库（如JDK的{@code HttpURLConnection}、
+ * Apache HttpComponents等）的功能。RestTemplate提供了针对常见场景的HTTP方法的模板，另外还提供了支持较少见情况的通用{@code exchange}和{@code execute}方法。
  *
  * <p>RestTemplate is typically used as a shared component. However, its
  * configuration does not support concurrent modification, and as such its
@@ -79,11 +81,15 @@ import org.springframework.web.util.UriTemplateHandler;
  * multiple, differently configured RestTemplate instances on startup. Such
  * instances may use the same the underlying {@link ClientHttpRequestFactory}
  * if they need to share HTTP client resources.
+ * RestTemplate通常被用作一个共享组件。但是，其配置不支持并发修改，因此通常在启动时准备好其配置。如果需要，您可以在启动时创建多个配置不同的RestTemplate实例。
+ * 这些实例可以共享相同的底层{@link ClientHttpRequestFactory}，如果它们需要共享HTTP客户端资源的话。
  *
  * <p><strong>NOTE:</strong> As of 5.0 this class is in maintenance mode, with
  * only minor requests for changes and bugs to be accepted going forward. Please,
  * consider using the {@code org.springframework.web.reactive.client.WebClient}
  * which has a more modern API and supports sync, async, and streaming scenarios.
+ * 请注意：从5.0版本开始，这个类处于维护模式，只接受对更改和错误的次要请求。
+ * 请考虑使用{@code org.springframework.web.reactive.client.WebClient}，它具有更现代的API，并支持同步、异步和流式场景。
  *
  * @author Arjen Poutsma
  * @author Brian Clozel
@@ -103,6 +109,8 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 	 * Boolean flag controlled by a {@code spring.xml.ignore} system property that instructs Spring to
 	 * ignore XML, i.e. to not initialize the XML-related infrastructure.
 	 * <p>The default is "false".
+	 * 由spring.xml.ignore System属性控制的Boolean标志，该属性指示Spring忽略XML，即不要初始化与XML相关的基础结构。
+	 * 默认值为“假”。
 	 */
 	private static final boolean shouldIgnoreXml = SpringProperties.getFlag("spring.xml.ignore");
 
@@ -151,8 +159,10 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 	/**
 	 * Create a new instance of the {@link RestTemplate} using default settings.
 	 * Default {@link HttpMessageConverter HttpMessageConverters} are initialized.
+	 * 使用默认设置创建RestTemplate的新实例。默认的HttpMessageConverters已初始化。
 	 */
 	public RestTemplate() {
+		// 添加HttpMessageConverter的实现类，熟悉springmvc的话估计知道HttpMessageConverter。顾名思义，它就是用来转换http请求响应过程中的消息数据的。
 		this.messageConverters.add(new ByteArrayHttpMessageConverter());
 		this.messageConverters.add(new StringHttpMessageConverter());
 		this.messageConverters.add(new ResourceHttpMessageConverter(false));
@@ -200,6 +210,7 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 			this.messageConverters.add(new MappingJackson2CborHttpMessageConverter());
 		}
 
+		// uri模板处理器
 		this.uriTemplateHandler = initUriTemplateHandler();
 	}
 
@@ -361,9 +372,11 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 	@Override
 	public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Object... uriVariables)
 			throws RestClientException {
-
+		// 请求回调
 		RequestCallback requestCallback = acceptHeaderRequestCallback(responseType);
+		// 响应体抽取
 		ResponseExtractor<ResponseEntity<T>> responseExtractor = responseEntityExtractor(responseType);
+		// 核心执行逻辑
 		return nonNull(execute(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables));
 	}
 
@@ -712,8 +725,9 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 	@Nullable
 	public <T> T execute(String url, HttpMethod method, @Nullable RequestCallback requestCallback,
 			@Nullable ResponseExtractor<T> responseExtractor, Object... uriVariables) throws RestClientException {
-
+		// uri处理
 		URI expanded = getUriTemplateHandler().expand(url, uriVariables);
+		// 核心逻辑
 		return doExecute(expanded, method, requestCallback, responseExtractor);
 	}
 
@@ -761,11 +775,14 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 	 * Execute the given method on the provided URI.
 	 * <p>The {@link ClientHttpRequest} is processed using the {@link RequestCallback};
 	 * the response with the {@link ResponseExtractor}.
-	 * @param url the fully-expanded URL to connect to
-	 * @param method the HTTP method to execute (GET, POST, etc.)
-	 * @param requestCallback object that prepares the request (can be {@code null})
-	 * @param responseExtractor object that extracts the return value from the response (can be {@code null})
+	 * 在提供的URI上执行给定的方法。
+	 * <p>使用{@link RequestCallback}处理{@link ClientHttpRequest}；使用{@link ResponseExtractor}处理响应。
+	 * @param url the fully-expanded URL to connect to -- 完全展开的要连接的URL
+	 * @param method the HTTP method to execute (GET, POST, etc.) -- 要执行的HTTP方法（GET、POST等）
+	 * @param requestCallback object that prepares the request (can be {@code null}) -- 准备请求的对象（可以为{@code null}）
+	 * @param responseExtractor object that extracts the return value from the response (can be {@code null}) -- 从响应中提取返回值的对象（可以为{@code null}）
 	 * @return an arbitrary object, as returned by the {@link ResponseExtractor}
+	 * 由{@link ResponseExtractor}返回的任意对象
 	 */
 	@Nullable
 	protected <T> T doExecute(URI url, @Nullable HttpMethod method, @Nullable RequestCallback requestCallback,
@@ -775,12 +792,17 @@ public class RestTemplate extends InterceptingHttpAccessor implements RestOperat
 		Assert.notNull(method, "HttpMethod is required");
 		ClientHttpResponse response = null;
 		try {
+			// 生成请求
 			ClientHttpRequest request = createRequest(url, method);
 			if (requestCallback != null) {
+				// 设置header
 				requestCallback.doWithRequest(request);
 			}
+			// 执行请求，获取响应
 			response = request.execute();
+			// 处理响应
 			handleResponse(url, method, response);
+			// 获取响应体对象
 			return (responseExtractor != null ? responseExtractor.extractData(response) : null);
 		}
 		catch (IOException ex) {

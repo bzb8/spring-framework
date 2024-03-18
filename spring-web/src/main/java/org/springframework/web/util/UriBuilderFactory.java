@@ -20,6 +20,7 @@ package org.springframework.web.util;
  * Factory to create {@link UriBuilder} instances with shared configuration
  * such as a base URI, an encoding mode strategy, and others across all URI
  * builder instances created through a factory.
+ * 工厂用于创建具有共享配置（如基本URI、编码模式策略等）的{@link UriBuilder}实例，这些配置将应用于通过工厂创建的所有URI构建器实例。
  *
  * @author Rossen Stoyanchev
  * @since 5.0

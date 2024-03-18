@@ -53,7 +53,6 @@ public interface Joinpoint {
 	 * Proceed to the next interceptor in the chain.
 	 * <p>The implementation and the semantics of this method depends
 	 * on the actual joinpoint type (see the children interfaces).
-	 *
 	 * 继续处理链中的下一个拦截器。
 	 * 此方法的实现和语义取决于实际的连接点类型（请参阅子接口）。
 	 *

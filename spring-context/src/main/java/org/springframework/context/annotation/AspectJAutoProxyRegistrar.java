@@ -26,6 +26,9 @@ import org.springframework.core.type.AnnotationMetadata;
  * AnnotationAwareAspectJAutoProxyCreator} against the current {@link BeanDefinitionRegistry}
  * as appropriate based on a given @{@link EnableAspectJAutoProxy} annotation.
  *
+ * 根据给定的@{@link EnableAspectJAutoProxy}注释，根据当前的{@link BeanDefinitionRegistry}注册一个
+ * {@link org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator AnnotationAwareAspectJAutoProxyCreator}。
+ *
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1

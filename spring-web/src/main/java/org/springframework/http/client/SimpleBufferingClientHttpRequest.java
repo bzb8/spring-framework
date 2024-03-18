@@ -75,12 +75,14 @@ final class SimpleBufferingClientHttpRequest extends AbstractBufferingClientHttp
 		}
 		this.connection.connect();
 		if (this.connection.getDoOutput()) {
+			// 写到输出流上
 			FileCopyUtils.copy(bufferedOutput, this.connection.getOutputStream());
 		}
 		else {
 			// Immediately trigger the request in a no-output scenario as well
 			this.connection.getResponseCode();
 		}
+		// 响应一个ClientHttpResponse对象
 		return new SimpleClientHttpResponse(this.connection);
 	}
 

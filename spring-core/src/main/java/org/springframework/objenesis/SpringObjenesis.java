@@ -81,6 +81,11 @@ public class SpringObjenesis implements Objenesis {
 	 * <p>If the configured Objenesis instantiator strategy has been identified to not
 	 * work on the current JVM at all or if the "spring.objenesis.ignore" property has
 	 * been set to "true", this method returns {@code false}.
+	 * 这段代码是Java中的一部分，它定义了Objenesis类中的一个方法isWorthTrying。
+	 * 这个方法用于检查当前Objenesis实例是否适合用于尝试创建对象实例。
+	 * 如果发现配置的Objenesis实例化策略在当前JVM环境下无法正常工作，
+	 * 或者系统属性"spring.objenesis.ignore"被设置为了"true"，则该方法会返回false，表示不建议使用此实例进行实例化操作。
+	 * 反之，在其他情况下，该方法将返回true，意味着可以尝试使用此Objenesis实例来创建对象。
 	 */
 	public boolean isWorthTrying() {
 		return (this.worthTrying != Boolean.FALSE);

@@ -720,6 +720,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		public DynamicAdvisedInterceptor(AdvisedSupport advised) {
 			this.advised = advised;
 		}
+
 		/**
 		 * 这个方法是关键，用来处理代理对象中方法的调用
 		 */
@@ -812,6 +813,10 @@ class CglibAopProxy implements AopProxy, Serializable {
 	 */
 	private static class CglibMethodInvocation extends ReflectiveMethodInvocation {
 
+		/**
+		 * 生成 对方法的代理 的代理类。cglib用来生成代替Method对象的一个对象，使用MethodProxy比调用JDK自身的Method直接执行方法效率会有提升
+		 * 它有两个重要的方法：invoke和invokeSuper
+		 */
 		@Nullable
 		private final MethodProxy methodProxy;
 
@@ -821,7 +826,9 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 			super(proxy, target, method, arguments, targetClass, interceptorsAndDynamicMethodMatchers);
 
+			// 调用父类的构造  完成参数的初始化
 			// Only use method proxy for public methods not derived from java.lang.Object
+			// 仅对不是从 java.lang.Object 派生的公共方法使用方法代理
 			this.methodProxy = (isMethodProxyCompatible(method) ? methodProxy : null);
 		}
 
@@ -829,6 +836,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		@Nullable
 		public Object proceed() throws Throwable {
 			try {
+				// 调用父类ReflectiveMethodInvocation #proceed()
 				return super.proceed();
 			}
 			catch (RuntimeException ex) {
@@ -857,6 +865,8 @@ class CglibAopProxy implements AopProxy, Serializable {
 		 */
 		@Override
 		protected Object invokeJoinpoint() throws Throwable {
+			// 如果是public的方法，调用methodProxy去执行目标方法
+			// 否则直接执行method即可
 			if (this.methodProxy != null) {
 				try {
 					return this.methodProxy.invoke(this.target, this.arguments);
