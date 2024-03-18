@@ -27,6 +27,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * Strategy interface for converting from and to HTTP requests and responses.
+ * 用于在 HTTP 请求和响应之间进行转换的策略接口。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller

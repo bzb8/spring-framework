@@ -90,6 +90,8 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 	 * 在当前的 Bean 工厂中查找 @AspectJ 注解的 aspect bean，并返回到表示它们的 Spring AOP Advisors 列表。
 	 * 为每个 AspectJ advice方法创建一个 Spring Advisor。
 	 * 1. 只会解析一次，后续缓存；
+	 * --
+	 * 遍历工厂中所有的bean name，获取切面实例（标记了@Aspect注解的bean），并获取切面实例中的advice方法，构建advice，并缓存，返回所有的advisor
 	 *
 	 * @return the list of {@link org.springframework.aop.Advisor} beans
 	 * @see #isEligibleBean

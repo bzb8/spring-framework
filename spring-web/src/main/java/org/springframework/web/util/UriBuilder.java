@@ -26,14 +26,18 @@ import org.springframework.util.MultiValueMap;
 
 /**
  * Builder-style methods to prepare and expand a URI template with variables.
+ * 用于准备和扩展带有变量的 URI 模板的构建器样式方法。
  *
  * <p>Effectively a generalization of {@link UriComponentsBuilder} but with
  * shortcuts to expand directly into {@link URI} rather than
  * {@link UriComponents} and also leaving common concerns such as encoding
  * preferences, a base URI, and others as implementation concerns.
+ * 实际上是对{@link UriComponentsBuilder}的泛化，但提供了直接扩展为{@link URI}而不是{@link UriComponents}的快捷方式，
+ * 并将编码偏好、基本URI等常见问题留给实现来处理。
  *
  * <p>Typically obtained via {@link UriBuilderFactory} which serves as a central
  * component configured once and used to create many URLs.
+ * 通常通过{@link UriBuilderFactory}获得，后者作为一个配置一次的中央组件，用于创建多个URL。
  *
  * @author Rossen Stoyanchev
  * @since 5.0

@@ -221,9 +221,7 @@ public class AspectJExpressionPointcut extends AbstractExpressionPointcut
 	/**
 	 * Check whether this pointcut is ready to match,
 	 * lazily building the underlying AspectJ pointcut expression.
-	 * 检查此切入点是否准备好匹配，懒惰地构建底层 AspectJ 切入表达式。
-	 *
-	 * @return PointcutExpressionImpl
+	 * 检查此切入点是否已准备好匹配，延迟构建底层 AspectJ 切入点表达式
 	 */
 	private PointcutExpression obtainPointcutExpression() {
 		if (getExpression() == null) {

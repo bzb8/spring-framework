@@ -61,6 +61,7 @@ class ObjenesisCglibAopProxy extends CglibAopProxy {
 		Class<?> proxyClass = enhancer.createClass();
 		Object proxyInstance = null;
 
+		// true：用objenesis去new一个实例
 		if (objenesis.isWorthTrying()) {
 			try {
 				proxyInstance = objenesis.newInstance(proxyClass, enhancer.getUseCache());
@@ -70,7 +71,7 @@ class ObjenesisCglibAopProxy extends CglibAopProxy {
 						"falling back to regular proxy construction", ex);
 			}
 		}
-
+		// 如果proxyInstance还为null，再去拿到构造函数去new一个实例（指定参数的）
 		if (proxyInstance == null) {
 			// Regular instantiation via default constructor...
 			try {

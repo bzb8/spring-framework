@@ -23,16 +23,27 @@ import org.springframework.aop.MethodMatcher;
 /**
  * Convenient abstract superclass for static method matchers, which don't care
  * about arguments at runtime.
+ * 静态方法匹配器的方便抽象超类，它不关心运行时的参数。
  *
  * @author Rod Johnson
  */
 public abstract class StaticMethodMatcher implements MethodMatcher {
 
+	/**
+	 * 一直返回false，表示只会进行静态匹配
+	 */
 	@Override
 	public final boolean isRuntime() {
 		return false;
 	}
 
+	/**
+	 * 调用这个方法就抛异常，说明不让调用
+	 * @param method the candidate method
+	 * @param targetClass the target class
+	 * @param args arguments to the method
+	 * @return
+	 */
 	@Override
 	public final boolean matches(Method method, Class<?> targetClass, Object... args) {
 		// should never be invoked because isRuntime() returns false

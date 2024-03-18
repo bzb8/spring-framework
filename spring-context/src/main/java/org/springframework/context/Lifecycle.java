@@ -67,6 +67,7 @@ public interface Lifecycle {
 	 * <p>In the case of a container, this will propagate the start signal to all
 	 * components that apply.
 	 * @see SmartLifecycle#isAutoStartup()
+	 * 容器启动后调用
 	 */
 	void start();
 
@@ -84,6 +85,7 @@ public interface Lifecycle {
 	 * that apply.
 	 * @see SmartLifecycle#stop(Runnable)
 	 * @see org.springframework.beans.factory.DisposableBean#destroy()
+	 * 容器停止时调用
 	 */
 	void stop();
 
@@ -92,6 +94,9 @@ public interface Lifecycle {
 	 * <p>In the case of a container, this will return {@code true} only if <i>all</i>
 	 * components that apply are currently running.
 	 * @return whether the component is currently running
+	 * 检查此组件是否正在运行。
+	 * 1. 只有该方法返回false时，start方法才会被执行。
+	 * 2. 只有该方法返回true时，stop()方法才会被执行。
 	 */
 	boolean isRunning();
 

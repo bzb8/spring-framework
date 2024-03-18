@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * Defines methods for expanding a URI template with variables.
+ * 定义使用变量扩展 URI 模板的方法。
  *
  * @author Rossen Stoyanchev
  * @since 4.2
@@ -38,6 +39,7 @@ public interface UriTemplateHandler {
 
 	/**
 	 * Expand the given URI template with an array of URI variables.
+	 * 使用 URI 变量数组扩展给定的 URI 模板。
 	 * @param uriTemplate the URI template
 	 * @param uriVariables variable values
 	 * @return the created URI instance

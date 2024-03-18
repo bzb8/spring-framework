@@ -31,9 +31,11 @@ import org.springframework.util.StringUtils;
 /**
  * {@code UriBuilderFactory} that relies on {@link UriComponentsBuilder} for
  * the actual building of the URI.
+ * {@code UriBuilderFactory}依赖于{@link UriComponentsBuilder}来实际构建URI。
  *
  * <p>Provides options to create {@link UriBuilder} instances with a common
  * base URI, alternative encoding mode strategies, among others.
+ * 提供了选项来创建具有共同基本URI、替代编码模式策略等的{@link UriBuilder}实例。
  *
  * @author Rossen Stoyanchev
  * @since 5.0
@@ -54,6 +56,8 @@ public class DefaultUriBuilderFactory implements UriBuilderFactory {
 	/**
 	 * Default constructor without a base URI.
 	 * <p>The target address must be specified on each UriBuilder.
+	 * 没有基本 URI 的默认构造函数。
+	 * 必须在每个 UriBuilder 上指定目标地址
 	 */
 	public DefaultUriBuilderFactory() {
 		this.baseUri = null;
@@ -213,6 +217,7 @@ public class DefaultUriBuilderFactory implements UriBuilderFactory {
 		 * (within a given URI component type) characters, but not characters
 		 * with reserved meaning.
 		 * @see UriComponents#encode()
+		 * 首先展开URI变量，然后对生成的URI组件值进行编码，仅替换非ASCII字符和非法字符（在给定URI组件类型中），而不替换具有保留含义的字符。请参考UriComponents#encode()。
 		 */
 		URI_COMPONENT,
 

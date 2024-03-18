@@ -71,7 +71,6 @@ public interface MethodMatcher {
 	 * method returns {@code false}, no runtime check (i.e. no
 	 * {@link #matches(java.lang.reflect.Method, Class, Object[])} call)
 	 * will be made.
-	 *
 	 * 执行静态检查给定方法是否匹配。
 	 * 如果返回 {@code false} 或 {@link #isRuntime()} 方法返回 {@code false}，
 	 * 则不进行运行时检查（即没有 {@link #matches(java.lang.reflect.Method, Class, Object[]) 调用} 。

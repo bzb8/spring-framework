@@ -455,6 +455,8 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * 如果给定的 bean 不应被此后处理器考虑用于自动代理，子类应重写此方法以返回true。
 	 * 有时我们需要能够避免这种情况发生，例如，如果它会导致循环引用，或者是否需要保留现有的目标实例。此实现返回 {@code false}，
 	 * 除非 Bean 名称根据 {@code AutowireCapableBeanFactory} 约定指示“原始实例”。
+	 * --
+	 * 1. 缓存切面实例
 	 *
 	 * @param beanClass the class of the bean
 	 * @param beanName the name of the bean
@@ -507,7 +509,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * @param beanClass the class of the bean
 	 * @param beanName the name of the bean
 	 * @param specificInterceptors the set of interceptors that is
-	 * specific to this bean (may be empty, but not null) -- 特定于此 Bean 的拦截器集（可能为空，但不是null）
+	 * specific to this bean (may be empty, but not null) -- 特定于此 Bean 的拦截器集（可能为空，但不是null）,advisors
 	 * @param targetSource the TargetSource for the proxy,
 	 * already pre-configured to access the bean
 	 * @return the AOP proxy for the bean

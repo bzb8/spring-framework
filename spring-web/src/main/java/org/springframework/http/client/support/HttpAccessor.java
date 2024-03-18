@@ -36,10 +36,13 @@ import org.springframework.util.Assert;
  * Base class for {@link org.springframework.web.client.RestTemplate}
  * and other HTTP accessing gateway helpers, defining common properties
  * such as the {@link ClientHttpRequestFactory} to operate on.
+ * org.springframework.web.client.RestTemplate和其他 HTTP 访问网关帮助程序的基类，定义常见属性，例如要操作的ClientHttpRequestFactory。
  *
  * <p>Not intended to be used directly.
+ * 不建议直接使用
  *
  * <p>See {@link org.springframework.web.client.RestTemplate} for an entry point.
+ * 请参阅org.springframework.web.client.RestTemplate以获取入口点
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
