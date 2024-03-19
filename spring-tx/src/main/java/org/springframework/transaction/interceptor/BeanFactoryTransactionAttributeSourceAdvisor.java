@@ -34,6 +34,9 @@ import org.springframework.lang.Nullable;
 @SuppressWarnings("serial")
 public class BeanFactoryTransactionAttributeSourceAdvisor extends AbstractBeanFactoryPointcutAdvisor {
 
+	/**
+	 * AnnotationTransactionAttributeSource
+	 */
 	@Nullable
 	private TransactionAttributeSource transactionAttributeSource;
 
@@ -50,6 +53,7 @@ public class BeanFactoryTransactionAttributeSourceAdvisor extends AbstractBeanFa
 	 * Set the transaction attribute source which is used to find transaction
 	 * attributes. This should usually be identical to the source reference
 	 * set on the transaction interceptor itself.
+	 * 设置用于查找事物属性的事物属性源。这通常应与事务拦截器本身上设置的源引用相同。
 	 * @see TransactionInterceptor#setTransactionAttributeSource
 	 */
 	public void setTransactionAttributeSource(TransactionAttributeSource transactionAttributeSource) {

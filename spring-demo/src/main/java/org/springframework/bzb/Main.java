@@ -51,7 +51,7 @@ public class Main {
 	 * @param applicationContext
 	 */
 	private static void testTransaction(AnnotationConfigApplicationContext applicationContext) {
-		UserService userService = applicationContext.getBean(UserService.class);
+		UserService userService = applicationContext.getBean("bzbUserService", UserService.class);
 		Role role = new Role(2, "ROLE_BZB1");
 		userService.insertRole(role);
 	}

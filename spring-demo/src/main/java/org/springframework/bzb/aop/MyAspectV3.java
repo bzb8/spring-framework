@@ -17,7 +17,7 @@ import java.lang.reflect.Modifier;
 public class MyAspectV3 {
 
 	//定义一个切入点：指定哪些方法可以被切入（如果是别的类需要使用 请用该方法的全类名）
-	@Pointcut(value = "execution(public void org.springframework.aop.UserService.test())")
+	@Pointcut(value = "execution(public void org.springframework.bzb.aop.UserService.test())")
 	public void pointCut() {
 	}
 

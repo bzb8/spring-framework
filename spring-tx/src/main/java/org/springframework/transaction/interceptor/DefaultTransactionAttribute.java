@@ -37,7 +37,7 @@ import org.springframework.util.StringValueResolver;
  */
 @SuppressWarnings("serial")
 public class DefaultTransactionAttribute extends DefaultTransactionDefinition implements TransactionAttribute {
-
+	// 我们执行方法的描述符:包名+类名+方法名
 	@Nullable
 	private String descriptor;
 
@@ -135,6 +135,8 @@ public class DefaultTransactionAttribute extends DefaultTransactionDefinition im
 	 * Associate a qualifier value with this transaction attribute.
 	 * <p>This may be used for choosing a corresponding transaction manager
 	 * to process this specific transaction.
+	 * 将限定符值与此事务属性相关联。
+	 * 这可用于选择相应的事务管理器来处理此特定事务。
 	 * @since 3.0
 	 * @see #resolveAttributeStrings
 	 */
@@ -194,8 +196,10 @@ public class DefaultTransactionAttribute extends DefaultTransactionDefinition im
 	 * This is typically used for resolving "${...}" placeholders.
 	 * @param resolver the embedded value resolver to apply, if any
 	 * @since 5.3
+	 *
 	 */
 	public void resolveAttributeStrings(@Nullable StringValueResolver resolver) {
+		// 解析timeout
 		String timeoutString = this.timeoutString;
 		if (StringUtils.hasText(timeoutString)) {
 			if (resolver != null) {

@@ -86,10 +86,13 @@ public class AnnotationTransactionAttributeSource extends AbstractFallbackTransa
 	 * Create a custom AnnotationTransactionAttributeSource, supporting
 	 * public methods that carry the {@code Transactional} annotation
 	 * or the EJB3 {@link javax.ejb.TransactionAttribute} annotation.
+	 * 创建定制 AnnotationTransactionAttributeSource，支持携带 Transactional 注解或 EJB3 javax.ejb.TransactionAttribute 注解的公共方法。
 	 * @param publicMethodsOnly whether to support public methods that carry
 	 * the {@code Transactional} annotation only (typically for use
 	 * with proxy-based AOP), or protected/private methods as well
 	 * (typically used with AspectJ class weaving)
+	 *                          是否支持仅携带注解的 Transactional 公共方法（通常用于基于代理的 AOP），还是支持受保护/私有方法（通常用于 AspectJ 类编织）
+	 *
 	 */
 	public AnnotationTransactionAttributeSource(boolean publicMethodsOnly) {
 		this.publicMethodsOnly = publicMethodsOnly;

@@ -24,6 +24,8 @@ import org.springframework.aop.SpringProxy;
  * <p>{@link TransactionAttributeSourcePointcut} will ignore such existing
  * transactional proxies during AOP auto-proxying and therefore avoid
  * re-processing transaction metadata on them.
+ * 用于手动创建的事务代理的标记接口。
+ * TransactionAttributeSourcePointcut 将在 AOP 自动代理期间忽略此类现有事务代理，从而避免重新处理其上的事务元数据。
  *
  * @author Juergen Hoeller
  * @since 4.1.7

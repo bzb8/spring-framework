@@ -65,6 +65,7 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 	public TransactionInterceptor transactionInterceptor(TransactionAttributeSource transactionAttributeSource) {
 		TransactionInterceptor interceptor = new TransactionInterceptor();
 		interceptor.setTransactionAttributeSource(transactionAttributeSource);
+		// txManager = null
 		if (this.txManager != null) {
 			interceptor.setTransactionManager(this.txManager);
 		}

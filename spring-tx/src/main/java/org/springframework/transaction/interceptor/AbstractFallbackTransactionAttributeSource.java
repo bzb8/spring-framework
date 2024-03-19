@@ -81,6 +81,7 @@ public abstract class AbstractFallbackTransactionAttributeSource
 	 * Cache of TransactionAttributes, keyed by method on a specific target class.
 	 * <p>As this base class is not marked Serializable, the cache will be recreated
 	 * after serialization - provided that the concrete subclass is Serializable.
+	 * 类方法缓存键 -> 事物属性
 	 */
 	private final Map<Object, TransactionAttribute> attributeCache = new ConcurrentHashMap<>(1024);
 
@@ -102,11 +103,13 @@ public abstract class AbstractFallbackTransactionAttributeSource
 	@Override
 	@Nullable
 	public TransactionAttribute getTransactionAttribute(Method method, @Nullable Class<?> targetClass) {
+		// 判断method所在的class是不是Object类型
 		if (method.getDeclaringClass() == Object.class) {
 			return null;
 		}
 
 		// First, see if we have a cached value.
+		// 首先，查看我们是否有缓存值。
 		Object cacheKey = getCacheKey(method, targetClass);
 		TransactionAttribute cached = this.attributeCache.get(cacheKey);
 		if (cached != null) {
@@ -121,21 +124,27 @@ public abstract class AbstractFallbackTransactionAttributeSource
 		}
 		else {
 			// We need to work it out.
+			// 查找我们的事务注解
 			TransactionAttribute txAttr = computeTransactionAttribute(method, targetClass);
 			// Put it in the cache.
+			// 若解析出来的事务注解属性为空
 			if (txAttr == null) {
+				// 往缓存中存放空事务注解属性
 				this.attributeCache.put(cacheKey, NULL_TRANSACTION_ATTRIBUTE);
 			}
 			else {
+				// 我们执行方法的描述符:包名+类名+方法名
 				String methodIdentification = ClassUtils.getQualifiedMethodName(method, targetClass);
 				if (txAttr instanceof DefaultTransactionAttribute) {
 					DefaultTransactionAttribute dta = (DefaultTransactionAttribute) txAttr;
 					dta.setDescriptor(methodIdentification);
+					// 解析事物属性中的占位符
 					dta.resolveAttributeStrings(this.embeddedValueResolver);
 				}
 				if (logger.isTraceEnabled()) {
 					logger.trace("Adding transactional method '" + methodIdentification + "' with attribute: " + txAttr);
 				}
+				// 加入缓存
 				this.attributeCache.put(cacheKey, txAttr);
 			}
 			return txAttr;
@@ -160,30 +169,37 @@ public abstract class AbstractFallbackTransactionAttributeSource
 	 * <p>As of 4.1.8, this method can be overridden.
 	 * @since 4.1.8
 	 * @see #getTransactionAttribute
+	 * 确定此方法调用的事务属性。
+	 * 如果未找到方法属性，则默认为类的事务属性
 	 */
 	@Nullable
 	protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class<?> targetClass) {
 		// Don't allow non-public methods, as configured.
+		// 首先判断方法是否是public，默认是支持public的
 		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {
 			return null;
 		}
 
 		// The method may be on an interface, but we need attributes from the target class.
 		// If the target class is null, the method will be unchanged.
+		// 该方法可能位于接口上，但我们需要来自目标类的属性。如果目标类为 null，则方法将保持不变。
+		// method代表接口中的方法，specificMethod代表实现类中的方法
 		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
 
 		// First try is the method in the target class.
+		// 优先方法上解析的事务注解的属性，会去找父类或者接口的方法
 		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);
 		if (txAttr != null) {
 			return txAttr;
 		}
 
 		// Second try is the transaction attribute on the target class.
+		// 如果没有，再尝试声明该方法的类上注解属性，会去父类或者接口找
 		txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());
 		if (txAttr != null && ClassUtils.isUserLevelMethod(method)) {
 			return txAttr;
 		}
-
+		// 如果指定方法不等于方法
 		if (specificMethod != method) {
 			// Fallback is to look at the original method.
 			txAttr = findTransactionAttribute(method);

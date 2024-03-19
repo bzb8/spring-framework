@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 import java.lang.reflect.Method;
 
-@Configuration
+//@Configuration
 public class MainConfig1 {
     //注册目标对象
     @Bean

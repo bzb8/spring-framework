@@ -27,6 +27,9 @@ import org.springframework.lang.Nullable;
  * without forcing a single translator to understand every single possible type
  * of exception.
  *
+ * Spring与数据访问技术集成实现的接口，会抛出运行时异常，比如JPA和Hibernate。
+ * 这样可以保持对异常转换功能的一致使用，而不需要一个翻译器理解每一种可能的异常类型。
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 2.0
