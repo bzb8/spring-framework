@@ -1,6 +1,5 @@
 package org.springframework.bzb.aop;
 
-import com.sun.istack.internal.NotNull;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.Advisor;
@@ -74,7 +73,7 @@ class DoMethodInterceptor implements MethodInterceptor {
 
 	@Nullable
 	@Override
-	public Object invoke(@NotNull MethodInvocation invocation) throws Throwable {
+	public Object invoke(MethodInvocation invocation) throws Throwable {
 		System.out.println("...放行前拦截...");
 		Object obj = invocation.proceed();
 		System.out.println("...放行后拦截...");

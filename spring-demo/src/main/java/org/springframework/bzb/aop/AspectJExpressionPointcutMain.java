@@ -1,6 +1,5 @@
 package org.springframework.bzb.aop;
 
-import com.sun.istack.internal.NotNull;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.Advisor;
@@ -13,7 +12,7 @@ public class AspectJExpressionPointcutMain {
 	public static void main(String[] args) {
 		//String expression = "args()"; // 所有没有入参的方法会被拦截,如：age()会拦截,但是age(int i)不会被拦截
 		// ... AspectJExpressionPointcut支持11种表达式（也就是Spring全部支持的切点表达式类型）
-		String expression = "execution(public int                        cccccccccccv                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        v                                vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvb                                                                                                                                                                                                                                                                                                                                                                                org.springframework.aop.User.age())";
+		String expression = "execution(public int org.springframework.aop.User.age())";
 		// 代理工厂
 		ProxyFactory proxyFactory = new ProxyFactory(new User());
 		// 切点
@@ -37,7 +36,7 @@ public class AspectJExpressionPointcutMain {
 	static class DoMethodInterceptor implements MethodInterceptor {
 
 		@Override
-		public Object invoke(@NotNull MethodInvocation invocation) throws Throwable {
+		public Object invoke(MethodInvocation invocation) throws Throwable {
 			System.out.println("...放行前拦截...");
 			Object obj = invocation.proceed();
 			System.out.println("...放行后拦截...");

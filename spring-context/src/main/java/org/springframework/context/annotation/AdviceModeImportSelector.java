@@ -28,7 +28,7 @@ import org.springframework.util.Assert;
  * Convenient base class for {@link ImportSelector} implementations that select imports
  * based on an {@link AdviceMode} value from an annotation (such as the {@code @Enable*}
  * annotations).
- * <p>{@link ImportSelector} 实现的方便基类，这些实现根据注解（如 {@code @Enable*} 注解）中的 {@link AdviceMode} 值选择导入。
+ * <p>ImportSelector实现的便捷基类，根据注解（例如@Enable*注解）中的AdviceMode值选择导入。
  *
  * @author Chris Beams
  * @since 3.1
