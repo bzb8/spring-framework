@@ -155,7 +155,8 @@ public @interface Transactional {
 	 * {@link org.springframework.transaction.TransactionManager TransactionManager}
 	 * bean definition.
 	 * 为指定事务的限定符 值。
-	 * <p>可用于确定目标事务管理器，匹配特定{@link org.springframework.transaction.TransactionManager TransactionManager} bean 定义的限定符值（或 bean 名称）。
+	 * <p>可用于确定目标事务管理器，匹配特定{@link org.springframework.transaction.TransactionManager TransactionManager}
+	 * bean 定义的限定符值（或 bean 名称）。
 	 * @since 4.2
 	 * @see #value
 	 * @see org.springframework.transaction.PlatformTransactionManager

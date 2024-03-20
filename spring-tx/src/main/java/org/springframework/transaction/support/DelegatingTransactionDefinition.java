@@ -27,6 +27,8 @@ import org.springframework.util.Assert;
  * {@link TransactionDefinition} instance. Abstract because it is meant to be subclassed,
  * with subclasses overriding specific methods that are not supposed to simply delegate
  * to the target instance.
+ * 一个代理{@link TransactionDefinition}的具体实现，该实现将所有调用委托给一个给定的目标{@link TransactionDefinition}实例。
+ * 该类被设计为被子类继承，子类可以重写不需要简单地委托给目标实例的具体方法。
  *
  * @author Juergen Hoeller
  * @since 3.0

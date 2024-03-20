@@ -76,6 +76,9 @@ public abstract class BeanFactoryAnnotationUtils {
 	 * Obtain a bean of type {@code T} from the given {@code BeanFactory} declaring a
 	 * qualifier (e.g. via {@code <qualifier>} or {@code @Qualifier}) matching the given
 	 * qualifier, or having a bean name matching the given qualifier.
+	 * 从给定的{@code BeanFactory}中获取声明了与给定限定符匹配（例如通过{@code <qualifier>}或{@code @Qualifier}）的bean，
+	 * 或者具有与给定限定符匹配的bean名称的类型为{@code T}的bean。
+	 *
 	 * @param beanFactory the factory to get the target bean from (also searching ancestors)
 	 * @param beanType the type of bean to retrieve
 	 * @param qualifier the qualifier for selecting between multiple bean matches

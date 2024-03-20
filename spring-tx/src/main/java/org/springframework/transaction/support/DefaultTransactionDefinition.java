@@ -26,9 +26,13 @@ import org.springframework.transaction.TransactionDefinition;
  * Default implementation of the {@link TransactionDefinition} interface,
  * offering bean-style configuration and sensible default values
  * (PROPAGATION_REQUIRED, ISOLATION_DEFAULT, TIMEOUT_DEFAULT, readOnly=false).
+ * {@link TransactionDefinition} 接口的默认实现，提供 bean 风格的配置和合理的默认值
+ *  （PROPAGATION_REQUIRED, ISOLATION_DEFAULT, TIMEOUT_DEFAULT, readOnly=false）。
  *
  * <p>Base class for both {@link TransactionTemplate} and
  * {@link org.springframework.transaction.interceptor.DefaultTransactionAttribute}.
+ * <p>这是 {@link TransactionTemplate} 和
+ * {@link org.springframework.transaction.interceptor.DefaultTransactionAttribute} 的基础类。
  *
  * @author Juergen Hoeller
  * @since 08.05.2003
@@ -134,6 +138,13 @@ public class DefaultTransactionDefinition implements TransactionDefinition, Seri
 	 * <p>Note that a transaction manager that does not support custom isolation levels
 	 * will throw an exception when given any other level than {@link #ISOLATION_DEFAULT}.
 	 * @throws IllegalArgumentException if the supplied value is not one of the
+	 * 设置传播行为。必须是TransactionDefinition接口中的传播常量之一。
+	 * 默认为PROPAGATION_REQUIRED。
+	 * <p>此方法专为{@link #PROPAGATION_REQUIRED}或{@link #PROPAGATION_REQUIRES_NEW}设计，
+	 * 因为其仅适用于新启动的事务。如果您希望在参与具有不同隔离级别的现有事务时，
+	 * 隔离级别声明被拒绝，考虑将事务管理器的"validateExistingTransactions"标志切换为"true"。
+	 * <p>请注意，不支持自定义隔离级别的事务管理器在给定除{@link #ISOLATION_DEFAULT}之外的任何其他级别时，
+	 * 将抛出异常。
 	 * {@code PROPAGATION_} constants
 	 * @see #PROPAGATION_REQUIRED
 	 */

@@ -20,6 +20,8 @@ package org.springframework.transaction;
  * Common representation of the current state of a transaction.
  * Serves as base interface for {@link TransactionStatus} as well as
  * {@link ReactiveTransaction}.
+ * 交易状态的通用表示形式。
+ * 作为{@link TransactionStatus}和{@link ReactiveTransaction}的基础接口。
  *
  * @author Juergen Hoeller
  * @since 5.2
@@ -37,6 +39,8 @@ public interface TransactionExecution {
 	 * Set the transaction rollback-only. This instructs the transaction manager
 	 * that the only possible outcome of the transaction may be a rollback, as
 	 * alternative to throwing an exception which would in turn trigger a rollback.
+	 * 将事务设置为回滚状态。这会指示事务管理器，事务的唯一可能结果是回滚，
+	 * 作为抛出异常从而触发回滚的替代方案。
 	 */
 	void setRollbackOnly();
 

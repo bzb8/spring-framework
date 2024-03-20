@@ -73,7 +73,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 	}
 
 	/**
-	 * TODO 解析出真正的事务属性对象
+	 * 解析出真正的事务属性对象
 	 * @param attributes
 	 * @return
 	 */
@@ -95,6 +95,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		rbta.setQualifier(attributes.getString("value"));
 		rbta.setLabels(Arrays.asList(attributes.getStringArray("label")));
 
+		// 回滚异常类型列表
 		List<RollbackRuleAttribute> rollbackRules = new ArrayList<>();
 		for (Class<?> rbRule : attributes.getClassArray("rollbackFor")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));

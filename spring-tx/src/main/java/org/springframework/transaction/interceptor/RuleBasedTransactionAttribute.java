@@ -27,8 +27,11 @@ import org.springframework.lang.Nullable;
  * should cause transaction rollback by applying a number of rollback rules,
  * both positive and negative. If no custom rollback rules apply, this attribute
  * behaves like DefaultTransactionAttribute (rolling back on runtime exceptions).
+ * 一个TransactionAttribute的实现，该实现通过应用一系列的回滚规则来决定某个异常是否应该导致事务回滚。
+ * 这些规则包括积极的和消极的。如果没有适用的自定义回滚规则，这个属性的行为会像DefaultTransactionAttribute一样（在运行时异常时回滚）。
  *
  * <p>{@link TransactionAttributeEditor} creates objects of this class.
+ * <p>{@link TransactionAttributeEditor} 能够创建这个类的实例。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -119,6 +122,9 @@ public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute i
 	 * Winning rule is the shallowest rule (that is, the closest in the
 	 * inheritance hierarchy to the exception). If no rule applies (-1),
 	 * return false.
+	 * 判断是否符合回滚规则的逻辑。
+	 * 赢家规则是最浅的规则，即在异常的继承层次结构中最接近的规则。
+	 * 如果没有适用的规则（返回-1），则返回false。
 	 * @see TransactionAttribute#rollbackOn(java.lang.Throwable)
 	 */
 	@Override
@@ -129,6 +135,7 @@ public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute i
 		if (this.rollbackRules != null) {
 			for (RollbackRuleAttribute rule : this.rollbackRules) {
 				int depth = rule.getDepth(ex);
+				// 取异常深度最小的规则
 				if (depth >= 0 && depth < deepest) {
 					deepest = depth;
 					winner = rule;
@@ -138,6 +145,7 @@ public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute i
 
 		// User superclass behavior (rollback on unchecked) if no rule matches.
 		if (winner == null) {
+			// ex instanceof RuntimeException || ex instanceof Error
 			return super.rollbackOn(ex);
 		}
 

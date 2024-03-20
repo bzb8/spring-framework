@@ -21,6 +21,8 @@ import org.springframework.lang.Nullable;
 /**
  * Interface that defines Spring-compliant transaction properties.
  * Based on the propagation behavior definitions analogous to EJB CMT attributes.
+ * 定义符合Spring事务属性的接口。
+ * 基于与EJB CMT属性类似的传播行为定义。
  *
  * <p>Note that isolation level and timeout settings will not get applied unless
  * an actual new transaction gets started. As only {@link #PROPAGATION_REQUIRED},
@@ -29,11 +31,20 @@ import org.springframework.lang.Nullable;
  * Furthermore, be aware that not all transaction managers will support those
  * advanced features and thus might throw corresponding exceptions when given
  * non-default values.
+ * <p>请注意，除非启动一个实际的新事务，否则隔离级别和超时设置不会生效。
+ * 因此，只有{@link #PROPAGATION_REQUIRED}、{@link #PROPAGATION_REQUIRES_NEW}和{@link #PROPAGATION_NESTED}
+ * 可以导致新事务开始，在其他情况下通常没有意义指定这些设置。
+ * 此外，请注意，并非所有的事务管理器都支持这些高级特性，
+ * 当给定非默认值时，它们可能会抛出相应的异常。
  *
  * <p>The {@link #isReadOnly() read-only flag} applies to any transaction context,
  * whether backed by an actual resource transaction or operating non-transactionally
  * at the resource level. In the latter case, the flag will only apply to managed
  * resources within the application, such as a Hibernate {@code Session}.
+ * <p>{@link #isReadOnly() 只读标志}适用于任何事务上下文，
+ * 无论底层是否基于实际资源事务，还是在资源级别无事务操作。
+ * 在后一种情况下，该标志仅应用于应用程序内的托管资源，
+ * 如Hibernate {@code Session}。
  *
  * @author Juergen Hoeller
  * @since 08.05.2003
@@ -48,6 +59,10 @@ public interface TransactionDefinition {
 	 * Analogous to the EJB transaction attribute of the same name.
 	 * <p>This is typically the default setting of a transaction definition,
 	 * and typically defines a transaction synchronization scope.
+	 * 支持当前事务；如果不存在事务，则创建一个新事务。
+	 * 类似于同名的EJB事务属性。
+	 * 这通常是事务定义的默认设置，
+	 * 通常定义了事务同步范围。
 	 */
 	int PROPAGATION_REQUIRED = 0;
 
@@ -136,6 +151,7 @@ public interface TransactionDefinition {
 	 * Use the default isolation level of the underlying datastore.
 	 * All other levels correspond to the JDBC isolation levels.
 	 * @see java.sql.Connection
+	 * 使用基础数据存储的默认隔离级别。所有其他级别都对应于 JDBC 隔离级别。
 	 */
 	int ISOLATION_DEFAULT = -1;
 
@@ -187,6 +203,7 @@ public interface TransactionDefinition {
 	/**
 	 * Use the default timeout of the underlying transaction system,
 	 * or none if timeouts are not supported.
+	 * 使用基础事务系统的默认超时，如果不支持超时，则不使用。
 	 */
 	int TIMEOUT_DEFAULT = -1;
 
@@ -285,6 +302,9 @@ public interface TransactionDefinition {
 	 * <p>For customization purposes, use the modifiable
 	 * {@link org.springframework.transaction.support.DefaultTransactionDefinition}
 	 * instead.
+	 * 返回一个具有默认设置的不可修改的{@code TransactionDefinition}。
+	 * <p>如果需要自定义，请使用可修改的{@link org.springframework.transaction.support.DefaultTransactionDefinition}代替。
+	 *
 	 * @since 5.2
 	 */
 	static TransactionDefinition withDefaults() {

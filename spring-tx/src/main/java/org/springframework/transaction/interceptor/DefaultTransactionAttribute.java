@@ -29,6 +29,7 @@ import org.springframework.util.StringValueResolver;
 /**
  * Spring's common transaction attribute implementation.
  * Rolls back on runtime, but not checked, exceptions by default.
+ * Spring 的通用事务属性实现。默认情况下，回滚运行时异常，但不checked异常。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

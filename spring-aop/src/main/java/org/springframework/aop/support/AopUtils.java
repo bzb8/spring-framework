@@ -112,7 +112,7 @@ public abstract class AopUtils {
 	/**
 	 * Determine the target class of the given bean instance which might be an AOP proxy.
 	 * <p>Returns the target class for an AOP proxy or the plain class otherwise.
-	 *
+	 * --
 	 * 确定给定 Bean 实例的目标类，该实例可能是 AOP 代理。返回 AOP 代理的目标类，否则返回普通类。
 	 *
 	 * @param candidate the instance to check (might be an AOP proxy)

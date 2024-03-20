@@ -67,6 +67,7 @@ public interface Joinpoint {
 	 * <p>For instance, the target object for an invocation.
 	 * --
 	 * 返回保存当前连接点静态部分的对象，这里一般指被代理的目标对象
+	 * 返回的是代理对象
 	 *
 	 * @return the object (can be null if the accessible object is static)
 	 */

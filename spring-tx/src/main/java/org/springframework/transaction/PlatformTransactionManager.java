@@ -23,6 +23,9 @@ import org.springframework.lang.Nullable;
  * Applications can use this directly, but it is not primarily meant as an API:
  * Typically, applications will work with either TransactionTemplate or
  * declarative transaction demarcation through AOP.
+ * 这是Spring命令式事务基础设施中的中心接口。应用程序可以直接使用此接口，
+ * 但主要不是用作API：通常，应用程序将通过TransactionTemplate或
+ * 通过AOP进行声明式事务边界划分来工作。
  *
  * <p>For implementors, it is recommended to derive from the provided
  * {@link org.springframework.transaction.support.AbstractPlatformTransactionManager}
@@ -30,11 +33,16 @@ import org.springframework.lang.Nullable;
  * of transaction synchronization handling. Subclasses have to implement
  * template methods for specific states of the underlying transaction,
  * for example: begin, suspend, resume, commit.
+ * <p>对于实现者，建议从提供的{@link org.springframework.transaction.support.AbstractPlatformTransactionManager}
+ * 类派生，该类预实现了定义的传播行为，并负责事务同步处理。子类必须实现
+ * 特定于底层事务状态的模板方法，例如：开始、暂停、恢复、提交。
  *
  * <p>A classic implementation of this strategy interface is
  * {@link org.springframework.transaction.jta.JtaTransactionManager}. However,
  * in common single-resource scenarios, Spring's specific transaction managers
  * for e.g. JDBC, JPA, JMS are preferred choices.
+ * <p>此策略接口的经典实现是{@link org.springframework.transaction.jta.JtaTransactionManager}。
+ * 但是在常见的单资源场景中，Spring针对例如JDBC、JPA、JMS等的具体事务管理器是首选选择。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -56,13 +64,21 @@ public interface PlatformTransactionManager extends TransactionManager {
 	 * <p>An exception to the above rule is the read-only flag, which should be
 	 * ignored if no explicit read-only mode is supported. Essentially, the
 	 * read-only flag is just a hint for potential optimization.
+	 * 根据指定的传播行为，返回当前活跃的事务或创建一个新的事务。
+	 *  <p>请注意，像隔离级别或超时这样的参数只会应用于新事务，因此在参与活跃事务时将被忽略。
+	 *  <p>此外，并非所有的事务定义设置都将被每个事务管理器支持：适当的事务管理器实现应该在遇到不支持的设置时抛出异常。
+	 *  <p>上述规则的一个例外是只读标志，如果明确的只读模式不被支持，则应该忽略它。本质上，只读标志只是潜在优化的提示。
+	 *
 	 * @param definition the TransactionDefinition instance (can be {@code null} for defaults),
 	 * describing propagation behavior, isolation level, timeout etc.
+	 *                   事务定义实例（可以为{@code null}以使用默认值），描述传播行为、隔离级别、超时等。
 	 * @return transaction status object representing the new or current transaction
+	 * 表示新事务或当前事务的事务状态对象
 	 * @throws TransactionException in case of lookup, creation, or system errors
 	 * @throws IllegalTransactionStateException if the given transaction definition
 	 * cannot be executed (for example, if a currently active transaction is in
 	 * conflict with the specified propagation behavior)
+	 *
 	 * @see TransactionDefinition#getPropagationBehavior
 	 * @see TransactionDefinition#getIsolationLevel
 	 * @see TransactionDefinition#getTimeout

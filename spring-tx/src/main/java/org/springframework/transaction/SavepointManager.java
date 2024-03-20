@@ -27,6 +27,14 @@ package org.springframework.transaction;
  *
  * <p>This interface is inspired by JDBC 3.0's Savepoint mechanism
  * but is independent of any specific persistence technology.
+ * 规定了一种通过程序控制事务保存点的通用API的接口。这是被TransactionStatus扩展的，
+ * 用于为特定事务暴露保存点管理功能。
+ *
+ * <p>请注意，保存点只能在活跃的事务内工作。仅在高级需求时使用此程序化保存点处理；
+ * 否则，使用带有PROPAGATION_NESTED的子事务是更可取的。
+ *
+ * <p>此接口受到JDBC 3.0的保存点机制的启发，但独立于任何特定持久化技术。
+ *
  *
  * @author Juergen Hoeller
  * @since 1.1

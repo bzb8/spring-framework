@@ -342,6 +342,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			throws TransactionException {
 
 		// Use defaults if no transaction definition given.
+		// 如果未给出事务定义，则使用默认值。
 		TransactionDefinition def = (definition != null ? definition : TransactionDefinition.withDefaults());
 
 		Object transaction = doGetTransaction();
@@ -1018,10 +1019,19 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	 * Consequently, a {@code doGetTransaction} implementation will usually
 	 * look for an existing transaction and store corresponding state in the
 	 * returned transaction object.
+	 * 根据当前事务状态返回一个事务对象。
+	 * <p>返回的对象通常会是具体事务管理器实现相关的，以可修改的方式携带相应的事务状态。这个对象会被传递给其他模板方法
+	 * （例如doBegin和doCommit），要么直接传递，要么作为DefaultTransactionStatus实例的一部分。
+	 * <p>返回的对象应该包含关于任何已存在事务的信息，即在当前事务管理器上的{@code getTransaction}调用之前已经启动的事务。
+	 * 因此，{@code doGetTransaction}的实现通常会查找已存在的事务，并将相应状态存储在返回的事务对象中。
 	 * @return the current transaction object
 	 * @throws org.springframework.transaction.CannotCreateTransactionException
 	 * if transaction support is not available
 	 * @throws TransactionException in case of lookup or system errors
+	 * @return 当前事务对象
+	 * @throws org.springframework.transaction.CannotCreateTransactionException 如果事务支持不可用
+	 * @throws TransactionException 在查找或系统出错时抛出
+	 *
 	 * @see #doBegin
 	 * @see #doCommit
 	 * @see #doRollback

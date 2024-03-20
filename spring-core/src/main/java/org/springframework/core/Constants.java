@@ -49,15 +49,21 @@ public class Constants {
 	/** The name of the introspected class. */
 	private final String className;
 
-	/** Map from String field name to object value. */
+	/**
+	 * Map from String field name to object value.
+	 * public static final field name -> 字段值
+	 */
 	private final Map<String, Object> fieldCache = new HashMap<>();
 
 
 	/**
 	 * Create a new Constants converter class wrapping the given class.
 	 * <p>All <b>public</b> static final variables will be exposed, whatever their type.
+	 * 构造一个新的常量转换类，封装给定的类。
+	 * <p>所有<b>公共</b>静态最终变量都将被暴露，无论其类型如何。
 	 * @param clazz the class to analyze
 	 * @throws IllegalArgumentException if the supplied {@code clazz} is {@code null}
+	 *
 	 */
 	public Constants(Class<?> clazz) {
 		Assert.notNull(clazz, "Class must not be null");
@@ -209,7 +215,11 @@ public class Constants {
 	 * values (i.e. all uppercase). The supplied {@code namePrefix}
 	 * will be uppercased (in a locale-insensitive fashion) prior to
 	 * the main logic of this method kicking in.
+	 * 返回给定常量组的所有值。
+	 * <p>请注意，此方法假定常量的命名符合标准Java常量值的约定（即全部大写）。
+	 * 在此方法的主要逻辑开始之前，提供的{@code namePrefix}将以不受区域设置影响的方式转换为大写。
 	 * @param namePrefix prefix of the constant names to search (may be {@code null})
+	 *                   要搜索的常量名称的前缀（可以为{@code null}）
 	 * @return the set of values
 	 */
 	public Set<Object> getValues(@Nullable String namePrefix) {
