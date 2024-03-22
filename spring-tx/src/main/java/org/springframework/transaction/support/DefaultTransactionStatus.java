@@ -67,23 +67,23 @@ public class DefaultTransactionStatus extends AbstractTransactionStatus {
 
 	/**
 	 * Create a new {@code DefaultTransactionStatus} instance.
+	 * 创建一个新的{@code DefaultTransactionStatus}实例。
 	 * @param transaction underlying transaction object that can hold state
-	 * for the internal transaction implementation
+	 * for the internal transaction implementation --  用于内部事务实现的状态保持的底层事务对象。
 	 * @param newTransaction if the transaction is new, otherwise participating
-	 * in an existing transaction
+	 * in an existing transaction -- 如果事务是新的，则为true，否则为参与一个已存在的事务。
 	 * @param newSynchronization if a new transaction synchronization has been
-	 * opened for the given transaction
-	 * @param readOnly whether the transaction is marked as read-only
+	 * opened for the given transaction -- 如果为给定事务打开了新的事务同步，则为true。
+	 * @param readOnly whether the transaction is marked as read-only -- 如果事务被标记为只读，则为true。
 	 * @param debug should debug logging be enabled for the handling of this transaction?
 	 * Caching it in here can prevent repeated calls to ask the logging system whether
-	 * debug logging should be enabled.
+	 * debug logging should be enabled. -- 是否为处理此事务启用调试日志记录？在此处缓存它可以防止重复调用询问日志系统是否应启用调试日志记录。
 	 * @param suspendedResources a holder for resources that have been suspended
-	 * for this transaction, if any
+	 * for this transaction, if any -- 如果有，用于持有因此事务而被挂起的资源的容器。
 	 */
 	public DefaultTransactionStatus(
 			@Nullable Object transaction, boolean newTransaction, boolean newSynchronization,
 			boolean readOnly, boolean debug, @Nullable Object suspendedResources) {
-
 		this.transaction = transaction;
 		this.newTransaction = newTransaction;
 		this.newSynchronization = newSynchronization;

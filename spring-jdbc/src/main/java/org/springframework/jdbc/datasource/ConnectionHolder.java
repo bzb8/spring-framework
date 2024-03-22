@@ -46,13 +46,18 @@ public class ConnectionHolder extends ResourceHolderSupport {
 	 */
 	public static final String SAVEPOINT_NAME_PREFIX = "SAVEPOINT_";
 
-
+	/**
+	 * SimpleConnectionHandle
+	 */
 	@Nullable
 	private ConnectionHandle connectionHandle;
 
 	@Nullable
 	private Connection currentConnection;
 
+	/**
+	 * doBegin会设置为true
+	 */
 	private boolean transactionActive = false;
 
 	@Nullable

@@ -166,9 +166,12 @@ public abstract class DataSourceUtils {
 
 	/**
 	 * Prepare the given Connection with the given transaction semantics.
+	 * 使用给定的事务语义准备给定的 Connection。
+	 * 设置只读标记，设置隔离级别
 	 * @param con the Connection to prepare
 	 * @param definition the transaction definition to apply
 	 * @return the previous isolation level, if any
+	 * 数据库连接之前的隔离级别
 	 * @throws SQLException if thrown by JDBC methods
 	 * @see #resetConnectionAfterTransaction
 	 * @see Connection#setTransactionIsolation
@@ -199,6 +202,7 @@ public abstract class DataSourceUtils {
 					exToCheck = exToCheck.getCause();
 				}
 				// "read-only not supported" SQLException -> ignore, it's just a hint anyway
+				// “不支持只读” SQLException ->忽略，反正这只是一个提示
 				logger.debug("Could not set JDBC Connection read-only", ex);
 			}
 		}

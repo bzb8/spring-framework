@@ -20,6 +20,9 @@ package org.springframework.transaction.support;
  * Generic interface to be implemented by resource holders.
  * Allows Spring's transaction infrastructure to introspect
  * and reset the holder when necessary.
+ * 资源持有者接口，需由资源持有者实现。
+ * 允许Spring的事务基础设施进行反射，并在必要时重置持有者。
+ * 这个接口主要用于管理资源的持有和释放，特别是在事务环境中。
  *
  * @author Juergen Hoeller
  * @since 2.5.5
@@ -41,6 +44,8 @@ public interface ResourceHolder {
 	/**
 	 * Determine whether this holder is considered as 'void',
 	 * i.e. as a leftover from a previous thread.
+	 * 判断当前持有者是否被视为“空”，
+	 * 即，作为之前线程的遗留物
 	 */
 	boolean isVoid();
 
