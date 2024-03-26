@@ -59,6 +59,7 @@ public abstract class TransactionSynchronizationUtils {
 	 * the given handle as-is.
 	 * @since 5.3.4
 	 * @see InfrastructureProxy#getWrappedObject()
+	 * @param resource 数据源或连接池
 	 */
 	public static Object unwrapResourceIfNecessary(Object resource) {
 		Assert.notNull(resource, "Resource must not be null");
