@@ -54,6 +54,9 @@ public abstract class JdbcTransactionObjectSupport implements SavepointManager, 
 	@Nullable
 	private ConnectionHolder connectionHolder;
 
+	/**
+	 * 数据库连接之前的隔离级别
+	 */
 	@Nullable
 	private Integer previousIsolationLevel;
 

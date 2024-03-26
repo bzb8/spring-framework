@@ -57,6 +57,7 @@ public abstract class TransactionSynchronizationUtils {
 	/**
 	 * Unwrap the given resource handle if necessary; otherwise return
 	 * the given handle as-is.
+	 * 如果有必要，解包给定的资源句柄；否则直接返回给定的句柄。
 	 * @since 5.3.4
 	 * @see InfrastructureProxy#getWrappedObject()
 	 * @param resource 数据源或连接池
