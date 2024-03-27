@@ -1,29 +1,18 @@
 package org.springframework.bzb.controller;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.bzb.service.CService;
-import org.springframework.stereotype.Controller;
 import org.springframework.bzb.transactionbzb.User;
 import org.springframework.bzb.transactionbzb.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/test")
-@Controller
-public class HelloController implements ApplicationContextAware {
-
-	ApplicationContext applicationContext;
-
-	private CService cService;
+@RestController
+public class HelloController {
 
 	@Autowired
-	public HelloController(CService cService) {
-		this.cService = cService;
-	}
+	private UserService bzbUserService;
 
 	@GetMapping("/hello")
 	public String hello() {
@@ -31,12 +20,8 @@ public class HelloController implements ApplicationContextAware {
 	}
 
 	@GetMapping("/user")
-	public User getUser() {
-		return applicationContext.getBean("bzbUserService", UserService.class).getUserById(1);
+	public String getUser() {
+		return bzbUserService.getUserById(1).toString();
 	}
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
 }
