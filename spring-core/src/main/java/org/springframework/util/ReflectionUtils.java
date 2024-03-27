@@ -183,8 +183,9 @@ public abstract class ReflectionUtils {
 	 */
 	public static <T> Constructor<T> accessibleConstructor(Class<T> clazz, Class<?>... parameterTypes)
 			throws NoSuchMethodException {
-
+		// 可以返回私有的构造函数
 		Constructor<T> ctor = clazz.getDeclaredConstructor(parameterTypes);
+		// 使得私有的构造函数可访问
 		makeAccessible(ctor);
 		return ctor;
 	}
