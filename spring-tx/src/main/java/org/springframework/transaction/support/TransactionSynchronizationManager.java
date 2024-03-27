@@ -32,10 +32,14 @@ import org.springframework.util.Assert;
 /**
  * Central delegate that manages resources and transaction synchronizations per thread.
  * To be used by resource management code but not by typical application code.
+ * 中心代理，负责按线程管理资源和事务同步。
+ * 供资源管理代码使用，但通常不被典型的应用程序代码使用。
  *
  * <p>Supports one resource per key without overwriting, that is, a resource needs
  * to be removed before a new one can be set for the same key.
  * Supports a list of transaction synchronizations if synchronization is active.
+ * <p>支持每个键一个资源且不覆盖，即，对于同一个键，需要移除旧资源后才能设置新资源。
+ * 如果同步激活，则支持事务同步列表。
  *
  * <p>Resource management code should check for thread-bound resources, e.g. JDBC
  * Connections or Hibernate Sessions, via {@code getResource}. Such code is
@@ -43,6 +47,9 @@ import org.springframework.util.Assert;
  * of transaction managers. A further option is to lazily bind on first use if
  * transaction synchronization is active, for performing transactions that span
  * an arbitrary number of resources.
+ * <p>资源管理代码应通过{@code getResource}检查线程绑定的资源，例如JDBC连接或Hibernate会话。
+ * 这类代码通常不负责将资源绑定到线程上，这是事务管理器的责任。
+ * 另一个选项是在第一次使用时（如果事务同步激活）懒惰地绑定，以便执行跨越任意数量资源的事务。
  *
  * <p>Transaction synchronization must be activated and deactivated by a transaction
  * manager via {@link #initSynchronization()} and {@link #clearSynchronization()}.
@@ -50,16 +57,23 @@ import org.springframework.util.Assert;
  * and thus by all standard Spring transaction managers, such as
  * {@link org.springframework.transaction.jta.JtaTransactionManager} and
  * {@link org.springframework.jdbc.datasource.DataSourceTransactionManager}.
+ * <p>事务同步必须通过事务管理器调用{@link #initSynchronization()}和{@link #clearSynchronization()}
+ * 来激活和停用。这自动由{@link AbstractPlatformTransactionManager}支持，
+ * 因此由所有标准的Spring事务管理器支持，例如{@link org.springframework.transaction.jta.JtaTransactionManager}和
+ * {@link org.springframework.jdbc.datasource.DataSourceTransactionManager}。
  *
  * <p>Resource management code should only register synchronizations when this
  * manager is active, which can be checked via {@link #isSynchronizationActive};
  * it should perform immediate resource cleanup else. If transaction synchronization
  * isn't active, there is either no current transaction, or the transaction manager
  * doesn't support transaction synchronization.
+ * <p>资源管理代码仅在本管理器激活时注册同步，这可通过{@link #isSynchronizationActive}进行检查；
+ * 否则应立即进行资源清理。如果事务同步不活跃，则要么没有当前事务，要么事务管理器不支持事务同步。
  *
  * <p>Synchronization is for example used to always return the same resources
  * within a JTA transaction, e.g. a JDBC Connection or a Hibernate Session for
  * any given DataSource or SessionFactory, respectively.
+ * <p>例如，同步被用于在JTA事务中总是返回相同的资源，例如给定DataSource或SessionFactory的JDBC连接或Hibernate会话。
  *
  * @author Juergen Hoeller
  * @since 02.06.2003
@@ -128,6 +142,7 @@ public abstract class TransactionSynchronizationManager {
 	 *            数据源
 	 * @return a value bound to the current thread (usually the active
 	 * resource object), or {@code null} if none
+	 * 绑定到当前线程的值（通常是活动资源对象），如果没有则返回{@code null}。
 	 * @see ResourceTransactionManager#getResourceFactory()
 	 */
 	@Nullable
