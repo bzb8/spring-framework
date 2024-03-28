@@ -34,17 +34,23 @@ import org.springframework.web.context.request.NativeWebRequest;
 /**
  * Base class for {@code ContentNegotiationStrategy} implementations with the
  * steps to resolve a request to media types.
+ * <p>{@code ContentNegotiationStrategy}实现的基础类，用于解析请求到媒体类型的过程。
  *
  * <p>First a key (e.g. "json", "pdf") must be extracted from the request (e.g.
  * file extension, query param). The key must then be resolved to media type(s)
  * through the base class {@link MappingMediaTypeFileExtensionResolver} which
  * stores such mappings.
+ * <p>首先，必须从请求中提取一个键（例如："json"、"pdf"）（例如：通过文件扩展名、查询参数）。然后，
+ * 通过基类{@link MappingMediaTypeFileExtensionResolver}解析该键到媒体类型，该类存储了此类映射。
  *
  * <p>The method {@link #handleNoMatch} allow subclasses to plug in additional
  * ways of looking up media types (e.g. through the Java Activation framework,
  * or {@link javax.servlet.ServletContext#getMimeType}). Media types resolved
  * via base classes are then added to the base class
  * {@link MappingMediaTypeFileExtensionResolver}, i.e. cached for new lookups.
+ * <p>通过重写方法{@link #handleNoMatch}，子类可以插入额外的查找媒体类型的方式（例如：通过Java Activation框架，
+ * 或使用{@link javax.servlet.ServletContext#getMimeType}）。通过基类解析的媒体类型随后将被添加到基类的
+ * {@link MappingMediaTypeFileExtensionResolver}中，即：为了新的查找被缓存。
  *
  * @author Rossen Stoyanchev
  * @since 3.2
@@ -71,6 +77,10 @@ public abstract class AbstractMappingContentNegotiationStrategy extends MappingM
 	 * Whether to only use the registered mappings to look up file extensions,
 	 * or also to use dynamic resolution (e.g. via {@link MediaTypeFactory}.
 	 * <p>By default this is set to {@code false}.
+	 * 设置是否仅使用注册的映射来查找文件扩展名，或者是否也使用动态解析（例如通过{@link MediaTypeFactory}）。
+	 * <p>默认情况下，此设置为{@code false}。
+	 * @param useRegisteredExtensionsOnly 是否仅使用注册的映射。如果为{@code true}，则仅使用注册的映射；如果为{@code false}，
+	 *                                    则同时使用注册的映射和动态解析。
 	 */
 	public void setUseRegisteredExtensionsOnly(boolean useRegisteredExtensionsOnly) {
 		this.useRegisteredExtensionsOnly = useRegisteredExtensionsOnly;

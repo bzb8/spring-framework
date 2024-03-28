@@ -33,25 +33,38 @@ import org.springframework.lang.Nullable;
 /**
  * An implementation of {@code MediaTypeFileExtensionResolver} that maintains
  * lookups between file extensions and MediaTypes in both directions.
+ * <p>一种实现{@code MediaTypeFileExtensionResolver}的方式，它维护了文件扩展名和媒体类型之间的双向查找。
  *
  * <p>Initially created with a map of file extensions and media types.
  * Subsequently subclasses can use {@link #addMapping} to add more mappings.
+ * <p>最初使用一个文件扩展名和媒体类型的映射来创建。随后，子类可以使用{@link #addMapping}添加更多的映射。
  *
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
  * @since 3.2
  */
 public class MappingMediaTypeFileExtensionResolver implements MediaTypeFileExtensionResolver {
-
+	/**
+	 * key: 小写的扩展名
+	 */
 	private final ConcurrentMap<String, MediaType> mediaTypes = new ConcurrentHashMap<>(64);
 
+	/**
+	 * 媒体类型 -> 小写的扩展名集合
+	 * application/json -> json
+	 */
 	private final ConcurrentMap<MediaType, List<String>> fileExtensions = new ConcurrentHashMap<>(64);
 
+	/**
+	 * 小写的扩展名集合
+	 * application/json -> json 中的json
+	 */
 	private final List<String> allFileExtensions = new CopyOnWriteArrayList<>();
 
 
 	/**
 	 * Create an instance with the given map of file extensions and media types.
+	 * 缓存媒体类型和扩展名
 	 */
 	public MappingMediaTypeFileExtensionResolver(@Nullable Map<String, MediaType> mediaTypes) {
 		if (mediaTypes != null) {

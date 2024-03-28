@@ -25,6 +25,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * A strategy for resolving the requested media types for a request.
+ * 用于解析请求的请求媒体类型的策略。
  *
  * @author Rossen Stoyanchev
  * @since 3.2

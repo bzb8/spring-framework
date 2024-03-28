@@ -37,20 +37,23 @@ import org.springframework.web.context.ServletContextAware;
 /**
  * Factory to create a {@code ContentNegotiationManager} and configure it with
  * {@link ContentNegotiationStrategy} instances.
+ * <p>用于创建和配置{@code ContentNegotiationManager}的工厂类。
  *
  * <p>This factory offers properties that in turn result in configuring the
  * underlying strategies. The table below shows the property names, their
  * default settings, as well as the strategies that they help to configure:
+ * <p>该工厂提供了一系列属性，用于配置底层的{@link ContentNegotiationStrategy}实例。下表显示了属性名称、
+ * 它们的默认设置，以及它们帮助配置的策略：
  *
  * <table>
  * <tr>
- * <th>Property Setter</th>
+ * <th>Property Setter 属性设置器</th>
  * <th>Default Value</th>
  * <th>Underlying Strategy</th>
  * <th>Enabled Or Not</th>
  * </tr>
  * <tr>
- * <td>{@link #setFavorParameter favorParameter}</td>
+ * <td>{@link #setFavorParameter favorParameter 喜爱}</td>
  * <td>false</td>
  * <td>{@link ParameterContentNegotiationStrategy}</td>
  * <td>Off</td>
@@ -84,6 +87,7 @@ import org.springframework.web.context.ServletContextAware;
  * <p>Alternatively you can avoid use of the above convenience builder
  * methods and set the exact strategies to use via
  * {@link #setStrategies(List)}.
+ * <p>或者，您可以避免使用上述方便的构建器方法，而是通过{@link #setStrategies(List)}设置确切要使用的策略。
  *
  * <p><strong>Deprecation Note:</strong> As of 5.2.4,
  * {@link #setFavorPathExtension(boolean) favorPathExtension} and
@@ -93,6 +97,10 @@ import org.springframework.web.context.ServletContextAware;
  * {@link org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
  * RequestMappingHandlerMapping}. For further context, please read issue
  * <a href="https://github.com/spring-projects/spring-framework/issues/24179">#24719</a>.
+ * <p><strong>弃用说明：</strong>从5.2.4开始，由于使用路径扩展进行内容协商和请求映射可能导致问题，
+ * 因此{@link #setFavorPathExtension(boolean) favorPathExtension}和{@link #setIgnoreUnknownPathExtensions(boolean) ignoreUnknownPathExtensions}
+ * 被弃用。关于这一决策的更多背景信息，请参阅问题<a href="https://github.com/spring-projects/spring-framework/issues/24179">#24719</a>。
+ *
  * @author Rossen Stoyanchev
  * @author Brian Clozel
  * @since 3.2
@@ -110,6 +118,9 @@ public class ContentNegotiationManagerFactoryBean
 
 	private boolean favorPathExtension = false;
 
+	/**
+	 * key为小写
+	 */
 	private Map<String, MediaType> mediaTypes = new HashMap<>();
 
 	private boolean ignoreUnknownPathExtensions = true;
@@ -256,6 +267,11 @@ public class ContentNegotiationManagerFactoryBean
 	 * whether to use only registered {@code MediaType} mappings or to allow
 	 * dynamic resolution, e.g. via {@link MediaTypeFactory}.
 	 * <p>By default this is not set in which case dynamic resolution is on.
+	 * <p>设置当{@link #setFavorPathExtension favorPathExtension}或{@link #setFavorParameter(boolean)}被设置时，
+	 * 该属性决定是否仅使用注册的{@code MediaType}映射，或者允许动态解析，例如通过{@link MediaTypeFactory}。
+	 * <p>默认情况下，此属性未设置，此时允许动态解析。
+	 * @param useRegisteredExtensionsOnly 是否仅使用注册的扩展名。如果为true，则仅使用注册的MediaType映射；
+	 *                                   如果为false，则允许使用动态解析，例如通过MediaTypeFactory。
 	 */
 	public void setUseRegisteredExtensionsOnly(boolean useRegisteredExtensionsOnly) {
 		this.useRegisteredExtensionsOnly = useRegisteredExtensionsOnly;
@@ -268,7 +284,13 @@ public class ContentNegotiationManagerFactoryBean
 	/**
 	 * Whether to disable checking the 'Accept' request header.
 	 * <p>By default this value is set to {@code false}.
+	 * <p>设置是否禁用检查'Accept'请求头。
+	 * <p>默认情况下，此值设置为{@code false}。
+	 *
+	 * @param ignoreAcceptHeader 如果为{@code true}，则禁用'Accept'请求头的检查；
+	 *                           如果为{@code false}，则启用检查（默认行为）。
 	 */
+
 	public void setIgnoreAcceptHeader(boolean ignoreAcceptHeader) {
 		this.ignoreAcceptHeader = ignoreAcceptHeader;
 	}
@@ -305,6 +327,7 @@ public class ContentNegotiationManagerFactoryBean
 
 	/**
 	 * Invoked by Spring to inject the ServletContext.
+	 * 由 Spring 调用以注入 ServletContext。
 	 */
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -350,7 +373,7 @@ public class ContentNegotiationManagerFactoryBean
 					strategy.setUseRegisteredExtensionsOnly(this.useRegisteredExtensionsOnly);
 				}
 				else {
-					strategy.setUseRegisteredExtensionsOnly(true);  // backwards compatibility
+					strategy.setUseRegisteredExtensionsOnly(true);  // backwards compatibility 向后兼容性
 				}
 				strategies.add(strategy);
 			}
@@ -366,6 +389,7 @@ public class ContentNegotiationManagerFactoryBean
 
 		// Ensure media type mappings are available via ContentNegotiationManager#getMediaTypeMappings()
 		// independent of path extension or parameter strategies.
+		// 确保媒体类型映射可通过 ContentNegotiationManager#getMediaTypeMappings() 获得，而与路径扩展或参数策略无关。
 
 		if (!CollectionUtils.isEmpty(this.mediaTypes) && !this.favorPathExtension && !this.favorParameter) {
 			this.contentNegotiationManager.addFileExtensionResolvers(

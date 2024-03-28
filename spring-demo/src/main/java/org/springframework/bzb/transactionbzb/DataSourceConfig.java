@@ -23,7 +23,7 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mysql://10.68.8.26:3306/test_office?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true");
+        config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/test_office?useUnicode=true&characterEncoding=UTF8&rewriteBatchedStatements=true&serverTimezone=PRC&useSSL=false&allowMultiQueries=true");
         config.setUsername("root");
         config.setPassword("123456");
         return new HikariDataSource(config);

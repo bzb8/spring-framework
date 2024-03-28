@@ -23,6 +23,8 @@ import org.springframework.http.MediaType;
 /**
  * Strategy to resolve a {@link MediaType} to a list of file extensions &mdash;
  * for example, to resolve "application/json" to "json".
+ * <p>用于解决{@link MediaType}到文件扩展名列表的策略 - 例如，将"application/json"解析为"json"。
+ * 这个接口提供了一种方法，将媒体类型映射到可能的文件扩展名集合。
  *
  * @author Rossen Stoyanchev
  * @since 3.2

@@ -31,12 +31,19 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
  * A {@link WebMvcConfigurer} that delegates to one or more others.
+ * 一个委托给一个或多个其他{@link WebMvcConfigurer}的配置器。
+ * <p>这个类没有实现任何具体的配置逻辑，它的作用是通过实例化并委托给多个{@link WebMvcConfigurer}对象来实现对Spring MVC的配置。
+ * 这样可以方便的组合和重用不同的配置策略，提供更高的灵活性和可维护性。
  *
  * @author Rossen Stoyanchev
  * @since 3.1
  */
 class WebMvcConfigurerComposite implements WebMvcConfigurer {
 
+	/**
+	 * The list of {@code WebMvcConfigurer} delegates.
+	 * 依次调用的{@code WebMvcConfigurer}的列表
+	 */
 	private final List<WebMvcConfigurer> delegates = new ArrayList<>();
 
 

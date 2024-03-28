@@ -120,6 +120,10 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * necessary, remembering to add {@link Configuration @Configuration} to the
  * subclass and {@link Bean @Bean} to overridden {@link Bean @Bean} methods.
  * For more details see the javadoc of {@link EnableWebMvc @EnableWebMvc}.
+ * <p>主要提供MVC Java配置的配置类。通常通过在应用的{@link Configuration @Configuration}类上添加
+ * {@link EnableWebMvc @EnableWebMvc}来导入。另一种更高级的选择是直接继承此类，并根据需要覆盖方法，
+ * 记得在子类上添加{@link Configuration @Configuration}注解，并在覆盖的{@link Bean @Bean}方法上添加注解。
+ * 有关更多详细信息，请参阅{@link EnableWebMvc @EnableWebMvc}的javadoc。
  *
  * <p>This class registers the following {@link HandlerMapping HandlerMappings}:</p>
  * <ul>
@@ -136,6 +140,15 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * <li>{@link HandlerMapping}
  * ordered at {@code Integer.MAX_VALUE} to forward requests to the default servlet.
  * </ul>
+ *  <p>此类注册了以下{@link HandlerMapping HandlerMappings}：</p>
+ *  <ul>
+ *  <li>{@link RequestMappingHandlerMapping}，顺序为0，用于映射请求到注解控制器方法。
+ *  <li>{@link HandlerMapping}，顺序为1，用于将URL路径直接映射到视图名称。
+ *  <li>{@link BeanNameUrlHandlerMapping}，顺序为2，用于将URL路径映射到控制器bean名称。
+ *  <li>{@link RouterFunctionMapping}，顺序为3，用于映射{@linkplain org.springframework.web.servlet.function.RouterFunction 路由函数}。
+ *  <li>{@link HandlerMapping}，顺序为{@code Integer.MAX_VALUE-1}，用于服务静态资源请求。
+ *  <li>{@link HandlerMapping}，顺序为{@code Integer.MAX_VALUE}，用于转发请求到默认Servlet。
+ *  </ul>
  *
  * <p>Registers these {@link HandlerAdapter HandlerAdapters}:
  * <ul>
@@ -148,6 +161,13 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * <li>{@link HandlerFunctionAdapter}
  * for processing requests with {@linkplain org.springframework.web.servlet.function.RouterFunction router functions}.
  * </ul>
+ * <p>注册了这些{@link HandlerAdapter HandlerAdapters}：</p>
+ * <ul>
+ * <li>{@link RequestMappingHandlerAdapter}，用于处理使用注解控制器方法的请求。
+ * <li>{@link HttpRequestHandlerAdapter}，用于处理使用{@link HttpRequestHandler HttpRequestHandlers}的请求。
+ * <li>{@link SimpleControllerHandlerAdapter}，用于处理使用接口为基础的{@link Controller Controllers}的请求。
+ * <li>{@link HandlerFunctionAdapter}，用于处理使用{@linkplain org.springframework.web.servlet.function.RouterFunction 路由函数}的请求。
+ * </ul>
  *
  * <p>Registers a {@link HandlerExceptionResolverComposite} with this chain of
  * exception resolvers:
@@ -159,6 +179,12 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * <li>{@link DefaultHandlerExceptionResolver} for resolving known Spring
  * exception types
  * </ul>
+ * <p>注册了一个{@link HandlerExceptionResolverComposite}，其中包含此异常解析器链：</p>
+ * <ul>
+ * <li>{@link ExceptionHandlerExceptionResolver}，用于通过{@link org.springframework.web.bind.annotation.ExceptionHandler}方法处理异常。
+ * <li>{@link ResponseStatusExceptionResolver}，用于处理注有{@link org.springframework.web.bind.annotation.ResponseStatus}的异常。
+ * <li>{@link DefaultHandlerExceptionResolver}，用于解析已知的Spring异常类型。
+ * </ul>
  *
  * <p>Registers an {@link AntPathMatcher} and a {@link UrlPathHelper}
  * to be used by:
@@ -168,6 +194,13 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * <li>and the {@link HandlerMapping} for serving resources
  * </ul>
  * Note that those beans can be configured with a {@link PathMatchConfigurer}.
+ * <p>注册了一个{@link AntPathMatcher}和一个{@link UrlPathHelper}，用于：</p>
+ * <ul>
+ * <li> {@link RequestMappingHandlerMapping}，
+ * <li> {@link HandlerMapping}用于ViewController，
+ * <li> 和 {@link HandlerMapping}用于服务资源。
+ * </ul>
+ * 注意，这些bean可以通过{@link PathMatchConfigurer}进行配置。
  *
  * <p>Both the {@link RequestMappingHandlerAdapter} and the
  * {@link ExceptionHandlerExceptionResolver} are configured with default
@@ -179,6 +212,13 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * if a JSR-303 implementation is available on the classpath
  * <li>a range of {@link HttpMessageConverter HttpMessageConverters} depending on the third-party
  * libraries available on the classpath.
+ * </ul>
+ * <p> {@link RequestMappingHandlerAdapter} 和 {@link ExceptionHandlerExceptionResolver} 默认配置了以下默认实例：</p>
+ * <ul>
+ * <li>一个{@link ContentNegotiationManager}
+ * <li>一个{@link DefaultFormattingConversionService}
+ * <li>如果类路径上可用JSR-303实现，则配置一个{@link org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean}
+ * <li>一系列{@link HttpMessageConverter HttpMessageConverters}，取决于类路径上第三方库的可用性。
  * </ul>
  *
  * @author Rossen Stoyanchev
@@ -194,6 +234,9 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * Boolean flag controlled by a {@code spring.xml.ignore} system property that instructs Spring to
 	 * ignore XML, i.e. to not initialize the XML-related infrastructure.
 	 * <p>The default is "false".
+	 * <p>由系统属性{@code spring.xml.ignore}控制的布尔标志，用于指示Spring忽略XML，
+	 * 即不初始化与XML相关的基础设施。
+	 * <p>默认值为"false"。
 	 */
 	private static final boolean shouldIgnoreXml = SpringProperties.getFlag("spring.xml.ignore");
 
@@ -300,6 +343,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	/**
 	 * Return a {@link RequestMappingHandlerMapping} ordered at 0 for mapping
 	 * requests to annotated controllers.
+	 * <p>获取一个顺序为0的{@link RequestMappingHandlerMapping}，用于将请求映射到注解控制器。
 	 */
 	@Bean
 	@SuppressWarnings("deprecation")
@@ -440,6 +484,10 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	/**
 	 * Return a {@link ContentNegotiationManager} instance to use to determine
 	 * requested {@linkplain MediaType media types} in a given request.
+	 * <p>返回一个{@link ContentNegotiationManager}实例，用于确定在给定请求中请求的{@linkplain MediaType 媒体类型}。
+	 * <p>
+	 * 这个方法不接受任何参数，它创建并返回一个配置好的ContentNegotiationManager实例，
+	 * 该实例可以分析请求并确定客户端期望的响应内容类型。
 	 */
 	@Bean
 	public ContentNegotiationManager mvcContentNegotiationManager() {

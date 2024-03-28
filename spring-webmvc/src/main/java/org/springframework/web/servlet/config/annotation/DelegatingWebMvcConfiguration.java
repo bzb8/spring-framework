@@ -35,6 +35,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
  * to all beans of type {@link WebMvcConfigurer} allowing them to customize the
  * configuration provided by {@code WebMvcConfigurationSupport}. This is the
  * class actually imported by {@link EnableWebMvc @EnableWebMvc}.
+ * <p>{@code WebMvcConfigurationSupport}的一个子类，用于检测并委托给所有类型为{@link WebMvcConfigurer}的bean，
+ * 允许它们自定义由{@code WebMvcConfigurationSupport}提供的配置。这是由{@link EnableWebMvc @EnableWebMvc}实际导入的类。
  *
  * @author Rossen Stoyanchev
  * @since 3.1

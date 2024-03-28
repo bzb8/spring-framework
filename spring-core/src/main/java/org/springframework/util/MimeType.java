@@ -36,14 +36,20 @@ import org.springframework.lang.Nullable;
 /**
  * Represents a MIME Type, as originally defined in RFC 2046 and subsequently
  * used in other Internet protocols including HTTP.
+ * <p>表示MIME类型，最初定义在RFC 2046中，随后在包括HTTP在内的其他Internet协议中使用。
  *
  * <p>This class, however, does not contain support for the q-parameters used
  * in HTTP content negotiation. Those can be found in the subclass
  * {@code org.springframework.http.MediaType} in the {@code spring-web} module.
+ * <p>这个类不包含用于HTTP内容协商的q-参数的支持。那些可以在{@code spring-web}模块的
+ * 子类{@code org.springframework.http.MediaType}中找到。
  *
  * <p>Consists of a {@linkplain #getType() type} and a {@linkplain #getSubtype() subtype}.
  * Also has functionality to parse MIME Type values from a {@code String} using
  * {@link #valueOf(String)}. For more parsing options see {@link MimeTypeUtils}.
+ * <p>由{@linkplain #getType() 类型}和{@linkplain #getSubtype() 子类型}组成。
+ * 同时提供从{@code String}使用{@link #valueOf(String)}解析MIME类型值的功能。
+ * 对于更多的解析选项，请见{@link MimeTypeUtils}。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller

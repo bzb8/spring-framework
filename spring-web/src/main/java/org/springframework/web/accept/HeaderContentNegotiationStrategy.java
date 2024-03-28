@@ -28,6 +28,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * A {@code ContentNegotiationStrategy} that checks the 'Accept' request header.
+ * <p>解析请求中的'Accept'头，返回一个媒体类型列表，按照客户端的偏好顺序排列。
+ * 如果无法解析'Accept'头，则抛出{@link HttpMediaTypeNotAcceptableException}。
  *
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller

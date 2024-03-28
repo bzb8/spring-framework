@@ -36,14 +36,16 @@ import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 /**
  * Creates a {@code ContentNegotiationManager} and configures it with
  * one or more {@link ContentNegotiationStrategy} instances.
+ * <p>创建一个{@code ContentNegotiationManager}并使用一个或多个{@link ContentNegotiationStrategy}实例对其进行配置。
  *
  * <p>This factory offers properties that in turn result in configuring the
  * underlying strategies. The table below shows the property names, their
  * default settings, as well as the strategies that they help to configure:
+ * <p>本工厂类提供了一些属性，这些属性可用于配置底层策略。下表显示了属性名称、其默认设置以及它们帮助配置的策略：
  *
  * <table>
  * <tr>
- * <th>Property Setter</th>
+ * <th>Property Setter 属性设置器</th>
  * <th>Default Value</th>
  * <th>Underlying Strategy</th>
  * <th>Enabled Or Not</th>
@@ -83,6 +85,7 @@ import org.springframework.web.accept.ParameterContentNegotiationStrategy;
  *
  * <p>As of 5.0 you can set the exact strategies to use via
  * {@link #strategies(List)}.
+ * <p>自5.0版本起，您可以通过{@link #strategies(List)}设置要使用的确切策略。
  *
  * <p><strong>Note:</strong> if you must use URL-based content type resolution,
  * the use of a query parameter is simpler and preferable to the use of a path
@@ -90,10 +93,14 @@ import org.springframework.web.accept.ParameterContentNegotiationStrategy;
  * parameters, and URI decoding. Consider setting {@link #favorPathExtension}
  * to {@literal false} or otherwise set the strategies to use explicitly via
  * {@link #strategies(List)}.
+ * <p><strong>注意：</strong>如果必须使用基于URL的内容类型解析，使用查询参数比使用路径扩展更简单且更可取，因为后者可能会导致URI变量、
+ * 路径参数和URI解码方面的问题。考虑将{@link #favorPathExtension}设置为{@literal false}，
+ * 或者通过{@link #strategies(List)}显式设置要使用的策略。
  *
  * @author Rossen Stoyanchev
  * @since 3.2
  */
+
 public class ContentNegotiationConfigurer {
 
 	private final ContentNegotiationManagerFactoryBean factory = new ContentNegotiationManagerFactoryBean();
@@ -180,6 +187,9 @@ public class ContentNegotiationConfigurer {
 
 	/**
 	 * An alternative to {@link #mediaType}.
+	 * <p>一种替代{@link #mediaType}的方法。
+	 * 请参见{@link #mediaType(String, MediaType)}和{@link #replaceMediaTypes(Map)}。
+	 *
 	 * @see #mediaType(String, MediaType)
 	 * @see #replaceMediaTypes(Map)
 	 */
