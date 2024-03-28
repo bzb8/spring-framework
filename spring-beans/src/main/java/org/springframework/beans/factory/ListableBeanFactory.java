@@ -162,7 +162,8 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * @see FactoryBean#getObjectType
 	 * @see BeanFactoryUtils#beanNamesForTypeIncludingAncestors(ListableBeanFactory, ResolvableType)
 	 */
-	String[] getBeanNamesForType(ResolvableType type);
+	String[]
+	getBeanNamesForType(ResolvableType type);
 
 	/**
 	 * Return the names of beans matching the given type (including subclasses),

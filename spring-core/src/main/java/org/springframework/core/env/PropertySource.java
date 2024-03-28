@@ -75,8 +75,13 @@ public abstract class PropertySource<T> {
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 属性源标识
+	 */
 	protected final String name;
-
+	/**
+	 * 任何对象，该对象封装了属性
+	 */
 	protected final T source;
 
 

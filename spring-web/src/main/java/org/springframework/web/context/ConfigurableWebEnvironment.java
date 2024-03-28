@@ -32,6 +32,15 @@ import org.springframework.lang.Nullable;
  * @since 3.1.2
  * @see ConfigurableWebApplicationContext#getEnvironment()
  */
+/**
+ * {@link ConfigurableEnvironment}接口的特化版，允许在{@link ServletContext}和（可选地）{@link ServletConfig}
+ * 变得可用的最早时刻初始化与Servlet相关的{@link org.springframework.core.env.PropertySource}对象。
+ *
+ * @author Chris Beams 表示该类的作者是Chris Beams。
+ * @since 3.1.2 表示该类是从3.1.2版本开始提供的。
+ * @see ConfigurableWebApplicationContext#getEnvironment() 提供了一个相关方法的引用说明。
+ */
+
 public interface ConfigurableWebEnvironment extends ConfigurableEnvironment {
 
 	/**
@@ -43,6 +52,16 @@ public interface ConfigurableWebEnvironment extends ConfigurableEnvironment {
 	 * @param servletConfig the {@link ServletConfig} ({@code null} if not available)
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#initServletPropertySources(
 	 * org.springframework.core.env.MutablePropertySources, ServletContext, ServletConfig)
+	 */
+	/**
+	 * 使用给定的参数，将作为占位符的任何{@linkplain
+	 * org.springframework.core.env.PropertySource.StubPropertySource stub property source}实例替换为真实的servlet上下文/配置属性源。
+	 *
+	 * @param servletContext the {@link ServletContext} (may not be {@code null})，表示servlet上下文，不能为空。
+	 * @param servletConfig the {@link ServletConfig} ({@code null} if not available)，表示servlet配置，如果不可用可以为null。
+	 * @see org.springframework.web.context.support.WebApplicationContextUtils#initServletPropertySources(
+	 * org.springframework.core.env.MutablePropertySources, ServletContext, ServletConfig)，
+	 * 参考WebApplicationContextUtils类中的initServletPropertySources方法，用于初始化servlet属性源。
 	 */
 	void initPropertySources(@Nullable ServletContext servletContext, @Nullable ServletConfig servletConfig);
 

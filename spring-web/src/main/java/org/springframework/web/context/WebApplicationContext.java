@@ -24,18 +24,25 @@ import org.springframework.lang.Nullable;
 /**
  * Interface to provide configuration for a web application. This is read-only while
  * the application is running, but may be reloaded if the implementation supports this.
+ * <p>为web应用程序提供配置的接口。该接口在应用程序运行时为只读，但如果实现支持，可以重新加载。
  *
  * <p>This interface adds a {@code getServletContext()} method to the generic
  * ApplicationContext interface, and defines a well-known application attribute name
  * that the root context must be bound to in the bootstrap process.
+ * <p>该接口向通用ApplicationContext接口添加了一个{@code getServletContext()}方法，并定义了一个众所周知的应用程序属性名称，
+ * 该名称必须在启动过程中将根上下文绑定到此。
  *
  * <p>Like generic application contexts, web application contexts are hierarchical.
  * There is a single root context per application, while each servlet in the application
  * (including a dispatcher servlet in the MVC framework) has its own child context.
+ * <p>像通用应用程序上下文一样，web应用程序上下文也是分层的。每个应用程序只有一个根上下文，而应用程序中的每个servlet（包括MVC框架中的分发器servlet）
+ * 都有自己的子上下文。
  *
  * <p>In addition to standard application context lifecycle capabilities,
  * WebApplicationContext implementations need to detect {@link ServletContextAware}
  * beans and invoke the {@code setServletContext} method accordingly.
+ * <p>除了标准的应用程序上下文生命周期功能外，WebApplicationContext实现还需要检测{@link ServletContextAware} beans
+ * 并相应地调用{@code setServletContext}方法。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -49,6 +56,10 @@ public interface WebApplicationContext extends ApplicationContext {
 	 * <p>Note: If the startup of the root context fails, this attribute can contain
 	 * an exception or error as value. Use WebApplicationContextUtils for convenient
 	 * lookup of the root WebApplicationContext.
+	 * <p>在成功启动后，用于绑定根 WebApplicationContext 的上下文属性。
+	 * <p>注意：如果根上下文的启动失败，这个属性可以包含一个异常或错误作为值。
+	 * 使用 WebApplicationContextUtils 可以方便地查找根 WebApplicationContext。
+	 *
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#getWebApplicationContext
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#getRequiredWebApplicationContext
 	 */

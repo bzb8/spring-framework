@@ -92,8 +92,10 @@ public abstract class WebApplicationContextUtils {
 	 * loaded via {@link org.springframework.web.context.ContextLoaderListener}.
 	 * <p>Will rethrow an exception that happened on root context startup,
 	 * to differentiate between a failed context startup and no context at all.
-	 * @param sc the ServletContext to find the web application context for
-	 * @return the root WebApplicationContext for this web app, or {@code null} if none
+	 * <p>查找当前web应用的根{@code WebApplicationContext}，通常通过{@link org.springframework.web.context.ContextLoaderListener}加载。
+	 * <p>如果根上下文启动时发生异常，将重新抛出该异常，以区分上下文启动失败和根本没有上下文的情况。
+	 * @param sc 要为其查找web应用程序上下文的ServletContext
+	 * @return 该web应用的根WebApplicationContext，如果没有则返回{@code null}
 	 * @see org.springframework.web.context.WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE
 	 */
 	@Nullable
@@ -290,6 +292,16 @@ public abstract class WebApplicationContextUtils {
 	 * servlet config property source} has already been initialized)
 	 * @see org.springframework.core.env.PropertySource.StubPropertySource
 	 * @see org.springframework.core.env.ConfigurableEnvironment#getPropertySources()
+	 */
+	/**
+	 * 使用给定的参数，将作为占位符的任何{@linkplain
+	 * org.springframework.core.env.PropertySource.StubPropertySource stub property source}实例替换为真实的servlet上下文/配置属性源。
+	 *
+	 * @param servletContext the {@link ServletContext} (may not be {@code null})，表示servlet上下文，不能为空。
+	 * @param servletConfig the {@link ServletConfig} ({@code null} if not available)，表示servlet配置，如果不可用可以为null。
+	 * @see org.springframework.web.context.support.WebApplicationContextUtils#initServletPropertySources(
+	 * org.springframework.core.env.MutablePropertySources, ServletContext, ServletConfig)，
+	 * 参考WebApplicationContextUtils类中的initServletPropertySources方法，用于初始化servlet属性源。
 	 */
 	public static void initServletPropertySources(MutablePropertySources sources,
 			@Nullable ServletContext servletContext, @Nullable ServletConfig servletConfig) {

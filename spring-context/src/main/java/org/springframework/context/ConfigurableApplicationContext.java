@@ -172,6 +172,8 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	 * <p>Note that any ApplicationListener registered here will be applied
 	 * on refresh if the context is not active yet, or on the fly with the
 	 * current event multicaster in case of a context that is already active.
+	 * <p>添加一个新的 ApplicationListener，它将在上下文刷新和上下文关闭等上下文事件时收到通知。
+	 * <p>请注意，如果上下文尚未处于活动状态，则此处注册的任何 ApplicationListener 将在刷新时应用；如果上下文已处于活动状态，则将在当前事件多播器中动态应用。
 	 * @param listener the ApplicationListener to register
 	 * @see org.springframework.context.event.ContextRefreshedEvent
 	 * @see org.springframework.context.event.ContextClosedEvent
@@ -239,6 +241,7 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	/**
 	 * Determine whether this application context is active, that is,
 	 * whether it has been refreshed at least once and has not been closed yet.
+	 * <p>确定此应用程序上下文是否处于活动状态，即是否已至少刷新一次且尚未关闭
 	 * @return whether the context is still active
 	 * @see #refresh()
 	 * @see #close()

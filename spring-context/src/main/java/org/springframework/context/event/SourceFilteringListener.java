@@ -26,9 +26,11 @@ import org.springframework.lang.Nullable;
  * {@link org.springframework.context.ApplicationListener} decorator that filters
  * events from a specified event source, invoking its delegate listener for
  * matching {@link org.springframework.context.ApplicationEvent} objects only.
+ * <p>一个用于过滤特定事件源事件的装饰器类，仅对匹配的{@link org.springframework.context.ApplicationEvent}对象调用其代理监听器。
  *
  * <p>Can also be used as base class, overriding the {@link #onApplicationEventInternal}
  * method instead of specifying a delegate listener.
+ * <p>该类也可作为基类使用，通过重写{@link #onApplicationEventInternal}方法而不是指定代理监听器。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll

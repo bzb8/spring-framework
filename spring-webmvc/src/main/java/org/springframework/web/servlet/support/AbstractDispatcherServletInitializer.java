@@ -39,9 +39,13 @@ import org.springframework.web.servlet.FrameworkServlet;
 /**
  * Base class for {@link org.springframework.web.WebApplicationInitializer}
  * implementations that register a {@link DispatcherServlet} in the servlet context.
+ * <p>{@link org.springframework.web.WebApplicationInitializer} 实现的基类，
+ * 用于在 servlet 上下文中注册一个 {@link DispatcherServlet}。
  *
  * <p>Most applications should consider extending the Spring Java config subclass
  * {@link AbstractAnnotationConfigDispatcherServletInitializer}.
+ * <p>大多数应用程序应考虑扩展 Spring Java 配置子类
+ * {@link AbstractAnnotationConfigDispatcherServletInitializer}。
  *
  * @author Arjen Poutsma
  * @author Chris Beams
@@ -60,6 +64,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
+		// 初始化并注册根上下文
 		super.onStartup(servletContext);
 		registerDispatcherServlet(servletContext);
 	}
@@ -73,19 +78,28 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	 * <p>Further customization can be achieved by overriding {@link
 	 * #customizeRegistration(ServletRegistration.Dynamic)} or
 	 * {@link #createDispatcherServlet(WebApplicationContext)}.
-	 * @param servletContext the context to register the servlet against
+	 * <p>在给定的servlet上下文中注册一个{@link DispatcherServlet}。
+	 * <p>此方法将使用{@link #getServletName()}返回的名称创建一个{@code DispatcherServlet}，
+	 * 并使用{@link #createServletApplicationContext()}返回的应用上下文对其进行初始化，
+	 * 并将其映射到{@link #getServletMappings()}返回的模式。
+	 * <p>可以通过重写{@link #customizeRegistration(ServletRegistration.Dynamic)}或
+	 * {@link #createDispatcherServlet(WebApplicationContext)}进一步进行定制。
+	 ** @param servletContext the context to register the servlet against
 	 */
 	protected void registerDispatcherServlet(ServletContext servletContext) {
 		String servletName = getServletName();
 		Assert.hasLength(servletName, "getServletName() must not return null or empty");
 
+		// 创建servlet上下文AnnotationConfigWebApplicationContext
 		WebApplicationContext servletAppContext = createServletApplicationContext();
 		Assert.notNull(servletAppContext, "createServletApplicationContext() must not return null");
 
+		// 创建DispatcherServlet
 		FrameworkServlet dispatcherServlet = createDispatcherServlet(servletAppContext);
 		Assert.notNull(dispatcherServlet, "createDispatcherServlet(WebApplicationContext) must not return null");
 		dispatcherServlet.setContextInitializers(getServletApplicationContextInitializers());
 
+		// 在servlet上下文注册DispatcherServlet
 		ServletRegistration.Dynamic registration = servletContext.addServlet(servletName, dispatcherServlet);
 		if (registration == null) {
 			throw new IllegalStateException("Failed to register servlet with name '" + servletName + "'. " +
@@ -94,8 +108,10 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
 		registration.setLoadOnStartup(1);
 		registration.addMapping(getServletMappings());
+		// 设置异步支持
 		registration.setAsyncSupported(isAsyncSupported());
 
+		// 指定要应用于dispatcherServlet的过滤器
 		Filter[] filters = getServletFilters();
 		if (!ObjectUtils.isEmpty(filters)) {
 			for (Filter filter : filters) {
@@ -109,6 +125,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	/**
 	 * Return the name under which the {@link DispatcherServlet} will be registered.
 	 * Defaults to {@link #DEFAULT_SERVLET_NAME}.
+	 * 返回将注册 {@link DispatcherServlet} 的名称。默认为 {@link #DEFAULT_SERVLET_NAME}。
 	 * @see #registerDispatcherServlet(ServletContext)
 	 */
 	protected String getServletName() {
@@ -130,6 +147,10 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	 * dispatcher) with the specified {@link WebApplicationContext}.
 	 * <p>Note: This allows for any {@link FrameworkServlet} subclass as of 4.2.3.
 	 * Previously, it insisted on returning a {@link DispatcherServlet} or subclass thereof.
+	 * <p>创建一个 {@link DispatcherServlet}（或其他 {@link FrameworkServlet} 派生的分发器），并将其与指定的 {@link WebApplicationContext} 关联。
+	 * <p>注意：此方法自 4.2.3 版本起允许任何 {@link FrameworkServlet} 子类作为返回类型。
+	 * 之前，它坚持返回 {@link DispatcherServlet} 或其子类。
+	 *
 	 */
 	protected FrameworkServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
 		return new DispatcherServlet(servletAppContext);
@@ -182,10 +203,24 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	 * @param filter the filter to be registered
 	 * @return the filter registration
 	 */
+	/**
+	 * 将给定的过滤器添加到ServletContext，并将其映射到{@code DispatcherServlet}，具体操作如下：
+	 * <ul>
+	 * <li>根据过滤器的具体类型选择一个默认的过滤器名称；
+	 * <li>设置{@code asyncSupported}标志，其值取决于{@link #isAsyncSupported() asyncSupported}方法的返回值；
+	 * <li>创建一个过滤器映射，其调度类型为{@code REQUEST}、{@code FORWARD}、{@code INCLUDE}，并且根据{@link #isAsyncSupported() asyncSupported}方法的返回值，条件性地添加{@code ASYNC}调度类型。
+	 * </ul>
+	 * <p>如果默认设置不适合或不充分，可以重写此方法，直接使用{@code ServletContext}注册过滤器。
+	 * @param servletContext 用于注册过滤器的servlet上下文
+	 * @param filter 要注册的过滤器
+	 * @return 过滤器注册信息
+	 */
 	protected FilterRegistration.Dynamic registerServletFilter(ServletContext servletContext, Filter filter) {
 		String filterName = Conventions.getVariableName(filter);
+		// 添加过滤器
 		Dynamic registration = servletContext.addFilter(filterName, filter);
 
+		// 从100开始递增，避免冲突
 		if (registration == null) {
 			int counter = 0;
 			while (registration == null) {

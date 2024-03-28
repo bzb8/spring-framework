@@ -305,7 +305,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	/** Perform cleanup of request attributes after include request?. */
 	private boolean cleanupAfterInclude = true;
 
-	/** MultipartResolver used by this servlet. */
+	/**
+	 * MultipartResolver used by this servlet.
+	 * 从spring容器中获取，默认为null
+	 */
 	@Nullable
 	private MultipartResolver multipartResolver;
 
@@ -405,6 +408,35 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @see #configureAndRefreshWebApplicationContext
 	 * @see org.springframework.web.WebApplicationInitializer
 	 */
+	/**
+	 * 使用给定的Web应用上下文创建一个新的{@code DispatcherServlet}。此构造函数在Servlet 3.0+环境中非常有用，
+	 * 通过{@link ServletContext#addServlet} API可以实现基于实例的Servlet注册。
+	 * <p>使用此构造函数表示以下属性/初始化参数将被忽略：
+	 * <ul>
+	 * <li>{@link #setContextClass(Class)} / 'contextClass'</li>
+	 * <li>{@link #setContextConfigLocation(String)} / 'contextConfigLocation'</li>
+	 * <li>{@link #setContextAttribute(String)} / 'contextAttribute'</li>
+	 * <li>{@link #setNamespace(String)} / 'namespace'</li>
+	 * </ul>
+	 * <p>给定的Web应用上下文可能已经或尚未经过{@linkplain ConfigurableApplicationContext#refresh() 刷新}。
+	 * 如果它尚未被刷新（建议的方式），则会发生以下情况：
+	 * <ul>
+	 * <li>如果给定的上下文尚未具有{@linkplain ConfigurableApplicationContext#setParent 父上下文}，
+	 * 根应用上下文将被设置为父上下文。</li>
+	 * <li>如果给定的上下文尚未分配{@linkplain ConfigurableApplicationContext#setId ID}，将为其分配一个ID。</li>
+	 * <li>将把{@code ServletContext}和{@code ServletConfig}对象委托给应用上下文。</li>
+	 * <li>将调用{@link #postProcessWebApplicationContext}。</li>
+	 * <li>通过"contextInitializerClasses" init-param或通过{@link #setContextInitializers}属性指定的任何{@code ApplicationContextInitializer}s
+	 * 将被应用。</li>
+	 * <li>如果上下文实现{@link ConfigurableApplicationContext}，则将调用{@link ConfigurableApplicationContext#refresh refresh()}。</li>
+	 * </ul>
+	 * 如果上下文已经刷新，则上述情况都不会发生，这是基于假设用户已根据特定需求执行了这些操作（或未执行）。
+	 * <p>请参见{@link org.springframework.web.WebApplicationInitializer}以了解用法示例。
+	 * @param webApplicationContext 要使用的上下文
+	 * @see #initWebApplicationContext
+	 * @see #configureAndRefreshWebApplicationContext
+	 * @see org.springframework.web.WebApplicationInitializer
+	 */
 	public DispatcherServlet(WebApplicationContext webApplicationContext) {
 		super(webApplicationContext);
 		setDispatchOptionsRequest(true);
@@ -494,8 +526,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Initialize the strategy objects that this servlet uses.
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
+	 * 初始化该 servlet 使用的策略对象。 <p>可以在子类中重写，以便初始化进一步的策略对象。
 	 */
 	protected void initStrategies(ApplicationContext context) {
+		// context = AnnotationConfigWebApplicationContext
 		initMultipartResolver(context);
 		initLocaleResolver(context);
 		initThemeResolver(context);
@@ -511,9 +545,13 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Initialize the MultipartResolver used by this class.
 	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
 	 * no multipart handling is provided.
+	 * <p>初始化用于本类的MultipartResolver。
+	 * <p>如果在当前命名空间的BeanFactory中没有定义给定名称的bean，
+	 * 则不提供多部分处理功能。
 	 */
 	private void initMultipartResolver(ApplicationContext context) {
 		try {
+			// 从spring容器中获取 MultipartResolver
 			this.multipartResolver = context.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Detected " + this.multipartResolver);

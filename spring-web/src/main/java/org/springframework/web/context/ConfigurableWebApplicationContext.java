@@ -26,11 +26,15 @@ import org.springframework.lang.Nullable;
  * Interface to be implemented by configurable web application contexts.
  * Supported by {@link ContextLoader} and
  * {@link org.springframework.web.servlet.FrameworkServlet}.
+ * <p>由{@link ContextLoader}和{@link org.springframework.web.servlet.FrameworkServlet}支持的，
+ * 可配置的web应用程序上下文需要实现的接口。
  *
  * <p>Note: The setters of this interface need to be called before an
  * invocation of the {@link #refresh} method inherited from
  * {@link org.springframework.context.ConfigurableApplicationContext}.
  * They do not cause an initialization of the context on their own.
+ * <p>注意：此接口的setter方法需要在调用从{@link org.springframework.context.ConfigurableApplicationContext}
+ * 继承来的{@link #refresh}方法之前调用。它们本身不会引起上下文的初始化。
  *
  * @author Juergen Hoeller
  * @since 05.12.2003
@@ -91,6 +95,12 @@ public interface ConfigurableWebApplicationContext extends WebApplicationContext
 	 * i.e. with distinct locations separated by commas, semicolons or whitespace.
 	 * <p>If not set, the implementation is supposed to use a default for the
 	 * given namespace or the root web application context, as appropriate.
+	 */
+	/**
+	 * 设置此web应用程序上下文的配置位置，以init-param样式进行设置，即使用逗号、分号或空格分隔的独立位置。
+	 * <p>如果未设置，实现应使用给定命名空间或根web应用程序上下文的适当默认值。
+	 *
+	 * @param configLocation 配置位置的字符串表示，多个位置之间使用逗号、分号或空格分隔。
 	 */
 	void setConfigLocation(String configLocation);
 

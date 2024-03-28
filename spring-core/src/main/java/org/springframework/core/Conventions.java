@@ -63,6 +63,18 @@ public final class Conventions {
 	 * @param value the value to generate a variable name for
 	 * @return the generated variable name
 	 */
+	/**
+	 * 根据提供的{@code Object}确定其常规变量名，基于其具体类型。使用的方法是返回根据JavaBeans属性命名规则未大写的短类名。
+	 * <p>例如：<br>
+	 * {@code com.myapp.Product} 变为 {@code "product"}<br>
+	 * {@code com.myapp.MyProduct} 变为 {@code "myProduct"}<br>
+	 * {@code com.myapp.UKProduct} 变为 {@code "UKProduct"}<br>
+	 * <p>对于数组，使用数组组件类型的复数形式。对于{@code Collection}，尝试“向前看”以确定组件类型并返回其复数形式。
+	 * @param value 为其生成变量名的值
+	 * @return 生成的变量名
+	 * @throws IllegalArgumentException 如果提供的Collection为空，因为无法为一个空的Collection生成变量名
+	 * @throws NullPointerException 如果提供的值为null，则抛出此异常
+	 */
 	public static String getVariableName(Object value) {
 		Assert.notNull(value, "Value must not be null");
 		Class<?> valueClass;

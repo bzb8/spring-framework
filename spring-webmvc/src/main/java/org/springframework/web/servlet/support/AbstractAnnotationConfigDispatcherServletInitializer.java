@@ -49,10 +49,16 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 	 * <p>This implementation creates an {@link AnnotationConfigWebApplicationContext},
 	 * providing it the annotated classes returned by {@link #getRootConfigClasses()}.
 	 * Returns {@code null} if {@link #getRootConfigClasses()} returns {@code null}.
+	 * <p>创建一个 {@link AnnotationConfigWebApplicationContext} 上下文，
+	 * 并将由 {@link #getRootConfigClasses()} 返回的注解配置类提供给它。
+	 * 如果 {@link #getRootConfigClasses()} 返回 {@code null}，则返回 {@code null}。
+	 * <p>此实现覆盖了特定行为，提供了初始化上下文的另一种方式。
+	 *
 	 */
 	@Override
 	@Nullable
 	protected WebApplicationContext createRootApplicationContext() {
+		// 获取配置类
 		Class<?>[] configClasses = getRootConfigClasses();
 		if (!ObjectUtils.isEmpty(configClasses)) {
 			AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
@@ -68,6 +74,17 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 	 * {@inheritDoc}
 	 * <p>This implementation creates an {@link AnnotationConfigWebApplicationContext},
 	 * providing it the annotated classes returned by {@link #getServletConfigClasses()}.
+	 */
+	/**
+	 * 重写方法，创建一个{@link AnnotationConfigWebApplicationContext}，
+	 * 并为该上下文提供由{@link #getServletConfigClasses()}返回的注解类。
+	 * 这个实现具体做了以下事情：
+	 * 1. 创建一个注解配置的Web应用上下文。
+	 * 2. 将获取到的Servlet配置类注解提供给这个上下文。
+	 *
+	 * @return 返回一个初始化好的{@link AnnotationConfigWebApplicationContext}实例。
+	 * @see AnnotationConfigWebApplicationContext
+	 * @see #getServletConfigClasses()
 	 */
 	@Override
 	protected WebApplicationContext createServletApplicationContext() {

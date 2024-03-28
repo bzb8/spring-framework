@@ -64,6 +64,7 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 	 */
 	protected void registerContextLoaderListener(ServletContext servletContext) {
 		// 创建root应用上下文，可由子类实现
+		// AbstractAnnotationConfigDispatcherServletInitializer
 		WebApplicationContext rootAppContext = createRootApplicationContext();
 		if (rootAppContext != null) {
 			// 向servletContext注册ContextLoaderListener监听器，并设置ContextLoaderListener的初始化器，
