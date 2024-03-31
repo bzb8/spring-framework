@@ -69,6 +69,8 @@ public class UrlPathHelper {
 	 * Special WebSphere request attribute, indicating the original request URI.
 	 * Preferable over the standard Servlet 2.4 forward attribute on WebSphere,
 	 * simply because we need the very first URI in the request forwarding chain.
+	 * 定义一个静态常量WEBSPHERE_URI_ATTRIBUTE，它表示原始请求的URI。
+	 * 在WebSphere上，它比标准的Servlet 2.4转发属性更优，原因是我们需要请求转发链中最原始的URI。
 	 */
 	private static final String WEBSPHERE_URI_ATTRIBUTE = "com.ibm.websphere.servlet.uri_non_decoded";
 

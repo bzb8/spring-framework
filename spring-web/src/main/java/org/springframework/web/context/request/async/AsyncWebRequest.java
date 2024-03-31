@@ -23,6 +23,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * Extends {@link NativeWebRequest} with methods for asynchronous request processing.
+ * 扩展了{@link NativeWebRequest}，提供了异步请求处理的方法。
+ * 这个类不包含具体的实现代码，主要是为了通过接口定义异步处理所需的方法。
  *
  * @author Rossen Stoyanchev
  * @since 3.2
@@ -67,6 +69,8 @@ public interface AsyncWebRequest extends NativeWebRequest {
 	 * Whether the request is in async mode following a call to {@link #startAsync()}.
 	 * Returns "false" if asynchronous processing never started, has completed,
 	 * or the request was dispatched for further processing.
+	 * 判断请求是否在调用 {@link #startAsync()} 后处于异步模式。
+	 * 如果异步处理从未开始、已完成，或者请求已分发以便进一步处理，则返回 "false"。
 	 */
 	boolean isAsyncStarted();
 

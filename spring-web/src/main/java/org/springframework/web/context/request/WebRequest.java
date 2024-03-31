@@ -27,6 +27,8 @@ import org.springframework.lang.Nullable;
  * Generic interface for a web request. Mainly intended for generic web
  * request interceptors, giving them access to general request metadata,
  * not for actual handling of the request.
+ * <p>用于web请求的通用接口。主要用于通用的web请求拦截器，使其能够访问通用的请求元数据，
+ * 而不是用于实际处理请求。
  *
  * @author Juergen Hoeller
  * @author Brian Clozel

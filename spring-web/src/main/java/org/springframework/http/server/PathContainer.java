@@ -23,11 +23,15 @@ import org.springframework.util.MultiValueMap;
 /**
  * Structured representation of a URI path parsed via {@link #parsePath(String)}
  * into a sequence of {@link Separator} and {@link PathSegment} elements.
+ * 径的结构化表示，通过{@link #parsePath(String)}方法解析而来。
+ * 解析结果为一系列的{@link Separator}和{@link PathSegment}元素序列。
  *
  * <p>Each {@link PathSegment} exposes its content in decoded form and with path
  * parameters removed. This makes it safe to match one path segment at a time
  * without the risk of decoded reserved characters altering the structure of
  * the path.
+ * <p>每个{@link PathSegment}暴露了其内容的解码形式，并去除了路径参数。
+ * 这使得能够安全地逐个匹配路径段，而不会因为解码后的保留字符改变路径的结构。
  *
  * @author Rossen Stoyanchev
  * @since 5.0

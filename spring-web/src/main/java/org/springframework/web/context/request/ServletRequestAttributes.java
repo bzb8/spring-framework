@@ -33,9 +33,11 @@ import org.springframework.web.util.WebUtils;
 
 /**
  * Servlet-based implementation of the {@link RequestAttributes} interface.
+ * 基于Servlet实现的{@link RequestAttributes}接口。
  *
  * <p>Accesses objects from servlet request and HTTP session scope,
  * with no distinction between "session" and "global session".
+ * <p>从Servlet请求和HTTP会话作用域访问对象，没有区分"会话"和"全局会话"。
  *
  * @author Juergen Hoeller
  * @since 2.0
@@ -47,6 +49,7 @@ public class ServletRequestAttributes extends AbstractRequestAttributes {
 	/**
 	 * Constant identifying the {@link String} prefixed to the name of a
 	 * destruction callback when it is stored in a {@link HttpSession}.
+	 * 用于在{@link HttpSession}中存储销毁回调时名称前缀的常量。
 	 */
 	public static final String DESTRUCTION_CALLBACK_NAME_PREFIX =
 			ServletRequestAttributes.class.getName() + ".DESTRUCTION_CALLBACK.";
@@ -69,6 +72,7 @@ public class ServletRequestAttributes extends AbstractRequestAttributes {
 	@Nullable
 	private volatile HttpSession session;
 
+	// 用于更新会话属性的映射。
 	private final Map<String, Object> sessionAttributesToUpdate = new ConcurrentHashMap<>(1);
 
 
@@ -109,7 +113,10 @@ public class ServletRequestAttributes extends AbstractRequestAttributes {
 
 	/**
 	 * Exposes the {@link HttpSession} that we're wrapping.
+	 * 暴露包装的{@link HttpSession}。
 	 * @param allowCreate whether to allow creation of a new session if none exists yet
+	 *                    是否允许创建新的会话（如果尚不存在）
+	 *
 	 */
 	@Nullable
 	protected final HttpSession getSession(boolean allowCreate) {
@@ -120,6 +127,7 @@ public class ServletRequestAttributes extends AbstractRequestAttributes {
 		}
 		else {
 			// Access through stored session reference, if any...
+			// 通过存储的会话引用访问，如果有的话...
 			HttpSession session = this.session;
 			if (session == null) {
 				if (allowCreate) {
@@ -135,6 +143,9 @@ public class ServletRequestAttributes extends AbstractRequestAttributes {
 		}
 	}
 
+	/**
+	 * 获取会话，确保不为空。
+	 */
 	private HttpSession obtainSession() {
 		HttpSession session = getSession(true);
 		Assert.state(session != null, "No HttpSession");
@@ -268,6 +279,9 @@ public class ServletRequestAttributes extends AbstractRequestAttributes {
 	/**
 	 * Update all accessed session attributes through {@code session.setAttribute}
 	 * calls, explicitly indicating to the container that they might have been modified.
+	 * 通过调用{@code session.setAttribute}更新所有通过访问过的会话属性，
+	 * 明确向容器指示它们可能已经被修改。
+	 *
 	 */
 	@Override
 	protected void updateAccessedSessionAttributes() {

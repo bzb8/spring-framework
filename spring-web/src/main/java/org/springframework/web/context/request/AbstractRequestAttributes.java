@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
  * Abstract support class for RequestAttributes implementations,
  * offering a request completion mechanism for request-specific destruction
  * callbacks and for updating accessed session attributes.
+ * <p>为RequestAttributes实现提供抽象支持类，提供一种请求完成机制，用于请求特定的销毁回调和更新访问过的会话属性。
  *
  * @author Juergen Hoeller
  * @since 2.0
@@ -33,6 +34,7 @@ import org.springframework.util.Assert;
 public abstract class AbstractRequestAttributes implements RequestAttributes {
 
 	/** Map from attribute name String to destruction callback Runnable. */
+	/** 从属性名称字符串到销毁回调Runnable的映射。 */
 	protected final Map<String, Runnable> requestDestructionCallbacks = new LinkedHashMap<>(8);
 
 	private volatile boolean requestActive = true;
@@ -42,6 +44,8 @@ public abstract class AbstractRequestAttributes implements RequestAttributes {
 	 * Signal that the request has been completed.
 	 * <p>Executes all request destruction callbacks and updates the
 	 * session attributes that have been accessed during request processing.
+	 * 信号表明请求已完成。
+	 * <p>执行所有请求销毁回调，并更新在请求处理期间访问过的会话属性。
 	 */
 	public void requestCompleted() {
 		executeRequestDestructionCallbacks();
@@ -97,6 +101,7 @@ public abstract class AbstractRequestAttributes implements RequestAttributes {
 	/**
 	 * Update all session attributes that have been accessed during request processing,
 	 * to expose their potentially updated state to the underlying session manager.
+	 * 更新在请求处理过程中访问过的所有会话属性，以向底层会话管理器暴露它们可能更新的状态。
 	 */
 	protected abstract void updateAccessedSessionAttributes();
 

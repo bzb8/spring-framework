@@ -216,6 +216,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Request attribute to hold the current web application context.
 	 * Otherwise only the global web app context is obtainable by tags etc.
+	 * 用于存储当前Web应用程序上下文的请求属性。
+	 * 如果不设置此属性，通过标签等只能获取到全局的Web应用上下文。
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#findWebApplicationContext
 	 */
 	public static final String WEB_APPLICATION_CONTEXT_ATTRIBUTE = DispatcherServlet.class.getName() + ".CONTEXT";
@@ -241,6 +243,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Name of request attribute that holds a read-only {@code Map<String,?>}
 	 * with "input" flash attributes saved by a previous request, if any.
+	 * 输入闪存映射的请求属性名称，该映射是只读的{@code Map<String,?>}，存储了前一个请求保存的“输入”闪存属性。
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getInputFlashMap(HttpServletRequest)
 	 */
 	public static final String INPUT_FLASH_MAP_ATTRIBUTE = DispatcherServlet.class.getName() + ".INPUT_FLASH_MAP";
@@ -248,6 +251,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Name of request attribute that holds the "output" {@link FlashMap} with
 	 * attributes to save for a subsequent request.
+	 * 用于存储后续请求中要保存的属性的“输出”{@link FlashMap}的请求属性名称。
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getOutputFlashMap(HttpServletRequest)
 	 */
 	public static final String OUTPUT_FLASH_MAP_ATTRIBUTE = DispatcherServlet.class.getName() + ".OUTPUT_FLASH_MAP";
@@ -276,6 +280,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/**
 	 * Common prefix that DispatcherServlet's default strategy attributes start with.
+	 * DispatcherServlet 的默认策略属性开头的通用前缀。
 	 */
 	private static final String DEFAULT_STRATEGIES_PREFIX = "org.springframework.web.servlet";
 
@@ -302,7 +307,12 @@ public class DispatcherServlet extends FrameworkServlet {
 	/** Throw a NoHandlerFoundException if no Handler was found to process this request? *.*/
 	private boolean throwExceptionIfNoHandlerFound = false;
 
-	/** Perform cleanup of request attributes after include request?. */
+	/**
+	 * Perform cleanup of request attributes after include request?.
+	 * 设定是否在包含请求后进行请求属性的清理。
+	 * <p>此属性决定在处理包含请求之后，是否执行请求属性的清理工作。如果设置为true，则会进行清理。</p>
+	 *
+	 */
 	private boolean cleanupAfterInclude = true;
 
 	/**
@@ -650,6 +660,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
 		if (this.handlerMappings == null) {
+			// 根据DispatcherServlet.properties文件中配置的handlerMapping创建HandlerMapping对象
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerMappings declared for servlet '" + getServletName() +
@@ -893,6 +904,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>The default implementation uses the "DispatcherServlet.properties" file (in the same
 	 * package as the DispatcherServlet class) to determine the class names. It instantiates
 	 * the strategy objects through the context's BeanFactory.
+	 * 为给定的策略接口创建一个默认策略对象的List。
+	 * <p>默认实现使用"DispatcherServlet.properties"文件（与DispatcherServlet类在同一包中）来确定类名。
+	 * 通过上下文的BeanFactory实例化策略对象。
 	 * @param context the current WebApplicationContext
 	 * @param strategyInterface the strategy interface
 	 * @return the List of corresponding strategy objects
@@ -904,6 +918,8 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Load default strategy implementations from properties file.
 				// This is currently strictly internal and not meant to be customized
 				// by application developers.
+				// 从属性文件加载默认策略实现
+				// 目前这完全是内部使用的，不打算让应用开发者定制
 				ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 				defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
 			}
@@ -913,6 +929,9 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		String key = strategyInterface.getName();
+		// org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
+		// org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+		// org.springframework.web.servlet.function.support.RouterFunctionMapping
 		String value = defaultStrategies.getProperty(key);
 		if (value != null) {
 			String[] classNames = StringUtils.commaDelimitedListToStringArray(value);
@@ -959,19 +978,24 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
 	 * for the actual dispatching.
+	 * <p>暴露特定于DispatcherServlet的请求属性，并委托给{@link #doDispatch}进行实际分发。
 	 */
 	@Override
 	protected void doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// 记录请求日志
 		logRequest(request);
 
 		// Keep a snapshot of the request attributes in case of an include,
 		// to be able to restore the original attributes after the include.
+		// 以防请求为包含请求，在包含请求的情况下保存请求属性的快照，
+		// 以便在包含请求完成后能够恢复原始属性。
 		Map<String, Object> attributesSnapshot = null;
 		if (WebUtils.isIncludeRequest(request)) {
 			attributesSnapshot = new HashMap<>();
 			Enumeration<?> attrNames = request.getAttributeNames();
 			while (attrNames.hasMoreElements()) {
 				String attrName = (String) attrNames.nextElement();
+				// 对于需要清理的属性或以特定前缀开始的属性，保存其值
 				if (this.cleanupAfterInclude || attrName.startsWith(DEFAULT_STRATEGIES_PREFIX)) {
 					attributesSnapshot.put(attrName, request.getAttribute(attrName));
 				}
@@ -979,12 +1003,17 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		// Make framework objects available to handlers and view objects.
+		// 将框架对象暴露给处理器和视图对象。
 		request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, getWebApplicationContext());
+		// AcceptHeaderLocaleResolver
 		request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);
+		// FixedThemeResolver
 		request.setAttribute(THEME_RESOLVER_ATTRIBUTE, this.themeResolver);
+		// webApplicationContext
 		request.setAttribute(THEME_SOURCE_ATTRIBUTE, getThemeSource());
 
 		if (this.flashMapManager != null) {
+			// SessionFlashMapManager
 			FlashMap inputFlashMap = this.flashMapManager.retrieveAndUpdate(request, response);
 			if (inputFlashMap != null) {
 				request.setAttribute(INPUT_FLASH_MAP_ATTRIBUTE, Collections.unmodifiableMap(inputFlashMap));
@@ -1005,6 +1034,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		finally {
 			if (!WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
 				// Restore the original attribute snapshot, in case of an include.
+				// 在包含的情况下恢复原始属性快照。
 				if (attributesSnapshot != null) {
 					restoreAttributesAfterInclude(request, attributesSnapshot);
 				}
@@ -1023,12 +1053,14 @@ public class DispatcherServlet extends FrameworkServlet {
 				params = "multipart";
 			}
 			else if (isEnableLoggingRequestDetails()) {
+				// 请求参数信息
 				params = request.getParameterMap().entrySet().stream()
 						.map(entry -> entry.getKey() + ":" + Arrays.toString(entry.getValue()))
 						.collect(Collectors.joining(", "));
 			}
 			else {
 				// Avoid request body parsing for form data
+				// 避免对表单数据进行请求正文分析
 				params = (StringUtils.startsWithIgnoreCase(contentType, MediaType.APPLICATION_FORM_URLENCODED_VALUE) ||
 						!request.getParameterMap().isEmpty() ? "masked" : "");
 			}
@@ -1062,6 +1094,12 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * to find the first that supports the handler class.
 	 * <p>All HTTP methods are handled by this method. It's up to HandlerAdapters or handlers
 	 * themselves to decide which methods are acceptable.
+	 * <p>处理实际的请求分发到处理器。
+	 * <p>处理器将通过按顺序应用Servlet的HandlerMappings来获取。
+	 * 处理器适配器将通过查询Servlet安装的HandlerAdapters来获取，
+	 * 以找到第一个支持处理器类的适配器。
+	 * <p>所有HTTP方法都由这个方法处理。决定哪些方法是可接受的是HandlerAdapter或处理器本身的职责。
+	 *
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @throws Exception in case of any kind of processing failure
@@ -1079,10 +1117,12 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
+				// 检查是否是multipart请求，并处理
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
+				// 为当前请求确定处理器。
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1090,30 +1130,37 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Determine handler adapter for the current request.
+				// 为当前请求确定处理器适配器。
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
+				// 处理last-modified头，如果处理器支持的话。
 				String method = request.getMethod();
 				boolean isGet = HttpMethod.GET.matches(method);
 				if (isGet || HttpMethod.HEAD.matches(method)) {
 					long lastModified = ha.getLastModified(request, mappedHandler.getHandler());
 					if (new ServletWebRequest(request, response).checkNotModified(lastModified) && isGet) {
+						// 如果资源未修改，则无需进一步处理
 						return;
 					}
 				}
-
+				// 如果预处理失败，则终止处理
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
 				// Actually invoke the handler.
+				// 实际调用处理器。
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
+				// 如果开启了异步处理，则终止处理
 				if (asyncManager.isConcurrentHandlingStarted()) {
 					return;
 				}
 
+				// 应用默认视图名
 				applyDefaultViewName(processedRequest, mv);
+				// 后处理
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
@@ -1122,8 +1169,11 @@ public class DispatcherServlet extends FrameworkServlet {
 			catch (Throwable err) {
 				// As of 4.3, we're processing Errors thrown from handler methods as well,
 				// making them available for @ExceptionHandler methods and other scenarios.
+				// 4.3版本起，我们把处理器方法抛出的Errors也作为异常处理，
+				// 使其可以被@ExceptionHandler方法和其他场景处理。
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
+			// 处理分发结果
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
@@ -1136,12 +1186,14 @@ public class DispatcherServlet extends FrameworkServlet {
 		finally {
 			if (asyncManager.isConcurrentHandlingStarted()) {
 				// Instead of postHandle and afterCompletion
+				// 如果开启了异步处理，则不执行postHandle和afterCompletion，而是执行applyAfterConcurrentHandlingStarted
 				if (mappedHandler != null) {
 					mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);
 				}
 			}
 			else {
 				// Clean up any resources used by a multipart request.
+				// 清理multipart请求使用的资源
 				if (multipartRequestParsed) {
 					cleanupMultipart(processedRequest);
 				}
@@ -1502,6 +1554,9 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/**
 	 * Restore the request attributes after an include.
+	 * 包含操作之后恢复请求属性。
+	 * 该方法用于在服务器进行页面包含操作后，恢复请求对象中的属性到其包含前的状态。
+	 *
 	 * @param request current HTTP request
 	 * @param attributesSnapshot the snapshot of the request attributes before the include
 	 */
@@ -1509,6 +1564,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	private void restoreAttributesAfterInclude(HttpServletRequest request, Map<?, ?> attributesSnapshot) {
 		// Need to copy into separate Collection here, to avoid side effects
 		// on the Enumeration when removing attributes.
+		// 需要将属性复制到单独的集合中，以避免在移除属性时对枚举产生的副作用。
 		Set<String> attrsToCheck = new HashSet<>();
 		Enumeration<?> attrNames = request.getAttributeNames();
 		while (attrNames.hasMoreElements()) {
@@ -1519,10 +1575,12 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		// Add attributes that may have been removed
+		// 将可能被移除的属性添加到检查列表中
 		attrsToCheck.addAll((Set<String>) attributesSnapshot.keySet());
 
 		// Iterate over the attributes to check, restoring the original value
 		// or removing the attribute, respectively, if appropriate.
+		// 遍历需要检查的属性，根据情况恢复原始值或移除属性。
 		for (String attrName : attrsToCheck) {
 			Object attrValue = attributesSnapshot.get(attrName);
 			if (attrValue == null) {

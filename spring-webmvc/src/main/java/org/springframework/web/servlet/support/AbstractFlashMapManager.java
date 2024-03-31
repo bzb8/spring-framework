@@ -92,11 +92,13 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 	@Override
 	@Nullable
 	public final FlashMap retrieveAndUpdate(HttpServletRequest request, HttpServletResponse response) {
+		// 从session中获取所有的flashMap
 		List<FlashMap> allFlashMaps = retrieveFlashMaps(request);
 		if (CollectionUtils.isEmpty(allFlashMaps)) {
 			return null;
 		}
 
+		// 从session中移除过期和匹配的flashMap
 		List<FlashMap> mapsToRemove = getExpiredFlashMaps(allFlashMaps);
 		FlashMap match = getMatchingFlashMap(allFlashMaps, request);
 		if (match != null) {
@@ -120,6 +122,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 			}
 		}
 
+		// 返回和当前请求匹配的FlashMap
 		return match;
 	}
 
@@ -127,6 +130,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 	 * Return a list of expired FlashMap instances contained in the given list.
 	 */
 	private List<FlashMap> getExpiredFlashMaps(List<FlashMap> allMaps) {
+		// 获取过期的flashMap
 		List<FlashMap> result = new ArrayList<>();
 		for (FlashMap map : allMaps) {
 			if (map.isExpired()) {
@@ -139,6 +143,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 	/**
 	 * Return a FlashMap contained in the given list that matches the request.
 	 * @return a matching FlashMap or {@code null}
+	 * 选择和当前请求匹配的FlashMap
 	 */
 	@Nullable
 	private FlashMap getMatchingFlashMap(List<FlashMap> allMaps, HttpServletRequest request) {
@@ -149,6 +154,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 			}
 		}
 		if (!result.isEmpty()) {
+			// 排序
 			Collections.sort(result);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Found " + result.get(0));
@@ -161,16 +167,20 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 	/**
 	 * Whether the given FlashMap matches the current request.
 	 * Uses the expected request path and query parameters saved in the FlashMap.
+	 * 定的 FlashMap 是否与当前请求匹配。使用保存在 FlashMap 中的预期请求路径和查询参数。
 	 */
 	protected boolean isFlashMapForRequest(FlashMap flashMap, HttpServletRequest request) {
 		String expectedPath = flashMap.getTargetRequestPath();
 		if (expectedPath != null) {
 			String requestUri = getUrlPathHelper().getOriginatingRequestUri(request);
+			// 当前请求路径和保存的请求路径不匹配 && 当前请求路径和保存的 请求路径/ 不匹配
 			if (!requestUri.equals(expectedPath) && !requestUri.equals(expectedPath + "/")) {
 				return false;
 			}
 		}
+		// 当前请求参数的请求参数
 		MultiValueMap<String, String> actualParams = getOriginatingRequestParams(request);
+		// flashMap保存的请求参数
 		MultiValueMap<String, String> expectedParams = flashMap.getTargetRequestParams();
 		for (Map.Entry<String, List<String>> entry : expectedParams.entrySet()) {
 			List<String> actualValues = actualParams.get(entry.getKey());

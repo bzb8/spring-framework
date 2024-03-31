@@ -25,6 +25,9 @@ import org.springframework.lang.Nullable;
  * Enumeration of HTTP request methods. Intended for use
  * with {@link org.springframework.http.client.ClientHttpRequest}
  * and {@link org.springframework.web.client.RestTemplate}.
+ * <p>HTTP请求方法的枚举。旨在与{@link org.springframework.http.client.ClientHttpRequest}和
+ * {@link org.springframework.web.client.RestTemplate}一起使用。
+ * 这个枚举定义了HTTP协议中常见的请求方法，例如GET、POST等，以便在发送HTTP请求时选择适当的方法。
  *
  * @author Arjen Poutsma
  * @author Juergen Hoeller
@@ -46,6 +49,7 @@ public enum HttpMethod {
 
 	/**
 	 * Resolve the given method value to an {@code HttpMethod}.
+	 * 将给定的方法值解析为 {@code HttpMethod}。从缓存中获取
 	 * @param method the method value as a String
 	 * @return the corresponding {@code HttpMethod}, or {@code null} if not found
 	 * @since 4.2.4

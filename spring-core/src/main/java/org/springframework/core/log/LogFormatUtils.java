@@ -94,6 +94,7 @@ public abstract class LogFormatUtils {
 	/**
 	 * Use this to log a message with different levels of detail (or different
 	 * messages) at TRACE vs DEBUG log levels. Effectively, a substitute for:
+	 * 用于在TRACE和DEBUG日志级别下记录不同详细程度或不同消息的便捷方法。有效地替代了以下代码：
 	 * <pre class="code">
 	 * if (logger.isDebugEnabled()) {
 	 *   String str = logger.isTraceEnabled() ? "..." : "...";

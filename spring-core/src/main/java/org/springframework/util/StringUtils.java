@@ -370,6 +370,7 @@ public abstract class StringUtils {
 	/**
 	 * Test if the given {@code String} starts with the specified prefix,
 	 * ignoring upper/lower case.
+	 * 测试给定的 {@code String} 是否以指定的前缀开始，忽略大小写。
 	 * @param str the {@code String} to check
 	 * @param prefix the prefix to look for
 	 * @see java.lang.String#startsWith

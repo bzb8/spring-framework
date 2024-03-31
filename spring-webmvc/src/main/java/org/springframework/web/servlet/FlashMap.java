@@ -30,6 +30,8 @@ import org.springframework.util.StringUtils;
  * to another -- e.g. the Post/Redirect/Get pattern. A FlashMap is saved before
  * the redirect (typically in the session) and is made available after the
  * redirect and removed immediately.
+ * FlashMap提供了一种方式，用于在一个请求中存储意图在另一个请求中使用的属性。这在遵循Post/Redirect/Get模式从一个URL重定向到另一个URL时最为常见。
+ * FlashMap在重定向之前保存（通常在会话中），在重定向之后可用，并立即被移除。
  *
  * <p>A FlashMap can be set up with a request path and request parameters to
  * help identify the target request. Without this information, a FlashMap is
@@ -37,10 +39,14 @@ import org.springframework.util.StringUtils;
  * recipient. On a redirect, the target URL is known and a FlashMap can be
  * updated with that information. This is done automatically when the
  * {@code org.springframework.web.servlet.view.RedirectView} is used.
+ * <p>FlashMap可以通过请求路径和请求参数来设置，以帮助识别目标请求。如果没有这些信息，FlashMap将被提供给下一个请求，而这个请求可能并不是预期的接收者。
+ * 在重定向时，目标URL是已知的，FlashMap可以使用该信息进行更新。当使用{@code org.springframework.web.servlet.view.RedirectView}时，这会自动完成。
  *
  * <p>Note: annotated controllers will usually not use FlashMap directly.
  * See {@code org.springframework.web.servlet.mvc.support.RedirectAttributes}
  * for an overview of using flash attributes in annotated controllers.
+ * <p>注意：注解控制器通常不会直接使用FlashMap。有关在注解控制器中使用闪现属性的概述，
+ * 请参阅{@code org.springframework.web.servlet.mvc.support.RedirectAttributes}。
  *
  * @author Rossen Stoyanchev
  * @since 3.1
@@ -59,8 +65,11 @@ public final class FlashMap extends HashMap<String, Object> implements Comparabl
 
 	/**
 	 * Provide a URL path to help identify the target request for this FlashMap.
+	 * 设置一个URL路径来帮助识别这个FlashMap目标请求。
 	 * <p>The path may be absolute (e.g. "/application/resource") or relative to the
 	 * current request (e.g. "../resource").
+	 * <p>该路径可以是绝对路径（例如 "/application/resource"），也可以是相对于当前请求的相对路径（例如 "../resource"）。
+	 * @param path 指定的目标请求的URL路径。可以为null，表示不设置。
 	 */
 	public void setTargetRequestPath(@Nullable String path) {
 		this.targetRequestPath = path;
@@ -137,6 +146,7 @@ public final class FlashMap extends HashMap<String, Object> implements Comparabl
 	/**
 	 * Return whether this instance has expired depending on the amount of
 	 * elapsed time since the call to {@link #startExpirationPeriod}.
+	 * 判断当前实例是否已过期，这取决于自调用{@link #startExpirationPeriod}方法以来经过的时间。
 	 */
 	public boolean isExpired() {
 		return (this.expirationTime != -1 && System.currentTimeMillis() > this.expirationTime);

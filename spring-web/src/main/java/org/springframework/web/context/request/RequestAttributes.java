@@ -22,9 +22,12 @@ import org.springframework.lang.Nullable;
  * Abstraction for accessing attribute objects associated with a request.
  * Supports access to request-scoped attributes as well as to session-scoped
  * attributes, with the optional notion of a "global session".
+ * <p>用于访问与请求关联的属性对象的抽象。
+ * 支持对请求范围内的属性以及会话范围内的属性的访问，并可选择性地支持“全局会话”的概念。
  *
  * <p>Can be implemented for any kind of request/session mechanism,
  * in particular for servlet requests.
+ * <p>该接口可以针对任何类型的请求/会话机制进行实现，特别是针对Servlet请求的实现。
  *
  * @author Juergen Hoeller
  * @since 2.0
@@ -61,8 +64,11 @@ public interface RequestAttributes {
 
 	/**
 	 * Return the value for the scoped attribute of the given name, if any.
+	 * 获取给定名称和作用域的属性值。
+	 * 如果找到该属性，返回其当前值；如果未找到，则返回{@code null}。
+	 *
 	 * @param name the name of the attribute
-	 * @param scope the scope identifier
+	 * @param scope the scope identifier 属性的作用域标识。
 	 * @return the current attribute value, or {@code null} if not found
 	 */
 	@Nullable

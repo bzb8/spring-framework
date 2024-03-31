@@ -26,6 +26,8 @@ import org.springframework.lang.Nullable;
  * The lattery is typically used for request mapping within the application
  * while the former is useful when preparing external links that point back to
  * the application.
+ * {@link PathContainer} 的特化类，将路径分割为 {@link #contextPath()} 和剩余的 {@link #pathWithinApplication()}。
+ *  其中，后者通常用于应用内的请求映射，而前者在准备指向应用的外部链接时非常有用。
  *
  * @author Rossen Stoyanchev
  * @since 5.0

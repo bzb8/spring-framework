@@ -25,19 +25,24 @@ import org.springframework.web.context.request.NativeWebRequest;
  * Intercepts concurrent request handling, where the concurrent result is
  * obtained by executing a {@link Callable} on behalf of the application with
  * an {@link AsyncTaskExecutor}.
+ * <p>用于拦截并发请求处理的接口，其中并发结果是通过代表应用程序在{@link AsyncTaskExecutor}上执行一个{@link Callable}来获取的。
  *
  * <p>A {@code CallableProcessingInterceptor} is invoked before and after the
  * invocation of the {@code Callable} task in the asynchronous thread, as well
  * as on timeout/error from a container thread, or after completing for any reason
  * including a timeout or network error.
+ * <p>{@code CallableProcessingInterceptor}在异步线程中调用{@code Callable}任务之前和之后，
+ * 以及在容器线程中发生超时/错误或因任何原因完成后都会被调用。
  *
  * <p>As a general rule exceptions raised by interceptor methods will cause
  * async processing to resume by dispatching back to the container and using
  * the Exception instance as the concurrent result. Such exceptions will then
  * be processed through the {@code HandlerExceptionResolver} mechanism.
+ * <p>异常由拦截器方法引发将导致异步处理重新开始，并使用异常实例作为并发结果。此类异常随后将通过{@code HandlerExceptionResolver}机制进行处理。
  *
  * <p>The {@link #handleTimeout(NativeWebRequest, Callable) handleTimeout} method
  * can select a value to be used to resume processing.
+ * <p>{@link #handleTimeout(NativeWebRequest, Callable) handleTimeout}方法可以选择用于重新开始处理的值。
  *
  * @author Rossen Stoyanchev
  * @author Rob Winch
@@ -84,6 +89,8 @@ public interface CallableProcessingInterceptor {
 	 * thread in which the {@code Callable} is executed and <em>before</em> the
 	 * actual invocation of the {@code Callable}.
 	 * <p>The default implementation is empty.
+	 * 在异步线程中开始并发处理后且在实际调用{@code Callable}之前调用。
+	 * <p>默认实现为空。
 	 * @param request the current request
 	 * @param task the task for the current async request
 	 * @throws Exception in case of errors
@@ -97,6 +104,9 @@ public interface CallableProcessingInterceptor {
 	 * be invoked later than {@code afterTimeout} or {@code afterCompletion}
 	 * depending on when the {@code Callable} finishes processing.
 	 * <p>The default implementation is empty.
+	 * 在异步线程中，{@code Callable}产生结果后调用。根据{@code Callable}完成处理的时间，此方法可能比{@code afterTimeout}
+	 * 或{@code afterCompletion}调用得晚。
+	 * <p>默认实现为空。
 	 * @param request the current request
 	 * @param task the task for the current async request
 	 * @param concurrentResult the result of concurrent processing, which could

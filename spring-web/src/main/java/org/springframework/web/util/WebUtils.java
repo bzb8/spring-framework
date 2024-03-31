@@ -60,6 +60,9 @@ public abstract class WebUtils {
 	 * Standard Servlet 2.3+ spec request attribute for include request URI.
 	 * <p>If included via a {@code RequestDispatcher}, the current resource will see the
 	 * originating request. Its own request URI is exposed as a request attribute.
+	 * Servlet 2.3+ 规范中定义的请求属性，用于包含请求的URI。
+	 * <p>如果通过 {@code RequestDispatcher} 进行包含，当前资源将能够看到原始请求。
+	 * 它自己的请求URI会被暴露为一个请求属性。
 	 */
 	public static final String INCLUDE_REQUEST_URI_ATTRIBUTE = "javax.servlet.include.request_uri";
 
@@ -95,6 +98,9 @@ public abstract class WebUtils {
 	 * Standard Servlet 2.4+ spec request attribute for forward request URI.
 	 * <p>If forwarded to via a RequestDispatcher, the current resource will see its
 	 * own request URI. The originating request URI is exposed as a request attribute.
+	 * 标准的Servlet 2.4+规范请求属性，用于转发请求的URI。
+	 * <p>如果通过RequestDispatcher进行转发，当前资源将看到其自己的请求URI。
+	 * 起始请求URI将以请求属性的形式暴露。
 	 */
 	public static final String FORWARD_REQUEST_URI_ATTRIBUTE = "javax.servlet.forward.request_uri";
 
@@ -495,6 +501,9 @@ public abstract class WebUtils {
 	 * <p>Checks the presence of the "javax.servlet.include.request_uri"
 	 * request attribute. Could check any request attribute that is only
 	 * present in an include request.
+	 * 判断给定的请求是否为包含请求，即不是来自外部的顶级HTTP请求。
+	 * <p>检查"javax.servlet.include.request_uri"请求属性是否存在。
+	 * 可以检查任何仅在包含请求中存在的请求属性。
 	 * @param request current servlet request
 	 * @return whether the given request is an include request
 	 */
