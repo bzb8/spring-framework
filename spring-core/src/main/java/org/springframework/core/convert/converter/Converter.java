@@ -21,11 +21,9 @@ import org.springframework.util.Assert;
 
 /**
  * A converter converts a source object of type {@code S} to a target of type {@code T}.
- *
- * 转换器将 {@code S} 类型的源对象转换为 {@code T} 类型的目标。
+ * <p>转换器将 {@code S} 类型的源对象转换为 {@code T} 类型的目标。
  *
  * <p>Implementations of this interface are thread-safe and can be shared.
- *
  * 此接口的实现是线程安全的，可以共享。
  *
  * <p>Implementations may additionally implement {@link ConditionalConverter}.
