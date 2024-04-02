@@ -26,6 +26,8 @@ import org.springframework.util.MultiValueMap;
 /**
  * This interface defines the multipart request access operations that are exposed
  * for actual multipart requests. It is extended by {@link MultipartHttpServletRequest}.
+ * <p>此接口定义了暴露给实际多部分请求的多部分请求访问操作。
+ * 它被{@link MultipartHttpServletRequest}扩展。
  *
  * @author Juergen Hoeller
  * @author Arjen Poutsma

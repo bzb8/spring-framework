@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 /**
  * Abstract base implementation of the MultipartHttpServletRequest interface.
  * Provides management of pre-generated MultipartFile instances.
+ * MultipartHttpServletRequest 接口的抽象基本实现。提供对预生成的 MultipartFile 实例的管理。
  *
  * @author Juergen Hoeller
  * @author Arjen Poutsma
@@ -125,6 +126,8 @@ public abstract class AbstractMultipartHttpServletRequest extends HttpServletReq
 	/**
 	 * Set a Map with parameter names as keys and list of MultipartFile objects as values.
 	 * To be invoked by subclasses on initialization.
+	 * 设置一个Map，其中参数名称作为键，MultipartFile对象的列表作为值。
+	 * 该方法应在子类初始化时被调用。
 	 */
 	protected final void setMultipartFiles(MultiValueMap<String, MultipartFile> multipartFiles) {
 		this.multipartFiles =

@@ -23,6 +23,7 @@ import org.springframework.web.util.pattern.PathPattern.MatchingContext;
 
 /**
  * Common supertype for the Ast nodes created to represent a path pattern.
+ * 代表路径模式的Ast节点的通用超类型。
  *
  * @author Andy Clement
  * @author Brian Clozel

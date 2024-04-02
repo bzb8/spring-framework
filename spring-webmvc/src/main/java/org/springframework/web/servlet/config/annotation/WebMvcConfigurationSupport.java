@@ -278,7 +278,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 	@Nullable
 	private ServletContext servletContext;
-
+	// ConversionServiceExposingInterceptor, ResourceUrlProviderExposingInterceptor
 	@Nullable
 	private List<Object> interceptors;
 
@@ -296,7 +296,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 	@Nullable
 	private List<HttpMessageConverter<?>> messageConverters;
-
+	// CorsRegistration.patterns -> CorsConfiguration
 	@Nullable
 	private Map<String, CorsConfiguration> corsConfigurations;
 

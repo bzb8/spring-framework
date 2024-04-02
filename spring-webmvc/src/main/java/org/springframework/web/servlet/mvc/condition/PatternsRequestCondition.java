@@ -52,15 +52,15 @@ public class PatternsRequestCondition extends AbstractRequestCondition<PatternsR
 
 	private final static Set<String> EMPTY_PATH_PATTERN = Collections.singleton("");
 
-
+	// 原始的请求路径
 	private final Set<String> patterns;
-
+	// AntPathMatcher
 	private final PathMatcher pathMatcher;
 
 	private final boolean useSuffixPatternMatch;
 
 	private final boolean useTrailingSlashMatch;
-
+	// .开头的扩展文件名
 	private final List<String> fileExtensions = new ArrayList<>();
 
 

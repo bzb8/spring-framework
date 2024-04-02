@@ -146,6 +146,12 @@ public interface HandlerMapping {
 	 * {@link org.springframework.web.util.ServletRequestPathUtils#getParsedRequestPath
 	 * access} in {@code HandlerMapping}s, {@code HandlerInterceptor}s, and
 	 * other components.
+	 * 判断当前 {@code HandlerMapping} 实例是否已启用解析后的 {@link org.springframework.web.util.pattern.PathPattern}
+	 * 在启用的情况下，{@link DispatcherServlet} 会自动调用
+	 * {@link org.springframework.web.util.ServletRequestPathUtils#parseAndCache} 方法解析 {@code RequestPath}，
+	 * 使其可用于 {@code HandlerMapping}、{@code HandlerInterceptor} 及其他组件中的访问。
+	 * @return 如果使用了路径模式，则返回 {@code true}；否则返回 {@code false}。
+	 *
 	 * @since 5.3
 	 */
 	default boolean usesPathPatterns() {
@@ -162,9 +168,16 @@ public interface HandlerMapping {
 	 * <p>Returns {@code null} if no match was found. This is not an error.
 	 * The DispatcherServlet will query all registered HandlerMapping beans to find
 	 * a match, and only decide there is an error if none can find a handler.
+	 * <p>根据请求返回一个处理器和任何拦截器。选择可以根据请求的URL、会话状态或实现类选择的任何因素。
+	 * <p>返回的HandlerExecutionChain包含一个处理器对象，而不是甚至一个标签接口，以便处理器不被任何方式约束。
+	 * 例如，可以编写一个HandlerAdapter来允许使用另一个框架的处理器对象。
+	 * <p>如果没有找到匹配项，则返回{@code null}。这不是一个错误。
+	 * DispatcherServlet将查询所有注册的HandlerMapping bean来找到匹配项，只有当没有找到处理器时才决定有一个错误。
+	 *
 	 * @param request current HTTP request
 	 * @return a HandlerExecutionChain instance containing handler object and
 	 * any interceptors, or {@code null} if no mapping found
+	 * 一个HandlerExecutionChain实例，包含处理器对象和任何拦截器，如果没有找到映射则返回{@code null}
 	 * @throws Exception if there is an internal error
 	 */
 	@Nullable

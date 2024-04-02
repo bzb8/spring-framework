@@ -50,6 +50,8 @@ import org.springframework.web.multipart.MultipartFile;
  * Spring MultipartHttpServletRequest adapter, wrapping a Servlet 3.0 HttpServletRequest
  * and its Part objects. Parameters get exposed through the native request's getParameter
  * methods - without any custom processing on our side.
+ * 这是一个适配器类，用于封装Servlet 3.0的HttpServletRequest和其Part对象。
+ * 该类通过原生请求的getParameter方法暴露参数，而不在我们这一侧进行任何自定义处理。
  *
  * @author Juergen Hoeller
  * @author Rossen Stoyanchev
@@ -92,6 +94,7 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 
 	private void parseRequest(HttpServletRequest request) {
 		try {
+			// 获取所有的Part对象
 			Collection<Part> parts = request.getParts();
 			this.multipartParameterNames = new LinkedHashSet<>(parts.size());
 			MultiValueMap<String, MultipartFile> files = new LinkedMultiValueMap<>(parts.size());

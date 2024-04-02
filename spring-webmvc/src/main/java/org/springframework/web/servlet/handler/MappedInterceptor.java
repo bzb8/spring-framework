@@ -39,6 +39,7 @@ import org.springframework.web.util.pattern.PatternParseException;
 /**
  * Wraps a {@link HandlerInterceptor} and uses URL patterns to determine whether
  * it applies to a given request.
+ * 包装一个{@link HandlerInterceptor}，并使用URL模式来确定它是否适用于给定的请求。
  *
  * <p>Pattern matching can be done with {@link PathMatcher} or with parsed
  * {@link PathPattern}. The syntax is largely the same with the latter being more
@@ -47,12 +48,17 @@ import org.springframework.web.util.pattern.PatternParseException;
  * {@code String} lookupPath or a {@link ServletRequestPathUtils#parseAndCache
  * parsed} {@code RequestPath} which in turn depends on the
  * {@link HandlerMapping} that matched the current request.
+ * <p>可以通过{@link PathMatcher}或解析的{@link PathPattern}进行模式匹配。其语法在很大程度上是相同的，后者更适用于web场景，并且效率更高。
+ * 这一选择取决于是否存在通过{@link UrlPathHelper#resolveAndCacheLookupPath 解析并缓存的} {@code String} lookupPath 或者
+ * 通过{@link ServletRequestPathUtils#parseAndCache 解析并缓存的} {@code RequestPath}，这反过来又取决于当前请求匹配的{@link HandlerMapping}。
  *
  * <p>{@code MappedInterceptor} is supported by subclasses of
  * {@link org.springframework.web.servlet.handler.AbstractHandlerMethodMapping
  * AbstractHandlerMethodMapping} which detect beans of type
  * {@code MappedInterceptor} and also check if interceptors directly registered
  * with it are of this type.
+ * <p>{@code MappedInterceptor}被{@link org.springframework.web.servlet.handler.AbstractHandlerMethodMapping AbstractHandlerMethodMapping}
+ * 的子类支持，它们可以检测到类型为{@code MappedInterceptor}的bean，并且还会检查直接注册的拦截器是否为这种类型。
  *
  * @author Keith Donald
  * @author Rossen Stoyanchev
@@ -268,9 +274,9 @@ public final class MappedInterceptor implements HandlerInterceptor {
 	 * @since 5.3.6
 	 */
 	private static class PatternAdapter {
-
+		// 原始的path
 		private final String patternString;
-
+		// 解析后的path
 		@Nullable
 		private final PathPattern pathPattern;
 

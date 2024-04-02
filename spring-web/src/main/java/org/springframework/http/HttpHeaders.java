@@ -183,6 +183,8 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	/**
 	 * The HTTP {@code Content-Disposition} header field name.
 	 * @see <a href="https://tools.ietf.org/html/rfc6266">RFC 6266</a>
+	 * HTTP的{@code Content-Disposition}头字段名称。
+	 * 该字段用于指定附加到HTTP响应体的文件或资源的名称和其他选项，常见于文件下载和表单数据处理。
 	 */
 	public static final String CONTENT_DISPOSITION = "Content-Disposition";
 	/**

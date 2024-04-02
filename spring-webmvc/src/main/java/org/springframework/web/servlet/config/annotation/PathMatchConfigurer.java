@@ -31,6 +31,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
 
 /**
  * Configure path matching options. The options are applied to the following:
+ * 配置路径匹配选项。这些选项将应用于以下组件：
  * <ul>
  * <li>{@link WebMvcConfigurationSupport#requestMappingHandlerMapping}</li>
  * <li>{@link WebMvcConfigurationSupport#viewControllerHandlerMapping}</li>
@@ -65,10 +66,10 @@ public class PathMatchConfigurer {
 
 	@Nullable
 	private PathPatternParser defaultPatternParser;
-
+	// UrlPathHelper
 	@Nullable
 	private UrlPathHelper defaultUrlPathHelper;
-
+	// AntPathMatcher
 	@Nullable
 	private PathMatcher defaultPathMatcher;
 

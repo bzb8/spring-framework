@@ -26,6 +26,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 /**
  * An interceptor that exposes the {@link ResourceUrlProvider} instance it
  * is configured with as a request attribute.
+ * <p>一个拦截器，它将配置的{@link ResourceUrlProvider}实例作为请求属性暴露。
+ *
+ * 通过这个拦截器，可以在请求的生命周期中访问到配置的{@link ResourceUrlProvider}，
+ * 从而方便地获取资源的URL。这在需要动态构造资源链接的场景中非常有用。
  *
  * @author Rossen Stoyanchev
  * @since 4.1
@@ -50,6 +54,7 @@ public class ResourceUrlProviderExposingInterceptor implements HandlerIntercepto
 			throws Exception {
 
 		try {
+			// 设置请求的属性：ResourceUrlProvider.class.getName() ->
 			request.setAttribute(RESOURCE_URL_PROVIDER_ATTR, this.resourceUrlProvider);
 		}
 		catch (ResourceUrlEncodingFilter.LookupPathIndexException ex) {

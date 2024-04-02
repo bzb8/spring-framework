@@ -377,6 +377,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Override
 	@Nullable
 	protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
+		// //获取请求的路径
 		String lookupPath = initLookupPath(request);
 		this.mappingRegistry.acquireReadLock();
 		try {
@@ -391,7 +392,10 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	/**
 	 * Look up the best-matching handler method for the current request.
 	 * If multiple matches are found, the best match is selected.
+	 * <p>查找当前请求的最佳处理方法。
+	 * 如果找到多个匹配项，则选择最佳匹配项。
 	 * @param lookupPath mapping lookup path within the current servlet mapping
+	 *                   当前Servlet映射内的映射查找路径
 	 * @param request the current request
 	 * @return the best-matching handler method, or {@code null} if no match
 	 * @see #handleMatch(Object, String, HttpServletRequest)
@@ -568,17 +572,19 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * A registry that maintains all mappings to handler methods, exposing methods
 	 * to perform lookups and providing concurrent access.
 	 * <p>Package-private for testing purposes.
+	 * 一个维护所有处理器方法映射的注册表，提供查找方法和并发访问的能力。
+	 * <p>由于测试目的，包私有。
 	 */
 	class MappingRegistry {
-
+		// 映射注册表，维护所有映射和它们的注册信息。
 		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();
-
+		// 通过直接路径查找映射的查找表，不保证线程安全。
 		private final MultiValueMap<String, T> pathLookup = new LinkedMultiValueMap<>();
-
+		// 通过映射名称查找处理器方法的线程安全查找表。
 		private final Map<String, List<HandlerMethod>> nameLookup = new ConcurrentHashMap<>();
-
+		// 通过处理器方法查找CORS配置的线程安全查找表。
 		private final Map<HandlerMethod, CorsConfiguration> corsLookup = new ConcurrentHashMap<>();
-
+		// 用于在读写操作之间同步的可重入读写锁。
 		private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
 		/**
@@ -591,6 +597,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		/**
 		 * Return matches for the given URL path. Not thread-safe.
+		 * 根据URL路径返回匹配的映射。不是线程安全的。
 		 * @see #acquireReadLock()
 		 */
 		@Nullable
@@ -600,6 +607,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		/**
 		 * Return handler methods by mapping name. Thread-safe for concurrent use.
+		 * 通过映射名称返回处理器方法。可并发使用。
 		 */
 		public List<HandlerMethod> getHandlerMethodsByMappingName(String mappingName) {
 			return this.nameLookup.get(mappingName);
@@ -791,6 +799,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	/**
 	 * A thin wrapper around a matched HandlerMethod and its mapping, for the purpose of
 	 * comparing the best match with a comparator in the context of the current request.
+	 * 一个用于比较当前请求下最佳匹配的HandlerMethod及其映射的薄包装器。
 	 */
 	private class Match {
 

@@ -83,6 +83,10 @@ public class StandardServletMultipartResolver implements MultipartResolver {
 	 * corresponding exceptions at the time of the {@link #resolveMultipart} call.
 	 * Switch this to "true" for lazy multipart parsing, throwing parse exceptions
 	 * once the application attempts to obtain multipart files or parameters.
+	 * <p>设置是否在访问文件或参数时懒惰地解析多部分请求。
+	 * <p>默认为 "false"，会在调用 {@link #resolveMultipart} 时立即解析多部分元素，并在那时抛出相应的异常。
+	 * 将此设置为 "true" 可实现懒惰的多部分解析，只有在应用程序尝试获取多部分文件或参数时才会抛出解析异常。
+	 * @param resolveLazily 指定是否懒惰解析多部分请求。如果为 true，则延迟解析；如果为 false，则立即解析。
 	 * @since 3.2.9
 	 */
 	public void setResolveLazily(boolean resolveLazily) {
@@ -104,6 +108,14 @@ public class StandardServletMultipartResolver implements MultipartResolver {
 	 * {@link org.springframework.web.multipart.commons.CommonsMultipartResolver}
 	 * supports any "multipart/" request type. However, it restricts processing
 	 * to POST requests which standard Servlet multipart parsers might not do.
+	 * <p>设置此解析器是否应严格遵守Servlet规范，仅在"multipart/form-data"请求时启动。
+	 * <p>默认为"false"，尝试处理任何具有"multipart/"内容类型的请求，只要底层Servlet容器支持它
+	 * （例如在Tomcat上工作，但在Jetty上不工作）。为了实现一致的可移植性，特别是为了在Spring的{@link MultipartResolver}机制之外
+	 * 一致地自定义处理非表单multipart请求类型，将此标志切换为"true"：此时仅将"multipart/form-data"请求包装为{@link MultipartHttpServletRequest}；
+	 * 其他类型的请求将保持原样，允许在用户代码中进行自定义处理。
+	 * <p>请注意，Commons FileUpload和因此{@link org.springframework.web.multipart.commons.CommonsMultipartResolver}
+	 * 支持任何"multipart/"请求类型。然而，它将处理限制为POST请求，而标准Servlet多部分解析器可能不会这样做。
+	 *
 	 * @since 5.3.9
 	 */
 	public void setStrictServletCompliance(boolean strictServletCompliance) {

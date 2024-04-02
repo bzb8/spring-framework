@@ -292,7 +292,12 @@ public class DispatcherServlet extends FrameworkServlet {
 	@Nullable
 	private static Properties defaultStrategies;
 
-	/** Detect all HandlerMappings or just expect "handlerMapping" bean?. */
+	/**
+	 * Detect all HandlerMappings or just expect "handlerMapping" bean?.
+	 * 检测所有的HandlerMappings还是只期望"handlerMapping" bean？
+	 * 这个属性用于控制是否检测所有的HandlerMappings bean。如果设置为true，则会检测所有的HandlerMappings；如果设置为false，
+	 * 则只期望找到名为"handlerMapping"的单一bean。
+	 */
 	private boolean detectAllHandlerMappings = true;
 
 	/** Detect all HandlerAdapters or just expect "handlerAdapter" bean?. */
@@ -1108,6 +1113,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
+		// 检查是否是multipart请求
 		boolean multipartRequestParsed = false;
 
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
@@ -1117,7 +1123,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
-				// 检查是否是multipart请求，并处理
+				// 检查是否是multipart请求，并处理，转换为MultipartHttpServletRequest
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
@@ -1280,8 +1286,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Convert the request into a multipart request, and make multipart resolver available.
 	 * <p>If no multipart resolver is set, simply use the existing request.
+	 * <p>将请求转换为多部分请求，并使多部分解析器可用。
+	 * <p>如果没有设置多部分解析器，则简单地使用现有的请求。
 	 * @param request current HTTP request
 	 * @return the processed request (multipart wrapper if necessary)
+	 * 处理后的请求（如果必要，为多部分包装器）
 	 * @see MultipartResolver#resolveMultipart
 	 */
 	protected HttpServletRequest checkMultipart(HttpServletRequest request) throws MultipartException {
@@ -1311,6 +1320,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 		// If not returned before: return original request.
+		// 返回原始请求
 		return request;
 	}
 
@@ -1346,6 +1356,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Return the HandlerExecutionChain for this request.
 	 * <p>Tries all handler mappings in order.
+	 * 为当前请求获取HandlerExecutionChain。
+	 * <p>尝试按顺序遍历所有处理器映射器。
 	 * @param request current HTTP request
 	 * @return the HandlerExecutionChain, or {@code null} if no handler could be found
 	 */
@@ -1354,6 +1366,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		if (this.handlerMappings != null) {
 			for (HandlerMapping mapping : this.handlerMappings) {
 				HandlerExecutionChain handler = mapping.getHandler(request);
+				// 只要有一个不为null，就返回
 				if (handler != null) {
 					return handler;
 				}

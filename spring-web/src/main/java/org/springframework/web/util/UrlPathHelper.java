@@ -41,10 +41,15 @@ import org.springframework.util.StringUtils;
 /**
  * Helper class for URL path matching. Provides support for URL paths in
  * {@code RequestDispatcher} includes and support for consistent URL decoding.
+ * <p> URL路径匹配的帮助类。提供对{@code RequestDispatcher}中URL路径的支持，
+ * 以及支持一致的URL解码。
  *
  * <p>Used by {@link org.springframework.web.servlet.handler.AbstractUrlHandlerMapping}
  * and {@link org.springframework.web.servlet.support.RequestContext} for path matching
  * and/or URI determination.
+ * <p>被{@link org.springframework.web.servlet.handler.AbstractUrlHandlerMapping}
+ * 和{@link org.springframework.web.servlet.support.RequestContext}用于路径匹配
+ * 和/或URI确定。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -58,6 +63,9 @@ public class UrlPathHelper {
 	/**
 	 * Name of Servlet request attribute that holds a
 	 * {@link #getLookupPathForRequest resolved} lookupPath.
+	 * 该常量定义了Servlet请求属性的名称，该属性用于存储通过{@link #getLookupPathForRequest resolved}方法解析得到的lookupPath。
+	 * 这个属性名是基于UrlPathHelper类的全限定名加上".PATH"后缀构成的，确保了其在应用程序中的唯一性。
+	 *
 	 * @since 5.3
 	 */
 	public static final String PATH_ATTRIBUTE = UrlPathHelper.class.getName() + ".PATH";
@@ -241,6 +249,9 @@ public class UrlPathHelper {
 	 * Return the mapping lookup path for the given request, within the current
 	 * servlet mapping if applicable, else within the web application.
 	 * <p>Detects include request URL if called within a RequestDispatcher include.
+	 * 根据给定的请求返回映射查找路径，如果适用，则在当前的Servlet映射中查找，否则在Web应用程序中查找。
+	 * <p>如果在RequestDispatcher include调用中，则检测包含的请求URL。
+	 *
 	 * @param request current HTTP request
 	 * @return the lookup path
 	 * @see #getPathWithinServletMapping

@@ -32,6 +32,7 @@ import org.springframework.web.util.pattern.PathPattern;
 
 /**
  * Assists with the creation of a {@link MappedInterceptor}.
+ * 用于协助创建{@link MappedInterceptor}的类
  *
  * @author Rossen Stoyanchev
  * @author Keith Donald

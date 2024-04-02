@@ -43,10 +43,13 @@ import org.springframework.web.util.UrlPathHelper;
 /**
  * A central component to use to obtain the public URL path that clients should
  * use to access a static resource.
+ * 一个中心组件，用于获取客户端应使用来访问静态资源的公共URL路径。
  *
  * <p>This class is aware of Spring MVC handler mappings used to serve static
  * resources and uses the {@code ResourceResolver} chains of the configured
  * {@code ResourceHttpRequestHandler}s to make its decisions.
+ * <p>此类了解用于服务静态资源的Spring MVC处理程序映射，并使用配置的{@code ResourceHttpRequestHandler}
+ * 的{@code ResourceResolver}链来做出决定。
  *
  * @author Rossen Stoyanchev
  * @author Brian Clozel

@@ -58,6 +58,9 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * Creates {@link RequestMappingInfo} instances from type and method-level
  * {@link RequestMapping @RequestMapping} annotations in
  * {@link Controller @Controller} classes.
+ * <p>从{@link Controller @Controller}类中的类型和方法级{@link RequestMapping @RequestMapping}注解
+ * 创建{@link RequestMappingInfo}实例。
+ *
  *
  * <p><strong>Deprecation Note:</strong></p> In 5.2.4,
  * {@link #setUseSuffixPatternMatch(boolean) useSuffixPatternMatch} and
@@ -67,6 +70,11 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * {@link org.springframework.web.accept.ContentNegotiationManagerFactoryBean
  * ContentNegotiationManagerFactoryBean}). For further context, please read issue
  * <a href="https://github.com/spring-projects/spring-framework/issues/24179">#24179</a>.
+ * <p><strong>弃用说明：</strong></p>在5.2.4版本中，为了不鼓励使用路径扩展进行请求映射和内容协商（在
+ * {@link org.springframework.web.accept.ContentNegotiationManagerFactoryBean ContentNegotiationManagerFactoryBean}中也有类似的弃用），
+ * {@link #setUseSuffixPatternMatch(boolean) useSuffixPatternMatch}和
+ * {@link #setUseRegisteredSuffixPatternMatch(boolean) useRegisteredSuffixPatternMatch}被弃用。
+ * 有关更多信息，请阅读问题<a href="https://github.com/spring-projects/spring-framework/issues/24179">#24179</a>。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
@@ -87,7 +95,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	private ContentNegotiationManager contentNegotiationManager = new ContentNegotiationManager();
 
 	@Nullable
-	private StringValueResolver embeddedValueResolver;
+	private StringValueResolver embeddedValueResolver; // embeddedValueResolver
 
 	private RequestMappingInfo.BuilderConfiguration config = new RequestMappingInfo.BuilderConfiguration();
 
@@ -228,6 +236,11 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 
 	/**
 	 * Whether to match to URLs irrespective of the presence of a trailing slash.
+	 * 用于判断是否无论尾部斜杠是否存在都匹配URL。
+	 * <p>此方法不接受任何参数，仅返回一个布尔值，指示是否启用尾部斜杠匹配。</p>
+	 *
+	 * @return 返回一个布尔值，如果启用尾部斜杠匹配，则为true；否则为false。
+	 *
 	 */
 	public boolean useTrailingSlashMatch() {
 		return this.useTrailingSlashMatch;

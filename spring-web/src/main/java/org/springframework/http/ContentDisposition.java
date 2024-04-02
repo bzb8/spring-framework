@@ -419,6 +419,17 @@ public final class ContentDisposition {
 		return new ContentDisposition(type, name, filename, charset, size, creationDate, modificationDate, readDate);
 	}
 
+	/**
+	 * 对给定的Content-Disposition头值进行分词，将其分解为类型和其他部分。
+	 * <p>
+	 * 此方法主要用于解析Content-Disposition头字段，例如"attachment; filename="example.txt""。
+	 * 它将头字段的主要类型（如attachment）作为第一个元素，将后续的所有参数（如filename）作为其他元素。
+	 * 参数之间的分隔符是分号";"。如果参数值被引号引用，则引号内的内容被视为一个参数值。
+	 *
+	 * @param headerValue Content-Disposition头字段的值。
+	 * @return 分解后的头字段组成部分列表，第一个元素是类型，后续是参数。
+	 * @throws IllegalArgumentException 如果头字段值为空，则抛出此异常。
+	 */
 	private static List<String> tokenize(String headerValue) {
 		int index = headerValue.indexOf(';');
 		String type = (index >= 0 ? headerValue.substring(0, index) : headerValue).trim();

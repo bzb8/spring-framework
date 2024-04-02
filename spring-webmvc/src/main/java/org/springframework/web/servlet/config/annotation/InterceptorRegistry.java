@@ -35,7 +35,7 @@ import org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapt
  * @since 3.1
  */
 public class InterceptorRegistry {
-
+	// 拦截器
 	private final List<InterceptorRegistration> registrations = new ArrayList<>();
 
 
@@ -69,12 +69,12 @@ public class InterceptorRegistry {
 	 */
 	protected List<Object> getInterceptors() {
 		return this.registrations.stream()
-				.sorted(INTERCEPTOR_ORDER_COMPARATOR)
+				.sorted(INTERCEPTOR_ORDER_COMPARATOR) // 按照order排序
 				.map(InterceptorRegistration::getInterceptor)
 				.collect(Collectors.toList());
 	}
 
-
+	// 按照order排序
 	private static final Comparator<Object> INTERCEPTOR_ORDER_COMPARATOR =
 			OrderComparator.INSTANCE.withSourceProvider(object -> {
 				if (object instanceof InterceptorRegistration) {

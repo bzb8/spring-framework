@@ -31,8 +31,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
  * so it's available during request processing. The request attribute name is
  * "org.springframework.core.convert.ConversionService", the value of
  * {@code ConversionService.class.getName()}.
+ * <p>一个处理拦截器，用于将配置的{@link ConversionService}放置在请求作用域中，
+ * 以便在请求处理期间可以使用。请求属性的名称是
+ * "org.springframework.core.convert.ConversionService"，值为
+ * {@code ConversionService.class.getName()}。
  *
  * <p>Mainly for use within JSP tags such as the spring:eval tag.
+ * 主要在JSP标签如spring:eval标签内部使用。
  *
  * @author Keith Donald
  * @since 3.0.1
@@ -55,7 +60,7 @@ public class ConversionServiceExposingInterceptor implements HandlerInterceptor 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws ServletException, IOException {
-
+		// 设置请求的属性：org.springframework.core.convert.ConversionService -> DefaultFormattingConversionService
 		request.setAttribute(ConversionService.class.getName(), this.conversionService);
 		return true;
 	}

@@ -32,12 +32,12 @@ import org.springframework.util.ObjectUtils;
  * @param <T> the value type
  */
 abstract class AbstractNameValueExpression<T> implements NameValueExpression<T> {
-
+	// 参数名
 	protected final String name;
-
+	// 参数值
 	@Nullable
 	protected final T value;
-
+	// 是否参数名是否有！号
 	protected final boolean isNegated;
 
 

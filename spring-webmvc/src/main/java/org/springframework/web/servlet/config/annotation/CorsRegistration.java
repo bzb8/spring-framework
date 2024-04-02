@@ -24,6 +24,7 @@ import org.springframework.web.cors.CorsConfiguration;
 /**
  * Assists with the creation of a {@link CorsConfiguration} instance for a given
  * URL path pattern.
+ * 辅助创建给定 URL 路径模式的 {@link CorsConfiguration} 实例。
  *
  * @author Sebastien Deleuze
  * @author Rossen Stoyanchev

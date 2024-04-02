@@ -90,13 +90,13 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	private PathPatternParser patternParser;
 
 	private UrlPathHelper urlPathHelper = new UrlPathHelper();
-
+	// AntPathMatcher
 	private PathMatcher pathMatcher = new AntPathMatcher();
-
+	// ConversionServiceExposingInterceptor, ResourceUrlProviderExposingInterceptor
 	private final List<Object> interceptors = new ArrayList<>();
 
 	private final List<HandlerInterceptor> adaptedInterceptors = new ArrayList<>();
-
+	// null
 	@Nullable
 	private CorsConfigurationSource corsConfigurationSource;
 
@@ -549,6 +549,16 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 * <p>Note: This method may also return a pre-built {@link HandlerExecutionChain},
 	 * combining a handler object with dynamically determined interceptors.
 	 * Statically specified interceptors will get merged into such an existing chain.
+	 * <p>查找给定请求的处理程序，如果没有找到特定的处理程序，则返回{@code null}。
+	 * 此方法由{@link #getHandler}调用；
+	 * {@code null}的返回值将导致调用默认处理程序，如果已设置的话。
+	 * <p>对于CORS预检请求，此方法应返回非预检请求的匹配结果，
+	 * 而是基于URL路径、"Access-Control-Request-Method"头中的HTTP方法，
+	 * 以及"Access-Control-Request-Headers"头中的头部来确定的预期实际请求，
+	 * 这样可以通过{@link #getCorsConfiguration(Object, HttpServletRequest)}获取CORS配置。
+	 * <p>注意：此方法还可以返回一个预构建的{@link HandlerExecutionChain}，
+	 * 将处理对象与动态确定的拦截器组合在一起。
+	 * 静态指定的拦截器将被合并到这样的现有链中。
 	 * @param request current HTTP request
 	 * @return the corresponding handler instance, or {@code null} if none found
 	 * @throws Exception if there is an internal error
@@ -566,6 +576,10 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 * <p>Otherwise for String pattern matching via {@code PathMatcher} the
 	 * path is {@link UrlPathHelper#resolveAndCacheLookupPath resolved} by this
 	 * method.
+	 * 初始化用于请求映射的路径。
+	 * <p>当解析的模式 {@link #usesPathPatterns() 启用} 时，预期已由 {@link org.springframework.web.servlet.DispatcherServlet}
+	 * 或 {@link org.springframework.web.filter.ServletRequestPathFilter} 外部解析了的 {@code RequestPath}。
+	 * <p>否则，对于通过 {@code PathMatcher} 进行字符串模式匹配，该路径将由本方法 {@link UrlPathHelper#resolveAndCacheLookupPath 解析}。
 	 * @since 5.3
 	 */
 	protected String initLookupPath(HttpServletRequest request) {

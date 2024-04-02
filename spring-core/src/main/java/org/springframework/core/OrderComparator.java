@@ -87,6 +87,7 @@ public class OrderComparator implements Comparator<Object> {
 	}
 
 	private int doCompare(@Nullable Object o1, @Nullable Object o2, @Nullable OrderSourceProvider sourceProvider) {
+		// 优先返回PriorityOrdered的排序
 		boolean p1 = (o1 instanceof PriorityOrdered);
 		boolean p2 = (o2 instanceof PriorityOrdered);
 		if (p1 && !p2) {
@@ -117,6 +118,7 @@ public class OrderComparator implements Comparator<Object> {
 			Object orderSource = sourceProvider.getOrderSource(obj);
 			if (orderSource != null) {
 				if (orderSource.getClass().isArray()) {
+					// 查找数组中的元素的order值，如果有，则返回第一个非null的order值
 					for (Object source : ObjectUtils.toObjectArray(orderSource)) {
 						order = findOrder(source);
 						if (order != null) {
@@ -227,7 +229,6 @@ public class OrderComparator implements Comparator<Object> {
 
 	/**
 	 * Strategy interface to provide an order source for a given object.
-	 *
 	 * 策略接口，用于为给定对象提供order源。
 	 *
 	 * @since 4.1
@@ -245,7 +246,7 @@ public class OrderComparator implements Comparator<Object> {
 		 * 返回指定对象的order源，即应检查order值作为给定对象的替代品的对象。也可以是order源对象的数组。如果返回的对象未指示任何顺序，则比较器将回退到检查原始对象。
 		 * 提供order值的对象
 		 *
-		 * @param obj the object to find an order source for 要查找其order源的对象
+		 * @param obj the object to find an order source for -- 要查找其order源的对象
 		 * @return the order source for that object, or {@code null} if none found
 		 */
 		@Nullable

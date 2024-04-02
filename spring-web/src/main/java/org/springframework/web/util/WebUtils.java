@@ -161,6 +161,9 @@ public abstract class WebUtils {
 	 * <p>To be exposed to JSPs that are marked as error pages, when forwarding
 	 * to them directly rather than through the servlet container's error page
 	 * resolution mechanism.
+	 * 这是一个静态常量，用于指定Servlet 2.3+规范中的错误页面异常属性。
+	 * 当直接转发到标示为错误页面的JSP时，而不是通过Servlet容器的错误页面解析机制，
+	 * 这个属性可以将异常信息暴露给这些JSP页面。
 	 */
 	public static final String ERROR_EXCEPTION_ATTRIBUTE = "javax.servlet.error.exception";
 
@@ -454,6 +457,7 @@ public abstract class WebUtils {
 	/**
 	 * Return an appropriate request object of the specified type, if available,
 	 * unwrapping the given request as far as necessary.
+	 * 尝试获取一个指定类型的请求对象，如果该类型的对象可用，则进行解包直到获得相应的对象。
 	 * @param request the servlet request to introspect
 	 * @param requiredType the desired type of request object
 	 * @return the matching request object, or {@code null} if none

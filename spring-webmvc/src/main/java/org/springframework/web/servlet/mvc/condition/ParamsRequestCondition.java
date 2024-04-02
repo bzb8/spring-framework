@@ -154,7 +154,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	 * Parses and matches a single param expression to a request.
 	 */
 	static class ParamExpression extends AbstractNameValueExpression<String> {
-
+		// 参数名
 		private final Set<String> namesToMatch = new HashSet<>(WebUtils.SUBMIT_IMAGE_SUFFIXES.length + 1);
 
 

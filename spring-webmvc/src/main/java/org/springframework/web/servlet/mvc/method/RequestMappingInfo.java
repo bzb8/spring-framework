@@ -866,6 +866,8 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	 * Container for configuration options used for request mapping purposes.
 	 * Such configuration is required to create RequestMappingInfo instances but
 	 * is typically used across all RequestMappingInfo instances.
+	 * <p>用于请求映射配置的容器。此类配置用于创建RequestMappingInfo实例，
+	 * 但通常被所有RequestMappingInfo实例共享。
 	 * @since 4.2
 	 * @see Builder#options
 	 */
