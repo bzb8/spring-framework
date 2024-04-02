@@ -80,9 +80,15 @@ public class DefaultConversionService extends GenericConversionService {
 
 	/**
 	 * Add converters appropriate for most environments.
+	 * <p>为大多数环境添加合适的转换器。
+	 * 向给定的转换器注册表中添加转换器，这些转换器通常适用于大多数环境。
+	 *
 	 * @param converterRegistry the registry of converters to add to
 	 * (must also be castable to ConversionService, e.g. being a {@link ConfigurableConversionService})
+	 * <p>转换器注册表，向其中添加转换器。该注册表也必须能够被转换为ConversionService，
+	 * 例如是ConfigurableConversionService的实例。
 	 * @throws ClassCastException if the given ConverterRegistry could not be cast to a ConversionService
+	 * <p>如果给定的ConverterRegistry无法被转换为ConversionService则抛出此异常。
 	 */
 	public static void addDefaultConverters(ConverterRegistry converterRegistry) {
 		addScalarConverters(converterRegistry);

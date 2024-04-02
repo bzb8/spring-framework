@@ -794,6 +794,9 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	/**
 	 * Return a {@link FormattingConversionService} for use with annotated controllers.
 	 * <p>See {@link #addFormatters} as an alternative to overriding this method.
+	 * <p>为注解控制器提供一个 {@link FormattingConversionService} 实例。
+	 * <p>如果不想重写此方法，可以考虑使用 {@link #addFormatters} 作为替代方案。
+	 * @return 返回一个 {@link FormattingConversionService} 实例，用于注解控制器。
 	 */
 	@Bean
 	public FormattingConversionService mvcConversionService() {

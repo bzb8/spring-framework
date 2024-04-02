@@ -45,6 +45,10 @@ import org.springframework.util.StringValueResolver;
 /**
  * A {@link org.springframework.core.convert.ConversionService} implementation
  * designed to be configured as a {@link FormatterRegistry}.
+ * <p> 一个实现{@link org.springframework.core.convert.ConversionService}接口的类，
+ * 专门设计用作{@link FormatterRegistry}的配置。
+ * <p>该转换服务主要负责格式化转换的处理，可以将一种类型的数据转换为另一种类型。
+ * 它扩展了{@link GenericConversionService}，提供了更丰富的转换功能。
  *
  * @author Keith Donald
  * @author Juergen Hoeller

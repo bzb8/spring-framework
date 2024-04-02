@@ -83,7 +83,10 @@ public interface FormatterRegistry extends ConverterRegistry {
 
 	/**
 	 * Adds a Formatter to format fields annotated with a specific format annotation.
+	 * <p>向格式化器中添加一个 Formatter，用于格式化被特定格式注解注解的字段。
+	 *
 	 * @param annotationFormatterFactory the annotation formatter factory to add
+	 *                                   要添加的注解格式工厂，该工厂用于创建格式化器
 	 */
 	void addFormatterForFieldAnnotation(AnnotationFormatterFactory<? extends Annotation> annotationFormatterFactory);
 

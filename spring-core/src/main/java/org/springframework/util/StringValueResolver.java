@@ -21,8 +21,7 @@ import org.springframework.lang.Nullable;
 /**
  * Simple strategy interface for resolving a String value.
  * Used by {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}.
- *
- * 用于解析 String 值的简单策略接口。由 {@link org.springframework.beans.factory.config.ConfigurableBeanFactory} 使用。
+ *<p>用于解析 String 值的简单策略接口。由 {@link org.springframework.beans.factory.config.ConfigurableBeanFactory} 使用。
  *
  * @author Juergen Hoeller
  * @since 2.5
