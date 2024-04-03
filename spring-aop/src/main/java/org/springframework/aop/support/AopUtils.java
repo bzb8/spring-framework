@@ -137,9 +137,14 @@ public abstract class AopUtils {
 	 * Select an invocable method on the target type: either the given method itself
 	 * if actually exposed on the target type, or otherwise a corresponding method
 	 * on one of the target type's interfaces or on the target type itself.
+	 * 在目标类型上选择一个可调用的方法：如果给定的方法实际上在目标类型上暴露，则选择该方法本身，
+	 * 否则选择目标类型的一个接口或目标类型本身的相应方法。
+	 *
 	 * @param method the method to check
 	 * @param targetType the target type to search methods on (typically an AOP proxy)
+	 *                   要在其上搜索方法的目标类型（通常是 AOP 代理）
 	 * @return a corresponding invocable method on the target type
+	 * 在目标类型上可调用的方法
 	 * @throws IllegalStateException if the given method is not invocable on the given
 	 * target type (typically due to a proxy mismatch)
 	 * @since 4.3

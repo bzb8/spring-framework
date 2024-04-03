@@ -159,6 +159,11 @@ public final class ConsumesRequestCondition extends AbstractRequestCondition<Con
 	 * header or falls back on "Content-Type: application/octet-stream".
 	 * <p>If set to {@code false}, and the request does not have a body, then this
 	 * condition matches automatically, i.e. without checking expressions.
+	 * 设置是否期望请求具有正文。
+	 * <p>默认情况下，此设置为{@code true}，在此情况下，假设需要请求正文，并且此条件匹配
+	 * "Content-Type"头，或者回退到"Content-Type: application/octet-stream"。
+	 * <p>如果设置为{@code false}，并且请求没有正文，则此条件自动匹配，即无需检查表达式。
+	 *
 	 * @param bodyRequired whether requests are expected to have a body
 	 * @since 5.2
 	 */

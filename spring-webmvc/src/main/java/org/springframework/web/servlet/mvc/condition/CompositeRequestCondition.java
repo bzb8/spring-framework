@@ -31,11 +31,15 @@ import org.springframework.util.ObjectUtils;
  * Implements the {@link RequestCondition} contract by delegating to multiple
  * {@code RequestCondition} types and using a logical conjunction ({@code ' && '}) to
  * ensure all conditions match a given request.
+ * 实现了{@link RequestCondition}接口，通过委托给多个{@code RequestCondition}类型，并使用逻辑与（{@code ' && '}）
+ * 来确保所有条件都匹配给定的请求。
  *
  * <p>When {@code CompositeRequestCondition} instances are combined or compared
  * they are expected to (a) contain the same number of conditions and (b) that
  * conditions in the respective index are of the same type. It is acceptable to
  * provide {@code null} conditions or no conditions at all to the constructor.
+ * <p>当{@code CompositeRequestCondition}实例被组合或比较时，期望它们（a）包含相同数量的条件，并且（b）
+ * 相应索引处的条件类型相同。向构造函数提供{@code null}条件或完全不提供条件是可接受的。
  *
  * @author Rossen Stoyanchev
  * @since 3.2

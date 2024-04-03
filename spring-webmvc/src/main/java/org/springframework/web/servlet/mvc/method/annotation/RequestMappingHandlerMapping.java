@@ -276,9 +276,11 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * {@inheritDoc}
 	 * <p>Expects a handler to have either a type-level @{@link Controller}
 	 * annotation or a type-level @{@link RequestMapping} annotation.
+	 * <p>期待处理器具有类型级别的{@link Controller}注解或类型级别的{@link RequestMapping}注解。
 	 */
 	@Override
 	protected boolean isHandler(Class<?> beanType) {
+		// 类级别上标注有@Controller或@RequestMapping注解
 		return (AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) ||
 				AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class));
 	}
@@ -286,17 +288,26 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	/**
 	 * Uses method and type-level @{@link RequestMapping} annotations to create
 	 * the RequestMappingInfo.
+	 * 基于方法和类型级别的 @{@link RequestMapping} 注解创建 RequestMappingInfo。
+	 * <p>
+	 * 本方法会分析方法上以及类型上的@RequestMapping注解，根据这些注解的信息组装成RequestMappingInfo对象。
+	 * 如果方法没有@RequestMapping注解，则返回null。
+	 * </p>
 	 * @return the created RequestMappingInfo, or {@code null} if the method
 	 * does not have a {@code @RequestMapping} annotation.
+	 * 创建的RequestMappingInfo对象，如果方法没有@RequestMapping注解则返回null。
 	 * @see #getCustomMethodCondition(Method)
 	 * @see #getCustomTypeCondition(Class)
 	 */
 	@Override
 	@Nullable
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
+		// 获取方法上的@Request注解
 		RequestMappingInfo info = createRequestMappingInfo(method);
 		if (info != null) {
+			// 获取类型上的@Request注解
 			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
+			// 合并
 			if (typeInfo != null) {
 				info = typeInfo.combine(info);
 			}
@@ -326,11 +337,15 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * Delegates to {@link #createRequestMappingInfo(RequestMapping, RequestCondition)},
 	 * supplying the appropriate custom {@link RequestCondition} depending on whether
 	 * the supplied {@code annotatedElement} is a class or method.
+	 * 委派给 {@link #createRequestMappingInfo(RequestMapping, RequestCondition)} 方法，
+	 * 根据提供的 {@code annotatedElement} 是类还是方法，提供适当的自定义 {@link RequestCondition}。
+	 *
 	 * @see #getCustomTypeCondition(Class)
 	 * @see #getCustomMethodCondition(Method)
 	 */
 	@Nullable
 	private RequestMappingInfo createRequestMappingInfo(AnnotatedElement element) {
+		// 获取@RequestMapping注解
 		RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(element, RequestMapping.class);
 		RequestCondition<?> condition = (element instanceof Class ?
 				getCustomTypeCondition((Class<?>) element) : getCustomMethodCondition((Method) element));
@@ -345,6 +360,12 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * <p>Consider extending {@link AbstractRequestCondition} for custom
 	 * condition types and using {@link CompositeRequestCondition} to provide
 	 * multiple custom conditions.
+	 * 提供一种自定义类型级别的请求条件。
+	 * 自定义的{@link RequestCondition}可以是任何类型，只要此方法的所有调用返回相同的条件类型，
+	 * 以确保可以组合和比较自定义请求条件。
+	 * <p>考虑扩展{@link AbstractRequestCondition}以用于自定义条件类型，
+	 * 并使用{@link CompositeRequestCondition}来提供多个自定义条件。
+	 *
 	 * @param handlerType the handler type for which to create the condition
 	 * @return the condition, or {@code null}
 	 */
@@ -374,6 +395,9 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	 * {@link RequestMapping @RequestMapping} annotation, which is either
 	 * a directly declared annotation, a meta-annotation, or the synthesized
 	 * result of merging annotation attributes within an annotation hierarchy.
+	 * 根据提供的{@link RequestMapping @RequestMapping}注解创建一个{@link RequestMappingInfo}对象。
+	 * 该注解可以是直接声明的注解、元注解或者是通过合并注解属性在注解层次结构中合成的结果。
+	 *
 	 */
 	protected RequestMappingInfo createRequestMappingInfo(
 			RequestMapping requestMapping, @Nullable RequestCondition<?> customCondition) {
@@ -394,7 +418,9 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 
 	/**
 	 * Resolve placeholder values in the given array of patterns.
+	 * 解析给定模式数组中的占位符值。
 	 * @return a new array with updated patterns
+	 * 一个包含更新后模式的新数组。
 	 */
 	protected String[] resolveEmbeddedValuesInPatterns(String[] patterns) {
 		if (this.embeddedValueResolver == null) {
@@ -437,6 +463,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	private void updateConsumesCondition(RequestMappingInfo info, Method method) {
 		ConsumesRequestCondition condition = info.getConsumesCondition();
 		if (!condition.isEmpty()) {
+			// 检查方法参数上是否有@RequestBody注解，有的话设置ConsumesRequestCondition的bodyRequired属性
 			for (Parameter parameter : method.getParameters()) {
 				MergedAnnotation<RequestBody> annot = MergedAnnotations.from(parameter).get(RequestBody.class);
 				if (annot.isPresent()) {
@@ -463,17 +490,21 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	protected CorsConfiguration initCorsConfiguration(Object handler, Method method, RequestMappingInfo mappingInfo) {
 		HandlerMethod handlerMethod = createHandlerMethod(handler, method);
 		Class<?> beanType = handlerMethod.getBeanType();
+		// 获取类级别的@CrossOrigin注解
 		CrossOrigin typeAnnotation = AnnotatedElementUtils.findMergedAnnotation(beanType, CrossOrigin.class);
+		// 获取方法级别的@CrossOrigin注解
 		CrossOrigin methodAnnotation = AnnotatedElementUtils.findMergedAnnotation(method, CrossOrigin.class);
 
 		if (typeAnnotation == null && methodAnnotation == null) {
 			return null;
 		}
 
+		// 创建CorsConfiguration对象, 合并类和方法上的@CrossOrigin注解
 		CorsConfiguration config = new CorsConfiguration();
 		updateCorsConfig(config, typeAnnotation);
 		updateCorsConfig(config, methodAnnotation);
 
+		// 允许的方法
 		if (CollectionUtils.isEmpty(config.getAllowedMethods())) {
 			for (RequestMethod allowedMethod : mappingInfo.getMethodsCondition().getMethods()) {
 				config.addAllowedMethod(allowedMethod.name());

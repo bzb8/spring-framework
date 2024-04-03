@@ -51,11 +51,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * {@linkplain #getMethod() method} and a {@linkplain #getBean() bean}.
  * Provides convenient access to method parameters, the method return value,
  * method annotations, etc.
+ * <p>代表一个处理器方法的信息封装，包括一个{@linkplain #getMethod() 方法}和一个{@linkplain #getBean() Bean}。
+ * 提供方便的方法参数访问、方法返回值、方法注解等。
  *
  * <p>The class may be created with a bean instance or with a bean name
  * (e.g. lazy-init bean, prototype bean). Use {@link #createWithResolvedBean()}
  * to obtain a {@code HandlerMethod} instance with a bean instance resolved
  * through the associated {@link BeanFactory}.
+ * <p>该类可以通过一个Bean实例或Bean名称来创建（例如延迟初始化Bean、原型Bean）。
+ * 使用{@link #createWithResolvedBean()}可以获取一个通过关联的{@link BeanFactory}解析Bean实例的{@code HandlerMethod}实例。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
@@ -67,23 +71,28 @@ public class HandlerMethod {
 
 	/** Logger that is available to subclasses. */
 	protected static final Log logger = LogFactory.getLog(HandlerMethod.class);
-
+	// either a bean name or an actual handler instance
 	private final Object bean;
 
 	@Nullable
 	private final BeanFactory beanFactory;
-
+	// Root WebApplicationContext
 	@Nullable
 	private final MessageSource messageSource;
 
 	private final Class<?> beanType;
 
+	// 原始方法
 	private final Method method;
-
+	// 被桥接的方法，实际调用的方法
 	private final Method bridgedMethod;
 
+	/**
+	 * 方法参数
+	 * HandlerMethodParameter
+	 */
 	private final MethodParameter[] parameters;
-
+	// 解析ResponseStatus注解后的httpStatus
 	@Nullable
 	private HttpStatus responseStatus;
 
@@ -96,6 +105,9 @@ public class HandlerMethod {
 	@Nullable
 	private volatile List<Annotation[][]> interfaceParameterAnnotations;
 
+	/**
+	 * 方法描述
+	 */
 	private final String description;
 
 
@@ -110,6 +122,14 @@ public class HandlerMethod {
 	 * Variant of {@link #HandlerMethod(Object, Method)} that
 	 * also accepts a {@link MessageSource} for use from subclasses.
 	 * @since 5.3.10
+	 */
+	/**
+	 * 一种变体的 {@link #HandlerMethod(Object, Method)} 构造函数，它还接受一个 {@link MessageSource}
+	 * 用于子类的使用。该方法是自版本 5.3.10 开始提供的。
+	 *
+	 * @param bean 方法所属的bean实例。
+	 * @param method 要处理的方法。
+	 * @param messageSource 可选的消息源，用于从子类中获取消息。可能为null。
 	 */
 	protected HandlerMethod(Object bean, Method method, @Nullable MessageSource messageSource) {
 		Assert.notNull(bean, "Bean is required");
@@ -229,8 +249,10 @@ public class HandlerMethod {
 	}
 
 	private void evaluateResponseStatus() {
+		// 获取方法上的ResponseStatus注解
 		ResponseStatus annotation = getMethodAnnotation(ResponseStatus.class);
 		if (annotation == null) {
+			// 方法上没有ResponseStatus注解，则获取类上的ResponseStatus注解
 			annotation = AnnotatedElementUtils.findMergedAnnotation(getBeanType(), ResponseStatus.class);
 		}
 		if (annotation != null) {

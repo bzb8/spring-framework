@@ -77,6 +77,13 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * reasons, while still expecting the bean to be eligible for handler methods.
 	 * <p>Originally defined in {@link org.springframework.aop.scope.ScopedProxyUtils}
 	 * but duplicated here to avoid a hard dependency on the spring-aop module.
+	 * <p>用于标记作用域代理背后的目标Bean的Bean名称前缀。此前缀用于在处理器方法检测中排除这些目标，
+	 * 以便优先使用相应的代理。
+	 * <p>这里不检查autowire-candidate状态，这是因为在自动装配级别上通过将autowire-candidate设置为{@code false}
+	 * 来处理代理目标过滤问题，尽管autowire-candidate可能因其他原因被设为{@code false}，但仍期望该Bean能够作为处理器方法的候选者。
+	 * <p>该常量最初在{@link org.springframework.aop.scope.ScopedProxyUtils}中定义，
+	 * 但为了避免对spring-aop模块的直接依赖，在此处进行了复制。
+	 *
 	 */
 	private static final String SCOPED_TARGET_NAME_PREFIX = "scopedTarget.";
 
@@ -94,7 +101,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 
 	private boolean detectHandlerMethodsInAncestorContexts = false;
-
+	// RequestMappingInfoHandlerMethodMappingNamingStrategy
 	@Nullable
 	private HandlerMethodMappingNamingStrategy<T> namingStrategy;
 
@@ -116,6 +123,10 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * is defined in (typically the current DispatcherServlet's context).
 	 * <p>Switch this flag on to detect handler beans in ancestor contexts
 	 * (typically the Spring root WebApplicationContext) as well.
+	 * 设置是否在祖先ApplicationContext中检测处理器方法。
+	 * <p>默认为"false"：只考虑当前ApplicationContext中的bean，即只考虑定义了当前HandlerMapping本身的上下文（通常为当前DispatcherServlet的上下文）中的bean。
+	 * <p>打开此标志可以同时在祖先上下文中检测处理器bean（通常为Spring根WebApplicationContext）。
+	 *
 	 * @see #getCandidateBeanNames()
 	 */
 	public void setDetectHandlerMethodsInAncestorContexts(boolean detectHandlerMethodsInAncestorContexts) {
@@ -235,6 +246,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see BeanFactoryUtils#beanNamesForTypeIncludingAncestors
 	 */
 	protected String[] getCandidateBeanNames() {
+		// 获取容器中所有beanName
 		return (this.detectHandlerMethodsInAncestorContexts ?
 				BeanFactoryUtils.beanNamesForTypeIncludingAncestors(obtainApplicationContext(), Object.class) :
 				obtainApplicationContext().getBeanNamesForType(Object.class));
@@ -246,12 +258,17 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * <p>This implementation avoids bean creation through checking
 	 * {@link org.springframework.beans.factory.BeanFactory#getType}
 	 * and calling {@link #detectHandlerMethods} with the bean name.
+	 * 确定指定候选bean的类型，如果识别为处理器类型，则调用{@link #detectHandlerMethods}。
+	 * <p>该实现通过检查{@link org.springframework.beans.factory.BeanFactory#getType}
+	 * 并调用{@link #detectHandlerMethods}来避免通过bean名称创建bean。
+	 *
 	 * @param beanName the name of the candidate bean
 	 * @since 5.1
 	 * @see #isHandler
 	 * @see #detectHandlerMethods
 	 */
 	protected void processCandidateBean(String beanName) {
+		// 确定 beanName的类型
 		Class<?> beanType = null;
 		try {
 			beanType = obtainApplicationContext().getType(beanName);
@@ -273,12 +290,15 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see #getMappingForMethod
 	 */
 	protected void detectHandlerMethods(Object handler) {
+		// 获取handler的类型
 		Class<?> handlerType = (handler instanceof String ?
 				obtainApplicationContext().getType((String) handler) : handler.getClass());
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
+			// 控制器中的所有方法 -> RequestMappingInfo
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
+					// userType的所有方法
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
 							return getMappingForMethod(method, userType);
@@ -322,9 +342,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	/**
 	 * Register a handler method and its unique mapping. Invoked at startup for
 	 * each detected handler method.
-	 * @param handler the bean name of the handler or the handler instance
-	 * @param method the method to register
+	 * 注册一个处理方法及其唯一的映射。在启动时为每个检测到的处理方法调用。
+	 * @param handler the bean name of the handler or the handler instance 处理器的bean名称或处理器实例
+	 * @param method the method to register 需要注册的方法
 	 * @param mapping the mapping conditions associated with the handler method
+	 *                与处理方法相关联的映射条件
 	 * @throws IllegalStateException if another method was already registered
 	 * under the same mapping
 	 */
@@ -508,7 +530,8 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 	/**
 	 * Whether the given type is a handler with handler methods.
-	 * @param beanType the type of the bean being checked
+	 * 判断给定的类型是否是一个具有处理方法的处理器。
+	 * @param beanType the type of the bean being checked 被检查的bean的类型
 	 * @return "true" if this a handler type, "false" otherwise.
 	 */
 	protected abstract boolean isHandler(Class<?> beanType);
@@ -516,9 +539,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	/**
 	 * Provide the mapping for a handler method. A method for which no
 	 * mapping can be provided is not a handler method.
+	 * 为处理器方法提供映射。如果一个方法无法提供映射，则它不是处理器方法。
 	 * @param method the method to provide a mapping for
+	 *               需要提供映射的方法
 	 * @param handlerType the handler type, possibly a subtype of the method's
 	 * declaring class
+	 *                    处理器类型，可能是该方法声明类的子类型
 	 * @return the mapping, or {@code null} if the method is not mapped
 	 */
 	@Nullable
@@ -536,6 +562,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 	/**
 	 * Return the request mapping paths that are not patterns.
+	 * 获取非模式化的请求映射路径。
+	 * 该方法会遍历给定映射的所有路径模式，从中筛选出非模式路径（即精确的路径）并返回。
+	 *
 	 * @since 5.3
 	 */
 	protected Set<String> getDirectPaths(T mapping) {
@@ -576,11 +605,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * <p>由于测试目的，包私有。
 	 */
 	class MappingRegistry {
-		// 映射注册表，维护所有映射和它们的注册信息。
+		// 映射注册表，维护所有映射和它们的注册信息。RequestMappingInfo -> MappingRegistration
 		private final Map<T, MappingRegistration<T>> registry = new HashMap<>();
-		// 通过直接路径查找映射的查找表，不保证线程安全。
+		// 通过直接路径（不是模式路径）查找映射的查找表，不保证线程安全。path -> RequestMappingInfo
 		private final MultiValueMap<String, T> pathLookup = new LinkedMultiValueMap<>();
-		// 通过映射名称查找处理器方法的线程安全查找表。
+		// 通过映射名称查找处理器方法的线程安全查找表。methodMappingName -> List<HandlerMethod>
 		private final Map<String, List<HandlerMethod>> nameLookup = new ConcurrentHashMap<>();
 		// 通过处理器方法查找CORS配置的线程安全查找表。
 		private final Map<HandlerMethod, CorsConfiguration> corsLookup = new ConcurrentHashMap<>();
@@ -636,12 +665,19 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			this.readWriteLock.readLock().unlock();
 		}
 
+		/**
+		 * 注册
+		 * @param mapping 控制器方法上的@RequestMapping的映射信息
+		 * @param handler
+		 * @param method
+		 */
 		public void register(T mapping, Object handler, Method method) {
 			this.readWriteLock.writeLock().lock();
 			try {
+				// 创建HandlerMethod
 				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
 				validateMethodMapping(handlerMethod, mapping);
-
+				// 返回不是模式的映射路径
 				Set<String> directPaths = AbstractHandlerMethodMapping.this.getDirectPaths(mapping);
 				for (String path : directPaths) {
 					this.pathLookup.add(path, mapping);
@@ -666,7 +702,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				this.readWriteLock.writeLock().unlock();
 			}
 		}
-
+		// 判断是否已经存在这个HandlerMethod了
 		private void validateMethodMapping(HandlerMethod handlerMethod, T mapping) {
 			MappingRegistration<T> registration = this.registry.get(mapping);
 			HandlerMethod existingHandlerMethod = (registration != null ? registration.getHandlerMethod() : null);
@@ -753,12 +789,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		private final T mapping;
 
 		private final HandlerMethod handlerMethod;
-
+		// 不是模式的映射路径
 		private final Set<String> directPaths;
-
+		// 映射名称
 		@Nullable
 		private final String mappingName;
-
+		// 是否有跨域配置
 		private final boolean corsConfig;
 
 		public MappingRegistration(T mapping, HandlerMethod handlerMethod,

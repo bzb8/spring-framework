@@ -43,8 +43,11 @@ public abstract class AbstractRequestCondition<T extends AbstractRequestConditio
 
 	/**
 	 * Return the discrete items a request condition is composed of.
+	 * 获取请求条件所组成的离散项。
 	 * <p>For example URL patterns, HTTP request methods, param expressions, etc.
+	 * <p>例如URL模式、HTTP请求方法、参数表达式等。
 	 * @return a collection of objects (never {@code null})
+	 * 一个对象集合（永远不为{@code null}）
 	 */
 	protected abstract Collection<?> getContent();
 

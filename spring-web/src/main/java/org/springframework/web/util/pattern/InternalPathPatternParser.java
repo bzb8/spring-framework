@@ -27,6 +27,7 @@ import org.springframework.web.util.pattern.PatternParseException.PatternMessage
 /**
  * Parser for URI template patterns. It breaks the path pattern into a number of
  * {@link PathElement PathElements} in a linked list. Instances are reusable but are not thread-safe.
+ * URI模板模式解析器。它将路径模式分解为一系列{@link PathElement}，并以链表形式存储。实例可重用，但不线程安全。
  *
  * @author Andy Clement
  * @since 5.0

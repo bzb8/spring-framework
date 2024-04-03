@@ -23,11 +23,14 @@ import org.springframework.web.servlet.handler.HandlerMethodMappingNamingStrateg
  * A {@link org.springframework.web.servlet.handler.HandlerMethodMappingNamingStrategy
  * HandlerMethodMappingNamingStrategy} for {@code RequestMappingInfo}-based handler
  * method mappings.
+ * 用于基于{@code RequestMappingInfo}的处理器方法映射的命名策略。
  *
  * If the {@code RequestMappingInfo} name attribute is set, its value is used.
  * Otherwise the name is based on the capital letters of the class name,
  * followed by "#" as a separator, and the method name. For example "TC#getFoo"
  * for a class named TestController with method getFoo.
+ * 如果{@code RequestMappingInfo}的名称属性被设置，则使用其值作为命名。
+ * 否则，名称将基于类名的首字母大写，后面跟随"#"作为分隔符，再接着是方法名。例如，对于一个名为TestController的类中名为getFoo的方法，其命名将会是"TC#getFoo"。
  *
  * @author Rossen Stoyanchev
  * @since 4.1

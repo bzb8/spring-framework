@@ -36,6 +36,8 @@ import org.springframework.util.StringUtils;
  * Representation of a parsed path pattern. Includes a chain of path elements
  * for fast matching and accumulates computed state for quick comparison of
  * patterns.
+ * <p>解析后的路径模式的表示形式。包括链式的路径元素
+ * 用于快速匹配，并累积计算状态以快速比较模式。
  *
  * <p>{@code PathPattern} matches URL paths using the following rules:<br>
  * <ul>
@@ -47,6 +49,15 @@ import org.springframework.util.StringUtils;
  * <li><code>{*spring}</code> matches zero or more <em>path segments</em> until the end of the path
  * and captures it as a variable named "spring"</li>
  * </ul>
+ * <p>{@code PathPattern} 使用以下规则匹配 URL 路径：<br>
+ * <ul>
+ * <li>{@code ?} 匹配一个字符</li>
+ * <li>{@code *} 在一个路径段中匹配零个或多个字符</li>
+ * <li>{@code **} 匹配零个或多个 <em>路径段</em> 直到路径末尾</li>
+ * <li><code>{spring}</code> 匹配一个 <em>路径段</em> 并将其捕获为名为 "spring" 的变量</li>
+ * <li><code>{spring:[a-z]+}</code> 匹配正则表达式 {@code [a-z]+} 作为名为 "spring" 的路径变量</li>
+ * <li><code>{*spring}</code> 匹配零个或多个 <em>路径段</em> 直到路径末尾，并将其捕获为名为 "spring" 的变量</li>
+ * </ul>
  *
  * <p><strong>Note:</strong> In contrast to
  * {@link org.springframework.util.AntPathMatcher}, {@code **} is supported only
@@ -54,6 +65,9 @@ import org.springframework.util.StringUtils;
  * {@code /pages/{**}/details} is not. The same applies also to the capturing
  * variant <code>{*spring}</code>. The aim is to eliminate ambiguity when
  * comparing patterns for specificity.
+ * <p><strong>注意：</strong> 与 {@link org.springframework.util.AntPathMatcher} 相反，{@code **} 仅支持
+ * 在模式的末尾。例如 {@code /pages/{**}} 是有效的，但 {@code /pages/{**}/details} 是无效的。这样做的目的是消除
+ * 在比较模式的具体性时的歧义。
  *
  * <h3>Examples</h3>
  * <ul>
@@ -71,6 +85,20 @@ import org.springframework.util.StringUtils;
  * will match with "path" &rarr; "/css/spring.css"</li>
  * <li><code>/resources/{filename:\\w+}.dat</code> will match {@code /resources/spring.dat}
  * and assign the value {@code "spring"} to the {@code filename} variable</li>
+ * </ul>
+ * <h3>示例</h3>
+ * <ul>
+ * <li>{@code /pages/t?st.html} &mdash; 匹配 {@code /pages/test.html} 以及
+ * {@code /pages/tXst.html}，但不匹配 {@code /pages/toast.html}</li>
+ * <li>{@code /resources/*.png} &mdash; 匹配 {@code resources} 目录中的所有 {@code .png} 文件</li>
+ * <li><code>/resources/&#42;&#42;</code> &mdash; 匹配 {@code /resources/} 路径下的所有文件，
+ * 包括 {@code /resources/image.png} 和 {@code /resources/css/spring.css}</li>
+ * <li><code>/resources/{&#42;path}</code> &mdash; 匹配 {@code /resources/} 路径下的所有文件，
+ * 以及 {@code /resources} 本身，并将它们的相对路径捕获为名为 "path" 的变量；
+ * {@code /resources/image.png} 将匹配 "path" &rarr; "/image.png"，而 {@code /resources/css/spring.css}
+ * 将匹配 "path" &rarr; "/css/spring.css"</li>
+ * <li><code>/resources/{filename:\\w+}.dat</code> 将匹配 {@code /resources/spring.dat}
+ * 并将值 {@code "spring"} 分配给 {@code filename} 变量</li>
  * </ul>
  *
  * @author Andy Clement

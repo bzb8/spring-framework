@@ -209,6 +209,7 @@ public class PatternsRequestCondition extends AbstractRequestCondition<PatternsR
 
 	/**
 	 * Return the mapping paths that are not patterns.
+	 * 返回不是模式的映射路径。
 	 * @since 5.3
 	 */
 	public Set<String> getDirectPaths() {

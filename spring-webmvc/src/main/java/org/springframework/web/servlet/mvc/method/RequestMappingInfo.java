@@ -239,7 +239,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	 * @since 5.3
 	 */
 	public Set<String> getDirectPaths() {
-		RequestCondition<?> condition = getActivePatternsCondition();
+		RequestCondition<?> condition = getActivePatternsCondition(); // PatternsRequestCondition
 		return (condition instanceof PathPatternsRequestCondition ?
 				((PathPatternsRequestCondition) condition).getDirectPaths() :
 				((PatternsRequestCondition) condition).getDirectPaths());
@@ -542,7 +542,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 
 	/**
 	 * Create a new {@code RequestMappingInfo.Builder} with the given paths.
-	 * @param paths the paths to use
+	 * @param paths the paths to use -- 解析占位符后的请求路径
 	 * @since 4.2
 	 */
 	public static Builder paths(String... paths) {
@@ -866,7 +866,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	 * Container for configuration options used for request mapping purposes.
 	 * Such configuration is required to create RequestMappingInfo instances but
 	 * is typically used across all RequestMappingInfo instances.
-	 * <p>用于请求映射配置的容器。此类配置用于创建RequestMappingInfo实例，
+	 * 用于请求映射配置的容器。此类配置用于创建RequestMappingInfo实例，
 	 * 但通常被所有RequestMappingInfo实例共享。
 	 * @since 4.2
 	 * @see Builder#options
