@@ -138,12 +138,20 @@ public interface HandlerInterceptor {
 	 * request processing. For more details see
 	 * {@link org.springframework.web.servlet.AsyncHandlerInterceptor}.
 	 * <p>The default implementation is empty.
+	 * 请求处理完成后回调，即视图渲染后。无论处理器执行结果如何，都会被调用，因此可用于适当资源的清理。
+	 * <p>注意：只有当前拦截器的{@code preHandle}方法成功完成并返回{@code true}时，才会被调用！
+	 * <p>与{@code postHandle}方法类似，该方法也将在链中的每个拦截器上逆序调用，因此第一个拦截器将是最后一个被调用的。
+	 * <p><strong>注意：</strong>对于异步请求处理，有特殊考虑。更多详情请参见
+	 * {@link org.springframework.web.servlet.AsyncHandlerInterceptor}。
+	 * <p>默认实现为空。
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @param handler the handler (or {@link HandlerMethod}) that started asynchronous
 	 * execution, for type and/or instance examination
+	 *                触发异步执行的处理器（或{@link HandlerMethod}），可用于类型和/或实例检查
 	 * @param ex any exception thrown on handler execution, if any; this does not
 	 * include exceptions that have been handled through an exception resolver
+	 *           处理器执行过程中抛出的任何异常，如果有的话；这不包括通过异常解析器处理的异常
 	 * @throws Exception in case of errors
 	 */
 	default void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,

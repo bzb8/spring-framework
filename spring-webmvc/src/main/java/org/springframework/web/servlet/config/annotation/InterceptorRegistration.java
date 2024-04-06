@@ -41,10 +41,14 @@ import org.springframework.web.util.pattern.PathPattern;
 public class InterceptorRegistration {
 
 	private final HandlerInterceptor interceptor;
-
+	/**
+	 * 匹配的路径
+	 */
 	@Nullable
 	private List<String> includePatterns;
-
+	/**
+	 * 不匹配的路径
+	 */
 	@Nullable
 	private List<String> excludePatterns;
 
@@ -142,6 +146,8 @@ public class InterceptorRegistration {
 	/**
 	 * Build the underlying interceptor. If URL patterns are provided, the returned
 	 * type is {@link MappedInterceptor}; otherwise {@link HandlerInterceptor}.
+	 * 构建底层拦截器。如果提供了URL模式，则返回的类型是{@link MappedInterceptor}；
+	 * 否则返回{@link HandlerInterceptor}。
 	 */
 	protected Object getInterceptor() {
 

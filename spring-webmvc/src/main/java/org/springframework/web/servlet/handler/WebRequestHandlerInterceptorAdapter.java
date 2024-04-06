@@ -29,6 +29,8 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * Adapter that implements the Servlet HandlerInterceptor interface
  * and wraps an underlying WebRequestInterceptor.
+ * 适配器类，实现了Servlet的HandlerInterceptor接口，并封装了一个底层的WebRequestInterceptor。
+ * 这个类允许将对WebRequestInterceptor的调用适配为Servlet环境所需的HandlerInterceptor接口调用。
  *
  * @author Juergen Hoeller
  * @since 2.0

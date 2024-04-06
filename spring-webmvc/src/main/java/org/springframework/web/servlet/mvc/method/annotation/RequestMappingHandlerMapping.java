@@ -61,7 +61,6 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * <p>从{@link Controller @Controller}类中的类型和方法级{@link RequestMapping @RequestMapping}注解
  * 创建{@link RequestMappingInfo}实例。
  *
- *
  * <p><strong>Deprecation Note:</strong></p> In 5.2.4,
  * {@link #setUseSuffixPatternMatch(boolean) useSuffixPatternMatch} and
  * {@link #setUseRegisteredSuffixPatternMatch(boolean) useRegisteredSuffixPatternMatch}

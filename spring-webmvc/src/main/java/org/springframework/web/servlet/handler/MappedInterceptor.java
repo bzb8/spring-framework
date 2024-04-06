@@ -186,15 +186,22 @@ public final class MappedInterceptor implements HandlerInterceptor {
 	 * Check whether this interceptor is mapped to the request.
 	 * <p>The request mapping path is expected to have been resolved externally.
 	 * See also class-level Javadoc.
-	 * @param request the request to match to
+	 * 检查当前拦截器是否被请求映射所指定。
+	 * <p>预期请求映射路径已在外部解析。
+	 * 请参见类级别的JavaDoc。
+	 *
+	 * @param request the request to match to 需要匹配的请求
 	 * @return {@code true} if the interceptor should be applied to the request
 	 */
 	public boolean matches(HttpServletRequest request) {
+		// 从请求属性中获取路径
 		Object path = ServletRequestPathUtils.getCachedPath(request);
 		if (this.pathMatcher != defaultPathMatcher) {
+			// 如果路径匹配器不为默认值，则将路径转换为字符串
 			path = path.toString();
 		}
 		boolean isPathContainer = (path instanceof PathContainer);
+		// 遍历排除模式列表，如果路径匹配任何一个排除模式，则拦截器不应用于该请求
 		if (!ObjectUtils.isEmpty(this.excludePatterns)) {
 			for (PatternAdapter adapter : this.excludePatterns) {
 				if (adapter.match(path, isPathContainer, this.pathMatcher)) {
@@ -202,14 +209,17 @@ public final class MappedInterceptor implements HandlerInterceptor {
 				}
 			}
 		}
+		// 如果没有包含模式，则默认认为拦截器应应用于该请求
 		if (ObjectUtils.isEmpty(this.includePatterns)) {
 			return true;
 		}
+		// 遍历包含模式列表，如果路径匹配任何一个包含模式，则拦截器应用于该请求
 		for (PatternAdapter adapter : this.includePatterns) {
 			if (adapter.match(path, isPathContainer, this.pathMatcher)) {
 				return true;
 			}
 		}
+		// 如果路径既不匹配排除模式也不匹配包含模式，则拦截器不应用于该请求
 		return false;
 	}
 

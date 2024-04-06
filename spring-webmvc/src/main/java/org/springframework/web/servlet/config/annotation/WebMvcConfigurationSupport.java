@@ -820,11 +820,16 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 * checks the classpath for the presence of a JSR-303 implementations
 	 * before creating a {@code OptionalValidatorFactoryBean}.If a JSR-303
 	 * implementation is not available, a no-op {@link Validator} is returned.
+	 * <p>返回一个全局的{@link Validator}实例，例如用于验证{@code @ModelAttribute}和{@code @RequestBody}方法参数。
+	 * 首先委托给{@link #getValidator()}方法，如果返回{@code null}，则检查类路径中是否存在JSR-303实现，
+	 * 如果存在，则创建一个{@code OptionalValidatorFactoryBean}。如果不存在JSR-303实现，则返回一个无操作的{@link Validator}实例。
+	 *
 	 */
 	@Bean
 	public Validator mvcValidator() {
 		Validator validator = getValidator();
 		if (validator == null) {
+			// javax.validation.Validator类存在的话, 就实例化org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean
 			if (ClassUtils.isPresent("javax.validation.Validator", getClass().getClassLoader())) {
 				Class<?> clazz;
 				try {
@@ -837,6 +842,7 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 				validator = (Validator) BeanUtils.instantiateClass(clazz);
 			}
 			else {
+				// 否则创建一个NoOpValidator
 				validator = new NoOpValidator();
 			}
 		}

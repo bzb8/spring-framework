@@ -66,6 +66,9 @@ public interface AsyncHandlerInterceptor extends HandlerInterceptor {
 	 * avoid modifying them in ways that would conflict with the concurrent
 	 * execution of the handler. A typical use of this method would be to
 	 * clean up thread-local variables.
+	 * 处理器并发执行时，代替{@code postHandle}和{@code afterCompletion}方法被调用。
+	 * <p>实现此方法时，可以使用提供的请求和响应对象，但应避免以会影响并发执行处理器的方式修改它们。
+	 * 此方法的一个典型用途是清理线程局部变量。
 	 * @param request the current request
 	 * @param response the current response
 	 * @param handler the handler (or {@link HandlerMethod}) that started async

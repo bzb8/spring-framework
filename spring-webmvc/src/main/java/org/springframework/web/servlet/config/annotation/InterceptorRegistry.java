@@ -29,6 +29,7 @@ import org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapt
 
 /**
  * Helps with configuring a list of mapped interceptors.
+ * 用于配置映射拦截器列表的帮助类。
  *
  * @author Rossen Stoyanchev
  * @author Keith Donald
@@ -41,9 +42,12 @@ public class InterceptorRegistry {
 
 	/**
 	 * Adds the provided {@link HandlerInterceptor}.
+	 * 添加提供的 {@link HandlerInterceptor}。
 	 * @param interceptor the interceptor to add
 	 * @return an {@link InterceptorRegistration} that allows you optionally configure the
 	 * registered interceptor further for example adding URL patterns it should apply to.
+	 * 一个 {@link InterceptorRegistration} 对象，它允许您进一步配置已注册的拦截器，
+	 * 例如添加它应适用的 URL 模式。
 	 */
 	public InterceptorRegistration addInterceptor(HandlerInterceptor interceptor) {
 		InterceptorRegistration registration = new InterceptorRegistration(interceptor);

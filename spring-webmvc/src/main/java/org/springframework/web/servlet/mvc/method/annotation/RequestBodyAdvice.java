@@ -29,10 +29,14 @@ import org.springframework.lang.Nullable;
  * Object and also allows for processing of the resulting Object before it is
  * passed into a controller method as an {@code @RequestBody} or an
  * {@code HttpEntity} method argument.
+ * <p>允许在请求体被读取和转换成对象之前自定义请求，也允许在对象被作为{@code @RequestBody}或
+ * {@code HttpEntity}方法参数传递给控制器方法之前处理对象。
  *
  * <p>Implementations of this contract may be registered directly with the
  * {@code RequestMappingHandlerAdapter} or more likely annotated with
  * {@code @ControllerAdvice} in which case they are auto-detected.
+ * <p>这个契约的实现可以直接注册到{@code RequestMappingHandlerAdapter}，或者更常见的是通过注解{@code @ControllerAdvice}来标记，
+ * 这样可以被自动检测到。
  *
  * @author Rossen Stoyanchev
  * @since 4.2

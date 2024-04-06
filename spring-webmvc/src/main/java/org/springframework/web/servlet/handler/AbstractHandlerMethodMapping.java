@@ -399,10 +399,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Override
 	@Nullable
 	protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
-		// //获取请求的路径
+		//获取请求的路径
 		String lookupPath = initLookupPath(request);
 		this.mappingRegistry.acquireReadLock();
 		try {
+			// 查询最佳匹配的handlerMethod
 			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
 			return (handlerMethod != null ? handlerMethod.createWithResolvedBean() : null);
 		}
@@ -426,6 +427,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Nullable
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<>();
+		// 根据path从非模式路径缓存中查找映射信息
 		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);
 		if (directPathMatches != null) {
 			addMatchingMappings(directPathMatches, matches, request);
@@ -437,6 +439,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			Match bestMatch = matches.get(0);
 			if (matches.size() > 1) {
 				Comparator<Match> comparator = new MatchComparator(getMappingComparator(request));
+				// 排序
 				matches.sort(comparator);
 				bestMatch = matches.get(0);
 				if (logger.isTraceEnabled()) {
@@ -460,6 +463,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 					}
 				}
 			}
+			// 设置最佳匹配的handlerMethod
 			request.setAttribute(BEST_MATCHING_HANDLER_ATTRIBUTE, bestMatch.getHandlerMethod());
 			handleMatch(bestMatch.mapping, lookupPath, request);
 			return bestMatch.getHandlerMethod();
@@ -469,6 +473,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		}
 	}
 
+	/**
+	 *
+	 * @param mappings 映射信息
+	 * @param matches
+	 * @param request
+	 */
 	private void addMatchingMappings(Collection<T> mappings, List<Match> matches, HttpServletRequest request) {
 		for (T mapping : mappings) {
 			T match = getMatchingMapping(mapping, request);
@@ -838,7 +848,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * 一个用于比较当前请求下最佳匹配的HandlerMethod及其映射的薄包装器。
 	 */
 	private class Match {
-
+		// 请求映射信息
 		private final T mapping;
 
 		private final MappingRegistration<T> registration;

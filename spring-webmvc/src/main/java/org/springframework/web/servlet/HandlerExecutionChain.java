@@ -48,6 +48,10 @@ public class HandlerExecutionChain {
 
 	private final List<HandlerInterceptor> interceptorList = new ArrayList<>();
 
+	/**
+	 * 拦截器链的索引
+	 * 拦截器返回false或执行完的索引
+	 */
 	private int interceptorIndex = -1;
 
 
@@ -140,19 +144,26 @@ public class HandlerExecutionChain {
 
 	/**
 	 * Apply preHandle methods of registered interceptors.
+	 * 应用所有已注册拦截器的preHandle方法。
 	 * @return {@code true} if the execution chain should proceed with the
 	 * next interceptor or the handler itself. Else, DispatcherServlet assumes
 	 * that this interceptor has already dealt with the response itself.
+	 * 返回{@code true}表示执行链应继续处理下一个拦截器或处理器本身。如果返回{@code false}，则表示当前拦截器已自行处理了响应，调度器将不再继续执行。
+	 * @throws Exception 如果在应用拦截器的preHandle方法时发生异常。
 	 */
 	boolean applyPreHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		for (int i = 0; i < this.interceptorList.size(); i++) {
 			HandlerInterceptor interceptor = this.interceptorList.get(i);
+			// 调用拦截器的preHandle方法，判断是否允许继续执行后续的处理流程
 			if (!interceptor.preHandle(request, response, this.handler)) {
+				// 如果preHandle返回false，触发afterCompletion方法，并终止执行链
 				triggerAfterCompletion(request, response, null);
 				return false;
 			}
+			// 记录当前执行到的拦截器索引
 			this.interceptorIndex = i;
 		}
+		// 当所有拦截器的preHandle方法都返回true时，继续执行链
 		return true;
 	}
 
@@ -172,11 +183,15 @@ public class HandlerExecutionChain {
 	 * Trigger afterCompletion callbacks on the mapped HandlerInterceptors.
 	 * Will just invoke afterCompletion for all interceptors whose preHandle invocation
 	 * has successfully completed and returned true.
+	 * 触发映射的HandlerInterceptor的afterCompletion回调。
+	 * 仅会调用preHandle调用成功并返回true的所有拦截器的afterCompletion方法。
 	 */
 	void triggerAfterCompletion(HttpServletRequest request, HttpServletResponse response, @Nullable Exception ex) {
+		// 倒序遍历preHandle调用成功的拦截器列表，调用afterCompletion方法
 		for (int i = this.interceptorIndex; i >= 0; i--) {
 			HandlerInterceptor interceptor = this.interceptorList.get(i);
 			try {
+				// 调用拦截器的afterCompletion方法
 				interceptor.afterCompletion(request, response, this.handler, ex);
 			}
 			catch (Throwable ex2) {

@@ -32,15 +32,22 @@ import org.springframework.util.Assert;
  * or for context-specific resource access. It saves the application
  * context reference and provides an initialization callback method.
  * Furthermore, it offers numerous convenience methods for message lookup.
+ * 为那些希望了解应用程序上下文的应用程序对象提供方便的基类。例如，可用于自定义协作bean的查找
+ * 或访问上下文特定的资源。它保存了应用程序上下文的引用，并提供了一个初始化回调方法。
+ * 此外，还提供了许多方便的消息查找方法。
  *
  * <p>There is no requirement to subclass this class: It just makes things
  * a little easier if you need access to the context, e.g. for access to
  * file resources or to the message source. Note that many application
  * objects do not need to be aware of the application context at all,
  * as they can receive collaborating beans via bean references.
+ * <p>没有要求子类化这个类：它只是在你需要访问上下文时使事情变得更容易，
+ * 例如访问文件资源或消息源。请注意，许多应用程序对象不需要意识到应用程序上下文，
+ * 因为他们可以通过bean引用接收协作bean。
  *
  * <p>Many framework classes are derived from this class, particularly
  * within the web support.
+ * <p>许多框架类都是从此类派生的，特别是在web支持中。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

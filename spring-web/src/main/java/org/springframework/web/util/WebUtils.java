@@ -63,6 +63,7 @@ public abstract class WebUtils {
 	 * Servlet 2.3+ 规范中定义的请求属性，用于包含请求的URI。
 	 * <p>如果通过 {@code RequestDispatcher} 进行包含，当前资源将能够看到原始请求。
 	 * 它自己的请求URI会被暴露为一个请求属性。
+	 * 原始请求
 	 */
 	public static final String INCLUDE_REQUEST_URI_ATTRIBUTE = "javax.servlet.include.request_uri";
 
@@ -70,6 +71,9 @@ public abstract class WebUtils {
 	 * Standard Servlet 2.3+ spec request attribute for include context path.
 	 * <p>If included via a {@code RequestDispatcher}, the current resource will see the
 	 * originating context path. Its own context path is exposed as a request attribute.
+	 * <p>定义了一个常量，用于表示Servlet 2.3+规范中请求属性的包含上下文路径。
+	 * 当通过{@code RequestDispatcher}进行包含时，当前资源能够看到起始的上下文路径。
+	 * 而它自身的上下文路径则通过请求属性暴露出来。
 	 */
 	public static final String INCLUDE_CONTEXT_PATH_ATTRIBUTE = "javax.servlet.include.context_path";
 

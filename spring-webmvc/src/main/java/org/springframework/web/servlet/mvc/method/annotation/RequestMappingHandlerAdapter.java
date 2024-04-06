@@ -101,11 +101,15 @@ import org.springframework.web.util.WebUtils;
 /**
  * Extension of {@link AbstractHandlerMethodAdapter} that supports
  * {@link RequestMapping @RequestMapping} annotated {@link HandlerMethod HandlerMethods}.
+ * {@link AbstractHandlerMethodAdapter}的扩展，支持
+ * {@link RequestMapping @RequestMapping}注解的{@link HandlerMethod HandlerMethods}。
  *
  * <p>Support for custom argument and return value types can be added via
  * {@link #setCustomArgumentResolvers} and {@link #setCustomReturnValueHandlers},
  * or alternatively, to re-configure all argument and return value types,
  * use {@link #setArgumentResolvers} and {@link #setReturnValueHandlers}.
+ * <p>可以通过{@link #setCustomArgumentResolvers}和{@link #setCustomReturnValueHandlers}添加对自定义参数和返回值类型的支持，
+ * 或者，如果需要重新配置所有参数和返回值类型，可以使用{@link #setArgumentResolvers}和{@link #setReturnValueHandlers}。
  *
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
@@ -416,6 +420,10 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 * <p>By default a {@link SimpleAsyncTaskExecutor} instance is used.
 	 * It's recommended to change that default in production as the simple executor
 	 * does not re-use threads.
+	 * 设置默认的 {@link AsyncTaskExecutor}，用于当控制器方法返回 {@link Callable} 时。
+	 * 控制器方法可以通过返回 {@link WebAsyncTask} 来按请求基础重写这个默认设置。
+	 * <p>默认情况下使用 {@link SimpleAsyncTaskExecutor} 实例。
+	 * 但在生产环境中建议更改这个默认设置，因为简单的执行器不重用线程。
 	 */
 	public void setTaskExecutor(AsyncTaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
@@ -428,6 +436,8 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 * for further processing of the concurrently produced result.
 	 * <p>If this value is not set, the default timeout of the underlying
 	 * implementation is used.
+	 * 设置并发处理超时的时间，单位为毫秒。在Servlet 3中，超时时间从主请求处理线程退出后开始计算，直到请求再次分发进行并发产生的结果的进一步处理结束。
+	 * <p>如果未设置此值，则使用底层实现的默认超时时间。
 	 * @param timeout the timeout value in milliseconds
 	 */
 	public void setAsyncRequestTimeout(long timeout) {
@@ -779,23 +789,40 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 * if it is a simple type, or as a model attribute otherwise. A return value
 	 * not recognized by any HandlerMethodReturnValueHandler will be interpreted
 	 * as a model attribute.
+	 * 此方法重写supportsInternal，用于判断处理器方法是否支持。
+	 * 无论方法参数和返回值类型如何，总是返回{@code true}。
+	 * 如果方法参数未被任何HandlerMethodArgumentResolver识别，如果它是简单类型，则将其解释为请求参数；
+	 * 否则，将其解释为模型属性。如果返回值未被任何HandlerMethodReturnValueHandler识别，将其解释为模型属性。
 	 */
 	@Override
 	protected boolean supportsInternal(HandlerMethod handlerMethod) {
 		return true;
 	}
 
+	/**
+	 * 处理HTTP请求并返回ModelAndView。
+	 * 如果需要，会在执行handlerMethod之前对请求进行检查，并在会话级别上进行同步。
+	 *
+	 * @param request HTTP请求对象
+	 * @param response HTTP响应对象
+	 * @param handlerMethod 处理请求的方法
+	 * @return ModelAndView，包含处理结果的模型和视图信息
+	 * @throws Exception 如果处理过程中发生异常
+	 */
 	@Override
 	protected ModelAndView handleInternal(HttpServletRequest request,
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
 		ModelAndView mav;
+		// 检查请求是否符合要求
 		checkRequest(request);
 
 		// Execute invokeHandlerMethod in synchronized block if required.
+		// 根据是否需要在会话级别上同步来执行handlerMethod
 		if (this.synchronizeOnSession) {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
+				// 如果存在会话，则使用会话锁来同步执行handlerMethod
 				Object mutex = WebUtils.getSessionMutex(session);
 				synchronized (mutex) {
 					mav = invokeHandlerMethod(request, response, handlerMethod);
@@ -803,19 +830,24 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			}
 			else {
 				// No HttpSession available -> no mutex necessary
+				// 如果没有会话，则直接执行handlerMethod
 				mav = invokeHandlerMethod(request, response, handlerMethod);
 			}
 		}
 		else {
 			// No synchronization on session demanded at all...
+			// 如果不需要会话级同步，则直接执行handlerMethod
 			mav = invokeHandlerMethod(request, response, handlerMethod);
 		}
 
+		// 如果响应头中未包含缓存控制信息，则根据handlerMethod是否有会话属性来设置缓存
 		if (!response.containsHeader(HEADER_CACHE_CONTROL)) {
 			if (getSessionAttributesHandler(handlerMethod).hasSessionAttributes()) {
+				// 有会话属性时，应用指定的缓存时间
 				applyCacheSeconds(response, this.cacheSecondsForSessionAttributeHandlers);
 			}
 			else {
+				// 无会话属性时，进行默认的响应准备
 				prepareResponse(response);
 			}
 		}
@@ -848,18 +880,23 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	/**
 	 * Invoke the {@link RequestMapping} handler method preparing a {@link ModelAndView}
 	 * if view resolution is required.
+	 * 调用{@link RequestMapping}处理方法，如果需要视图解析，则准备一个{@link ModelAndView}。
+	 * 本方法负责处理HTTP请求，解析请求参数，调用相应的处理方法，并根据处理结果准备模型和视图。
 	 * @since 4.2
 	 * @see #createInvocableHandlerMethod(HandlerMethod)
 	 */
 	@Nullable
 	protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
-			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+											   HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
+		// 创建一个ServletWebRequest对象，用于封装HTTP请求和响应
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
 		try {
+			// 获取数据绑定工厂和模型工厂
 			WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
 			ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
 
+			// 创建可调用的处理方法对象，并配置参数解析器和返回值处理器
 			ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
 			if (this.argumentResolvers != null) {
 				invocableMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
@@ -870,11 +907,13 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			invocableMethod.setDataBinderFactory(binderFactory);
 			invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
 
+			// 初始化ModelAndView容器，并准备模型
 			ModelAndViewContainer mavContainer = new ModelAndViewContainer();
 			mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
 			modelFactory.initModel(webRequest, mavContainer, invocableMethod);
 			mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
 
+			// 配置异步请求处理相关参数
 			AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
 			asyncWebRequest.setTimeout(this.asyncRequestTimeout);
 
@@ -884,10 +923,12 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			asyncManager.registerCallableInterceptors(this.callableInterceptors);
 			asyncManager.registerDeferredResultInterceptors(this.deferredResultInterceptors);
 
+			// 如果存在异步处理结果，则处理异步结果
 			if (asyncManager.hasConcurrentResult()) {
 				Object result = asyncManager.getConcurrentResult();
 				mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0];
 				asyncManager.clearConcurrentResult();
+				// 日志记录异步结果处理
 				LogFormatUtils.traceDebug(logger, traceOn -> {
 					String formatted = LogFormatUtils.formatValue(result, !traceOn);
 					return "Resume with async result [" + formatted + "]";
@@ -895,14 +936,18 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 				invocableMethod = invocableMethod.wrapConcurrentResult(result);
 			}
 
+			// 调用处理方法，并处理结果
 			invocableMethod.invokeAndHandle(webRequest, mavContainer);
 			if (asyncManager.isConcurrentHandlingStarted()) {
+				// 如果是异步处理，则不返回ModelAndView
 				return null;
 			}
 
+			// 返回模型和视图
 			return getModelAndView(mavContainer, modelFactory, webRequest);
 		}
 		finally {
+			// 请求处理完成后的清理工作
 			webRequest.requestCompleted();
 		}
 	}

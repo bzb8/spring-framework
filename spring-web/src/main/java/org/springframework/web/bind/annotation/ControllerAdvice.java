@@ -31,6 +31,9 @@ import org.springframework.stereotype.Component;
  * {@link ExceptionHandler @ExceptionHandler}, {@link InitBinder @InitBinder}, or
  * {@link ModelAttribute @ModelAttribute} methods to be shared across
  * multiple {@code @Controller} classes.
+ * {@link Component @Component}注解的一个特殊化，用于声明具有{@link ExceptionHandler @ExceptionHandler}、
+ * {@link InitBinder @InitBinder}或{@link ModelAttribute @ModelAttribute}方法的类，
+ * 这些方法可以在多个{@code @Controller}类之间共享。
  *
  * <p>Classes annotated with {@code @ControllerAdvice} can be declared explicitly
  * as Spring beans or auto-detected via classpath scanning. All such beans are
@@ -48,6 +51,16 @@ import org.springframework.stereotype.Component;
  * will be picked on the first advice with a matching exception handler method. For
  * model attributes and data binding initialization, {@code @ModelAttribute} and
  * {@code @InitBinder} methods will follow {@code @ControllerAdvice} order.
+ * <p>标记有{@code @ControllerAdvice}的类可以显式声明为Spring Bean，或通过类路径扫描自动检测。
+ * 所有这类Bean都会根据{@link org.springframework.core.Ordered Ordered}语义或
+ * {@link org.springframework.core.annotation.Order @Order} / {@link javax.annotation.Priority @Priority}声明进行排序。
+ * 其中，{@code Ordered}语义优先于{@code @Order} / {@code @Priority}声明。
+ * 运行时，{@code @ControllerAdvice} Bean会按照该顺序应用。
+ * 但是，实现{@link org.springframework.core.PriorityOrdered PriorityOrdered}的{@code @ControllerAdvice} Bean
+ * 不会优先于实现{@code Ordered}的{@code @ControllerAdvice} Bean。
+ * 此外，对于有作用域的{@code @ControllerAdvice} Bean（例如，配置为请求作用域或会话作用域的Bean），
+ * {@code Ordered}不被尊重。对于异常处理，将选择第一个匹配的异常处理方法。
+ * 对于模型属性和数据绑定初始化，{@code @ModelAttribute}和{@code @InitBinder}方法将遵循{@code @ControllerAdvice}的顺序。
  *
  * <p>Note: For {@code @ExceptionHandler} methods, a root exception match will be
  * preferred to just matching a cause of the current exception, among the handler
@@ -55,6 +68,9 @@ import org.springframework.stereotype.Component;
  * advice will still be preferred over any match (whether root or cause level)
  * on a lower-priority advice bean. As a consequence, please declare your primary
  * root exception mappings on a prioritized advice bean with a corresponding order.
+ * <p>对于{@code @ExceptionHandler}方法，默认情况下，将优先选择匹配根异常的方法，而不是仅匹配当前异常的原因。
+ * 但是在高优先级的建议中，原因匹配仍然会优先于低优先级建议中的任何匹配（无论是根异常还是原因异常）。
+ * 因此，请在具有相应顺序的优先级建议Bean上声明您的主要根异常映射。
  *
  * <p>By default, the methods in an {@code @ControllerAdvice} apply globally to
  * all controllers. Use selectors such as {@link #annotations},
@@ -64,6 +80,11 @@ import org.springframework.stereotype.Component;
  * selected controllers should match at least one selector. Note that selector checks
  * are performed at runtime, so adding many selectors may negatively impact
  * performance and add complexity.
+ * <p>默认情况下，{@code @ControllerAdvice}中的方法适用于所有控制器。
+ * 使用选择器（如{@link #annotations}、{@link #basePackageClasses}和{@link #basePackages}（或其别名{@link #value}））
+ * 来定义更窄的目标控制器子集。
+ * 如果声明了多个选择器，则会应用布尔{@code OR}逻辑，这意味着选定的控制器应匹配至少一个选择器。
+ * 请注意，选择器检查在运行时执行，因此添加许多选择器可能会对性能产生负面影响并增加复杂性。
  *
  * @author Rossen Stoyanchev
  * @author Brian Clozel

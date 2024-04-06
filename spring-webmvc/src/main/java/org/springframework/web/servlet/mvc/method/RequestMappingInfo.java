@@ -369,11 +369,15 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 	 * <p>For example the returned instance may contain the subset of URL
 	 * patterns that match to the current request, sorted with best matching
 	 * patterns on top.
+	 * 检查当前请求映射信息中的所有条件是否与提供的请求匹配，并返回一个可能经过定制的新的请求映射信息实例。
+	 * 例如，返回的实例可能包含与当前请求匹配的URL模式子集，且以最佳匹配模式为先。
+	 *
 	 * @return a new instance in case of a match; or {@code null} otherwise
 	 */
 	@Override
 	@Nullable
 	public RequestMappingInfo getMatchingCondition(HttpServletRequest request) {
+		// 检查请求方法是否匹配
 		RequestMethodsRequestCondition methods = this.methodsCondition.getMatchingCondition(request);
 		if (methods == null) {
 			return null;

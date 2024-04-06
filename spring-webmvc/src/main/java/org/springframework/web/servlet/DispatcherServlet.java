@@ -685,8 +685,13 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * Initialize the HandlerAdapters used by this class.
 	 * <p>If no HandlerAdapter beans are defined in the BeanFactory for this namespace,
 	 * we default to SimpleControllerHandlerAdapter.
+	 * 初始化本类使用的HandlerAdapter。
+	 * <p>如果在当前命名空间的BeanFactory中没有定义HandlerAdapter bean，
+	 * 则默认使用SimpleControllerHandlerAdapter。
+	 * @param context 应用上下文，用于查找和初始化HandlerAdapter
 	 */
 	private void initHandlerAdapters(ApplicationContext context) {
+		// 将handlerAdapters设置为null
 		this.handlerAdapters = null;
 
 		if (this.detectAllHandlerAdapters) {
@@ -711,6 +716,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Ensure we have at least some HandlerAdapters, by registering
 		// default HandlerAdapters if no other adapters are found.
+		// 确保至少存在一些HandlerAdapter，如果未找到其他适配器，则注册默认的HandlerAdapter。
 		if (this.handlerAdapters == null) {
 			this.handlerAdapters = getDefaultStrategies(context, HandlerAdapter.class);
 			if (logger.isTraceEnabled()) {
@@ -923,7 +929,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Load default strategy implementations from properties file.
 				// This is currently strictly internal and not meant to be customized
 				// by application developers.
-				// 从属性文件加载默认策略实现
+				// 从DispatcherServlet.properties属性文件加载默认策略实现
 				// 目前这完全是内部使用的，不打算让应用开发者定制
 				ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 				defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
@@ -933,18 +939,22 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 
+		// class的全限定名称
 		String key = strategyInterface.getName();
 		// org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
 		// org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 		// org.springframework.web.servlet.function.support.RouterFunctionMapping
+		// 获取对应class的value值
 		String value = defaultStrategies.getProperty(key);
 		if (value != null) {
+			// value按照, 号分割为数组
 			String[] classNames = StringUtils.commaDelimitedListToStringArray(value);
 			List<T> strategies = new ArrayList<>(classNames.length);
 			for (String className : classNames) {
 				try {
 					Class<?> clazz = ClassUtils.forName(className, DispatcherServlet.class.getClassLoader());
 					Object strategy = createDefaultStrategy(context, clazz);
+					// 实例化，并返回
 					strategies.add((T) strategy);
 				}
 				catch (ClassNotFoundException ex) {
@@ -1130,6 +1140,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Determine handler for the current request.
 				// 为当前请求确定处理器。
 				mappedHandler = getHandler(processedRequest);
+				// 如果没有找到处理器，则抛出异常
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
 					return;
@@ -1143,6 +1154,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// 处理last-modified头，如果处理器支持的话。
 				String method = request.getMethod();
 				boolean isGet = HttpMethod.GET.matches(method);
+				// 如果是GET或HEAD请求，则处理last-modified头
 				if (isGet || HttpMethod.HEAD.matches(method)) {
 					long lastModified = ha.getLastModified(request, mappedHandler.getHandler());
 					if (new ServletWebRequest(request, response).checkNotModified(lastModified) && isGet) {

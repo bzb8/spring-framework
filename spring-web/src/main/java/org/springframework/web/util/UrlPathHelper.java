@@ -207,7 +207,7 @@ public class UrlPathHelper {
 	 */
 	public String resolveAndCacheLookupPath(HttpServletRequest request) {
 		String lookupPath = getLookupPathForRequest(request);
-		request.setAttribute(PATH_ATTRIBUTE, lookupPath);
+ 		request.setAttribute(PATH_ATTRIBUTE, lookupPath);
 		return lookupPath;
 	}
 
@@ -357,6 +357,10 @@ public class UrlPathHelper {
 	/**
 	 * Return the path within the web application for the given request.
 	 * <p>Detects include request URL if called within a RequestDispatcher include.
+	 * 获取给定请求在Web应用程序内的路径。
+	 * <p>如果在RequestDispatcher include内调用，则会检测到包含请求的URL。
+	 * 获取移除contextPath后的path
+	 *
 	 * @param request current HTTP request
 	 * @return the path within the web application
 	 * @see #getLookupPathForRequest
@@ -379,6 +383,9 @@ public class UrlPathHelper {
 	 * is a match return the extra part. This method is needed because the
 	 * context path and the servlet path returned by the HttpServletRequest are
 	 * stripped of semicolon content unlike the requestUri.
+	 * 将给定的"mapping"与"requestUri"的开始部分进行匹配，如果存在匹配，则返回剩余部分。
+	 * 这个方法的需要是因为HttpServletRequest返回的上下文路径和Servlet路径去除了分号内容，
+	 * 而requestUri没有
 	 */
 	@Nullable
 	private String getRemainingPath(String requestUri, String mapping, boolean ignoreCase) {
@@ -440,6 +447,10 @@ public class UrlPathHelper {
 	 * <p>The URI that the web container resolves <i>should</i> be correct, but some
 	 * containers like JBoss/Jetty incorrectly include ";" strings like ";jsessionid"
 	 * in the URI. This method cuts off such incorrect appendices.
+	 * 获取给定请求的请求URI，如果在RequestDispatcher include中调用，则检测到include请求URL。
+	 * <p>由于{@code request.getRequestURI()}返回的值不会被Servlet容器解码，此方法将对其进行解码。
+	 * <p>web容器解析的URI“应该”是正确的，但一些容器（如JBoss/Jetty）会错误地将";"字符串（如";jsessionid"）包含在URI中。
+	 * 此方法会截去此类不正确的后缀。
 	 * @param request current HTTP request
 	 * @return the request URI
 	 */
@@ -456,6 +467,9 @@ public class UrlPathHelper {
 	 * URL if called within a RequestDispatcher include.
 	 * <p>As the value returned by {@code request.getContextPath()} is <i>not</i>
 	 * decoded by the servlet container, this method will decode it.
+	 * <p>获取给定请求的上下文路径，如果在 RequestDispatcher 包含中调用，则检测包含请求的 URL。
+	 * <p>由于 {@code request.getContextPath()} 返回的值不会被 servlet 容器解码，此方法将对其进行解码。
+	 *
 	 * @param request current HTTP request
 	 * @return the context path
 	 */
@@ -465,7 +479,7 @@ public class UrlPathHelper {
 			contextPath = request.getContextPath();
 		}
 		if (StringUtils.matchesCharacter(contextPath, '/')) {
-			// Invalid case, but happens for includes on Jetty: silently adapt it.
+			// Invalid case, but happens for includes on Jetty: silently adapt it. 无效的情况，但发生在 Jetty 上：静默地调整它。
 			contextPath = "";
 		}
 		return decodeRequestString(request, contextPath);
@@ -583,7 +597,7 @@ public class UrlPathHelper {
 		}
 		return source;
 	}
-
+	// 对source进行url解码
 	@SuppressWarnings("deprecation")
 	private String decodeInternal(HttpServletRequest request, String source) {
 		String enc = determineEncoding(request);

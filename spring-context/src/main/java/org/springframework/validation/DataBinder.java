@@ -53,9 +53,11 @@ import org.springframework.util.StringUtils;
 /**
  * Binder that allows for setting property values on a target object, including
  * support for validation and binding result analysis.
+ * 一个允许在目标对象上设置属性值的Binder，包括验证和支持绑定结果分析的支持。
  *
  * <p>The binding process can be customized by specifying allowed field patterns,
  * required fields, custom editors, etc.
+ * <p>可以通过指定允许的字段模式、必需的字段、自定义编辑器等来定制绑定过程。
  *
  * <p><strong>WARNING</strong>: Data binding can lead to security issues by exposing
  * parts of the object graph that are not meant to be accessed or modified by
@@ -65,22 +67,37 @@ import org.springframework.util.StringUtils;
  * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-initbinder-model-design">Spring Web MVC</a> and
  * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-ann-initbinder-model-design">Spring WebFlux</a>
  * in the reference manual.
+ * <p><strong>警告</strong>：数据绑定可能会导致安全问题，因为它可能会暴露给外部客户端访问或修改的对象图的某些部分。
+ * 因此，数据绑定的设计和使用应仔细考虑安全性问题。有关更多信息，请参阅参考手册中关于
+ * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-initbinder-model-design">Spring Web MVC</a> 和
+ * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-ann-initbinder-model-design">Spring WebFlux</a> 的专门章节。
  *
  * <p>The binding results can be examined via the {@link BindingResult} interface,
  * extending the {@link Errors} interface: see the {@link #getBindingResult()} method.
  * Missing fields and property access exceptions will be converted to {@link FieldError FieldErrors},
  * collected in the Errors instance, using the following error codes:
+ * <p>可以通过{@link BindingResult}接口检查绑定结果，它扩展了{@link Errors}接口；
+ * 请参阅{@link #getBindingResult()}方法。缺少字段和属性访问异常将被转换为{@link FieldError FieldErrors}，
+ * 并通过以下错误代码收集在Errors实例中：
  *
  * <ul>
  * <li>Missing field error: "required"
  * <li>Type mismatch error: "typeMismatch"
  * <li>Method invocation error: "methodInvocation"
  * </ul>
+ * <ul>
+ * <li>缺少字段错误： "required"
+ * <li>类型不匹配错误： "typeMismatch"
+ * <li>方法调用错误： "methodInvocation"
+ * </ul>
  *
  * <p>By default, binding errors get resolved through the {@link BindingErrorProcessor}
  * strategy, processing for missing fields and property access exceptions: see the
  * {@link #setBindingErrorProcessor} method. You can override the default strategy
  * if needed, for example to generate different error codes.
+ * <p>默认情况下，绑定错误通过{@link BindingErrorProcessor}策略进行处理，
+ * 处理缺少字段和属性访问异常；请参阅{@link #setBindingErrorProcessor}方法。
+ * 如果需要，您可以重写默认策略，例如生成不同的错误代码。
  *
  * <p>Custom validation errors can be added afterwards. You will typically want to resolve
  * such error codes into proper user-visible error messages; this can be achieved through
@@ -90,8 +107,14 @@ import org.springframework.util.StringUtils;
  * method. The list of message codes can be customized through the {@link MessageCodesResolver}
  * strategy: see the {@link #setMessageCodesResolver} method. {@link DefaultMessageCodesResolver}'s
  * javadoc states details on the default resolution rules.
+ * <p>之后可以添加自定义验证错误。您通常希望将此类错误代码解析为用户可见的错误消息，
+ * 这可以通过使用{@link org.springframework.context.MessageSource}解析每个错误来实现，
+ * 它能够通过其{@link org.springframework.context.MessageSource#getMessage(org.springframework.context.MessageSourceResolvable, java.util.Locale)}
+ * 方法解析{@link ObjectError}/{@link FieldError}。消息代码列表可以通过{@link MessageCodesResolver}策略进行自定义：
+ * 请参阅{@link #setMessageCodesResolver}方法。{@link DefaultMessageCodesResolver}的javadoc详细说明了默认解析规则。
  *
  * <p>This generic data binder can be used in any kind of environment.
+ * <p>这种通用数据绑定器可以在任何类型的环境中使用。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

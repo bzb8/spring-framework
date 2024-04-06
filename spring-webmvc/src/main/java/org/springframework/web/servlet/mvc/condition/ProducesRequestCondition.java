@@ -43,6 +43,10 @@ import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition.Hea
  * supported, which are described in {@link RequestMapping#produces()} and
  * {@link RequestMapping#headers()} where the header name is 'Accept'.
  * Regardless of which syntax is used, the semantics are the same.
+ * <p>一个逻辑或（' || '）请求条件，用于将请求的'Accept'头部匹配到媒体类型表达式的列表中。
+ * 支持两种媒体类型表达式，分别在{@link RequestMapping#produces()}和
+ * {@link RequestMapping#headers()}中描述，其中头名称为'Accept'。
+ * 无论使用哪种语法，其语义都是相同的。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
@@ -344,6 +348,7 @@ public final class ProducesRequestCondition extends AbstractRequestCondition<Pro
 	 * @since 5.2
 	 */
 	public static void clearMediaTypesAttribute(HttpServletRequest request) {
+		// 从请求中移除媒体类型属性
 		request.removeAttribute(MEDIA_TYPES_ATTRIBUTE);
 	}
 
