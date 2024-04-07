@@ -120,6 +120,12 @@ public @interface ControllerAdvice {
 	 * more concise use of the annotation.
 	 * <p>Also consider using {@link #basePackageClasses} as a type-safe
 	 * alternative to String-based package names.
+	 * 基础包数组。
+	 * <p>属于这些基础包或其子包的控制器将被包含—例如，
+	 * {@code @ControllerAdvice(basePackages = "org.my.pkg")}或
+	 * {@code @ControllerAdvice(basePackages = {"org.my.pkg", "org.my.other.pkg"})}。
+	 * <p>{@link #value}是此属性的别名，仅允许注解的更简洁使用。
+	 * <p>还可以考虑使用{@link #basePackageClasses}作为基于类型的包名称的替代方案。
 	 * @since 4.0
 	 */
 	@AliasFor("value")
@@ -131,6 +137,8 @@ public @interface ControllerAdvice {
 	 * annotated class.
 	 * <p>Consider creating a special no-op marker class or interface in each package
 	 * that serves no purpose other than being referenced by this attribute.
+	 * 用于指定由{@code @ControllerAdvice}注解类提供建议的控制器的选择包的类型安全替代方法。
+	 * <p>考虑在每个包中创建一个特殊无操作的标记类或接口，其目的仅在于被此属性引用。
 	 * @since 4.0
 	 */
 	Class<?>[] basePackageClasses() default {};
@@ -139,6 +147,8 @@ public @interface ControllerAdvice {
 	 * Array of classes.
 	 * <p>Controllers that are assignable to at least one of the given types
 	 * will be advised by the {@code @ControllerAdvice} annotated class.
+	 * 类数组。
+	 * <p>可分配至至少一个给定类型的控制器将被{@code @ControllerAdvice}注解类提供建议。
 	 * @since 4.0
 	 */
 	Class<?>[] assignableTypes() default {};
@@ -149,6 +159,9 @@ public @interface ControllerAdvice {
 	 * types will be advised by the {@code @ControllerAdvice} annotated class.
 	 * <p>Consider creating a custom composed annotation or use a predefined one,
 	 * like {@link RestController @RestController}.
+	 * 注解类型数组。
+	 * <p>至少被一个提供的注解类型注解的控制器将被{@code @ControllerAdvice}注解类提供建议。
+	 * <p>考虑创建一个自定义组合注解或使用预定义的一个，如{@link RestController @RestController}。
 	 * @since 4.0
 	 */
 	Class<? extends Annotation>[] annotations() default {};

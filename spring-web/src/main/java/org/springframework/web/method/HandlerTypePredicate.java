@@ -38,7 +38,14 @@ import org.springframework.util.StringUtils;
  * <li>Assignable types -- for selecting handlers by supertype.
  * <li>Annotations -- for selecting handlers annotated in a specific way.
  * </ul>
+ * 一个{@code Predicate}，用于匹配请求处理组件类型，如果以下任何选择器匹配：
+ * <ul>
+ * <li>基础包 - 用于按包选择处理器。
+ * <li>可分配类型 - 用于按超类型选择处理器。
+ * <li>注解 - 用于选择以特定方式注解的处理器。
+ * </ul>
  * <p>Composability methods on {@link Predicate} can be used :
+ * 可以使用{@link Predicate}上的组合方法：
  * <pre class="code">
  * Predicate&lt;Class&lt;?&gt;&gt; predicate =
  * 		HandlerTypePredicate.forAnnotation(RestController.class)
@@ -69,28 +76,42 @@ public final class HandlerTypePredicate implements Predicate<Class<?>> {
 	}
 
 
+	/**
+	 * 测试给定的类是否满足一定的条件。
+	 * 该方法首先检查是否有选择器，如果没有，则认为测试通过；
+	 * 如果有选择器，则进一步检查给定的类是否属于指定的基本包，
+	 * 是否可分配给指定的类型，或者是否包含指定的注解。
+	 *
+	 * @param controllerType 待测试的类。可以为null。
+	 * @return 如果给定的类满足至少一个条件，则返回true；否则返回false。
+	 */
 	@Override
 	public boolean test(@Nullable Class<?> controllerType) {
+		// 没有选择器时，直接返回true
 		if (!hasSelectors()) {
 			return true;
 		}
 		else if (controllerType != null) {
+			// 检查类是否属于指定的基本包
 			for (String basePackage : this.basePackages) {
 				if (controllerType.getName().startsWith(basePackage)) {
 					return true;
 				}
 			}
+			// 检查类是否可分配给指定的类型
 			for (Class<?> clazz : this.assignableTypes) {
 				if (ClassUtils.isAssignable(clazz, controllerType)) {
 					return true;
 				}
 			}
+			// 检查类是否包含指定的注解
 			for (Class<? extends Annotation> annotationClass : this.annotations) {
 				if (AnnotationUtils.findAnnotation(controllerType, annotationClass) != null) {
 					return true;
 				}
 			}
 		}
+		// 如果都不满足，则返回false
 		return false;
 	}
 
@@ -155,7 +176,9 @@ public final class HandlerTypePredicate implements Predicate<Class<?>> {
 	 * A {@link HandlerTypePredicate} builder.
 	 */
 	public static class Builder {
-
+		/**
+		 * 添加基础包
+		 */
 		private final Set<String> basePackages = new LinkedHashSet<>();
 
 		private final List<Class<?>> assignableTypes = new ArrayList<>();
@@ -164,9 +187,13 @@ public final class HandlerTypePredicate implements Predicate<Class<?>> {
 
 		/**
 		 * Match handlers declared under a base package, e.g. "org.example".
+		 * 配置基于给定的基本包搜索匹配的处理器。
+		 * 例如，给定"org.example"作为基本包，此方法将匹配该包及其子包下声明的所有处理器。
+		 *
 		 * @param packages one or more base package classes
 		 */
 		public Builder basePackage(String... packages) {
+			// 对传入的包名数组进行流式处理，过滤掉空或空字符串的包名，并添加到基础包列表中
 			Arrays.stream(packages).filter(StringUtils::hasText).forEach(this::addBasePackage);
 			return this;
 		}

@@ -28,7 +28,7 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @since 3.1
  */
 public class DefaultDataBinderFactory implements WebDataBinderFactory {
-
+	// ConfigurableWebBindingInitializer
 	@Nullable
 	private final WebBindingInitializer initializer;
 

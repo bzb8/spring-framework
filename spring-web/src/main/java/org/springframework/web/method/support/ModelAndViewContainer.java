@@ -47,6 +47,20 @@ import org.springframework.web.bind.support.SimpleSessionStatus;
  * @author Juergen Hoeller
  * @since 3.1
  */
+/**
+ * 用于记录由{@link HandlerMethodArgumentResolver HandlerMethodArgumentResolvers}和
+ * {@link HandlerMethodReturnValueHandler HandlerMethodReturnValueHandlers}在控制器方法调用过程中做出的与模型和视图相关的决策。
+ *
+ * <p>可以通过设置{@link #setRequestHandled}标志来指示请求已被直接处理，不需要进行视图解析。
+ *
+ * <p>在实例化时会自动创建一个默认的{@link Model}。可以通过{@link #setRedirectModel}提供一个替代的模型实例，
+ * 用于重定向场景。当设置{@link #setRedirectModelScenario}为{@code true}表示重定向场景时，
+ * {@link #getModel()}方法将返回重定向模型而不是默认模型。
+ *
+ * @author Rossen Stoyanchev
+ * @author Juergen Hoeller
+ * @since 3.1
+ */
 public class ModelAndViewContainer {
 
 	private boolean ignoreDefaultModelOnRedirect = false;

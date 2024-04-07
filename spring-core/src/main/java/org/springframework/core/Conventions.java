@@ -112,36 +112,50 @@ public final class Conventions {
 	 * @param parameter the method or constructor parameter
 	 * @return the generated variable name
 	 */
+	/**
+	 * 根据给定的参数确定传统的变量名称，考虑通用集合类型（如果有的话）。
+	 * <p>5.0版本起，本方法支持响应式类型：<br>
+	 * {@code Mono<com.myapp.Product>} 变为 {@code "productMono"}<br>
+	 * {@code Flux<com.myapp.MyProduct>} 变为 {@code "myProductFlux"}<br>
+	 * {@code Observable<com.myapp.MyProduct>} 变为 {@code "myProductObservable"}<br>
+	 * @param parameter 方法或构造函数参数
+	 * @return 生成的变量名称
+	 * @throws IllegalArgumentException 如果参数是非泛型的Collection类型且无法确定其元素类型时抛出
+	 */
 	public static String getVariableNameForParameter(MethodParameter parameter) {
-		Assert.notNull(parameter, "MethodParameter must not be null");
+		Assert.notNull(parameter, "MethodParameter must not be null"); // 确保MethodParameter对象不为null
 		Class<?> valueClass;
-		boolean pluralize = false;
-		String reactiveSuffix = "";
+		boolean pluralize = false; // 默认不使用复数形式
+		String reactiveSuffix = ""; // 默认无响应式后缀
 
+		// 处理数组类型参数
 		if (parameter.getParameterType().isArray()) {
-			valueClass = parameter.getParameterType().getComponentType();
-			pluralize = true;
+			valueClass = parameter.getParameterType().getComponentType(); // 获取数组元素类型
+			pluralize = true; // 使用复数形式
 		}
+		// 处理集合类型参数
 		else if (Collection.class.isAssignableFrom(parameter.getParameterType())) {
-			valueClass = ResolvableType.forMethodParameter(parameter).asCollection().resolveGeneric();
+			valueClass = ResolvableType.forMethodParameter(parameter).asCollection().resolveGeneric(); // 获取集合元素类型
 			if (valueClass == null) {
 				throw new IllegalArgumentException(
-						"Cannot generate variable name for non-typed Collection parameter type");
+						"Cannot generate variable name for non-typed Collection parameter type"); // 如果无法确定元素类型，抛出异常
 			}
-			pluralize = true;
+			pluralize = true; // 使用复数形式
 		}
 		else {
-			valueClass = parameter.getParameterType();
+			// 处理非数组和集合类型参数，考虑响应式类型
+			valueClass = parameter.getParameterType(); // 直接使用参数类型
 			ReactiveAdapter adapter = ReactiveAdapterRegistry.getSharedInstance().getAdapter(valueClass);
 			if (adapter != null && !adapter.getDescriptor().isNoValue()) {
-				reactiveSuffix = ClassUtils.getShortName(valueClass);
-				valueClass = parameter.nested().getNestedParameterType();
+				reactiveSuffix = ClassUtils.getShortName(valueClass); // 获取响应式后缀
+				valueClass = parameter.nested().getNestedParameterType(); // 获取真实的非响应式类型
 			}
 		}
 
-		String name = ClassUtils.getShortNameAsProperty(valueClass);
-		return (pluralize ? pluralize(name) : name + reactiveSuffix);
+		String name = ClassUtils.getShortNameAsProperty(valueClass); // 将类名转换为属性名
+		return (pluralize ? pluralize(name) : name + reactiveSuffix); // 根据是否需要复数形式或包含响应式后缀，返回变量名
 	}
+
 
 	/**
 	 * Determine the conventional variable name for the return type of the

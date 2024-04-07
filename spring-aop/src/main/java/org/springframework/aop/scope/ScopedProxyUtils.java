@@ -139,9 +139,15 @@ public abstract class ScopedProxyUtils {
 	/**
 	 * Determine if the {@code beanName} is the name of a bean that references
 	 * the target bean within a scoped proxy.
+	 * 判断给定的 {@code beanName} 是否是一个指向目标bean的限定代理bean的名称。
+	 * <p>此方法主要用于识别一个bean是否是作为某个作用域内代理的目标bean。如果beanName以特定前缀开始，
+	 * 则表示该bean是目标bean，即被代理的对象。</p>
+	 * @param beanName 待检查的bean的名称。可以为null。
+	 * @return 如果 {@code beanName} 不为null，并且以目标bean名称前缀开始，则返回true；否则返回false。
 	 * @since 4.1.4
 	 */
 	public static boolean isScopedTarget(@Nullable String beanName) {
+		// 检查beanName是否非空且以目标bean名称前缀开始
 		return (beanName != null && beanName.startsWith(TARGET_NAME_PREFIX));
 	}
 

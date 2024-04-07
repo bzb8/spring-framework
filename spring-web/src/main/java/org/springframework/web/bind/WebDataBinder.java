@@ -33,6 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
  * to JavaBean objects. Designed for web environments, but not dependent on
  * the Servlet API; serves as base class for more specific DataBinder variants,
  * such as {@link org.springframework.web.bind.ServletRequestDataBinder}.
+ * 专门用于将web请求参数绑定到JavaBean对象的{@link DataBinder}。设计用于web环境，但不依赖于Servlet API；
+ * 作为更具体的数据绑定器变体（如{@link org.springframework.web.bind.ServletRequestDataBinder}）的基类。
  *
  * <p><strong>WARNING</strong>: Data binding can lead to security issues by exposing
  * parts of the object graph that are not meant to be accessed or modified by
@@ -42,6 +44,10 @@ import org.springframework.web.multipart.MultipartFile;
  * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-initbinder-model-design">Spring Web MVC</a> and
  * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-ann-initbinder-model-design">Spring WebFlux</a>
  * in the reference manual.
+ * <p><strong>警告</strong>：数据绑定可能会导致安全问题，暴露不是由外部客户端访问或修改的对象图部分。
+ * 因此，数据绑定的设计和使用应仔细考虑安全性。有关详细信息，请参阅参考手册中关于
+ * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-initbinder-model-design">Spring Web MVC</a>和
+ * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-ann-initbinder-model-design">Spring WebFlux</a>的数据绑定专门章节。
  *
  * <p>Includes support for field markers which address a common problem with
  * HTML checkboxes and select options: detecting that a field was part of
@@ -49,6 +55,9 @@ import org.springframework.web.multipart.MultipartFile;
  * A field marker allows to detect that state and reset the corresponding
  * bean property accordingly. Default values, for parameters that are otherwise
  * not present, can specify a value for the field other than empty.
+ * <p>包括对字段标记的支持，解决了HTML复选框和选择框的常见问题：检测字段是否为表单的一部分，
+ * 但由于为空而未生成请求参数。字段标记允许检测该状态，并相应地重置相应的bean属性。
+ * 对于否则不存在的参数，默认值可以为字段指定一个非空值。
  *
  * @author Juergen Hoeller
  * @author Scott Andrews

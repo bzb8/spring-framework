@@ -200,9 +200,14 @@ public class DataBinder implements PropertyEditorRegistry, TypeConverter {
 
 	/**
 	 * Create a new DataBinder instance.
+	 * 构造一个新的DataBinder实例。
+	 * DataBinder用于将数据绑定到目标对象上，或者仅仅用于转换一个普通的参数值。
+	 *
 	 * @param target the target object to bind onto (or {@code null}
 	 * if the binder is just used to convert a plain parameter value)
+	 *               目标对象，即将数据绑定到的对象。如果只是简单地转换参数值，可以为{@code null}。
 	 * @param objectName the name of the target object
+	 *                   目标对象的名称。这个名称用于标识和引用目标对象。
 	 */
 	public DataBinder(@Nullable Object target, String objectName) {
 		this.target = ObjectUtils.unwrapOptional(target);

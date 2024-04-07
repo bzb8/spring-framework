@@ -81,7 +81,12 @@ public @interface ModelAttribute {
 	 * based on the non-qualified class name:
 	 * e.g. "orderAddress" for class "mypackage.OrderAddress",
 	 * or "orderAddressList" for "List&lt;mypackage.OrderAddress&gt;".
+	 * 指定模型属性绑定的名称。
+	 * <p>默认的模型属性名称是根据声明的属性类型（即方法参数类型或方法返回类型）推断出来的，
+	 * 基于非限定类名：例如，对于类 "mypackage.OrderAddress"，默认属性名为 "orderAddress"，
+	 * 对于 "List<mypackage.OrderAddress>"，默认属性名为 "orderAddressList"。
 	 * @since 4.3
+	 * @return 返回属性绑定的名称。如果不指定，默认为空字符串。
 	 */
 	@AliasFor("value")
 	String name() default "";

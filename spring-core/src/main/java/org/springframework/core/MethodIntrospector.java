@@ -101,12 +101,17 @@ public final class MethodIntrospector {
 	/**
 	 * Select methods on the given target type based on a filter.
 	 * <p>Callers define methods of interest through the {@code MethodFilter} parameter.
+	 * 根据过滤器在给定的目标类型上选择方法。
+	 * <p>调用者通过{@code MethodFilter}参数定义感兴趣的方法。
 	 * @param targetType the target type to search methods on
 	 * @param methodFilter a {@code MethodFilter} to help
 	 * recognize handler methods of interest
+	 *                     一个{@code MethodFilter}，帮助识别感兴趣的手柄方法
 	 * @return the selected methods, or an empty set in case of no match
+	 * 选择的方法集合，如果没有匹配则返回空集合
 	 */
 	public static Set<Method> selectMethods(Class<?> targetType, final ReflectionUtils.MethodFilter methodFilter) {
+		// 使用方法过滤器来识别目标类型中感兴趣的方法，并返回这些方法的集合
 		return selectMethods(targetType,
 				(MetadataLookup<Boolean>) method -> (methodFilter.matches(method) ? Boolean.TRUE : null)).keySet();
 	}

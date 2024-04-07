@@ -414,10 +414,15 @@ public interface ListableBeanFactory extends BeanFactory {
 	 * Find an {@link Annotation} of {@code annotationType} on the specified bean,
 	 * traversing its interfaces and superclasses if no annotation can be found on
 	 * the given class itself, as well as checking the bean's factory method (if any).
+	 * 在指定的bean上查找指定类型的注解，如果在给定的类本身上找不到注解，则会遍历它的接口和超类，
+	 * 以及检查bean的工厂方法（如果有）。
 	 * @param beanName the name of the bean to look for annotations on
+	 *                 要在其上查找注解的bean的名称
 	 * @param annotationType the type of annotation to look for
 	 * (at class, interface or factory method level of the specified bean)
+	 *                       要查找的注解类型（在给定bean的类、接口或工厂方法级别上）
 	 * @return the annotation of the given type if found, or {@code null} otherwise
+	 * 果找到给定类型的注解则返回该注解，否则返回null
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
 	 * @since 3.0
 	 * @see #getBeanNamesForAnnotation

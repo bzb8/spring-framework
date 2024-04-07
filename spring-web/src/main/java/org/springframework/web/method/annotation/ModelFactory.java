@@ -63,31 +63,33 @@ public final class ModelFactory {
 
 	private static final Log logger = LogFactory.getLog(ModelFactory.class);
 
-
 	private final List<ModelMethod> modelMethods = new ArrayList<>();
 
+	// ServletRequestDataBinderFactory
 	private final WebDataBinderFactory dataBinderFactory;
 
 	private final SessionAttributesHandler sessionAttributesHandler;
 
-
 	/**
 	 * Create a new instance with the given {@code @ModelAttribute} methods.
-	 * @param handlerMethods the {@code @ModelAttribute} methods to invoke
-	 * @param binderFactory for preparation of {@link BindingResult} attributes
-	 * @param attributeHandler for access to session attributes
+	 * 使用给定的{@code @ModelAttribute}方法创建一个新的实例。
+	 * @param handlerMethods 要调用的{@code @ModelAttribute}方法列表
+	 * @param binderFactory 用于准备{@link BindingResult}属性的工厂
+	 * @param attributeHandler 用于访问会话属性的处理器
 	 */
 	public ModelFactory(@Nullable List<InvocableHandlerMethod> handlerMethods,
-			WebDataBinderFactory binderFactory, SessionAttributesHandler attributeHandler) {
+						WebDataBinderFactory binderFactory, SessionAttributesHandler attributeHandler) {
 
+		// 如果handlerMethods不为空，则遍历handlerMethods列表，并为每个方法创建一个新的ModelMethod实例，然后添加到modelMethods列表中
 		if (handlerMethods != null) {
 			for (InvocableHandlerMethod handlerMethod : handlerMethods) {
 				this.modelMethods.add(new ModelMethod(handlerMethod));
 			}
 		}
-		this.dataBinderFactory = binderFactory;
-		this.sessionAttributesHandler = attributeHandler;
+		this.dataBinderFactory = binderFactory; // 设置数据绑定器工厂
+		this.sessionAttributesHandler = attributeHandler; // 设置会话属性处理器
 	}
+
 
 
 	/**
@@ -252,11 +254,20 @@ public final class ModelFactory {
 	 * @return the derived name
 	 * @see Conventions#getVariableNameForParameter(MethodParameter)
 	 */
+	/**
+	 * 根据给定方法参数的{@code @ModelAttribute}参数注解（如果存在）或基于参数类型的传统约定，推导出模型属性名称。
+	 * @param parameter 描述方法参数的对象
+	 * @return 推导出的名称
+	 * @see Conventions#getVariableNameForParameter(MethodParameter)
+	 */
 	public static String getNameForParameter(MethodParameter parameter) {
+		// 尝试获取方法参数上的ModelAttribute注解，并从中获取名称
 		ModelAttribute ann = parameter.getParameterAnnotation(ModelAttribute.class);
 		String name = (ann != null ? ann.value() : null);
+		// 如果注解名称非空，则使用注解名称；否则，使用传统约定来获取变量名
 		return (StringUtils.hasText(name) ? name : Conventions.getVariableNameForParameter(parameter));
 	}
+
 
 	/**
 	 * Derive the model attribute name for the given return value. Results will be
@@ -288,7 +299,7 @@ public final class ModelFactory {
 	private static class ModelMethod {
 
 		private final InvocableHandlerMethod handlerMethod;
-
+		// 模型方法依赖的属性名称，根据方法参数和@ModelAttribute注解获取
 		private final Set<String> dependencies = new HashSet<>();
 
 		public ModelMethod(InvocableHandlerMethod handlerMethod) {

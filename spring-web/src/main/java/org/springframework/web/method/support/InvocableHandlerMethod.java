@@ -38,6 +38,10 @@ import org.springframework.web.method.HandlerMethod;
  * Extension of {@link HandlerMethod} that invokes the underlying method with
  * argument values resolved from the current HTTP request through a list of
  * {@link HandlerMethodArgumentResolver}.
+ * {@link HandlerMethod}的扩展，通过一系列的{@link HandlerMethodArgumentResolver}从当前HTTP请求中解析参数值，
+ * 并调用底层方法。
+ * 该类提供了一种机制，能够根据HTTP请求动态地解析方法参数，并将解析后的参数值传递给目标处理方法。
+ * 这使得处理方法能够以灵活的方式获取请求中的数据，增强了框架的灵活性和可扩展性。
  *
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
@@ -48,11 +52,12 @@ public class InvocableHandlerMethod extends HandlerMethod {
 
 	private static final Object[] EMPTY_ARGS = new Object[0];
 
-
+	// 存放参数解析器
 	private HandlerMethodArgumentResolverComposite resolvers = new HandlerMethodArgumentResolverComposite();
 
 	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
+	// ServletRequestDataBinderFactory
 	@Nullable
 	private WebDataBinderFactory dataBinderFactory;
 

@@ -43,10 +43,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 /**
  * Encapsulates information about an {@link ControllerAdvice @ControllerAdvice}
  * Spring-managed bean without necessarily requiring it to be instantiated.
+ * <p>封装有关使用 {@link ControllerAdvice @ControllerAdvice} 注解的 Spring 管理 Bean 的信息，且不一定要求此类 Bean 被实例化。
  *
  * <p>The {@link #findAnnotatedBeans(ApplicationContext)} method can be used to
  * discover such beans. However, a {@code ControllerAdviceBean} may be created
  * from any object, including ones without an {@code @ControllerAdvice} annotation.
+ * <p>可利用 {@link #findAnnotatedBeans(ApplicationContext)} 方法来查找此类 Bean。然而，即使对于未使用 {@code @ControllerAdvice} 注解的对象，
+ * 亦可创建一个 {@code ControllerAdviceBean} 实例。
  *
  * @author Rossen Stoyanchev
  * @author Brian Clozel
@@ -59,6 +62,7 @@ public class ControllerAdviceBean implements Ordered {
 	/**
 	 * Reference to the actual bean instance or a {@code String} representing
 	 * the bean name.
+	 * 实际 bean 实例的引用或表示 bean 名称的 {@code String}
 	 */
 	private final Object beanOrName;
 
@@ -285,6 +289,10 @@ public class ControllerAdviceBean implements Ordered {
 	 * instances.
 	 * <p>As of Spring Framework 5.2, the {@code ControllerAdviceBean} instances
 	 * in the returned list are sorted using {@link OrderComparator#sort(List)}.
+	 * 在给定的{@link ApplicationContext}中查找被{@link ControllerAdvice @ControllerAdvice}注解的bean，
+	 * 并将它们包装为{@code ControllerAdviceBean}实例。
+	 * <p>自Spring Framework 5.2起，返回列表中的{@code ControllerAdviceBean}实例将使用
+	 * {@link OrderComparator#sort(List)}进行排序。
 	 * @see #getOrder()
 	 * @see OrderComparator
 	 * @see Ordered
@@ -292,20 +300,22 @@ public class ControllerAdviceBean implements Ordered {
 	public static List<ControllerAdviceBean> findAnnotatedBeans(ApplicationContext context) {
 		ListableBeanFactory beanFactory = context;
 		if (context instanceof ConfigurableApplicationContext) {
-			// Use internal BeanFactory for potential downcast to ConfigurableBeanFactory above
+			// 如果上下文是可配置的ApplicationContext，则使用内部BeanFactory，
+			// 以便可能向下转换为ConfigurableBeanFactory。
 			beanFactory = ((ConfigurableApplicationContext) context).getBeanFactory();
 		}
 		List<ControllerAdviceBean> adviceBeans = new ArrayList<>();
+		// 遍历所有类型为Object的bean名称，查找被@ControllerAdvice注解的bean。
 		for (String name : BeanFactoryUtils.beanNamesForTypeIncludingAncestors(beanFactory, Object.class)) {
 			if (!ScopedProxyUtils.isScopedTarget(name)) {
+				// 检查bean是否被@ControllerAdvice注解，并避免重复查找同一注解。
 				ControllerAdvice controllerAdvice = beanFactory.findAnnotationOnBean(name, ControllerAdvice.class);
 				if (controllerAdvice != null) {
-					// Use the @ControllerAdvice annotation found by findAnnotationOnBean()
-					// in order to avoid a subsequent lookup of the same annotation.
 					adviceBeans.add(new ControllerAdviceBean(name, beanFactory, controllerAdvice));
 				}
 			}
 		}
+		// 对查找到的@ControllerAdvice注解的bean进行排序。
 		OrderComparator.sort(adviceBeans);
 		return adviceBeans;
 	}
