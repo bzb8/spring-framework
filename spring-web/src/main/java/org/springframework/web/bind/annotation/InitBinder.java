@@ -65,6 +65,13 @@ public @interface InitBinder {
 	 * request parameter names here restricts the init-binder method to those specific
 	 * attributes/parameters, with different init-binder methods typically applying to
 	 * different groups of attributes or parameters.
+	 * 用于指定该init-binder方法适用的命令/表单属性和/或请求参数的名称。
+	 * <p>默认情况下，该init-binder方法将应用于由注解处理类处理的所有命令/表单属性和所有请求参数。
+	 * 如果在此指定模型属性名称或请求参数名称，则将init-binder方法限制为仅适用于这些特定属性或参数，
+	 * 不同的init-binder方法通常适用于不同组的属性或参数。
+	 *
+	 * @return 返回一个字符串数组，包含init-binder方法适用的属性和参数名称。
+	 *         如果为空，默认应用所有处理的属性和参数。
 	 */
 	String[] value() default {};
 

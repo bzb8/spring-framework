@@ -40,6 +40,9 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 
 	private final List<HandlerMethodArgumentResolver> argumentResolvers = new ArrayList<>();
 
+	/**
+	 * 处理器方法参数 -> 参数解析器
+	 */
 	private final Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache =
 			new ConcurrentHashMap<>(256);
 

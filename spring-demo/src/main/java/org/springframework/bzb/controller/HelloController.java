@@ -5,6 +5,7 @@ import org.springframework.bzb.transactionbzb.User;
 import org.springframework.bzb.transactionbzb.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/test")
@@ -15,8 +16,8 @@ public class HelloController {
 	private UserService bzbUserService;
 
 	@GetMapping("/hello")
-	public String hello() {
-		return "hello";
+	public String hello(@RequestParam String name) {
+		return "hello:" + name;
 	}
 
 	@GetMapping("/user")

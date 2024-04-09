@@ -70,6 +70,9 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 	@Nullable
 	private final BeanExpressionContext expressionContext;
 
+	/**
+	 * 处理器方法参数 -> NamedValueInfo
+	 */
 	private final Map<MethodParameter, NamedValueInfo> namedValueInfoCache = new ConcurrentHashMap<>(256);
 
 
@@ -91,54 +94,79 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 	}
 
 
+	/**
+	 * 解析方法参数。
+	 * 根据给定的方法参数信息，从Web请求中解析出对应的参数值。
+	 *
+	 * @param parameter 方法参数的元数据
+	 * @param mavContainer Model和View的容器，可用于存储解析过程中的数据，可为null
+	 * @param webRequest 表示当前Web请求的对象
+	 * @param binderFactory 数据绑定工厂，用于创建数据绑定器，可为null
+	 * @return 解析出的参数值，可能为null
+	 * @throws Exception 如果解析过程中发生异常
+	 */
 	@Override
 	@Nullable
 	public final Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
-			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
+										NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
+		// 获取命名参数的信息
 		NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
+		// 如果参数是可选的，则获取嵌套的参数
 		MethodParameter nestedParameter = parameter.nestedIfOptional();
 
+		// 解析参数名中的嵌入式值和表达式
 		Object resolvedName = resolveEmbeddedValuesAndExpressions(namedValueInfo.name);
 		if (resolvedName == null) {
+			// 如果解析结果为null，则抛出异常
 			throw new IllegalArgumentException(
 					"Specified name must not resolve to null: [" + namedValueInfo.name + "]");
 		}
 
+		// 尝试根据解析后的参数名解析参数值
 		Object arg = resolveName(resolvedName.toString(), nestedParameter, webRequest);
 		if (arg == null) {
+			// 如果参数值未找到，尝试使用默认值
 			if (namedValueInfo.defaultValue != null) {
 				arg = resolveEmbeddedValuesAndExpressions(namedValueInfo.defaultValue);
 			}
 			else if (namedValueInfo.required && !nestedParameter.isOptional()) {
+				// 如果参数是必需的且没有默认值，则处理缺失的值
 				handleMissingValue(namedValueInfo.name, nestedParameter, webRequest);
 			}
+			// 处理参数值为null的情况
 			arg = handleNullValue(namedValueInfo.name, arg, nestedParameter.getNestedParameterType());
 		}
 		else if ("".equals(arg) && namedValueInfo.defaultValue != null) {
+			// 如果参数值为空字符串且有默认值，则使用默认值
 			arg = resolveEmbeddedValuesAndExpressions(namedValueInfo.defaultValue);
 		}
 
 		if (binderFactory != null) {
+			// 如果提供了数据绑定工厂，则尝试进行数据转换
 			WebDataBinder binder = binderFactory.createBinder(webRequest, null, namedValueInfo.name);
 			try {
+				// 使用binder进行转换为给定的类型
 				arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);
 			}
 			catch (ConversionNotSupportedException ex) {
+				// 转换不支持时抛出异常
 				throw new MethodArgumentConversionNotSupportedException(arg, ex.getRequiredType(),
 						namedValueInfo.name, parameter, ex.getCause());
 			}
 			catch (TypeMismatchException ex) {
+				// 类型不匹配时抛出异常
 				throw new MethodArgumentTypeMismatchException(arg, ex.getRequiredType(),
 						namedValueInfo.name, parameter, ex.getCause());
 			}
-			// Check for null value after conversion of incoming argument value
+			// 转换后检查参数值是否为null
 			if (arg == null && namedValueInfo.defaultValue == null &&
 					namedValueInfo.required && !nestedParameter.isOptional()) {
 				handleMissingValueAfterConversion(namedValueInfo.name, nestedParameter, webRequest);
 			}
 		}
 
+		// 处理解析后的参数值
 		handleResolvedValue(arg, namedValueInfo.name, parameter, mavContainer, webRequest);
 
 		return arg;
@@ -167,19 +195,21 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 
 	/**
 	 * Create a new NamedValueInfo based on the given NamedValueInfo with sanitized values.
+	 * 根据给定的 NamedValueInfo 创建一个新的 NamedValueInfo 实例，带有清理后的值。
 	 */
 	private NamedValueInfo updateNamedValueInfo(MethodParameter parameter, NamedValueInfo info) {
-		String name = info.name;
-		if (info.name.isEmpty()) {
+		String name = info.name; // 尝试使用传入的 NamedValueInfo 中的名称。
+		if (info.name.isEmpty()) { // 如果名称为空，则尝试从方法参数中获取名称。
 			name = parameter.getParameterName();
-			if (name == null) {
+			if (name == null) { // 如果无法从方法参数中获取名称，抛出异常。
 				throw new IllegalArgumentException(
 						"Name for argument of type [" + parameter.getNestedParameterType().getName() +
-						"] not specified, and parameter name information not found in class file either.");
+								"] not specified, and parameter name information not found in class file either.");
 			}
 		}
+		// 如果默认值是特定的默认标识符，则将其设置为 null，否则保持不变。
 		String defaultValue = (ValueConstants.DEFAULT_NONE.equals(info.defaultValue) ? null : info.defaultValue);
-		return new NamedValueInfo(name, info.required, defaultValue);
+		return new NamedValueInfo(name, info.required, defaultValue); // 创建并返回新的 NamedValueInfo 实例。
 	}
 
 	/**
@@ -201,9 +231,12 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 
 	/**
 	 * Resolve the given parameter type and value name into an argument value.
+	 * 将给定的参数类型和值名称解析为参数值。
 	 * @param name the name of the value being resolved
+	 *             要解析的值的名称
 	 * @param parameter the method parameter to resolve to an argument value
 	 * (pre-nested in case of a {@link java.util.Optional} declaration)
+	 *                  要解析为参数值的方法参数（如果声明为{@link java.util.Optional}，则已嵌套处理）
 	 * @param request the current request
 	 * @return the resolved argument (may be {@code null})
 	 * @throws Exception in case of errors
@@ -283,6 +316,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 
 	/**
 	 * Represents the information about a named value, including name, whether it's required and a default value.
+	 * 代表一个命名值的信息，包括名称、是否必需以及默认值。
 	 */
 	protected static class NamedValueInfo {
 
