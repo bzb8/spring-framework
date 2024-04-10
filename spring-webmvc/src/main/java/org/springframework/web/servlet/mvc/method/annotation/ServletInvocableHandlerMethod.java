@@ -111,13 +111,24 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 	 * @param mavContainer the ModelAndViewContainer for this request
 	 * @param providedArgs "given" arguments matched by type (not resolved)
 	 */
+	/**
+	 * 调用方法并通过对配置的{@link HandlerMethodReturnValueHandler HandlerMethodReturnValueHandlers}之一处理返回值。
+	 * @param webRequest 当前请求
+	 * @param mavContainer 用于此请求的ModelAndViewContainer
+	 * @param providedArgs 通过类型匹配的“给定”参数（未解析）
+	 * @throws Exception 抛出异常的情况
+	 */
 	public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
-			Object... providedArgs) throws Exception {
+								Object... providedArgs) throws Exception {
 
+		// 调用请求对应的方法，并获取返回值
 		Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
+		// 设置响应状态
 		setResponseStatus(webRequest);
 
+		// 判断返回值是否为空，并处理
 		if (returnValue == null) {
+			// 请求未修改、响应状态已设置或ModelAndViewContainer标识请求已处理时，禁用内容缓存并标记请求已处理
 			if (isRequestNotModified(webRequest) || getResponseStatus() != null || mavContainer.isRequestHandled()) {
 				disableContentCachingIfNecessary(webRequest);
 				mavContainer.setRequestHandled(true);
@@ -125,17 +136,22 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 			}
 		}
 		else if (StringUtils.hasText(getResponseStatusReason())) {
+			// 如果有响应状态描述，则标记请求已处理
 			mavContainer.setRequestHandled(true);
 			return;
 		}
 
+		// 如果以上条件都不满足，则重置请求处理标记
 		mavContainer.setRequestHandled(false);
+		// 断言返回值处理器不为空
 		Assert.state(this.returnValueHandlers != null, "No return value handlers");
 		try {
+			// 使用返回值处理器处理返回值
 			this.returnValueHandlers.handleReturnValue(
 					returnValue, getReturnValueType(returnValue), mavContainer, webRequest);
 		}
 		catch (Exception ex) {
+			// 如果处理返回值时发生异常，记录日志并抛出异常
 			if (logger.isTraceEnabled()) {
 				logger.trace(formatErrorForReturnValue(returnValue), ex);
 			}
@@ -145,6 +161,7 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 
 	/**
 	 * Set the response status according to the {@link ResponseStatus} annotation.
+	 * 根据 {@link ResponseStatus} 注解设置响应状态。
 	 */
 	private void setResponseStatus(ServletWebRequest webRequest) throws IOException {
 		HttpStatus status = getResponseStatus();
@@ -155,15 +172,18 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 		HttpServletResponse response = webRequest.getResponse();
 		if (response != null) {
 			String reason = getResponseStatusReason();
+			// reason不为空时，发送错误
 			if (StringUtils.hasText(reason)) {
 				response.sendError(status.value(), reason);
 			}
 			else {
+				// reason为空时，设置响应状态码
 				response.setStatus(status.value());
 			}
 		}
 
 		// To be picked up by RedirectView
+		// 将响应状态码设置为请求的属性，以便在RedirectView中使用
 		webRequest.getRequest().setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, status);
 	}
 

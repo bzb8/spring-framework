@@ -174,6 +174,7 @@ public class HandlerExecutionChain {
 			throws Exception {
 
 		for (int i = this.interceptorList.size() - 1; i >= 0; i--) {
+			// 在调用handlerMethod执行后，调用拦截器的postHandle方法
 			HandlerInterceptor interceptor = this.interceptorList.get(i);
 			interceptor.postHandle(request, response, this.handler, mv);
 		}
@@ -188,6 +189,7 @@ public class HandlerExecutionChain {
 	 */
 	void triggerAfterCompletion(HttpServletRequest request, HttpServletResponse response, @Nullable Exception ex) {
 		// 倒序遍历preHandle调用成功的拦截器列表，调用afterCompletion方法
+		// 在视图渲染之后
 		for (int i = this.interceptorIndex; i >= 0; i--) {
 			HandlerInterceptor interceptor = this.interceptorList.get(i);
 			try {

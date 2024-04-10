@@ -101,20 +101,32 @@ public final class ModelFactory {
 	 * {@code @SessionAttributes} and ensure they're present in the model raising
 	 * an exception if necessary.
 	 * </ol>
+	 * 按以下顺序填充模型：
+	 * <ol>
+	 * <li>检索作为{@code @SessionAttributes}列出的“已知”会话属性。
+	 * <li>调用{@code @ModelAttribute}方法。
+	 * <li>查找作为{@code @SessionAttributes}列出的{@code @ModelAttribute}方法参数，并确保它们存在于模型中，如果必要，会引发异常。
+	 * </ol>
 	 * @param request the current request
 	 * @param container a container with the model to be initialized
+	 *                  用于初始化模型的容器
 	 * @param handlerMethod the method for which the model is initialized
+	 *                      为其中初始化模型的方法（ServletInvocableHandlerMethod）
 	 * @throws Exception may arise from {@code @ModelAttribute} methods
 	 */
 	public void initModel(NativeWebRequest request, ModelAndViewContainer container, HandlerMethod handlerMethod)
 			throws Exception {
 
+		// 从会话中检索属性，并将其合并到模型容器中
 		Map<String, ?> sessionAttributes = this.sessionAttributesHandler.retrieveAttributes(request);
 		container.mergeAttributes(sessionAttributes);
+		// 调用@ModelAttribute方法以进一步初始化模型
 		invokeModelAttributeMethods(request, container);
 
+		// 遍历所有作为会话属性的方法参数，确保它们已在模型中
 		for (String name : findSessionAttributeArguments(handlerMethod)) {
 			if (!container.containsAttribute(name)) {
+				// 尝试从会话中检索属性值，如果不存在，则抛出异常
 				Object value = this.sessionAttributesHandler.retrieveAttribute(request, name);
 				if (value == null) {
 					throw new HttpSessionRequiredException("Expected session attribute '" + name + "'", name);
@@ -128,13 +140,24 @@ public final class ModelFactory {
 	 * Invoke model attribute methods to populate the model.
 	 * Attributes are added only if not already present in the model.
 	 */
+	/**
+	 * 调用模型属性方法以填充模型。
+	 * 只有当模型中尚未存在这些属性时，才会将它们添加到模型中。
+	 *
+	 * @param request 本地Web请求，用于获取请求相关信息。
+	 * @param container 视图和模型容器，用于存储和管理模型数据及视图相关信息。
+	 * @throws Exception 如果方法调用或数据绑定过程中发生错误，则抛出异常。
+	 */
 	private void invokeModelAttributeMethods(NativeWebRequest request, ModelAndViewContainer container)
 			throws Exception {
 
 		while (!this.modelMethods.isEmpty()) {
+			// 获取下一个要处理的模型属性方法
 			InvocableHandlerMethod modelMethod = getNextModelMethod(container).getHandlerMethod();
 			ModelAttribute ann = modelMethod.getMethodAnnotation(ModelAttribute.class);
+			// 确保方法上有ModelAttribute注解
 			Assert.state(ann != null, "No ModelAttribute annotation");
+			// 如果模型中已存在该属性，则检查是否禁止绑定
 			if (container.containsAttribute(ann.name())) {
 				if (!ann.binding()) {
 					container.setBindingDisabled(ann.name());
@@ -142,7 +165,9 @@ public final class ModelFactory {
 				continue;
 			}
 
+			// 调用模型属性方法，并处理返回值
 			Object returnValue = modelMethod.invokeForRequest(request, container);
+			// 如果方法返回void，且@ModelAttribute注解中指定了名称，则记录调试信息
 			if (modelMethod.isVoid()) {
 				if (StringUtils.hasText(ann.value())) {
 					if (logger.isDebugEnabled()) {
@@ -153,10 +178,13 @@ public final class ModelFactory {
 				continue;
 			}
 
+			// 根据返回值或方法返回类型确定属性名称
 			String returnValueName = getNameForReturnValue(returnValue, modelMethod.getReturnType());
+			// 如果指定禁止绑定，则设置该属性为不可绑定
 			if (!ann.binding()) {
 				container.setBindingDisabled(returnValueName);
 			}
+			// 如果模型中不存在该属性，则将其添加到模型中
 			if (!container.containsAttribute(returnValueName)) {
 				container.addAttribute(returnValueName, returnValue);
 			}
@@ -195,18 +223,24 @@ public final class ModelFactory {
 	/**
 	 * Promote model attributes listed as {@code @SessionAttributes} to the session.
 	 * Add {@link BindingResult} attributes where necessary.
+	 * 将模型属性列表中标记为{@code @SessionAttributes}的属性提升至会话中。
+	 * 在必要时添加{@link BindingResult}属性。
 	 * @param request the current request
 	 * @param container contains the model to update
+	 *                  包含需要更新的模型的容器
 	 * @throws Exception if creating BindingResult attributes fails
 	 */
 	public void updateModel(NativeWebRequest request, ModelAndViewContainer container) throws Exception {
 		ModelMap defaultModel = container.getDefaultModel();
+		// 如果会话状态完成，则清理会话属性
 		if (container.getSessionStatus().isComplete()){
 			this.sessionAttributesHandler.cleanupAttributes(request);
 		}
 		else {
+			// 否则，将模型属性存储到会话中
 			this.sessionAttributesHandler.storeAttributes(request, defaultModel);
 		}
+		// 如果请求未被处理且容器中的模型为默认模型，则更新BindingResult
 		if (!container.isRequestHandled() && container.getModel() == defaultModel) {
 			updateBindingResult(request, defaultModel);
 		}

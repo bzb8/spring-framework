@@ -23,10 +23,13 @@ import org.springframework.lang.Nullable;
 
 /**
  * Interface that defines a holder for model attributes.
+ * 定义模型属性的持有者的接口。
  *
  * <p>Primarily designed for adding attributes to the model.
+ * <p>主要设计用于向模型添加属性。
  *
  * <p>Allows for accessing the overall model as a {@code java.util.Map}.
+ * <p>允许将整个模型作为 {@code java.util.Map} 进行访问。
  *
  * @author Juergen Hoeller
  * @since 2.5.1

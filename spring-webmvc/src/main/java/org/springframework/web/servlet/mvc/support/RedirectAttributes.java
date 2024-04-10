@@ -30,13 +30,19 @@ import org.springframework.web.servlet.FlashMap;
  * attribute values may be formatted as Strings and stored that way to make
  * them eligible to be appended to the query string or expanded as URI
  * variables in {@code org.springframework.web.servlet.view.RedirectView}.
+ * Model 接口的一个特殊化版本，控制器可以使用它来为重定向场景选择属性。由于添加重定向属性的意图非常明确——即用于重定向 URL，
+ * 因此属性值可以被格式化为字符串并以这种方式存储，以便使其有资格被追加到查询字符串或在 org.springframework.web.servlet.view.RedirectView
+ * 中扩展为 URI 变量。
  *
  * <p>This interface also provides a way to add flash attributes. For a
  * general overview of flash attributes see {@link FlashMap}. You can use
  * {@link RedirectAttributes} to store flash attributes and they will be
  * automatically propagated to the "output" FlashMap of the current request.
+ * <p>此接口还提供了一种添加闪现（flash）属性的方法。有关闪现属性的一般概述，请参见 {@link FlashMap}。您可以使用 {@link RedirectAttributes}
+ * 存储闪现属性，它们将自动传播到当前请求的“输出”闪现映射（FlashMap）中。
  *
  * <p>Example usage in an {@code @Controller}:
+ * <p>在 {@code @Controller} 中的示例用法：
  * <pre class="code">
  * &#064;RequestMapping(value = "/accounts", method = RequestMethod.POST)
  * public String handle(Account account, BindingResult result, RedirectAttributes redirectAttrs) {
@@ -51,9 +57,11 @@ import org.springframework.web.servlet.FlashMap;
  *
  * <p>A RedirectAttributes model is empty when the method is called and is never
  * used unless the method returns a redirect view name or a RedirectView.
+ * <p>当调用方法时，`RedirectAttributes` 模型为空，并且除非方法返回重定向视图名称或 `RedirectView`，否则该模型永远不会被使用。
  *
  * <p>After the redirect, flash attributes are automatically added to the model
  * of the controller that serves the target URL.
+ * <p>重定向后，闪现属性会自动添加到服务于目标 URL 的控制器的模型中
  *
  * @author Rossen Stoyanchev
  * @since 3.1

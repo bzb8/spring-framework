@@ -57,6 +57,9 @@ public interface FlashMapManager {
 	 * <p><strong>NOTE:</strong> Invoke this method prior to a redirect in order
 	 * to allow saving the FlashMap in the HTTP session or in a response
 	 * cookie before the response is committed.
+	 * 保存给定的FlashMap对象到某种底层存储，并设置其过期时间的开始点。
+	 * <p><strong>注意：</strong>为了能够在响应提交之前将FlashMap保存到HTTP会话或响应cookie中，
+	 * 应当在重定向之前调用此方法。
 	 * @param flashMap the FlashMap to save
 	 * @param request the current request
 	 * @param response the current response

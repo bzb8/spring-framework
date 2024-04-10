@@ -55,6 +55,7 @@ public abstract class AbstractRequestAttributes implements RequestAttributes {
 
 	/**
 	 * Determine whether the original request is still active.
+	 * 确定原始请求是否仍处于活动状态
 	 * @see #requestCompleted()
 	 */
 	protected final boolean isRequestActive() {
@@ -88,12 +89,17 @@ public abstract class AbstractRequestAttributes implements RequestAttributes {
 	/**
 	 * Execute all callbacks that have been registered for execution
 	 * after request completion.
+	 * 执行所有在请求完成后注册的回调函数。
+	 * 该方法会同步执行所有注册的回调，并在执行完毕后清空回调列表。
 	 */
 	private void executeRequestDestructionCallbacks() {
+		// 同步锁定请求销毁回调列表，确保线程安全
 		synchronized (this.requestDestructionCallbacks) {
+			// 遍历并执行所有注册的回调函数
 			for (Runnable runnable : this.requestDestructionCallbacks.values()) {
 				runnable.run();
 			}
+			// 执行完毕后清空回调列表，准备下一次使用
 			this.requestDestructionCallbacks.clear();
 		}
 	}

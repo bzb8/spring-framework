@@ -78,6 +78,9 @@ public @interface ResponseStatus {
 	 * The status <em>code</em> to use for the response.
 	 * <p>Default is {@link HttpStatus#INTERNAL_SERVER_ERROR}, which should
 	 * typically be changed to something more appropriate.
+	 * 用于响应的状态码。
+	 * <p>默认为{@link HttpStatus#INTERNAL_SERVER_ERROR}，通常应该更改为更合适的状态码。
+	 *
 	 * @since 4.2
 	 * @see javax.servlet.http.HttpServletResponse#setStatus(int)
 	 * @see javax.servlet.http.HttpServletResponse#sendError(int)
@@ -89,6 +92,9 @@ public @interface ResponseStatus {
 	 * The <em>reason</em> to be used for the response.
 	 * <p>Defaults to an empty string which will be ignored. Set the reason to a
 	 * non-empty value to have it used for the response.
+	 * 用于响应的"<em>原因</em>"。
+	 * <p>默认为空字符串，将被忽略。将原因设置为非空值，以便在响应中使用。
+	 *
 	 * @see javax.servlet.http.HttpServletResponse#sendError(int, String)
 	 */
 	String reason() default "";

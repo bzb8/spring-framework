@@ -98,6 +98,15 @@ public class ModelAndViewContainer {
 	 * may be used in a redirect if the controller method doesn't declare a
 	 * RedirectAttributes argument.
 	 * <p>The default setting is {@code false}.
+	 * 设置在重定向场景中是否忽略默认模型。
+	 * 默认情况下，"default"模型的内容既用于渲染也用于重定向场景。
+	 * 另外，控制器方法可以声明一个{@code RedirectAttributes}类型的参数，
+	 * 并使用它来为重定向URL提供属性。
+	 * <p>将此标志设置为{@code true}可确保即使控制器方法没有声明RedirectAttributes参数，
+	 * "default"模型也永远不会在重定向场景中使用。
+	 * 设置为{@code false}意味着如果控制器方法没有声明RedirectAttributes参数，
+	 * "default"模型可能会在重定向中被使用。
+	 * <p>默认设置为{@code false}。
 	 */
 	public void setIgnoreDefaultModelOnRedirect(boolean ignoreDefaultModelOnRedirect) {
 		this.ignoreDefaultModelOnRedirect = ignoreDefaultModelOnRedirect;
@@ -197,6 +206,8 @@ public class ModelAndViewContainer {
 	/**
 	 * Whether the controller has returned a redirect instruction, e.g. a
 	 * "redirect:" prefixed view name, a RedirectView instance, etc.
+	 * 设置控制器是否返回了重定向指令，例如以"redirect:"前缀的视图名称，RedirectView实例等。
+	 * 这个方法用于标记当前的模型场景是否为重定向场景。
 	 */
 	public void setRedirectModelScenario(boolean redirectModelScenario) {
 		this.redirectModelScenario = redirectModelScenario;
@@ -269,6 +280,11 @@ public class ModelAndViewContainer {
 	 * necessary. This flag can also be set when controller methods declare an
 	 * argument of type {@code ServletResponse} or {@code OutputStream}).
 	 * <p>The default value is {@code false}.
+	 * 设置请求是否已被处理器完全处理，例如在{@code @ResponseBody}方法内，因此不需要视图解析。
+	 * 这个标志也可以在控制器方法声明一个类型为{@code ServletResponse}或{@code OutputStream}的参数时被设置。
+	 * <p>默认值为{@code false}。
+	 *
+	 * @param requestHandled 指示请求是否已完全处理的布尔值。
 	 */
 	public void setRequestHandled(boolean requestHandled) {
 		this.requestHandled = requestHandled;
@@ -302,6 +318,7 @@ public class ModelAndViewContainer {
 	/**
 	 * Copy all attributes to the underlying model.
 	 * A shortcut for {@code getModel().addAllAttributes(Map)}.
+	 * 将所有属性复制到底层模型中。
 	 */
 	public ModelAndViewContainer addAllAttributes(@Nullable Map<String, ?> attributes) {
 		getModel().addAllAttributes(attributes);

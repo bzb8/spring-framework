@@ -52,6 +52,7 @@ class RequestResponseBodyAdviceChain implements RequestBodyAdvice, ResponseBodyA
 	 * {@code ControllerAdviceBean} or {@code RequestBodyAdvice}.
 	 */
 	public RequestResponseBodyAdviceChain(@Nullable List<Object> requestResponseBodyAdvice) {
+		//按照RequestBodyAdvice或ResponseBodyAdvice分组
 		this.requestBodyAdvice.addAll(getAdviceByType(requestResponseBodyAdvice, RequestBodyAdvice.class));
 		this.responseBodyAdvice.addAll(getAdviceByType(requestResponseBodyAdvice, ResponseBodyAdvice.class));
 	}
@@ -60,7 +61,9 @@ class RequestResponseBodyAdviceChain implements RequestBodyAdvice, ResponseBodyA
 	static <T> List<T> getAdviceByType(@Nullable List<Object> requestResponseBodyAdvice, Class<T> adviceType) {
 		if (requestResponseBodyAdvice != null) {
 			List<T> result = new ArrayList<>();
+			// 遍历所有的增强器
 			for (Object advice : requestResponseBodyAdvice) {
+				// 当前advice的类型
 				Class<?> beanType = (advice instanceof ControllerAdviceBean ?
 						((ControllerAdviceBean) advice).getBeanType() : advice.getClass());
 				if (beanType != null && adviceType.isAssignableFrom(beanType)) {
@@ -145,6 +148,13 @@ class RequestResponseBodyAdviceChain implements RequestBodyAdvice, ResponseBodyA
 		return body;
 	}
 
+	/**
+	 *
+	 * @param parameter 方法返回值
+	 * @param adviceType RequestBodyAdvice or ResponseBodyAdvice
+	 * @return
+	 * @param <A>
+	 */
 	@SuppressWarnings("unchecked")
 	private <A> List<A> getMatchingAdvice(MethodParameter parameter, Class<? extends A> adviceType) {
 		List<Object> availableAdvice = getAdvice(adviceType);
