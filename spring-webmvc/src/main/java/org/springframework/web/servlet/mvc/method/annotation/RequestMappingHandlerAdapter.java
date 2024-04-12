@@ -944,6 +944,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 			// 初始化ModelAndView容器，并准备模型
 			ModelAndViewContainer mavContainer = new ModelAndViewContainer();
+			// 向ModelAndViewContainer中添加FlashMap中的属性
 			mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
 			modelFactory.initModel(webRequest, mavContainer, invocableMethod);
 			mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
@@ -1144,19 +1145,34 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		return new ServletRequestDataBinderFactory(binderMethods, getWebBindingInitializer());
 	}
 
+	/**
+	 * 获取ModelAndView对象。
+	 * 该方法会首先尝试更新模型，并根据条件构建并返回一个ModelAndView对象，如果请求已经被处理，则返回null。
+	 *
+	 * @param mavContainer 包含模型和视图信息的容器，如果请求已处理，可以返回null。
+	 * @param modelFactory 用于创建和更新模型的工厂。
+	 * @param webRequest 表示当前Web请求的对象。
+	 * @return ModelAndView对象，或者在请求已经被处理的情况下返回null。
+	 * @throws Exception 如果处理过程中发生异常，则抛出。
+	 */
 	@Nullable
 	private ModelAndView getModelAndView(ModelAndViewContainer mavContainer,
-			ModelFactory modelFactory, NativeWebRequest webRequest) throws Exception {
+										 ModelFactory modelFactory, NativeWebRequest webRequest) throws Exception {
 
+		// 更新模型
 		modelFactory.updateModel(webRequest, mavContainer);
+		// 如果请求已经被处理，则直接返回null，比如@ResponseBody标注的方法
 		if (mavContainer.isRequestHandled()) {
 			return null;
 		}
+		// 获取模型并创建ModelAndView对象
 		ModelMap model = mavContainer.getModel();
 		ModelAndView mav = new ModelAndView(mavContainer.getViewName(), model, mavContainer.getStatus());
+		// 如果视图不是一个引用，则直接设置视图对象
 		if (!mavContainer.isViewReference()) {
 			mav.setView((View) mavContainer.getView());
 		}
+		// 如果模型包含重定向属性，将其保存到flash map中，以供下一个请求使用
 		if (model instanceof RedirectAttributes) {
 			Map<String, ?> flashAttributes = ((RedirectAttributes) model).getFlashAttributes();
 			HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
@@ -1166,5 +1182,6 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		}
 		return mav;
 	}
+
 
 }

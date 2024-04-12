@@ -92,10 +92,10 @@ public class HandlerMethod {
 	 * HandlerMethodParameter
 	 */
 	private final MethodParameter[] parameters;
-	// 解析ResponseStatus注解后的httpStatus
+	// 解析@ResponseStatus注解后的httpStatus
 	@Nullable
 	private HttpStatus responseStatus;
-
+	// 解析@ResponseStatus注解后的reason属性
 	@Nullable
 	private String responseStatusReason;
 
@@ -475,6 +475,7 @@ public class HandlerMethod {
 	protected static Object findProvidedArgument(MethodParameter parameter, @Nullable Object... providedArgs) {
 		if (!ObjectUtils.isEmpty(providedArgs)) {
 			for (Object providedArg : providedArgs) {
+				// 提供的参数值是当前参数的类型的实例，就返回它
 				if (parameter.getParameterType().isInstance(providedArg)) {
 					return providedArg;
 				}

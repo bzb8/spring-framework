@@ -27,11 +27,15 @@ import org.springframework.lang.Nullable;
  * {@link Errors interface} for error registration capabilities,
  * allowing for a {@link Validator} to be applied, and adds
  * binding-specific analysis and model building.
+ * 代表绑定结果的一般接口。扩展了{@link Errors}接口以实现错误注册功能，
+ * 应用{@link Validator}验证器，并添加了特定于绑定的分析和模型构建功能。
  *
  * <p>Serves as result holder for a {@link DataBinder}, obtained via
  * the {@link DataBinder#getBindingResult()} method. BindingResult
  * implementations can also be used directly, for example to invoke
  * a {@link Validator} on it (e.g. as part of a unit test).
+ * <p>作为{@link DataBinder}的结果持有者，可以通过{@link DataBinder#getBindingResult()}方法获取。
+ * 绑定结果实现也可以直接使用，例如在单元测试中调用{@link Validator}验证器。
  *
  * @author Juergen Hoeller
  * @since 2.0

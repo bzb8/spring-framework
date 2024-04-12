@@ -1176,7 +1176,7 @@ public class DispatcherServlet extends FrameworkServlet {
 					return;
 				}
 
-				// 应用默认视图名
+				// mv没有视图的情况下，则设置默认视图名
 				applyDefaultViewName(processedRequest, mv);
 				// 后处理
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
@@ -1191,6 +1191,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// 使其可以被@ExceptionHandler方法和其他场景处理。
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
+
 			// 处理分发结果
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
@@ -1234,45 +1235,60 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Handle the result of handler selection and handler invocation, which is
 	 * either a ModelAndView or an Exception to be resolved to a ModelAndView.
+	 * 处理处理器选择和处理器调用的结果，这可以是一个Model
+	 * @param request HttpServletRequest对象，代表客户端的HTTP请求。
+	 * @param response HttpServletResponse对象，用于向客户端发送HTTP响应。
+	 * @param mappedHandler 映射到的处理器执行链，可能为null。
+	 * @param mv 处理器返回的ModelAndView对象，可能为null。
+	 * @param exception 处理过程中遇到的异常，可能为null。
+	 * @throws Exception 如果处理过程中发生异常，则抛出。AndView或者一个需要被解析成ModelAndView的异常。
 	 */
 	private void processDispatchResult(HttpServletRequest request, HttpServletResponse response,
-			@Nullable HandlerExecutionChain mappedHandler, @Nullable ModelAndView mv,
-			@Nullable Exception exception) throws Exception {
+									   @Nullable HandlerExecutionChain mappedHandler, @Nullable ModelAndView mv,
+									   @Nullable Exception exception) throws Exception {
 
 		boolean errorView = false;
 
+		// 处理异常情况
 		if (exception != null) {
+			// 如果异常是ModelAndViewDefiningException，则直接使用其提供的ModelAndView
 			if (exception instanceof ModelAndViewDefiningException) {
 				logger.debug("ModelAndViewDefiningException encountered", exception);
 				mv = ((ModelAndViewDefiningException) exception).getModelAndView();
 			}
 			else {
+				// 否则，使用异常处理器处理异常，并获取可能的ModelAndView
 				Object handler = (mappedHandler != null ? mappedHandler.getHandler() : null);
 				mv = processHandlerException(request, response, handler, exception);
-				errorView = (mv != null);
+				errorView = (mv != null); // 如果处理异常后返回了ModelAndView，则认为是错误视图
 			}
 		}
 
 		// Did the handler return a view to render?
+		// 处理处理器返回的ModelAndView
 		if (mv != null && !mv.wasCleared()) {
+			// 如果有视图需要渲染，则进行渲染
 			render(mv, request, response);
+			// 如果是错误视图，则清除请求中的错误属性
 			if (errorView) {
 				WebUtils.clearErrorRequestAttributes(request);
 			}
 		}
 		else {
+			// 如果没有视图需要渲染，记录调试信息
 			if (logger.isTraceEnabled()) {
 				logger.trace("No view rendering, null ModelAndView returned.");
 			}
 		}
 
+		// 检查是否启动了并发处理
 		if (WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
-			// Concurrent handling started during a forward
+			// 如果在转发过程中启动了并发处理，则直接返回
 			return;
 		}
 
+		// 处理器完成后的后续处理
 		if (mappedHandler != null) {
-			// Exception (if any) is already handled..
 			mappedHandler.triggerAfterCompletion(request, response, null);
 		}
 	}
@@ -1478,14 +1494,19 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
 	 * Render the given ModelAndView.
 	 * <p>This is the last stage in handling a request. It may involve resolving the view by name.
+	 * 渲染给定的ModelAndView。
+	 * <p>这是处理请求的最后阶段。可能涉及通过名称解析视图。
 	 * @param mv the ModelAndView to render
+	 *           要渲染的ModelAndView
 	 * @param request current HTTP servlet request
 	 * @param response current HTTP servlet response
 	 * @throws ServletException if view is missing or cannot be resolved
+	 * 如果视图缺失或无法解析
 	 * @throws Exception if there's a problem rendering the view
+	 * 如果渲染视图出现问题
 	 */
 	protected void render(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// Determine locale for request and apply it to the response.
+		// 根据请求确定地区设置，并将其应用到响应中。
 		Locale locale =
 				(this.localeResolver != null ? this.localeResolver.resolveLocale(request) : request.getLocale());
 		response.setLocale(locale);
@@ -1494,24 +1515,26 @@ public class DispatcherServlet extends FrameworkServlet {
 		String viewName = mv.getViewName();
 		if (viewName != null) {
 			// We need to resolve the view name.
+			// 我们需要解析视图名称。
 			view = resolveViewName(viewName, mv.getModelInternal(), locale, request);
 			if (view == null) {
-				throw new ServletException("Could not resolve view with name '" + mv.getViewName() +
-						"' in servlet with name '" + getServletName() + "'");
+				throw new ServletException("无法解析名称为 '" + mv.getViewName() +
+						"' 的视图，在名称为 '" + getServletName() + "' 的servlet中");
 			}
-		}
-		else {
+		} else {
 			// No need to lookup: the ModelAndView object contains the actual View object.
+			// 无需查找：ModelAndView对象包含实际的View对象。
 			view = mv.getView();
 			if (view == null) {
-				throw new ServletException("ModelAndView [" + mv + "] neither contains a view name nor a " +
-						"View object in servlet with name '" + getServletName() + "'");
+				throw new ServletException("ModelAndView [" + mv + "] 既不包含视图名称，也不包含 " +
+						"View 对象在名称为 '" + getServletName() + "' 的servlet中");
 			}
 		}
 
 		// Delegate to the View object for rendering.
+		// 委托给View对象进行渲染。
 		if (logger.isTraceEnabled()) {
-			logger.trace("Rendering view [" + view + "] ");
+			logger.trace("正在渲染视图 [" + view + "] ");
 		}
 		try {
 			if (mv.getStatus() != null) {
@@ -1519,10 +1542,9 @@ public class DispatcherServlet extends FrameworkServlet {
 				response.setStatus(mv.getStatus().value());
 			}
 			view.render(mv.getModelInternal(), request, response);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Error rendering view [" + view + "]", ex);
+				logger.debug("渲染视图 [" + view + "] 时出错", ex);
 			}
 			throw ex;
 		}

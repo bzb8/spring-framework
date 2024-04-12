@@ -84,7 +84,12 @@ public class ModelMap extends LinkedHashMap<String, Object> {
 	 * the model when using this method because we cannot correctly determine
 	 * the true convention name. View code should check for {@code null} rather
 	 * than for empty collections as is already done by JSTL tags.</i>
+	 * 将提供的属性添加到此{@code Map}，使用的是{@link org.springframework.core.Conventions#getVariableName}生成的名称。
+	 * <p><i>注意：当使用此方法时，空的{@link Collection Collections}不会被添加到模型中，因为我们无法正确确定真正的约定名称。
+	 * 视图代码应该检查{@code null}而不是空集合，正如JSTL标签已经做的那样。</i>
+	 *
 	 * @param attributeValue the model attribute value (never {@code null})
+	 *                       模型属性的值（永远不为{@code null}）
 	 */
 	public ModelMap addAttribute(Object attributeValue) {
 		Assert.notNull(attributeValue, "Model object must not be null");

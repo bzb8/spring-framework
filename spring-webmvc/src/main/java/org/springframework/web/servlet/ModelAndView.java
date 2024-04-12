@@ -340,7 +340,10 @@ public class ModelAndView {
 	 * i.e. whether it does not hold any view and does not contain a model.
 	 * <p>Returns {@code false} if any additional state was added to the instance
 	 * <strong>after</strong> the call to {@link #clear}.
+	 * 判断当前ModelAndView对象是否因调用了{@link #clear}方法而为空，即是否既不持有任何视图也不包含模型。
+	 * <p>如果在调用{@link #clear}方法之后，向实例添加了任何其他状态，返回{@code false}。
 	 * @see #clear()
+	 * @return 如果该对象因调用clear方法而完全清空，则返回true；否则返回false。
 	 */
 	public boolean wasCleared() {
 		return (this.cleared && isEmpty());

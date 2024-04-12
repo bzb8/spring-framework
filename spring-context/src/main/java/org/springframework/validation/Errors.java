@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
 /**
  * Stores and exposes information about data-binding and validation errors
  * for a specific object.
+ * 用于存储和暴露与特定对象的数据绑定和验证错误相关信息的类。
  *
  * <p>Field names are typically properties of the target object (e.g. "name"
  * when binding to a customer object). Implementations may also support nested
@@ -31,8 +32,12 @@ import org.springframework.lang.Nullable;
  * with subtree navigation via {@link #setNestedPath}: for example, an
  * {@code AddressValidator} may validate "address", not being aware that this
  * is a nested object of a top-level customer object.
+ * <p>字段名称通常是目标对象的属性（例如，当绑定到客户对象时的"name"）。实现也可能支持嵌套字段的情况，
+ * 以应对嵌套对象（例如"address.street"），这通常与通过{@link #setNestedPath}进行子树导航配合使用：
+ * 例如，一个{@code AddressValidator}可能验证"address"，但并不知道这是一个顶级客户对象的嵌套对象。
  *
  * <p>Note: {@code Errors} objects are single-threaded.
+ * <p>注意：{@code Errors}对象是单线程使用的。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -55,6 +60,7 @@ public interface Errors {
 
 	/**
 	 * Return the name of the bound root object.
+	 * 返回绑定的根对象的名称。
 	 */
 	String getObjectName();
 

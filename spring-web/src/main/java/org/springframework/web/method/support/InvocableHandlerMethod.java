@@ -135,9 +135,17 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	 * Provided argument values are checked before argument resolvers.
 	 * <p>Delegates to {@link #getMethodArgumentValues} and calls {@link #doInvoke} with the
 	 * resolved arguments.
+	 * 在给定请求的上下文中解析方法参数值后调用方法。
+	 * <p>参数值通常通过{@link HandlerMethodArgumentResolver HandlerMethodArgumentResolvers}解析。
+	 * 但是，{@code providedArgs}参数可以提供直接使用的参数值，即无需参数解析。提供的参数值的示例包括
+	 * {@link WebDataBinder}、{@link SessionStatus}或抛出的异常实例。
+	 * 提供的参数值会在解析器之前进行检查。
+	 * <p>该方法委托给{@link #getMethodArgumentValues}，然后使用解析的参数调用{@link #doInvoke}。
+	 *
 	 * @param request the current request
 	 * @param mavContainer the ModelAndViewContainer for this request
 	 * @param providedArgs "given" arguments matched by type, not resolved
+	 *                     通过类型匹配的“给定”参数，不需要进行解析
 	 * @return the raw value returned by the invoked method
 	 * @throws Exception raised if no suitable argument resolver can be found,
 	 * or if the method raised an exception
@@ -147,11 +155,12 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	@Nullable
 	public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-
+		// 通过{@link HandlerMethodArgumentResolver HandlerMethodArgumentResolvers}解析解析方法参数
 		Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Arguments: " + Arrays.toString(args));
 		}
+		// 反射调用方法
 		return doInvoke(args);
 	}
 
@@ -171,8 +180,10 @@ public class InvocableHandlerMethod extends HandlerMethod {
 
 		Object[] args = new Object[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {
+			// 当前方法参数
 			MethodParameter parameter = parameters[i];
 			parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
+			// 尝试从提供的参数中匹配，找到了，就直接返回
 			args[i] = findProvidedArgument(parameter, providedArgs);
 			if (args[i] != null) {
 				continue;

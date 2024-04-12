@@ -207,6 +207,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 			return;
 		}
 
+		// 解码和规范化路径
 		String path = decodeAndNormalizePath(flashMap.getTargetRequestPath(), request);
 		flashMap.setTargetRequestPath(path);
 
@@ -215,8 +216,10 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 		Object mutex = getFlashMapsMutex(request);
 		if (mutex != null) {
 			synchronized (mutex) {
+				// 从session中获取之前保存的FlashMap
 				List<FlashMap> allFlashMaps = retrieveFlashMaps(request);
 				allFlashMaps = (allFlashMaps != null ? allFlashMaps : new CopyOnWriteArrayList<>());
+				// 添加当前的FlashMap
 				allFlashMaps.add(flashMap);
 				updateFlashMaps(allFlashMaps, request, response);
 			}
@@ -244,6 +247,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 
 	/**
 	 * Retrieve saved FlashMap instances from the underlying storage.
+	 * 从底层存储中检索保存的FlashMap实例。
 	 * @param request the current request
 	 * @return a List with FlashMap instances, or {@code null} if none found
 	 */
