@@ -49,6 +49,8 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * Resolves method arguments annotated with {@code @RequestBody} and handles return
  * values from methods annotated with {@code @ResponseBody} by reading and writing
  * to the body of the request or response with an {@link HttpMessageConverter}.
+ * <p>处理被{@code @RequestBody}注解的方法参数，并通过{@link HttpMessageConverter}读写请求或响应体中的内容，
+ *  用于处理被{@code @ResponseBody}注解的方法返回值。
  *
  * <p>An {@code @RequestBody} method argument is also validated if it is annotated
  * with any
@@ -56,6 +58,10 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * annotations that trigger validation}. In case of validation failure,
  * {@link MethodArgumentNotValidException} is raised and results in an HTTP 400
  * response status code if {@link DefaultHandlerExceptionResolver} is configured.
+ * <p>如果{@code @RequestBody}注解的方法参数同时被任何触发验证的注解注解，
+ * 如{@linkplain org.springframework.validation.annotation.ValidationAnnotationUtils#determineValidationHints 所确定的验证注解}注解，
+ * 则该参数也会进行验证。验证失败时，会抛出{@link MethodArgumentNotValidException}异常，
+ * 并且如果配置了{@link DefaultHandlerExceptionResolver}，会导致HTTP 400响应状态码。
  *
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
@@ -115,6 +121,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 
 	@Override
 	public boolean supportsReturnType(MethodParameter returnType) {
+		// 类上有ResponseBody注解，或者方法上存在ResponseBody注解
 		return (AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ResponseBody.class) ||
 				returnType.hasMethodAnnotation(ResponseBody.class));
 	}
@@ -170,16 +177,26 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 		return (requestBody != null && requestBody.required() && !parameter.isOptional());
 	}
 
+	/**
+	 * 处理方法返回值，将返回值写入响应体中。
+	 * @param returnValue 方法的返回值，可能为null。如果为null，可能会涉及到ResponseBodyAdvice的处理。
+	 * @param returnType 方法返回值的类型信息。
+	 * @param mavContainer Model和View的容器，用于存储数据和视图相关信息。
+	 * @param webRequest 当前的Web请求。
+	 * @throws IOException 如果发生输入/输出错误。
+	 * @throws HttpMediaTypeNotAcceptableException 如果客户端不接受响应的媒体类型。
+	 * @throws HttpMessageNotWritableException 如果无法写入响应消息。
+	 */
 	@Override
 	public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
-			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
+								  ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
 			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
 
-		mavContainer.setRequestHandled(true);
-		ServletServerHttpRequest inputMessage = createInputMessage(webRequest);
-		ServletServerHttpResponse outputMessage = createOutputMessage(webRequest);
+		mavContainer.setRequestHandled(true); // 标记请求已处理
+		ServletServerHttpRequest inputMessage = createInputMessage(webRequest); // 创建输入消息
+		ServletServerHttpResponse outputMessage = createOutputMessage(webRequest); // 创建输出消息
 
-		// Try even with null return value. ResponseBodyAdvice could get involved.
+		// 即使返回值为null，也尝试进行处理。可能涉及到ResponseBodyAdvice的处理逻辑。
 		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);
 	}
 

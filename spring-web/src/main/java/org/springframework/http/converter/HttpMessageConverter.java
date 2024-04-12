@@ -39,16 +39,22 @@ public interface HttpMessageConverter<T> {
 
 	/**
 	 * Indicates whether the given class can be read by this converter.
+	 * 判断给定的类是否可以通过此转换器读取。
 	 * @param clazz the class to test for readability
+	 *              要测试读取能力的类
 	 * @param mediaType the media type to read (can be {@code null} if not specified);
 	 * typically the value of a {@code Content-Type} header.
+	 *                  要读取的媒体类型（如果未指定，可以为{@code null}）；通常是{@code Content-Type}头的值。
 	 * @return {@code true} if readable; {@code false} otherwise
+	 * 如果可读，则返回{@code true}；否则返回{@code false}。
 	 */
 	boolean canRead(Class<?> clazz, @Nullable MediaType mediaType);
 
 	/**
 	 * Indicates whether the given class can be written by this converter.
+	 * 判断给定的类是否可以通过此转换器写入。
 	 * @param clazz the class to test for writability
+	 *              要测试写入能力的类
 	 * @param mediaType the media type to write (can be {@code null} if not specified);
 	 * typically the value of an {@code Accept} header.
 	 * @return {@code true} if writable; {@code false} otherwise
@@ -62,7 +68,12 @@ public interface HttpMessageConverter<T> {
 	 * canWrite(clazz, null}. The list may also exclude MIME types supported
 	 * only for a specific class. Alternatively, use
 	 * {@link #getSupportedMediaTypes(Class)} for a more precise list.
+	 * 返回此转换器支持的媒体类型列表。该列表可能不适用于每个可能的目标元素类型，
+	 * 调用此方法时通常应通过{@link #canWrite(Class, MediaType) canWrite(clazz, null)}进行保护。
+	 * 该列表也可能排除仅支持特定类的MIME类型。或者，可以使用
+	 * {@link #getSupportedMediaTypes(Class)} 获取更精确的列表。
 	 * @return the list of supported media types
+	 * 支持的媒体类型列表
 	 */
 	List<MediaType> getSupportedMediaTypes();
 
@@ -71,8 +82,12 @@ public interface HttpMessageConverter<T> {
 	 * class. The list may differ from {@link #getSupportedMediaTypes()} if the
 	 * converter does not support the given Class or if it supports it only for
 	 * a subset of media types.
+	 * 返回此转换器支持的给定类的媒体类型列表。该列表可能与{@link #getSupportedMediaTypes()}不同，
+	 * 如果转换器不支持给定的类，或者仅支持该类的一子集媒体类型。
 	 * @param clazz the type of class to check
+	 *              要检查的类类型
 	 * @return the list of media types supported for the given class
+	 * 支持给定类的媒体类型列表
 	 * @since 5.3.4
 	 */
 	default List<MediaType> getSupportedMediaTypes(Class<?> clazz) {
@@ -82,9 +97,13 @@ public interface HttpMessageConverter<T> {
 
 	/**
 	 * Read an object of the given type from the given input message, and returns it.
+	 * 从给定的输入消息中读取指定类型的对象，并返回它。
 	 * @param clazz the type of object to return. This type must have previously been passed to the
 	 * {@link #canRead canRead} method of this interface, which must have returned {@code true}.
+	 * 要返回的对象的类型。此类型必须先前已传递给此接口的
+	 * {@link #canRead canRead} 方法，且必须返回{@code true}。
 	 * @param inputMessage the HTTP input message to read from
+	 *                     从中读取的HTTP输入消息
 	 * @return the converted object
 	 * @throws IOException in case of I/O errors
 	 * @throws HttpMessageNotReadableException in case of conversion errors
@@ -94,6 +113,7 @@ public interface HttpMessageConverter<T> {
 
 	/**
 	 * Write a given object to the given output message.
+	 * 将给定对象写入给定的输出消息中
 	 * @param t the object to write to the output message. The type of this object must have previously been
 	 * passed to the {@link #canWrite canWrite} method of this interface, which must have returned {@code true}.
 	 * @param contentType the content type to use when writing. May be {@code null} to indicate that the

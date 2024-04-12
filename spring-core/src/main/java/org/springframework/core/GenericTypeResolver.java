@@ -147,14 +147,19 @@ public final class GenericTypeResolver {
 	/**
 	 * Resolve the given generic type against the given context class,
 	 * substituting type variables as far as possible.
+	 * 根据给定的上下文类解析给定的泛型类型，尽可能地替换类型变量。
 	 * @param genericType the (potentially) generic type
+	 *                    可能是泛型的类型
 	 * @param contextClass a context class for the target type, for example a class
 	 * in which the target type appears in a method signature (can be {@code null})
+	 *                      泛型类型出现的背景类，例如方法签名中的类（可以为null）
 	 * @return the resolved type (possibly the given generic type as-is)
+	 * 解析后的类型（可能是给定的泛型类型原样返回）
 	 * @since 5.0
 	 */
 	public static Type resolveType(Type genericType, @Nullable Class<?> contextClass) {
 		if (contextClass != null) {
+			// 如果类型是类型变量，则尝试解析它
 			if (genericType instanceof TypeVariable) {
 				ResolvableType resolvedTypeVariable = resolveVariable(
 						(TypeVariable<?>) genericType, ResolvableType.forClass(contextClass));
@@ -165,8 +170,10 @@ public final class GenericTypeResolver {
 					}
 				}
 			}
+			// 如果类型是参数化类型，则尝试解析其泛型参数
 			else if (genericType instanceof ParameterizedType) {
 				ResolvableType resolvedType = ResolvableType.forType(genericType);
+				// 如果存在无法解析的泛型参数，则尝试对每个泛型参数进行解析
 				if (resolvedType.hasUnresolvableGenerics()) {
 					ParameterizedType parameterizedType = (ParameterizedType) genericType;
 					Class<?>[] generics = new Class<?>[parameterizedType.getActualTypeArguments().length];
@@ -174,6 +181,7 @@ public final class GenericTypeResolver {
 					ResolvableType contextType = ResolvableType.forClass(contextClass);
 					for (int i = 0; i < typeArguments.length; i++) {
 						Type typeArgument = typeArguments[i];
+						// 对类型参数进行解析，考虑它可能是类型变量
 						if (typeArgument instanceof TypeVariable) {
 							ResolvableType resolvedTypeArgument = resolveVariable(
 									(TypeVariable<?>) typeArgument, contextType);
@@ -195,6 +203,7 @@ public final class GenericTypeResolver {
 				}
 			}
 		}
+		// 如果无法解析或不需要解析，则返回原始类型
 		return genericType;
 	}
 

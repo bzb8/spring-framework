@@ -648,7 +648,6 @@ public class MethodParameter {
 
 	/**
 	 * Return the generic type of the method/constructor parameter.
-	 *
 	 * 返回 method/constructor 参数的泛型类型。
 	 *
 	 * @return the parameter type (never {@code null}) -- 参数类型（不可以为{@code null})

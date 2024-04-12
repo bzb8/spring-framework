@@ -280,7 +280,9 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 	/**
 	 * Indicates whether this MIME Type is concrete, i.e. whether neither the type
 	 * nor the subtype is a wildcard character <code>&#42;</code>.
+	 * 判断此MIME类型是否为具体类型，即类型和子类型都不是通配符字符<code>&#42;</code>。
 	 * @return whether this MIME Type is concrete
+	 * @return 如果此MIME类型为具体类型，则返回true；否则返回false。
 	 */
 	public boolean isConcrete() {
 		return !isWildcardType() && !isWildcardSubtype();

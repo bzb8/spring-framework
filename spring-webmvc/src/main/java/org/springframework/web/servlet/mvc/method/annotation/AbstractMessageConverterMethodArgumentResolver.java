@@ -105,6 +105,9 @@ public abstract class AbstractMessageConverterMethodArgumentResolver implements 
 	 * Return the configured {@link RequestBodyAdvice} and
 	 * {@link RequestBodyAdvice} where each instance may be wrapped as a
 	 * {@link org.springframework.web.method.ControllerAdviceBean ControllerAdviceBean}.
+	 * 获取配置的{@link RequestBodyAdvice}和{@link RequestBodyAdvice}，
+	 * 其中每个实例都可以被包装为一个{@link org.springframework.web.method.ControllerAdviceBean ControllerAdviceBean}。
+	 *
 	 */
 	RequestResponseBodyAdviceChain getAdvice() {
 		return this.advice;

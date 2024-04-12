@@ -152,10 +152,15 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 
 	/**
 	 * Writes the given return type to the given output message.
+	 * 使用消息转换器将给定的返回值写入给定的输出消息中。
 	 * @param value the value to write to the output message
+	 *              要写入输出消息的值，可能是任何类型。
 	 * @param returnType the type of the value
+	 *                   值的返回类型。
 	 * @param inputMessage the input messages. Used to inspect the {@code Accept} header.
+	 *                     输入消息，用于检查{@code Accept}头。
 	 * @param outputMessage the output message to write to
+	 *                      要写入的输出消息。
 	 * @throws IOException thrown in case of I/O errors
 	 * @throws HttpMediaTypeNotAcceptableException thrown when the conditions indicated
 	 * by the {@code Accept} header on the request cannot be met by the message converters
@@ -165,24 +170,29 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	protected <T> void writeWithMessageConverters(@Nullable T value, MethodParameter returnType,
-			ServletServerHttpRequest inputMessage, ServletServerHttpResponse outputMessage)
+												  ServletServerHttpRequest inputMessage, ServletServerHttpResponse outputMessage)
 			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
-
+		// 返回客户端的消息
 		Object body;
+		// body类型
 		Class<?> valueType;
+		// 泛型类型
 		Type targetType;
 
+		// 处理值为CharSequence类型的情况，直接将其转换为字符串
 		if (value instanceof CharSequence) {
 			body = value.toString();
 			valueType = String.class;
 			targetType = String.class;
 		}
 		else {
+			// 处理其他类型的情况，获取实际的值类型和目标类型
 			body = value;
 			valueType = getReturnValueType(body, returnType);
 			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());
 		}
 
+		// 检查是否是资源类型，并处理资源的范围请求
 		if (isResourceType(value, returnType)) {
 			outputMessage.getHeaders().set(HttpHeaders.ACCEPT_RANGES, "bytes");
 			if (value != null && inputMessage.getHeaders().getFirst(HttpHeaders.RANGE) != null &&
@@ -206,12 +216,14 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		MediaType contentType = outputMessage.getHeaders().getContentType();
 		boolean isContentTypePreset = contentType != null && contentType.isConcrete();
 		if (isContentTypePreset) {
+			// 如果Content-Type已经预设，则直接使用
 			if (logger.isDebugEnabled()) {
 				logger.debug("Found 'Content-Type:" + contentType + "' in response");
 			}
 			selectedMediaType = contentType;
 		}
 		else {
+			// 根据客户端的Accept头和可生产的媒体类型选择最合适的MediaType
 			HttpServletRequest request = inputMessage.getServletRequest();
 			List<MediaType> acceptableTypes;
 			try {
@@ -220,6 +232,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 			catch (HttpMediaTypeNotAcceptableException ex) {
 				int series = outputMessage.getServletResponse().getStatus() / 100;
 				if (body == null || series == 4 || series == 5) {
+					// 忽略错误响应内容
 					if (logger.isDebugEnabled()) {
 						logger.debug("Ignoring error response content (if any). " + ex);
 					}
@@ -233,6 +246,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 				throw new HttpMessageNotWritableException(
 						"No converter found for return value of type: " + valueType);
 			}
+			// 根据AcceptableMediaType和producibleTypes，选择mediaType
 			List<MediaType> mediaTypesToUse = new ArrayList<>();
 			for (MediaType requestedType : acceptableTypes) {
 				for (MediaType producibleType : producibleTypes) {
@@ -271,6 +285,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		}
 
 		if (selectedMediaType != null) {
+			// 根据选择的MediaType寻找合适的HttpMessageConverter进行消息转换
 			selectedMediaType = selectedMediaType.removeQualityValue();
 			for (HttpMessageConverter<?> converter : this.messageConverters) {
 				GenericHttpMessageConverter genericConverter = (converter instanceof GenericHttpMessageConverter ?
@@ -293,17 +308,13 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 							((HttpMessageConverter) converter).write(body, selectedMediaType, outputMessage);
 						}
 					}
-					else {
-						if (logger.isDebugEnabled()) {
-							logger.debug("Nothing to write: null body");
-						}
-					}
 					return;
 				}
 			}
 		}
 
 		if (body != null) {
+			// 如果没有找到合适的转换器，抛出异常
 			Set<MediaType> producibleMediaTypes =
 					(Set<MediaType>) inputMessage.getServletRequest()
 							.getAttribute(HandlerMapping.PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE);
@@ -321,6 +332,8 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 	 * a simple check via getClass on the value but if the value is null, then the
 	 * return type needs to be examined possibly including generic type determination
 	 * (e.g. {@code ResponseEntity<T>}).
+	 * 获取将要写入响应的值的类型。通常，这是通过对值执行getClass操作的简单检查，但如果值为null，
+	 * 则需要检查返回类型，可能包括泛型类型确定（例如{@code ResponseEntity<T>}）。
 	 */
 	protected Class<?> getReturnValueType(@Nullable Object value, MethodParameter returnType) {
 		return (value != null ? value.getClass() : returnType.getParameterType());
@@ -337,6 +350,9 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 	/**
 	 * Return the generic type of the {@code returnType} (or of the nested type
 	 * if it is an {@link HttpEntity}).
+	 * 获取给定返回类型的方法参数的泛型类型。
+	 * 如果返回类型是{@link HttpEntity}的子类型，则获取嵌套类型的泛型。
+	 * 获取方法返回类型（HttpEntity<List<Item>>）的泛型类型（List<Item>）
 	 */
 	private Type getGenericType(MethodParameter returnType) {
 		if (HttpEntity.class.isAssignableFrom(returnType.getParameterType())) {
