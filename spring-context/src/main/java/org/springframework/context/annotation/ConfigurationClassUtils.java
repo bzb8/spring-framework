@@ -149,7 +149,7 @@ abstract class ConfigurationClassUtils {
 			}
 		}
 
-		// 获取bean上的Configuration 注解的属性。如果没有被 @Configuration 修饰 config 则为null
+		// 获取bean上的@Configuration 注解的属性。如果没有被 @Configuration 修饰 config 则为null
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		// 如果被 @Configuration 修饰 &&  proxyBeanMethods 属性为 不是false
 		// @Configuration 的 proxyBeanMethods  属性默认值即为 true。

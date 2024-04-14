@@ -271,6 +271,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * {@link #setActiveProfiles} or if the current set of active profiles
 	 * is empty, check for the presence of {@link #doGetActiveProfilesProperty()}
 	 * and assign its value to the set of active profiles.
+	 * 获取当前激活的配置文件集。首先尝试通过{@link #setActiveProfiles}方法显式设置的激活配置文件集返回；
+	 * 如果当前激活的配置文件集为空，则检查是否存在{@link #doGetActiveProfilesProperty()}方法，
+	 * 并将其值赋给激活的配置文件集。
 	 * @see #getActiveProfiles()
 	 * @see #doGetActiveProfilesProperty()
 	 */
@@ -410,11 +413,13 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * Return whether the given profile is active, or if active profiles are empty
 	 * whether the profile should be active by default.
+	 * 判断给定的profile是否激活，或者如果激活的profiles为空，是否应该默认激活。
 	 * @throws IllegalArgumentException per {@link #validateProfile(String)}
 	 */
 	protected boolean isProfileActive(String profile) {
 		validateProfile(profile);
 		Set<String> currentActiveProfiles = doGetActiveProfiles();
+		// 判断profile是否在当前激活的profiles中，或者当前没有激活的profile但应在默认profiles中
 		return (currentActiveProfiles.contains(profile) ||
 				(currentActiveProfiles.isEmpty() && doGetDefaultProfiles().contains(profile)));
 	}

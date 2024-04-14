@@ -166,6 +166,10 @@ public interface Environment extends PropertyResolver {
 	 * matches the {@linkplain #getDefaultProfiles() default profiles}.
 	 * <p>If you wish provide profile expressions directly as strings, use
 	 * {@link #matchesProfiles(String...)} instead.
+	 * 判断给定的{@link Profiles}谓词是否匹配当前的活动Profiles &mdash;
+	 * 如果没有明确的活动Profiles，则判断给定的{@code Profiles}谓词是否匹配默认的Profiles。
+	 * <p>如果您希望直接以字符串形式提供profile表达式，请使用{@link #matchesProfiles(String...)}代替。
+	 *
 	 * @since 5.1
 	 * @see #matchesProfiles(String...)
 	 * @see Profiles#of(String...)

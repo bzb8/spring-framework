@@ -40,7 +40,7 @@ public interface ConfigurationCondition extends Condition {
 
 	/**
 	 * The various configuration phases where the condition could be evaluated.
-	 * 可以评估条件的各个配置阶段。
+	 * 定义条件评估的各个配置阶段。
 	 */
 	enum ConfigurationPhase {
 
@@ -49,9 +49,8 @@ public interface ConfigurationCondition extends Condition {
 		 * class is being parsed.
 		 * <p>If the condition does not match at this point, the {@code @Configuration}
 		 * class will not be added.
-		 * --
-		 * {@link Condition} 应在解析 {@code @Configuration} 类时进行评估。
-		 * 如果此时条件不匹配，则不会添加 {@code @Configuration} 类。
+		 * <p>在解析{@code @Configuration}类时评估{@link Condition}。
+		 * <p>如果此时条件不匹配，则不会添加该{@code @Configuration}类。
 		 */
 		PARSE_CONFIGURATION,
 
@@ -61,9 +60,9 @@ public interface ConfigurationCondition extends Condition {
 		 * {@code @Configuration} classes from being added.
 		 * <p>At the time that the condition is evaluated, all {@code @Configuration}
 		 * classes will have been parsed.
-		 * --
-		 * 添加常规（非 {@code @Configuration}）bean 时应评估 {@link Condition}。
-		 * 该条件不会阻止添加 {@code @Configuration} 类。 在评估条件时，所有 {@code @Configuration} 类都将被解析。
+		 * <p>在添加普通（非{@code @Configuration}）bean时评估{@link Condition}。
+		 * 条件不会阻止{@code @Configuration}类的添加。
+		 * <p>在评估条件时，所有{@code @Configuration}类都将被解析。
 		 */
 		REGISTER_BEAN
 	}

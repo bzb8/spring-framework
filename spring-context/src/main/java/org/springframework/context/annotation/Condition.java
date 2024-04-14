@@ -22,22 +22,19 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 /**
  * A single {@code condition} that must be {@linkplain #matches matched} in order
  * for a component to be registered.
- *
- * 必须满足 {@linkplain #matches matched} 的单个 {@code condition} 才能注册组件。
+ * 一个条件接口，组件只有在该条件被{@linkplain #matches 匹配}的情况下才能被注册。
  *
  * <p>Conditions are checked immediately before the bean-definition is due to be
  * registered and are free to veto registration based on any criteria that can
  * be determined at that point.
- *
- * 在 Bean 定义即将注册之前立即检查条件，并且可以根据当时可以确定的任何标准自由否决注册。
+ * <p>条件在 bean 定义即将注册的立即时刻进行检查，并且可以根据当时任何可确定的条件自由决定是否阻止注册
  *
  * <p>Conditions must follow the same restrictions as {@link BeanFactoryPostProcessor}
  * and take care to never interact with bean instances. For more fine-grained control
  * of conditions that interact with {@code @Configuration} beans consider implementing
  * the {@link ConfigurationCondition} interface.
- *
- * 条件必须遵循与 {@link BeanFactoryPostProcessor} 相同的限制，并注意不要与 bean 实例交互。
- * 要对与 {@code @Configuration} beans 交互的条件进行更细粒度的控制，请考虑实现 {@link ConfigurationCondition} 接口。
+ * <p>条件必须遵守与{@link BeanFactoryPostProcessor}相同的限制，并且要避免与 bean 实例交互。
+ * 如需更细粒度地控制与{@code @Configuration} beans 交互的条件，可以考虑实现 {@link ConfigurationCondition} 接口。
  *
  * @author Phillip Webb
  * @since 4.0
@@ -50,11 +47,15 @@ public interface Condition {
 
 	/**
 	 * Determine if the condition matches.
+	 * 判断条件是否匹配。
 	 * @param context the condition context
+	 *                条件上下文，包含环境信息和元数据。
 	 * @param metadata the metadata of the {@link org.springframework.core.type.AnnotationMetadata class}
 	 * or {@link org.springframework.core.type.MethodMetadata method} being checked
+	 *                 当前正在检查的类或方法的注解元数据。
 	 * @return {@code true} if the condition matches and the component can be registered,
 	 * or {@code false} to veto the annotated component's registration
+	 * 如果条件匹配且组件可以注册，则返回{@code true}；如果条件不匹配，要阻止注解组件的注册，则返回{@code false}。
 	 */
 	boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata);
 

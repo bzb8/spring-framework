@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Internal parser used by {@link Profiles#of}.
+ * 由{@link Profiles#of}内部使用的解析器。
  *
  * @author Phillip Webb
  * @author Sam Brannen
@@ -41,6 +42,13 @@ final class ProfilesParser {
 	private ProfilesParser() {
 	}
 
+	/**
+	 * 解析给定的profile表达式。
+	 *
+	 * @param expressions at least one profile expression must be specified.
+	 * @return a {@link Profiles} instance representing the parsed expressions.
+	 * @throws IllegalArgumentException if no expressions are provided.
+	 */
 
 	static Profiles parse(String... expressions) {
 		Assert.notEmpty(expressions, "Must specify at least one profile expression");
@@ -51,16 +59,36 @@ final class ProfilesParser {
 		return new ParsedProfiles(expressions, parsed);
 	}
 
+	/**
+	 * 解析单个profile表达式。
+	 *
+	 * @param expression the expression to parse.
+	 * @return a {@link Profiles} instance representing the parsed expression.
+	 * @throws IllegalArgumentException if the expression is invalid.
+	 */
 	private static Profiles parseExpression(String expression) {
 		Assert.hasText(expression, () -> "Invalid profile expression [" + expression + "]: must contain text");
 		StringTokenizer tokens = new StringTokenizer(expression, "()&|!", true);
 		return parseTokens(expression, tokens);
 	}
-
+	/**
+	 * 使用给定的tokenizer解析profile表达式。
+	 *
+	 * @param expression the original expression.
+	 * @param tokens     the tokenizer for the expression.
+	 * @return a {@link Profiles} instance representing the parsed tokens.
+	 */
 	private static Profiles parseTokens(String expression, StringTokenizer tokens) {
 		return parseTokens(expression, tokens, Context.NONE);
 	}
-
+	/**
+	 * 使用给定的tokenizer和上下文解析profile表达式。
+	 *
+	 * @param expression  the original expression.
+	 * @param tokens      the tokenizer for the expression.
+	 * @param context     the parsing context.
+	 * @return a {@link Profiles} instance representing the parsed tokens.
+	 */
 	private static Profiles parseTokens(String expression, StringTokenizer tokens, Context context) {
 		List<Profiles> elements = new ArrayList<>();
 		Operator operator = null;
@@ -107,7 +135,15 @@ final class ProfilesParser {
 		}
 		return merge(expression, elements, operator);
 	}
-
+	/**
+	 * 合并解析的profile元素。
+	 *
+	 * @param expression  the original expression.
+	 * @param elements    the list of parsed elements.
+	 * @param operator    the current logical operator.
+	 * @return a {@link Profiles} instance representing the merged elements.
+	 * @throws IllegalArgumentException if the expression is malformed.
+	 */
 	private static Profiles merge(String expression, List<Profiles> elements, @Nullable Operator operator) {
 		assertWellFormed(expression, !elements.isEmpty());
 		if (elements.size() == 1) {
@@ -116,15 +152,32 @@ final class ProfilesParser {
 		Profiles[] profiles = elements.toArray(new Profiles[0]);
 		return (operator == Operator.AND ? and(profiles) : or(profiles));
 	}
+	/**
+	 * 确保表达式符合形成规则。
+	 *
+	 * @param expression the expression being parsed.
+	 * @param wellFormed whether the current state is well formed.
+	 * @throws IllegalArgumentException if the expression is malformed.
+	 */
 
 	private static void assertWellFormed(String expression, boolean wellFormed) {
 		Assert.isTrue(wellFormed, () -> "Malformed profile expression [" + expression + "]");
 	}
-
+	/**
+	 * 创建表示逻辑或的Profiles实例。
+	 *
+	 * @param profiles the profiles to join with OR.
+	 * @return a {@link Profiles} instance representing the logical OR of the given profiles.
+	 */
 	private static Profiles or(Profiles... profiles) {
 		return activeProfile -> Arrays.stream(profiles).anyMatch(isMatch(activeProfile));
 	}
-
+	/**
+	 * 创建表示逻辑与的Profiles实例。
+	 *
+	 * @param profiles the profiles to join with AND.
+	 * @return a {@link Profiles} instance representing the logical AND of the given profiles.
+	 */
 	private static Profiles and(Profiles... profiles) {
 		return activeProfile -> Arrays.stream(profiles).allMatch(isMatch(activeProfile));
 	}
@@ -132,32 +185,53 @@ final class ProfilesParser {
 	private static Profiles not(Profiles profiles) {
 		return activeProfile -> !profiles.matches(activeProfile);
 	}
-
+	/**
+	 * 创建表示等于的Profiles实例。
+	 *
+	 * @param profile the profile to match.
+	 * @return a {@link Profiles} instance representing equality with the given profile.
+	 */
 	private static Profiles equals(String profile) {
 		return activeProfile -> activeProfile.test(profile);
 	}
-
+	/**
+	 * 创建一个匹配给定活动profile的predicate。
+	 *
+	 * @param activeProfiles the active profile predicate.
+	 * @return a predicate that matches the given profiles.
+	 */
 	private static Predicate<Profiles> isMatch(Predicate<String> activeProfiles) {
 		return profiles -> profiles.matches(activeProfiles);
 	}
 
-
+	/**
+	 * 表示逻辑操作符的枚举。
+	 */
 	private enum Operator { AND, OR }
-
+	/**
+	 * 解析上下文的枚举。
+	 */
 	private enum Context { NONE, NEGATE, PARENTHESIS }
 
-
+	/**
+	 * Profile表达式解析结果的内部类。
+	 */
 	private static class ParsedProfiles implements Profiles {
-
+		// 原始的profiles表达式
 		private final Set<String> expressions = new LinkedHashSet<>();
-
+		// 解析后的profiles表达式
 		private final Profiles[] parsed;
 
 		ParsedProfiles(String[] expressions, Profiles[] parsed) {
 			Collections.addAll(this.expressions, expressions);
 			this.parsed = parsed;
 		}
-
+		/**
+		 * 检查给定的活动profiles是否匹配任何解析的表达式。
+		 *
+		 * @param activeProfiles the active profiles to match.
+		 * @return whether the active profiles match any of the parsed expressions.
+		 */
 		@Override
 		public boolean matches(Predicate<String> activeProfiles) {
 			for (Profiles candidate : this.parsed) {
@@ -167,7 +241,9 @@ final class ProfilesParser {
 			}
 			return false;
 		}
-
+		/**
+		 * 用于equals和hashCode实现的表达式集合。
+		 */
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
@@ -184,7 +260,9 @@ final class ProfilesParser {
 		public int hashCode() {
 			return this.expressions.hashCode();
 		}
-
+		/**
+		 * 将解析的表达式集合转换为字符串表示。
+		 */
 		@Override
 		public String toString() {
 			return StringUtils.collectionToDelimitedString(this.expressions, " or ");

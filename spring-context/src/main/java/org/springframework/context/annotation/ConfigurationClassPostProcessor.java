@@ -269,7 +269,6 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	/**
 	 * Prepare the Configuration classes for servicing bean requests at runtime
 	 * by replacing them with CGLIB-enhanced subclasses.
-	 *
 	 * 准备配置类，以便在运行时处理 Bean 请求，方法是将其替换为 CGLIB 增强的子类。
 	 */
 	@Override

@@ -40,7 +40,7 @@ import org.springframework.util.MultiValueMap;
 
 /**
  * Internal class used to evaluate {@link Conditional} annotations.
- *
+ * <p>
  * 用于评估{@link Conditional}注解的内部类。
  *
  * @author Phillip Webb
@@ -81,8 +81,10 @@ class ConditionEvaluator {
 	 * Determine if an item should be skipped based on {@code @Conditional} annotations.
 	 * --
 	 * 根据 {@code @Conditional} 注解确定是否应跳过某个项目。
+	 * <p>{@code @Conditional} 注解的value值只要有一个不匹配，则返回true
 	 *
 	 * @param metadata the meta data
+	 *                 @Conditional注解元数据
 	 * @param phase the phase of the call (null)
 	 * @return if the item should be skipped
 	 */

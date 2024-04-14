@@ -41,6 +41,10 @@ import org.springframework.util.MultiValueMap;
  * ASM class visitor which looks for the class name and implemented types as
  * well as for the annotations defined on the class, exposing them through
  * the {@link org.springframework.core.type.AnnotationMetadata} interface.
+ * <p>ASM类访问器，用于查找类名、实现的类型以及类上定义的注解，并通过
+ * {@link org.springframework.core.type.AnnotationMetadata} 接口暴露它们。
+ * 这个类是Spring框架中用于内部处理的，主要功能是通过ASM字节码库动态分析类的元数据，
+ * 包括类的名称、实现的接口、以及类级别的注解。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -52,6 +56,9 @@ import org.springframework.util.MultiValueMap;
  * {@link SimpleAnnotationMetadataReadingVisitor} for internal use within the
  * framework, but there is no public replacement for
  * {@code AnnotationMetadataReadingVisitor}.
+ * 自Spring Framework 5.2以来，本类已被
+ *  {@link SimpleAnnotationMetadataReadingVisitor} 替换，在框架内部使用，
+ *  但没有公共替换用于 {@code AnnotationMetadataReadingVisitor}。
  */
 @Deprecated
 public class AnnotationMetadataReadingVisitor extends ClassMetadataReadingVisitor implements AnnotationMetadata {
