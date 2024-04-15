@@ -157,6 +157,7 @@ public interface AnnotatedTypeMetadata {
 	 * @return a MultiMap of attributes, with the attribute name as key (e.g. "value")
 	 * and a list of the defined attribute values as Map value. This return value will
 	 * be {@code null} if no matching annotation is defined.
+	 * <p>返回值为：MultiValueMap<String, List<String[]>>的形式
 	 *
 	 * @see #getAllAnnotationAttributes(String)
 	 *
