@@ -127,17 +127,17 @@ class ConfigurationClassParser {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	private final MetadataReaderFactory metadataReaderFactory;
+	private final MetadataReaderFactory metadataReaderFactory; // CachingMetadataReaderFactory
 
-	private final ProblemReporter problemReporter;
+	private final ProblemReporter problemReporter; // FailFastProblemReporter
 
-	private final Environment environment;
+	private final Environment environment; // StandardEnvironment
 
 	private final ResourceLoader resourceLoader;
 
-	private final BeanDefinitionRegistry registry;
+	private final BeanDefinitionRegistry registry; // DefaultListableBeanFactory
 
-	private final ComponentScanAnnotationParser componentScanParser;
+	private final ComponentScanAnnotationParser componentScanParser; // ComponentScanAnnotationParser
 
 	private final ConditionEvaluator conditionEvaluator;
 
@@ -281,7 +281,7 @@ class ConfigurationClassParser {
 
 		// Recursively process the configuration class and its superclass hierarchy.
 		// 递归处理配置类及其超类层次结构。
-		SourceClass sourceClass = asSourceClass(configClass, filter);
+		SourceClass sourceClass = asSourceClass(configClass, filter); // 配置类
 		do {
 			// 返回值是它的父类，为了递归处理
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
@@ -300,7 +300,7 @@ class ConfigurationClassParser {
 	 * 应用处理，通过读取源类中的注解、成员和方法来构建完整的 {@link ConfigurationClass}。当发现相关源时，可以多次调用此方法。
 	 *
 	 * @param configClass the configuration class being build -- 正在构建的配置类
-	 * @param sourceClass a source class --
+	 * @param sourceClass a source class -- 配置类
 	 * @return the superclass, or {@code null} if none found or previously processed 超类，如果未找到或之前未处理，则为 {@code null}
 	 */
 	@Nullable
@@ -851,7 +851,7 @@ class ConfigurationClassParser {
 
 		/**
 		 * @Import 注解的 value值作为配置类处理时会添加到该缓存中
-		 * 被导入的类 -> 导入该类的配置类
+		 * @Import的value值表示的类 -> 导入该类的配置类
 		 */
 		private final MultiValueMap<String, AnnotationMetadata> imports = new LinkedMultiValueMap<>();
 
@@ -937,8 +937,8 @@ class ConfigurationClassParser {
 				if (deferredImports != null) {
 					DeferredImportSelectorGroupingHandler handler = new DeferredImportSelectorGroupingHandler();
 					deferredImports.sort(DEFERRED_IMPORT_COMPARATOR);
-					deferredImports.forEach(handler::register);
-					handler.processGroupImports();
+					deferredImports.forEach(handler::register); // 分组
+					handler.processGroupImports(); //
 				}
 			}
 			finally {
@@ -982,7 +982,7 @@ class ConfigurationClassParser {
 				grouping.getImports().forEach(entry -> {
 					// 获取配置类
 					ConfigurationClass configurationClass = this.configurationClasses.get(entry.getMetadata());
-					try {
+					try {// 处理group返回的待导入的类
 						processImports(configurationClass, asSourceClass(configurationClass, exclusionFilter),
 								Collections.singleton(asSourceClass(entry.getImportClassName(), exclusionFilter)),
 								exclusionFilter, false);
@@ -1013,7 +1013,7 @@ class ConfigurationClassParser {
 
 	private static class DeferredImportSelectorHolder {
 
-		private final ConfigurationClass configurationClass;
+		private final ConfigurationClass configurationClass; // 标记了@Import的配置类
 
 		private final DeferredImportSelector importSelector;
 
@@ -1034,7 +1034,7 @@ class ConfigurationClassParser {
 
 	private static class DeferredImportSelectorGrouping {
 
-		private final DeferredImportSelector.Group group;
+		private final DeferredImportSelector.Group group; // 分组
 
 		/**
 		 * 该组所持有的DeferredImportSelectorHolder

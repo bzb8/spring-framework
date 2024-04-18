@@ -56,7 +56,7 @@ final class ConfigurationClass {
 	private final Resource resource;
 
 	/**
-	 * 配置类的beanName
+	 * 配置类的beanName，如appConfig
 	 */
 	@Nullable
 	private String beanName;
@@ -79,7 +79,7 @@ final class ConfigurationClass {
 
 	/**
 	 * 将该ImportBeanDefinitionRegistrar缓存在configClass的importBeanDefinitionRegistrars
-	 * 处理@Import注解缓存的
+	 * 处理@Import注解缓存的, @Import注解的value值是ImportBeanDefinitionRegistrar类型，初始化它 -> 当前配置类
 	 */
 	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars =
 			new LinkedHashMap<>();
@@ -151,7 +151,7 @@ final class ConfigurationClass {
 	/**
 	 * Create a new {@link ConfigurationClass} with the given name.
 	 * @param metadata the metadata for the underlying class to represent 要表示的基础类的元数据
-	 * @param beanName name of the {@code @Configuration} class bean {@code @Configuration} 类 Bean 的 AME
+	 * @param beanName name of the {@code @Configuration} class bean {@code @Configuration} 类 Bean 的 NAME
 	 * @see ConfigurationClass#ConfigurationClass(Class, ConfigurationClass)
 	 */
 	ConfigurationClass(AnnotationMetadata metadata, String beanName) {

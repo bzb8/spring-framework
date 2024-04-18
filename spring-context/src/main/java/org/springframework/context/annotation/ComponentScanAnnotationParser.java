@@ -52,7 +52,7 @@ class ComponentScanAnnotationParser {
 
 	private final ResourceLoader resourceLoader;
 
-	private final BeanNameGenerator beanNameGenerator;
+	private final BeanNameGenerator beanNameGenerator; // AnnotationBeanNameGenerator
 
 	private final BeanDefinitionRegistry registry;
 

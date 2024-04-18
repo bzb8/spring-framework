@@ -1421,6 +1421,17 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return a {@link ResolvableType} for the specified {@link Class} with pre-declared generics.
+	 * <p>public class GenericContainer<T> {
+	 *     private T item;
+	 *
+	 *     // ...
+	 * }
+	 *
+	 * public class SpecificItem implements SomeInterface {
+	 *     // ...
+	 * }
+	 *
+	 *  返回 GenericContainer<SpecificItem>
 	 * @param clazz the class (or interface) to introspect
 	 * @param generics the generics of the class
 	 * @return a {@link ResolvableType} for the specific class and generics

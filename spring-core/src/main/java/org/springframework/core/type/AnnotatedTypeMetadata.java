@@ -55,6 +55,14 @@ public interface AnnotatedTypeMetadata {
 	 * Return annotation details based on the direct annotations of the
 	 * underlying element.
 	 * 基于底层元素的直接注解返回注解详情。
+	 * 比如：
+	 * <p>
+	 * @Bean
+	 * @ConditionalOnMissingBean(search = SearchStrategy.CURRENT)
+	 * public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+	 * 	return new PropertySourcesPlaceholderConfigurer();
+	 * }
+	 * 则会返回：@Bean @ConditionalOnMissingBean两个注解
 	 *
 	 * @return merged annotations based on the direct annotations
 	 * 基于直接注解合并的注解

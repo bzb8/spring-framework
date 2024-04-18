@@ -123,7 +123,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	private ProblemReporter problemReporter = new FailFastProblemReporter();
 
 	@Nullable
-	private Environment environment;
+	private Environment environment; // StandardEnvironment
 
 	private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
