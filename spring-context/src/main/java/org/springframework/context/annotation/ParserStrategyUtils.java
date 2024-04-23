@@ -55,6 +55,8 @@ abstract class ParserStrategyUtils {
 	 * 使用适当的构造函数实例化一个类，并返回新实例作为指定的可分配类型。
 	 * 返回的实例将调用 {@link BeanClassLoaderAware}、{@link BeanFactoryAware}、{@link EnvironmentAware} 和 {@link ResourceLoaderAware} 合约（如果它们是由给定对象实现的）。
 	 *
+	 * @param clazz 待实例化的类
+	 *
 	 * @since 5.2
 	 */
 	@SuppressWarnings("unchecked")

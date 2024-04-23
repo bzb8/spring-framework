@@ -86,7 +86,7 @@ public interface ImportBeanDefinitionRegistrar {
 	 * 此处可能不会注册 {@link BeanDefinitionRegistryPostProcessor} 类型。
 	 * 默认实现委托给 {@link #registerBeanDefinitions(AnnotationMetadata, BeanDefinitionRegistry)}。
 	 *
-	 * @param importingClassMetadata annotation metadata of the importing class 导入类的注解元数据
+	 * @param importingClassMetadata annotation metadata of the importing class -- 配置类的注解元数据
 	 * @param registry current bean definition registry --  定义注册表
 	 * @param importBeanNameGenerator the bean name generator strategy for imported beans:
 	 * {@link ConfigurationClassPostProcessor#IMPORT_BEAN_NAME_GENERATOR} by default, or a

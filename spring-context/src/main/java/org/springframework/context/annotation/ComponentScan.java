@@ -229,7 +229,7 @@ public @interface ComponentScan {
 		 * <p>Custom {@link TypeFilter TypeFilters} may optionally implement any of the
 		 * following {@link org.springframework.beans.factory.Aware Aware} interfaces, and
 		 * their respective methods will be called prior to {@link TypeFilter#match match}:
-		 *
+		 * --
 		 * 当指定了多个类时，将应用 OR 逻辑，例如，“包含用 {@code @Foo} OR {@code @Bar} 注解的类型”。
 		 * 自定义 {@link TypeFilter TypeFilters} 可以选择实现以下任何 {@link org.springframework.beans.factory.Aware Aware} 接口，
 		 * 并且它们各自的方法将在 {@link TypeFilter#match match} 之前调用：
@@ -242,7 +242,7 @@ public @interface ComponentScan {
 		 * </ul>
 		 * <p>Specifying zero classes is permitted but will have no effect on component
 		 * scanning.
-		 *
+		 * --
 		 * 允许指定零类，但对组件扫描没有影响。
 		 *
 		 * @since 4.2

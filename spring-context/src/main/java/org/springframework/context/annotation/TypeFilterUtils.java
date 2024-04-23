@@ -61,7 +61,7 @@ public abstract class TypeFilterUtils {
 	 * {@code ResourceLoaderAware} 合约由类型筛选器实现，则调用它们。
 	 *
 	 * @param filterAttributes {@code AnnotationAttributes} for a
-	 * {@link ComponentScan.Filter @Filter} declaration {@code AnnotationAttributes} 用于 {@link ComponentScan.Filter @Filter} 声明
+	 * {@link ComponentScan.Filter @Filter} declaration {@code AnnotationAttributes} -- {@link ComponentScan.Filter @Filter} 声明
 	 * @param environment the {@code Environment} to make available to filters
 	 * @param resourceLoader the {@code ResourceLoader} to make available to filters
 	 * @param registry the {@code BeanDefinitionRegistry} to make available to filters
@@ -82,9 +82,10 @@ public abstract class TypeFilterUtils {
 			ResourceLoader resourceLoader, BeanDefinitionRegistry registry) {
 
 		List<TypeFilter> typeFilters = new ArrayList<>();
+		// @Filter注解的type属性值
 		FilterType filterType = filterAttributes.getEnum("type");
 
-		// 实例话classes对象，并存入typeFilters中
+		// 实例化@Filter注解的classes属性对象，并存入typeFilters中
 		for (Class<?> filterClass : filterAttributes.getClassArray("classes")) {
 			switch (filterType) {
 				case ANNOTATION:
@@ -109,6 +110,7 @@ public abstract class TypeFilterUtils {
 			}
 		}
 
+		// 实例化@Filter注解的pattern属性值对象，并存入typeFilters中
 		for (String expression : filterAttributes.getStringArray("pattern")) {
 			switch (filterType) {
 				case ASPECTJ:

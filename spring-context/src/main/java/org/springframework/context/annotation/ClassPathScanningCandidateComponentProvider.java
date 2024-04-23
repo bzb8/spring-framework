@@ -107,6 +107,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 
 	/**
 	 * 要排除的过滤器
+	 * -- @ComponentScan 注解的excludeFilters属性值
 	 */
 	private final List<TypeFilter> excludeFilters = new ArrayList<>();
 
@@ -119,6 +120,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	@Nullable
 	private ResourcePatternResolver resourcePatternResolver;
 
+	// CachingMetadataReaderFactory
 	@Nullable
 	private MetadataReaderFactory metadataReaderFactory;
 

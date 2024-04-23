@@ -52,10 +52,11 @@ public interface MetadataReaderFactory {
 
 	/**
 	 * Obtain a MetadataReader for the given resource.
-	 *
+	 * --
 	 * 获取给定资源的 MetadataReader。
+	 * SimpleMetadataReader
 	 *
-	 * @param resource the resource (pointing to a ".class" file) 资源（指向“.class”文件）
+	 * @param resource the resource (pointing to a ".class" file) 资源（指向“.class”文件）,当前待扫描的类
 	 * @return a holder for the ClassReader instance (never {@code null}) ClassReader 实例的持有者 （从不 {@code null}）
 	 * @throws IOException in case of I/O failure
 	 */

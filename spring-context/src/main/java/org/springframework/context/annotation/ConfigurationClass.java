@@ -79,7 +79,7 @@ final class ConfigurationClass {
 
 	/**
 	 * 将该ImportBeanDefinitionRegistrar缓存在configClass的importBeanDefinitionRegistrars
-	 * 处理@Import注解缓存的, @Import注解的value值是ImportBeanDefinitionRegistrar类型，初始化它 -> 当前配置类
+	 * 处理@Import注解缓存的, @Import注解的value值是ImportBeanDefinitionRegistrar类型，初始化它 -> 当前配置类的元数据
 	 */
 	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars =
 			new LinkedHashMap<>();

@@ -98,7 +98,7 @@ class ComponentScanAnnotationParser {
 				scanner.addIncludeFilter(typeFilter);
 			}
 		}
-
+		// 获取@ComponentScan注解的excludeFilters属性值
 		for (AnnotationAttributes excludeFilterAttributes : componentScan.getAnnotationArray("excludeFilters")) {
 			List<TypeFilter> typeFilters = TypeFilterUtils.createTypeFiltersFor(excludeFilterAttributes, this.environment,
 				this.resourceLoader, this.registry);
