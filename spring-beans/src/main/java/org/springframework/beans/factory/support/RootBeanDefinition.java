@@ -366,6 +366,12 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	/**
 	 * Specify a generics-containing target type of this bean definition, if known in advance.
+	 * 设置此bean定义的目标类型，如果提前已知的话。
+	 * <p>该方法允许你指定包含泛型的目标类型。这对于那些在运行时才能确定其实际类型，
+	 * 但你又希望提前对其进行一些配置或限制的情况非常有用。</p>
+	 *
+	 * @param targetType 表示目标类型的{@link ResolvableType}实例。它允许在运行时解析类型，
+	 * 并且可以是泛型的。
 	 * @since 4.3.3
 	 */
 	public void setTargetType(ResolvableType targetType) {

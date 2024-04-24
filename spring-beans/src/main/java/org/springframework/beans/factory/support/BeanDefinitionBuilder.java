@@ -30,6 +30,10 @@ import org.springframework.util.ObjectUtils;
  * {@link org.springframework.beans.factory.config.BeanDefinition BeanDefinitions}
  * using the builder pattern. Intended primarily for use when implementing Spring 2.0
  * {@link org.springframework.beans.factory.xml.NamespaceHandler NamespaceHandlers}.
+ * <p>这是一个用于通过程序方式构建Spring框架的
+ * {@link org.springframework.beans.factory.config.BeanDefinition BeanDefinitions}
+ * 的类，它使用了建造者模式。这个类主要用途是在实现Spring 2.0
+ * {@link org.springframework.beans.factory.xml.NamespaceHandler NamespaceHandlers} 时使用。
  *
  * @author Rod Johnson
  * @author Rob Harrop
@@ -80,7 +84,12 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
+	 * <p>创建一个新的{@code BeanDefinitionBuilder}，用于构建一个{@link RootBeanDefinition}。
+	 * 这个方法主要用于创建一个根bean定义，其中bean的类型是通过类名指定的。
+	 *
 	 * @param beanClassName the class name for the bean that the definition is being created for
+	 *                      要为bean创建定义的类名。
+	 * @return 返回一个配置了bean类名的{@code BeanDefinitionBuilder}实例，可用于进一步配置bean定义。
 	 */
 	public static BeanDefinitionBuilder rootBeanDefinition(String beanClassName) {
 		return rootBeanDefinition(beanClassName, null);
@@ -88,8 +97,13 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
+	 * <p>创建一个新的 {@code BeanDefinitionBuilder}，用于构建 {@link RootBeanDefinition}。
+	 * 这个方法主要用于配置基于类名和工厂方法名的bean定义。
+	 *
 	 * @param beanClassName the class name for the bean that the definition is being created for
+	 *                      要为其创建定义的bean的类名。
 	 * @param factoryMethodName the name of the method to use to construct the bean instance
+	 *                          用于构建bean实例的方法名。如果不需要工厂方法，则可以为 {@code null}。
 	 */
 	public static BeanDefinitionBuilder rootBeanDefinition(String beanClassName, @Nullable String factoryMethodName) {
 		BeanDefinitionBuilder builder = new BeanDefinitionBuilder(new RootBeanDefinition());
@@ -133,8 +147,13 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * Create a new {@code BeanDefinitionBuilder} used to construct a {@link RootBeanDefinition}.
+	 * <p>创建一个新的 {@code BeanDefinitionBuilder}，用于构建 {@link RootBeanDefinition}。
+	 * 这个方法允许通过指定bean的类和一个供应器来创建bean的定义，供应者用于实例化bean。
+	 *
 	 * @param beanClass the {@code Class} of the bean that the definition is being created for
+	 *                  创建 bean 定义所针对的 bean 的 {@code Class} 对象。
 	 * @param instanceSupplier a callback for creating an instance of the bean
+	 *                         一个回调，用于创建 bean 的实例。这个供应者应该能够提供 bean 的实例。
 	 * @since 5.3.9
 	 * @see #rootBeanDefinition(ResolvableType, Supplier)
 	 */
@@ -153,6 +172,7 @@ public final class BeanDefinitionBuilder {
 
 	/**
 	 * The {@code BeanDefinition} instance we are creating.
+	 * 正在创建的bean定义
 	 */
 	private final AbstractBeanDefinition beanDefinition;
 

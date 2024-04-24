@@ -1208,9 +1208,14 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Validate this bean definition.
+	 * 验证这个 bean 定义。
+	 * <p>此方法主要检查 bean 定义是否包含不兼容的配置，比如同时指定了工厂方法和方法覆盖。
+	 * 如果发现不兼容的配置，将抛出 {@link BeanDefinitionValidationException}。</p>
+	 *
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
 	public void validate() throws BeanDefinitionValidationException {
+		// 检查是否同时指定了工厂方法和方法覆盖，则抛出移除
 		if (hasMethodOverrides() && getFactoryMethodName() != null) {
 			throw new BeanDefinitionValidationException(
 					"Cannot combine factory method with container-generated method overrides: " +
