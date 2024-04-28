@@ -73,7 +73,7 @@ final class SerializableTypeWrapper {
 
 	private static final Class<?>[] SUPPORTED_SERIALIZABLE_TYPES = {
 			GenericArrayType.class, ParameterizedType.class, TypeVariable.class, WildcardType.class};
-
+	// TypeProvider的getType() -> jdk动态代理对象 TypeProxyInvocationHandler
 	static final ConcurrentReferenceHashMap<Type, Type> cache = new ConcurrentReferenceHashMap<>(256);
 
 
@@ -127,6 +127,7 @@ final class SerializableTypeWrapper {
 	 */
 	@Nullable
 	static Type forTypeProvider(TypeProvider provider) {
+		// 获取Type
 		Type providedType = provider.getType();
 		if (providedType == null || providedType instanceof Serializable) {
 			// No serializable type wrapping necessary (e.g. for java.lang.Class)
@@ -153,11 +154,13 @@ final class SerializableTypeWrapper {
 		if (cached != null) {
 			return cached;
 		}
+		// GenericArrayType.class, ParameterizedType.class, TypeVariable.class, WildcardType.class
 		for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
 			if (type.isInstance(providedType)) {
 				ClassLoader classLoader = provider.getClass().getClassLoader();
 				Class<?>[] interfaces = new Class<?>[] {type, SerializableTypeProxy.class, Serializable.class};
 				InvocationHandler handler = new TypeProxyInvocationHandler(provider);
+				// 场景provider的动态代理
 				cached = (Type) Proxy.newProxyInstance(classLoader, interfaces, handler);
 				cache.put(providedType, cached);
 				return cached;
@@ -184,7 +187,7 @@ final class SerializableTypeWrapper {
 
 	/**
 	 * A {@link Serializable} interface providing access to a {@link Type}.
-	 *
+	 * <p>
 	 * 提供对{@link Type}的访问的{@link Serializable}接口。
 	 *
 	 */
@@ -202,11 +205,11 @@ final class SerializableTypeWrapper {
 		/**
 		 * Return the source of the type, or {@code null} if not known.
 		 * <p>The default implementations returns {@code null}.
-		 *
+		 * --
 		 * 返回类型的源，如果未知，则返回 {@code null}。
 		 * 默认实现返回 {@code null}。
-		 *
-		 * 返回类型源
+		 * --
+		 * 返回类型源，如Field
 		 */
 		@Nullable
 		default Object getSource() {
@@ -223,10 +226,13 @@ final class SerializableTypeWrapper {
 	 * {@link Serializable}{@link InvocationHandler} 由代理 {@link Type} 使用。提供序列化支持并增强{@code Type} 或 {@code Type[]} 返回 的任何方法。
 	 *
 	 * 关联的调用处理程序，当在代理实例上调用方法时，方法调用将被编码并分派到其调用处理程序的invoke方法。
+	 * <p>实现了(GenericArrayType.class, ParameterizedType.class, TypeVariable.class, WildcardType.class 其中之一)
+	 * 和SerializableTypeProxy.class, Serializable.class。
+	 * 目的是将原始Type的方法返回值变为jdk 动态代理类型 TypeProxyInvocationHandler
 	 */
 	@SuppressWarnings("serial")
 	private static class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
-
+		// 原始目标对象，TypeProvider
 		private final TypeProvider provider;
 
 		public TypeProxyInvocationHandler(TypeProvider provider) {
@@ -405,6 +411,8 @@ final class SerializableTypeWrapper {
 
 		/**
 		 * 数组索引值
+		 * -1表示Type的方法返回值为Type
+		 * 其他表示Type的方法返回值为Type[]
 		 */
 		private final int index;
 
@@ -422,6 +430,7 @@ final class SerializableTypeWrapper {
 			this.method = method;
 		}
 
+		// 延迟实例化
 		@Override
 		@Nullable
 		public Type getType() {

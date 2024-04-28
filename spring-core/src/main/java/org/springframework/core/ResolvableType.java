@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
  * {@link #getSuperType() supertypes}, {@link #getInterfaces() interfaces}, and
  * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately
  * {@link #resolve() resolve} to a {@link java.lang.Class}.
- *
+ * --
  * 封装 Java {@link java.lang.reflect.Type}，提供对 {@link #getSuperType() 超类型}、{@link #getInterfaces() 接口}和 {@link #getGeneric(int...) 泛型参数}
  * 的访问以及最终将 {@link #resolve() 解析} 为 {@link java.lang.Class} 的能力。
  * 可以看作是封装Java Type的元信息类
@@ -63,8 +63,8 @@ import org.springframework.util.StringUtils;
  * 此类上的大多数方法本身都会返回一个 {@code ResolvableType}，以便轻松导航。例如
  *
  * <pre class="code">
- * private HashMap<Integer, List<String>> myMap;
- * private HashMap<Integer, List<Integer,String>> myMap;
+ * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
+ * private HashMap&lt;Integer, List&lt;Integer,String&gt;&gt; myMap;
  *
  * public void example() {
  *     ResolvableType t = ResolvableType.forField(getClass().getDeclaredField("myMap"));
@@ -76,7 +76,7 @@ import org.springframework.util.StringUtils;
  *     t.resolveGeneric(1, 0); // String
  * }
  * </pre>
- *
+ * --
  * 解析泛型的工具类。ResolvableType 是对 Class，Field，Method 获取 Type 的抽象。
  *
  * @author Phillip Webb
@@ -117,7 +117,8 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * The underlying Java type being managed.
-	 * 正在管理的底层 Java 类型。
+	 * <p>正在管理的底层 Java 类型。
+	 * 需要解析的 JDK Type 类型
 	 */
 	private final Type type;
 
@@ -148,6 +149,8 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * 将{@link #type}解析成Class对象
+	 * 缓存解析后的 Class 类型
+	 * rawType，比如List<T>，返回<>前面的List
 	 */
 	@Nullable
 	private Class<?> resolved;
@@ -156,7 +159,7 @@ public class ResolvableType implements Serializable {
 	@Nullable
 	private volatile ResolvableType superType;
 
-	// 当前类型实现的带泛型的接口
+	// 当前类型实现的带泛型的接口  缓存解析后实现的泛型接口数组
 	@Nullable
 	private volatile ResolvableType[] interfaces;
 
@@ -243,8 +246,9 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Return the underling Java {@link Type} being managed.
-	 *
+	 * --
 	 * 返回正在管理的底层 Java {@link Type}。
+	 * 返回原始的 Type 类型
 	 */
 	public Type getType() {
 		// 解包给定类型，有效地返回原始的不可序列化类型。
@@ -585,7 +589,7 @@ public class ResolvableType implements Serializable {
 	 * {@link #getSuperType() supertype} and {@link #getInterfaces() interface}
 	 * hierarchies to find a match, returning {@link #NONE} if this type does not
 	 * implement or extend the specified class.
-	 *
+	 * --
 	 * 将此类型作为指定类的{@link ResolvableType}返回。搜索{@link #getSuperType() supertype}
 	 * 和{@link #getInterfaces() interface}层次结构以找到匹配项，如果此类不会实现或者继承指定类，
 	 * 返回{@link #NONE}
@@ -1045,7 +1049,7 @@ public class ResolvableType implements Serializable {
 	 * if the type cannot be resolved. This method will consider bounds of
 	 * {@link TypeVariable TypeVariables} and {@link WildcardType WildcardTypes} if
 	 * direct resolution fails; however, bounds of {@code Object.class} will be ignored.
-	 *
+	 * --
 	 * 将此类型解析为{@link java.lang.Class},如果无法解析，则返回{@code null}.如果
 	 * 直接解析失败，则此方法将考虑{@link TypeVariable TypeVariables}和{@link WildcardType
 	 * WildcardTypes}的边界；但是，{@code Object.class}的边界将被忽略
@@ -1053,7 +1057,7 @@ public class ResolvableType implements Serializable {
 	 * <p>If this method returns a non-null {@code Class} and {@link #hasGenerics()}
 	 * returns {@code false}, the given type effectively wraps a plain {@code Class},
 	 * allowing for plain {@code Class} processing if desirable.
-	 *
+	 * --
 	 * 如果此方法返回非空的{@code Class},并且{@link #hasGenerics()} 返回{@code false}，
 	 * 则给定类型有效地包装一个{@code class} ，如果需要允许使用普通的{@code Class}
 	 *
@@ -1781,7 +1785,7 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Return a {@link ResolvableType} for the specified {@link Type} backed by a given
 	 * {@link VariableResolver}.
-	 *
+	 * <p>
 	 * 返回由给定{@link VariableResolver}支持的指定{@link Type}的{@link ResolvableType}
 	 *
 	 * @param type the source type or {@code null} -- 源类型
@@ -1844,6 +1848,7 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Strategy interface used to resolve {@link TypeVariable TypeVariables}.
 	 * 解析{@link TypeVariable}的策略接口
+	 * 对 TypeVariable 如何解析为 Class 的策略
 	 */
 	interface VariableResolver extends Serializable {
 
