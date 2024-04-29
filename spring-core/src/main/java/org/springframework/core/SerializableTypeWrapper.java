@@ -117,7 +117,7 @@ final class SerializableTypeWrapper {
 
 	/**
 	 * Return a {@link Serializable} {@link Type} backed by a {@link TypeProvider} .
-	 *
+	 * <p>
 	 * 返回由 {@link TypeProvider} 支持的 {@link Serializable} {@link Type}。
 	 *
 	 * <p>If type artifacts are generally not serializable in the current runtime

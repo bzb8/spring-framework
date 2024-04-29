@@ -110,6 +110,7 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * ResolvableType对象映射缓存
+	 * 未解析的ResolvableType对象 -> 解析（resolveClass()）后的ResolvableType对象
 	 */
 	private static final ConcurrentReferenceHashMap<ResolvableType, ResolvableType> cache =
 			new ConcurrentReferenceHashMap<>(256);
@@ -124,8 +125,8 @@ public class ResolvableType implements Serializable {
 
 	/**
 	 * Optional provider for the type.
+	 * 底层类型的提供者，静态工厂方法中如果未提供类型，则根据该类型提供者获取类型
 	 */
-	// 底层类型的提供者，静态工厂方法中如果未提供类型，则根据该类型提供者获取类型
 	@Nullable
 	private final TypeProvider typeProvider;
 
@@ -174,7 +175,7 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Private constructor used to create a new {@link ResolvableType} for cache key purposes,
 	 * with no upfront resolution.
-	 *
+	 * <p>
 	 * 私有构造函数，用于创建新的{@link ResolvableType}以用于缓存key目的，无需预先解析
 	 */
 	private ResolvableType(
@@ -203,14 +204,14 @@ public class ResolvableType implements Serializable {
 		this.variableResolver = variableResolver;
 		this.componentType = null;
 		this.hash = hash;
-		// 将type解析成Class赋值给resolved
+		// 将type解析成Class赋值给resolved，关键
 		this.resolved = resolveClass();
 	}
 
 	/**
 	 * Private constructor used to create a new {@link ResolvableType} for uncached purposes,
 	 * with upfront resolution but lazily calculated hash.
-	 *
+	 * <p>
 	 * 私有构造函数用于创建一个新的 {@link ResolvableType} 以用于未缓存的目的，具有预先解析但延迟计算的哈希值。
 	 */
 	private ResolvableType(Type type, @Nullable TypeProvider typeProvider,
@@ -1101,6 +1102,8 @@ public class ResolvableType implements Serializable {
 			// type为空类型对象, 返回null
 			return null;
 		}
+
+		// Class类型，直接返回
 		if (this.type instanceof Class) {
 			// 如果type是Class的子类或本身, 直接返回
 			return (Class<?>) this.type;
@@ -1108,18 +1111,20 @@ public class ResolvableType implements Serializable {
 		// 如果type是GenericArrayType的子类或本类
 		// GenericArrayType是Type的子接口，用于表示“泛型数组”，描述的是形如：A<T>[]或T[]的类型。
 		// 	其实也就是描述ParameterizedType类型以及TypeVariable类型的数组，即形如：classA<T>[][]、T[]等。
+		// 2. GenericArrayType 泛型数组，成员变量的 Class 类型
 		if (this.type instanceof GenericArrayType) {
 			// 获取type的表示数组的组件类型的ResolvableType;如果此类型不能表示数组，就返回NONE
 			Class<?> resolvedComponent = getComponentType().resolve();
-			return (resolvedComponent != null ? Array.newInstance(resolvedComponent, 0).getClass() : null);
+			return (resolvedComponent != null ? Array.newInstance(resolvedComponent, 0).getClass() : null); // 数组
 		}
 		return resolveType().resolve();
 	}
 
 	/**
 	 * Resolve this type by a single level, returning the resolved value or {@link #NONE}.
-	 *
+	 * <p>
 	 * 按单个级别解析此类型，返回解析的值或{@link #NONE}
+	 * <p>对剩余的 ParameterizedType、WildcardType、TypeVariable 三种类型继续解析。
 	 *
 	 * <p>Note: The returned {@link ResolvableType} should only be used as an intermediary
 	 * as it cannot be serialized.
@@ -1134,6 +1139,7 @@ public class ResolvableType implements Serializable {
 		}
 		// WildcardType：通配符表达式，泛型表达式，也可以说是，限定性的泛型，形如：? extends classA、? super classB
 		// 如果type是WildcardType的子类或本身
+		// 4. WildcardType 类型，上界或下界的 Class 类型，如有多个只取第一个
 		if (this.type instanceof WildcardType) {
 			// WildcardType.getUppperBounds： 获得泛型表达式上界（上限），即父类
 			Type resolved = resolveBounds(((WildcardType) this.type).getUpperBounds());
@@ -1786,7 +1792,8 @@ public class ResolvableType implements Serializable {
 	 * Return a {@link ResolvableType} for the specified {@link Type} backed by a given
 	 * {@link VariableResolver}.
 	 * <p>
-	 * 返回由给定{@link VariableResolver}支持的指定{@link Type}的{@link ResolvableType}
+	 * 返回由给定{@link VariableResolver}支持的指定{@link Type}的{@link ResolvableType}，
+	 * 先判断ResolvableType是否在缓存中，没有再创建解析后的ResolvableType
 	 *
 	 * @param type the source type or {@code null} -- 源类型
 	 * @param typeProvider the type provider or {@code null} -- 类型提供者
@@ -1820,13 +1827,15 @@ public class ResolvableType implements Serializable {
 		cache.purgeUnreferencedEntries();
 
 		// 其他类型实例化后进行缓存
+		// 2. 其余的 Type 类型需要解析，所以先缓存起来
+		// 2.1 这个构造器专为缓存使用，不会触发 resolveClass() 操作
 
 		// Check the cache - we may have a ResolvableType which has been resolved before...
 		// 检查缓存-我们可能有一个ResolvableType，它已经在...之前解析了
 		ResolvableType resultType = new ResolvableType(type, typeProvider, variableResolver);
 		ResolvableType cachedType = cache.get(resultType);
 		if (cachedType == null) {
-			// 重新创建一个ResolvableType对象作为cacheType
+			// 2.2 如果缓存中没有就需要解析了，这个构造器会触发 resolveClass() 操作
 			cachedType = new ResolvableType(type, typeProvider, variableResolver, resultType.hash);
 			cache.put(cachedType, cachedType);
 		}
