@@ -29,6 +29,11 @@ import org.springframework.util.ObjectUtils;
  * {@link #getProperty(String)} which may be more expensive. Implementations may
  * consider caching the result of {@link #getPropertyNames()} to fully exploit this
  * performance opportunity.
+ * <p>一个{@link PropertySource}的实现，能够查询其底层源对象以枚举所有可能的属性名称/值对。
+ * 通过提供{@link #getPropertyNames()}方法，允许调用者无需访问底层源对象即可了解可用属性。
+ * 这也促进了{@link #containsProperty(String)}的更高效实现，因为它可以调用{@link #getPropertyNames()}
+ * 并遍历返回的数组，而不是尝试调用可能更为昂贵的{@link #getProperty(String)}。
+ * 实现可能会考虑缓存{@link #getPropertyNames()}的结果，以充分利用这个性能提升的机会。
  *
  * <p>Most framework-provided {@code PropertySource} implementations are enumerable;
  * a counter-example would be {@code JndiPropertySource} where, due to the
@@ -36,6 +41,10 @@ import org.springframework.util.ObjectUtils;
  * any given time; rather it is only possible to try to access a property
  * (via {@link #getProperty(String)}) in order to evaluate whether it is present
  * or not.
+ * <p>大多数框架提供的{@code PropertySource}实现是可枚举的；
+ * 一个反例是{@code JndiPropertySource}，由于JNDI的性质，不可能在任何给定时间确定所有可能的属性名称；
+ * 而是只能通过（via {@link #getProperty(String)})访问属性来评估其是否存在。
+ * (JNDI（Java Naming and Directory Interface）环境的一个特点是，它的目录结构和其中存储的属性在运行时可能是动态变化的。)
  *
  * @author Chris Beams
  * @author Juergen Hoeller
